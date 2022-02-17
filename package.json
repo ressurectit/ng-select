@@ -87,6 +87,7 @@
         "rxjs": "^6.5.0",
         "@jscrpt/common": "^1.2.0",
         "@anglr/common": "^9.0.0",
+        "@anglr/animations": "^7.0.0",
         "@popperjs/core": "^2.6.0",
         "@types/node": "11.11.1",
         "@anglr/types": "1.1.18",
