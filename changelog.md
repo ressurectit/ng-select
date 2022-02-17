@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 10.0.0 (2021-01-13)
+## Version 10.0.0 (2022-02-17)
 
 ### Features
 
@@ -24,7 +24,7 @@
 
 - minimal supported version of *Angular* is `10.0.0`
 - minimal supported version of `@jscrpt/common` is `1.2.0`
-- minimal supported version of `@anglr/common` is `8.0.0`
+- minimal supported version of `@anglr/common` is `9.0.0`
 - `BasicPositionerComponent` has new parameter in constructor `ScrollTargetSelector`
 
 ## Version 9.1.3 (2020-07-09)

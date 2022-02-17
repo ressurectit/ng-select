@@ -1,4 +1,4 @@
-import {ElementRef, EventEmitter, OnDestroy} from '@angular/core';
+import {Directive, ElementRef, EventEmitter, OnDestroy} from '@angular/core';
 import {Subscription} from 'rxjs';
 
 import {NgSelectPlugin, OptionsGatherer, CompareValueFunc, LiveSearchFilter, NormalizeFunc} from '../../misc';
@@ -12,6 +12,7 @@ import {PluginBus} from '../../misc/pluginBus/pluginBus';
 /**
  * Base class for value handlers
  */
+@Directive()
 export abstract class ValueHandlerBase<TValue = any, TOptions extends ValueHandlerOptions = any> implements ValueHandler<TValue>, NgSelectPlugin<TOptions, TValue>, OnDestroy
 {
     //######################### protected fields #########################
