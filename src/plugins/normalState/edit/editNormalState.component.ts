@@ -44,7 +44,7 @@ const defaultOptions: EditNormalStateOptions =
  */
 @Component(
 {
-    selector: "div.edit-normal-state",
+    selector: 'div.edit-normal-state',
     templateUrl: 'editNormalState.component.html',
     styleUrls: ['editNormalState.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -83,7 +83,7 @@ export class EditNormalStateComponent<TValue = any> extends NormalStateAbstractC
     {
         if(Array.isArray(this.selectedOptions))
         {
-            let options = [...this.selectedOptions];
+            const options = [...this.selectedOptions];
 
             options.forEach(opt => this.pluginBus.optionCancel.emit(opt));
         }

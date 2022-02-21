@@ -1,5 +1,5 @@
+import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {NgModule} from "@angular/core";
 import {ScrollingModule} from '@angular/cdk/scrolling';
 
 import {VirtualEditPopupComponent} from '../plugins/popup/virtualEdit/virtualEditPopup.component';

@@ -99,7 +99,7 @@ export class PopupAbstractComponent<TCssClasses = any, TOptions extends PopupOpt
      */
     public get popupElement(): HTMLElement
     {
-        let ref = this.popupElementChildren.first;
+        const ref = this.popupElementChildren.first;
 
         if(!ref)
         {
@@ -137,7 +137,7 @@ export class PopupAbstractComponent<TCssClasses = any, TOptions extends PopupOpt
                 public pluginBus: PluginBus,
                 public pluginElement: ElementRef,
                 protected _changeDetector: ChangeDetectorRef,
-                protected _document: HTMLDocument,
+                protected _document: Document,
                 protected _stringLocalization: StringLocalization)
     {
     }
@@ -168,7 +168,7 @@ export class PopupAbstractComponent<TCssClasses = any, TOptions extends PopupOpt
             }
 
             this._popupVisible = !!this.popupElementChildren.first;
-            this.visibilityChange.emit()
+            this.visibilityChange.emit();
         });
     }
 
@@ -231,7 +231,7 @@ export class PopupAbstractComponent<TCssClasses = any, TOptions extends PopupOpt
             this._visibilityRequestSubscription = this.pluginBus.showHidePopup.subscribe(this._handleVisibilityChange);
         }
 
-        let valueHandler = this.ngSelectPlugins[VALUE_HANDLER] as ValueHandler;
+        const valueHandler = this.ngSelectPlugins[VALUE_HANDLER] as ValueHandler;
 
         if(this._valueHandler && this._valueHandler != valueHandler)
         {
@@ -282,7 +282,7 @@ export class PopupAbstractComponent<TCssClasses = any, TOptions extends PopupOpt
     {
         Object.keys(this.options.texts).forEach(key =>
         {
-            this.texts[key] = this._stringLocalization.get(this.options.texts[key]);
+            this.texts[key as keyof PopupTexts] = this._stringLocalization.get(this.options.texts[key as keyof PopupTexts]);
         });
 
         this._changeDetector.detectChanges();

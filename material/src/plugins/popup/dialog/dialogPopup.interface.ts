@@ -1,5 +1,5 @@
-import {Popup, PopupOptions, NgSelectPluginInstances, PluginBus, VisualPluginOptions} from "@anglr/select";
 import {ComponentType} from '@angular/cdk/portal';
+import {Popup, PopupOptions, NgSelectPluginInstances, PluginBus, VisualPluginOptions} from '@anglr/select';
 
 /**
  * Css classes for dialog popup

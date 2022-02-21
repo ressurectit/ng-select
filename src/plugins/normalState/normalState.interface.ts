@@ -1,4 +1,4 @@
-import {NgSelectPlugin, VisualPluginOptions} from "../../misc";
+import {NgSelectPlugin, VisualPluginOptions} from '../../misc';
 import {NgSelectOption} from '../../components/option';
 
 //TODO - version 10, change order of TValue and TCssClasses

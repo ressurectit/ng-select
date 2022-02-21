@@ -1,6 +1,6 @@
 import {FlipCallback} from '@anglr/common/positions';
 
-import {Positioner, PositionerOptions} from "../positioner.interface";
+import {Positioner, PositionerOptions} from '../positioner.interface';
 
 /**
  * Basic positioner options

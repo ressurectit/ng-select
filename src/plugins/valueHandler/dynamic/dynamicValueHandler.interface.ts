@@ -1,5 +1,5 @@
-import {ValueHandler, ValueHandlerOptions} from "../valueHandler.interface";
-import {GetOptionsCallback} from "../../../misc";
+import {ValueHandler, ValueHandlerOptions} from '../valueHandler.interface';
+import {GetOptionsCallback} from '../../../misc';
 
 /**
  * Dynamic value handler options

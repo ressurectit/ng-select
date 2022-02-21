@@ -1,14 +1,14 @@
-import {EventEmitter} from "@angular/core";
-import {isPresent} from "@jscrpt/common";
-import {Subscription, Observable} from "rxjs";
-import {debounceTime} from "rxjs/operators";
+import {EventEmitter} from '@angular/core';
+import {isPresent} from '@jscrpt/common';
+import {Subscription, Observable} from 'rxjs';
+import {debounceTime} from 'rxjs/operators';
 
-import {OptionsGatherer} from "./optionsGatherer.interface";
-import {NgSelectPluginInstances, NgSelect} from "../../components/select";
-import {NgSelectOption} from "../../components/option";
-import {DynamicOptionsGathererOptions} from "./dynamicOptionsGatherer.interface";
-import {LiveSearch} from "../../plugins/liveSearch";
-import {LIVE_SEARCH} from "../../plugins/liveSearch/types";
+import {OptionsGatherer} from './optionsGatherer.interface';
+import {NgSelectPluginInstances, NgSelect} from '../../components/select';
+import {NgSelectOption} from '../../components/option';
+import {DynamicOptionsGathererOptions} from './dynamicOptionsGatherer.interface';
+import {LiveSearch} from '../../plugins/liveSearch';
+import {LIVE_SEARCH} from '../../plugins/liveSearch/types';
 import {PluginBus} from '../pluginBus/pluginBus';
 import {Popup} from '../../plugins/popup';
 import {POPUP} from '../../plugins/popup/types';
@@ -105,7 +105,7 @@ export class DynamicOptionsGatherer<TValue = any> implements OptionsGatherer<TVa
     {
         if(!this._options)
         {
-            throw new Error("Options can not be null!");
+            throw new Error('Options can not be null!');
         }
 
         if(this._options && isPresent(this._options.minLength))
@@ -121,7 +121,7 @@ export class DynamicOptionsGatherer<TValue = any> implements OptionsGatherer<TVa
      */
     public initializeGatherer(): void
     {
-        let liveSearch = this.ngSelectPlugins[LIVE_SEARCH] as LiveSearch;
+        const liveSearch = this.ngSelectPlugins[LIVE_SEARCH] as LiveSearch;
 
         if(this._liveSearch && this._liveSearch != liveSearch)
         {
@@ -131,7 +131,7 @@ export class DynamicOptionsGatherer<TValue = any> implements OptionsGatherer<TVa
             this._liveSearch = null;
         }
 
-        let popup: Popup = this.ngSelectPlugins[POPUP] as Popup;
+        const popup: Popup = this.ngSelectPlugins[POPUP] as Popup;
 
         if(this._popup && this._popup != popup)
         {

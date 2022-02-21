@@ -1,6 +1,6 @@
-import {EventEmitter} from "@angular/core";
+import {EventEmitter} from '@angular/core';
 
-import {NgSelectOption} from "./option.interface";
+import {NgSelectOption} from './option.interface';
 
 /**
  * Option group for ng select

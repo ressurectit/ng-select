@@ -1,10 +1,10 @@
-import {Component, ChangeDetectionStrategy, Inject, OnDestroy, OnInit, ChangeDetectorRef} from "@angular/core";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {OptionsGatherer, ɵNgSelectOption} from "@anglr/select";
+import {Component, ChangeDetectionStrategy, Inject, OnDestroy, OnInit, ChangeDetectorRef} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {OptionsGatherer, ɵNgSelectOption} from '@anglr/select';
 import {extend} from '@jscrpt/common';
-import {Subscription} from "rxjs";
+import {Subscription} from 'rxjs';
 
-import {DialogPopupComponentData, DialogPopupContentComponent} from "../../plugins/popup/dialog/dialogPopup.interface";
+import {DialogPopupComponentData, DialogPopupContentComponent} from '../../plugins/popup/dialog/dialogPopup.interface';
 import {BasicDialogPopupOptions, CssClassesBasicDialogPopup} from './basicDialogPopup.interface';
 
 /**
@@ -88,7 +88,7 @@ export class BasicDialogPopupComponent<TValue = any> implements DialogPopupConte
             this._optionsChangeSubscription = this._optionsGatherer.availableOptionsChange.subscribe(() =>
             {
                 this.selectOptions = this._optionsGatherer.availableOptions;
-                this._changeDetector.detectChanges()
+                this._changeDetector.detectChanges();
             });
         }
     }

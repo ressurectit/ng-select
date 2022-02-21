@@ -94,6 +94,7 @@
         "@jscrpt/common": "^2.2.0",
         "@anglr/common": "^10.0.0",
         "@anglr/animations": "^9.0.0",
+        "positions": "^1.6.2",
         "@popperjs/core": "^2.11.2",
         "@types/node": "^14.14.31",
         "@angular/compiler-cli": "^13.1.0",

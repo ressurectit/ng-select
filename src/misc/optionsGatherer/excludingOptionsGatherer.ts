@@ -1,9 +1,9 @@
-import {EventEmitter} from "@angular/core";
+import {EventEmitter} from '@angular/core';
 import {Subscription} from 'rxjs';
 
-import {OptionsGatherer} from "./optionsGatherer.interface";
-import {NgSelectOption, ɵNgSelectOption} from "../../components/option";
-import {NgSelectPluginInstances, NgSelect} from "../../components/select";
+import {OptionsGatherer} from './optionsGatherer.interface';
+import {NgSelectOption, ɵNgSelectOption} from '../../components/option';
+import {NgSelectPluginInstances, NgSelect} from '../../components/select';
 import {PluginBus} from '../pluginBus/pluginBus';
 import {ValueHandler} from '../../plugins/valueHandler';
 import {VALUE_HANDLER} from '../../plugins/valueHandler/types';
@@ -64,7 +64,7 @@ export class ExcludingOptionsGatherer<TValue = any> implements OptionsGatherer<T
     public get availableOptions(): NgSelectOption<TValue>[]
     {
         return this._availableOptions;
-    };
+    }
 
     /**
      * Occurs when array of visible, displayed options has changed
@@ -100,7 +100,7 @@ export class ExcludingOptionsGatherer<TValue = any> implements OptionsGatherer<T
 
         this._availableOptionsChangeSubscription = this.select.availableOptionsChange.subscribe(() => this._excludeSelected());
 
-        let valueHandler = this.ngSelectPlugins[VALUE_HANDLER] as ValueHandler;
+        const valueHandler = this.ngSelectPlugins[VALUE_HANDLER] as ValueHandler;
 
         if(this._valueHandler && this._valueHandler != valueHandler)
         {
@@ -148,8 +148,8 @@ export class ExcludingOptionsGatherer<TValue = any> implements OptionsGatherer<T
             return;
         }
 
-        let compare = this.pluginBus.selectOptions.valueComparer;
-        let normalize = this.pluginBus.selectOptions.normalizer;
+        const compare = this.pluginBus.selectOptions.valueComparer;
+        const normalize = this.pluginBus.selectOptions.normalizer;
 
         //multi selected
         if(this.pluginBus.selectOptions.multiple && Array.isArray(this._valueHandler.value))
@@ -157,7 +157,7 @@ export class ExcludingOptionsGatherer<TValue = any> implements OptionsGatherer<T
             //filter out value
             if(this._valueHandler.value.length)
             {
-                let value = this._valueHandler.value;
+                const value = this._valueHandler.value;
     
                 this._availableOptions = this.select.availableOptions.filter(opt => !value.find(itm => compare(normalize(itm), normalize(opt.value))));
             }

@@ -37,7 +37,7 @@ const defaultOptions: EditPopupOptions =
  */
 @Component(
 {
-    selector: "div.ng-select-edit-popup",
+    selector: 'div.ng-select-edit-popup',
     templateUrl: 'editPopup.component.html',
     styleUrls: ['editPopup.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -49,7 +49,7 @@ export class EditPopupComponent extends PopupAbstractComponent<CssClassesEditPop
     /**
      * Gets indication whether keep open popup after value change
      */
-    protected get keepOpen(): boolean
+    protected override get keepOpen(): boolean
     {
         return false;
     }
@@ -69,7 +69,7 @@ export class EditPopupComponent extends PopupAbstractComponent<CssClassesEditPop
                 changeDetector: ChangeDetectorRef,
                 @Inject(POPUP_OPTIONS) @Optional() options: EditPopupOptions,
                 @Inject(STRING_LOCALIZATION) stringLocalization: StringLocalization,
-                @Inject(DOCUMENT) document?: HTMLDocument)
+                @Inject(DOCUMENT) document?: Document)
     {
         super(ngSelectPlugins, pluginBus, pluginElement, changeDetector, document, stringLocalization);
 

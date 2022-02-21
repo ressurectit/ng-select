@@ -1,4 +1,4 @@
-import {ValueHandler, ValueHandlerOptions} from "../valueHandler.interface";
+import {ValueHandler, ValueHandlerOptions} from '../valueHandler.interface';
 
 /**
  * Basic value handler options

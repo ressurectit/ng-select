@@ -1,9 +1,9 @@
-import {NgModule} from "@angular/core";
-import {CommonModule} from "@angular/common";
-import {MatDialogModule} from "@angular/material/dialog";
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {MatDialogModule} from '@angular/material/dialog';
 
-import {BasicDialogPopupComponent} from "../components/basicDialogPopup/types";
-import {DialogPopupComponent} from "../plugins/popup/dialog/dialogPopup.component";
+import {BasicDialogPopupComponent} from '../components/basicDialogPopup/types';
+import {DialogPopupComponent} from '../plugins/popup/dialog/dialogPopup.component';
 import {DialogPopupDirective} from '../directives/types';
 
 /**

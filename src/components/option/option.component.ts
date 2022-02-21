@@ -1,6 +1,6 @@
-import {Component, ChangeDetectionStrategy, Input} from "@angular/core";
+import {Component, ChangeDetectionStrategy, Input} from '@angular/core';
 
-import {NgSelectOption} from "./option.interface";
+import {NgSelectOption} from './option.interface';
 
 /**
  * Component used for options in select component

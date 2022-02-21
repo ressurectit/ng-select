@@ -24,7 +24,7 @@ const defaultOptions: BasicKeyboardHandlerOptions =
  */
 @Component(
 {
-    selector: "ng-basic-keyboard-handler",
+    selector: 'ng-basic-keyboard-handler',
     template: '',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -100,7 +100,7 @@ export class BasicKeyboardHandlerComponent implements BasicKeyboardHandler, NgSe
             this.pluginBus.selectElement.nativeElement.addEventListener('keydown', this._handleKeyboard);
         }
 
-        let popup = this.ngSelectPlugins[POPUP] as Popup;
+        const popup = this.ngSelectPlugins[POPUP] as Popup;
 
         if(this._popup && this._popup != popup)
         {
@@ -135,10 +135,10 @@ export class BasicKeyboardHandlerComponent implements BasicKeyboardHandler, NgSe
      */
     protected _handleKeyboard = (event: KeyboardEvent) =>
     {
-        if(event.key == "ArrowDown" || event.key == "ArrowUp")
+        if(event.key == 'ArrowDown' || event.key == 'ArrowUp')
         {
             this.pluginBus.showHidePopup.emit(true);
-            let activeOption = this.availableOptions.find(itm => itm.active);
+            const activeOption = this.availableOptions.find(itm => itm.active);
 
             if(activeOption)
             {
@@ -146,7 +146,7 @@ export class BasicKeyboardHandlerComponent implements BasicKeyboardHandler, NgSe
                 activeOption.active = false;
 
                 //move down cursor
-                if(event.key == "ArrowDown")
+                if(event.key == 'ArrowDown')
                 {
                     index += 1;
                 }
@@ -176,9 +176,9 @@ export class BasicKeyboardHandlerComponent implements BasicKeyboardHandler, NgSe
         }
 
         //prevent enter if popup is opened
-        if(event.key == "Enter" && this._popup.popupElement)
+        if(event.key == 'Enter' && this._popup.popupElement)
         {
-            let activeOption = this.availableOptions.find(itm => itm.active);
+            const activeOption = this.availableOptions.find(itm => itm.active);
 
             if(activeOption)
             {
@@ -188,7 +188,7 @@ export class BasicKeyboardHandlerComponent implements BasicKeyboardHandler, NgSe
             event.preventDefault();
         }
 
-        if(event.key == "Tab" || event.key == "Escape")
+        if(event.key == 'Tab' || event.key == 'Escape')
         {
             this.pluginBus.showHidePopup.emit(false);
         }

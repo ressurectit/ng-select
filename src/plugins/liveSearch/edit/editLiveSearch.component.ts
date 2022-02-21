@@ -1,6 +1,6 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef, Inject, Optional, ElementRef, ViewChild, EventEmitter, OnDestroy} from '@angular/core';
-import {extend, isPresent} from '@jscrpt/common';
 import {STRING_LOCALIZATION, StringLocalization} from '@anglr/common';
+import {extend, isPresent} from '@jscrpt/common';
 import {Subscription} from 'rxjs';
 
 import {EditLiveSearchOptions, EditLiveSearch} from './editLiveSearch.interface';
@@ -42,7 +42,7 @@ const defaultOptions: EditLiveSearchOptions =
  */
 @Component(
 {
-    selector: "ng-edit-live-search",
+    selector: 'ng-edit-live-search',
     templateUrl: 'editLiveSearch.component.html',
     styleUrls: ['editLiveSearch.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -231,7 +231,7 @@ export class EditLiveSearchComponent implements EditLiveSearch, NgSelectPlugin<E
                     //only when input is filled at least with one char
                     if(this.searchValue)
                     {
-                        let option: ɵNgSelectOption = this.pluginBus.selectOptions.optionsGatherer.availableOptions.find(itm => this.pluginBus.selectOptions.liveSearchFilter(this.searchValue, this.pluginBus.selectOptions.normalizer)(itm));
+                        const option: ɵNgSelectOption = this.pluginBus.selectOptions.optionsGatherer.availableOptions.find(itm => this.pluginBus.selectOptions.liveSearchFilter(this.searchValue, this.pluginBus.selectOptions.normalizer)(itm));
     
                         if(option)
                         {
@@ -249,7 +249,7 @@ export class EditLiveSearchComponent implements EditLiveSearch, NgSelectPlugin<E
             });
         }
 
-        let popup = this.ngSelectPlugins[POPUP] as Popup;
+        const popup = this.ngSelectPlugins[POPUP] as Popup;
 
         if(this._popup && this._popup != popup)
         {
@@ -277,7 +277,7 @@ export class EditLiveSearchComponent implements EditLiveSearch, NgSelectPlugin<E
             });
         }
 
-        let valueHandler = this.ngSelectPlugins[VALUE_HANDLER] as ValueHandler;
+        const valueHandler = this.ngSelectPlugins[VALUE_HANDLER] as ValueHandler;
 
         if(this._valueHandler && this._valueHandler != valueHandler)
         {
@@ -293,7 +293,7 @@ export class EditLiveSearchComponent implements EditLiveSearch, NgSelectPlugin<E
 
             this._valueChangedSubscription = this._valueHandler.valueChange.subscribe(() =>
             {
-                let selected = this._valueHandler.selectedOptions;
+                const selected = this._valueHandler.selectedOptions;
 
                 if(!selected)
                 {
@@ -439,7 +439,7 @@ export class EditLiveSearchComponent implements EditLiveSearch, NgSelectPlugin<E
     {
         Object.keys(this.options.texts).forEach(key =>
         {
-            this.texts[key] = this._stringLocalization.get(this.options.texts[key]);
+            this.texts[key as keyof LiveSearchTexts] = this._stringLocalization.get(this.options.texts[key as keyof LiveSearchTexts]);
         });
 
         this._changeDetector.detectChanges();
@@ -450,13 +450,13 @@ export class EditLiveSearchComponent implements EditLiveSearch, NgSelectPlugin<E
      */
     protected _activateSelectedOrFirst()
     {
-        let activeOption = this.availableOptions.find(itm => itm.active);
-        let selectedOptions = this.availableOptions.filter(itm => itm.selected);
+        const activeOption = this.availableOptions.find(itm => itm.active);
+        const selectedOptions = this.availableOptions.filter(itm => itm.selected);
 
         //nothing active, nothing selected
         if(!activeOption && !selectedOptions.length)
         {
-            let first = this.availableOptions[0];
+            const first = this.availableOptions[0];
 
             if(first)
             {

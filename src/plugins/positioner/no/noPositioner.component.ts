@@ -1,7 +1,7 @@
-import {NoPositioner, NoPositionerOptions} from "./noPositioner.interface";
-import {ChangeDetectionStrategy, Component, ElementRef, Inject, Optional} from "@angular/core";
-import {extend} from "@jscrpt/common";
+import {ChangeDetectionStrategy, Component, ElementRef, Inject, Optional} from '@angular/core';
+import {extend} from '@jscrpt/common';
 
+import {NoPositioner, NoPositionerOptions} from './noPositioner.interface';
 import {NgSelectPlugin} from '../../../misc';
 import {NgSelectPluginInstances} from '../../../components/select';
 import {NG_SELECT_PLUGIN_INSTANCES} from '../../../components/select/types';
@@ -21,7 +21,7 @@ const defaultOptions: NoPositionerOptions =
  */
 @Component(
 {
-    selector: "ng-no-positioner",
+    selector: 'ng-no-positioner',
     template: '',
     changeDetection: ChangeDetectionStrategy.OnPush
 })

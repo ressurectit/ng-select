@@ -50,7 +50,7 @@ export class DialogPopupDirective implements OnChanges
      */
     public ngOnChanges(changes: SimpleChanges): void
     {
-        let options: DialogPopupOptions = {};
+        const options: DialogPopupOptions = {};
         let changed = false;
 
         if(nameof<DialogPopupDirective>('popupType') in changes && this.popupType)
@@ -78,7 +78,7 @@ export class DialogPopupDirective implements OnChanges
                         options: options
                     }
                 }
-            }))
+            }));
         }
     }
 }

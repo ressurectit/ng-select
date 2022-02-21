@@ -1,4 +1,4 @@
-import {KeyboardHandler, KeyboardHandlerOptions} from "../keyboardHandler.interface";
+import {KeyboardHandler, KeyboardHandlerOptions} from '../keyboardHandler.interface';
 
 /**
  * Edit keyboard handler options

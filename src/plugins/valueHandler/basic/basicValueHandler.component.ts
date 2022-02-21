@@ -24,7 +24,7 @@ const defaultOptions: BasicValueHandlerOptions =
  */
 @Component(
 {
-    selector: "ng-basic-value-handler",
+    selector: 'ng-basic-value-handler',
     template: '',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -76,14 +76,14 @@ export class BasicValueHandlerComponent<TValue = any> extends ValueHandlerBase<T
     /**
      * Initialize plugin options, all operations required to be done with plugin options are handled here
      */
-    public initOptions()
+    public override initOptions()
     {
     }
 
     /**
      * Explicitly runs invalidation of content (change detection)
      */
-    public invalidateVisuals(): void
+    public override invalidateVisuals(): void
     {
     }
 
@@ -172,7 +172,7 @@ export class BasicValueHandlerComponent<TValue = any> extends ValueHandlerBase<T
         {
             if(Array.isArray(value))
             {
-                let items = value;
+                const items = value;
 
                 this.selectedOptions = this._optionsGatherer.options.filter(itm => !!items.find(it => this.valueComparer(it, itm.value)));
             }
@@ -189,7 +189,7 @@ export class BasicValueHandlerComponent<TValue = any> extends ValueHandlerBase<T
             }
             else
             {
-                let item = value;
+                const item = value;
 
                 this.selectedOptions = this._optionsGatherer.options.find(itm => this.valueComparer(itm.value, item));
             }

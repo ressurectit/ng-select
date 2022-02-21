@@ -1,13 +1,13 @@
-import {InjectionToken, Type} from "@angular/core";
+import {InjectionToken, Type} from '@angular/core';
 
-import {KeyboardHandler} from "../plugins/keyboardHandler";
-import {NormalState} from "../plugins/normalState";
-import {Popup} from "../plugins/popup";
-import {Positioner} from "../plugins/positioner";
-import {ReadonlyState} from "../plugins/readonlyState";
-import {ValueHandler} from "../plugins/valueHandler";
-import {LiveSearch} from "../plugins/liveSearch";
-import {NgSelectOptions} from "./ngSelectOptions.interface";
+import {KeyboardHandler} from '../plugins/keyboardHandler';
+import {NormalState} from '../plugins/normalState';
+import {Popup} from '../plugins/popup';
+import {Positioner} from '../plugins/positioner';
+import {ReadonlyState} from '../plugins/readonlyState';
+import {ValueHandler} from '../plugins/valueHandler';
+import {LiveSearch} from '../plugins/liveSearch';
+import {NgSelectOptions} from './ngSelectOptions.interface';
 
 /**
  * Injection token for 'NgSelectOptions'

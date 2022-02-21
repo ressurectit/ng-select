@@ -1,4 +1,4 @@
-import {Popup, PopupOptions} from "../popup.interface";
+import {Popup, PopupOptions} from '../popup.interface';
 
 /**
  * Css classes for basic popup

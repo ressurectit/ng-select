@@ -1,4 +1,4 @@
-import {NormalState, NormalStateOptions} from "../normalState.interface";
+import {NormalState, NormalStateOptions} from '../normalState.interface';
 
 /**
  * Css classes for edit normal state

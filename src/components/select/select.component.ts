@@ -1,34 +1,34 @@
-import {Component, ChangeDetectionStrategy, FactoryProvider, Input, Inject, ChangeDetectorRef, Optional, Type, AfterViewInit, OnInit, ContentChildren, QueryList, EventEmitter, forwardRef, resolveForwardRef, ElementRef, OnChanges, SimpleChanges, Attribute, OnDestroy, TemplateRef, ContentChild, ComponentFactoryResolver, ApplicationRef, Injector, EmbeddedViewRef, ComponentRef, ClassProvider} from "@angular/core";
-import {extend, nameof, isBoolean, isPresent, isString} from "@jscrpt/common";
-import {BehaviorSubject, Observable, Subscription} from "rxjs";
+import {Component, ChangeDetectionStrategy, FactoryProvider, Input, Inject, ChangeDetectorRef, Optional, Type, AfterViewInit, OnInit, ContentChildren, QueryList, EventEmitter, forwardRef, resolveForwardRef, ElementRef, OnChanges, SimpleChanges, Attribute, OnDestroy, TemplateRef, ContentChild, ComponentFactoryResolver, ApplicationRef, Injector, EmbeddedViewRef, ComponentRef, ClassProvider} from '@angular/core';
+import {extend, nameof, isBoolean, isPresent, isString} from '@jscrpt/common';
+import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 
-import {NgSelectOptions, NgSelectPlugin, PluginDescription, NormalizeFunc, NgSelectPluginTypes} from "../../misc";
-import {NG_SELECT_OPTIONS, KEYBOARD_HANDLER_TYPE, NORMAL_STATE_TYPE, POPUP_TYPE, POSITIONER_TYPE, READONLY_STATE_TYPE, VALUE_HANDLER_TYPE, LIVE_SEARCH_TYPE} from "../../misc/types";
-import {NgSelect, NgSelectPluginInstances, NgSelectAction, NgSelectFunction} from "./select.interface";
-import {NG_SELECT_PLUGIN_INSTANCES} from "./types";
-import {KeyboardHandler} from "../../plugins/keyboardHandler";
-import {BasicKeyboardHandlerComponent} from "../../plugins/keyboardHandler/components";
-import {KEYBOARD_HANDLER} from "../../plugins/keyboardHandler/types";
-import {NormalState, NormalStateContext} from "../../plugins/normalState";
-import {NORMAL_STATE} from "../../plugins/normalState/types";
-import {BasicNormalStateComponent} from "../../plugins/normalState/components";
-import {Popup, PopupContext} from "../../plugins/popup";
-import {POPUP} from "../../plugins/popup/types";
-import {BasicPopupComponent} from "../../plugins/popup/component";
-import {Positioner} from "../../plugins/positioner";
-import {POSITIONER} from "../../plugins/positioner/types";
-import {BasicPositionerComponent} from "../../plugins/positioner/components";
-import {ReadonlyState} from "../../plugins/readonlyState";
-import {READONLY_STATE} from "../../plugins/readonlyState/types";
-import {ValueHandler} from "../../plugins/valueHandler";
-import {VALUE_HANDLER} from "../../plugins/valueHandler/types";
-import {BasicValueHandlerComponent} from "../../plugins/valueHandler/components";
-import {LiveSearch} from "../../plugins/liveSearch";
-import {LIVE_SEARCH} from "../../plugins/liveSearch/types";
-import {NoLiveSearchComponent} from "../../plugins/liveSearch/components";
-import {NgSelectOption, NgSelectOptGroup} from "../option";
-import {OptionComponent} from "../option/option.component";
-import {OptGroupComponent} from "../option/optgroup.component";
+import {NgSelectOptions, NgSelectPlugin, PluginDescription, NormalizeFunc, NgSelectPluginTypes} from '../../misc';
+import {NG_SELECT_OPTIONS, KEYBOARD_HANDLER_TYPE, NORMAL_STATE_TYPE, POPUP_TYPE, POSITIONER_TYPE, READONLY_STATE_TYPE, VALUE_HANDLER_TYPE, LIVE_SEARCH_TYPE} from '../../misc/types';
+import {NgSelect, NgSelectPluginInstances, NgSelectAction, NgSelectFunction} from './select.interface';
+import {NG_SELECT_PLUGIN_INSTANCES} from './types';
+import {KeyboardHandler} from '../../plugins/keyboardHandler';
+import {BasicKeyboardHandlerComponent} from '../../plugins/keyboardHandler/components';
+import {KEYBOARD_HANDLER} from '../../plugins/keyboardHandler/types';
+import {NormalState, NormalStateContext} from '../../plugins/normalState';
+import {NORMAL_STATE} from '../../plugins/normalState/types';
+import {BasicNormalStateComponent} from '../../plugins/normalState/components';
+import {Popup, PopupContext} from '../../plugins/popup';
+import {POPUP} from '../../plugins/popup/types';
+import {BasicPopupComponent} from '../../plugins/popup/component';
+import {Positioner} from '../../plugins/positioner';
+import {POSITIONER} from '../../plugins/positioner/types';
+import {BasicPositionerComponent} from '../../plugins/positioner/components';
+import {ReadonlyState} from '../../plugins/readonlyState';
+import {READONLY_STATE} from '../../plugins/readonlyState/types';
+import {ValueHandler} from '../../plugins/valueHandler';
+import {VALUE_HANDLER} from '../../plugins/valueHandler/types';
+import {BasicValueHandlerComponent} from '../../plugins/valueHandler/components';
+import {LiveSearch} from '../../plugins/liveSearch';
+import {LIVE_SEARCH} from '../../plugins/liveSearch/types';
+import {NoLiveSearchComponent} from '../../plugins/liveSearch/components';
+import {NgSelectOption, NgSelectOptGroup} from '../option';
+import {OptionComponent} from '../option/option.component';
+import {OptGroupComponent} from '../option/optgroup.component';
 import {PluginBus} from '../../misc/pluginBus/pluginBus';
 import {PluginBusEvents} from '../../misc/pluginBus/pluginBus.interface';
 
@@ -353,9 +353,9 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
                 @Attribute('multiple') multiple?: string)
     {
         //at least on of following is present (value is not important)
-        let readonlyDefault = isPresent(readonly) || isPresent(disabled);
-        let multipleDefault = isPresent(multiple);
-        let opts: NgSelectOptions<TValue> = extend(true, {}, options);
+        const readonlyDefault = isPresent(readonly) || isPresent(disabled);
+        const multipleDefault = isPresent(multiple);
+        const opts: NgSelectOptions<TValue> = extend(true, {}, options);
 
         if(!opts.plugins)
         {
@@ -457,7 +457,7 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
      */
     public ngOnChanges(changes: SimpleChanges): void
     {
-        let updateReadonly = (state: boolean, firstChange: boolean) =>
+        const updateReadonly = (state: boolean, firstChange: boolean) =>
         {
             //update options
             this.selectOptions.readonly = state;
@@ -535,7 +535,7 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
      */
     public initializeGatherer(): void
     {
-        let liveSearch = this._pluginInstances[LIVE_SEARCH] as LiveSearch;
+        const liveSearch = this._pluginInstances[LIVE_SEARCH] as LiveSearch;
 
         if(this._liveSearch && this._liveSearch != liveSearch)
         {
@@ -653,7 +653,7 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
      */
     public initialize()
     {
-        let liveSearchPlugin = this._pluginInstances[LIVE_SEARCH] as LiveSearch;
+        const liveSearchPlugin = this._pluginInstances[LIVE_SEARCH] as LiveSearch;
         this.liveSearchElement = [[liveSearchPlugin.liveSearchElement]];
 
         if(this.selectOptions.absolute)
@@ -686,7 +686,7 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
         this.selectOptions.optionsGatherer.pluginBus = this._pluginBus;
         this.selectOptions.optionsGatherer.select = this;
 
-        let initOptionsPlugin = (pluginKey: string, pluginName: keyof NgSelectPluginTypes) =>
+        const initOptionsPlugin = (pluginKey: string, pluginName: keyof NgSelectPluginTypes) =>
         {
             if(this._selectOptions.plugins[pluginName])
             {
@@ -702,7 +702,7 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
                     this._pluginInstances[pluginKey].initOptions();
                 }
             }
-        }
+        };
 
         if(this._selectOptions.plugins)
         {

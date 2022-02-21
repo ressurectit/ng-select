@@ -1,8 +1,8 @@
-import {Component, ChangeDetectionStrategy, Input, EventEmitter, QueryList, ViewChildren, AfterViewInit} from "@angular/core";
+import {Component, ChangeDetectionStrategy, Input, EventEmitter, QueryList, ViewChildren, AfterViewInit} from '@angular/core';
 
-import {NgSelectOptGroup} from "./optgroup.interface";
-import {NgSelectOption} from "./option.interface";
-import {OptionComponent} from "./option.component";
+import {NgSelectOptGroup} from './optgroup.interface';
+import {NgSelectOption} from './option.interface';
+import {OptionComponent} from './option.component';
 
 /**
  * Component used for options group in select component

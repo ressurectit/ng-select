@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {CommonModule as NgCommonModule} from '@anglr/common';
+import {CommonDynamicModule} from '@anglr/common';
 
 import {NgSelectValuePipe} from '../pipes/ngSelectValue.pipe';
 import {NgSelectHasValuePipe} from '../pipes/ngSelectHasValue.pipe';
@@ -27,7 +27,7 @@ import {NgSelectPlaceholderDirective} from '../directives/ngSelectPlaceholder/ng
     imports:
     [
         CommonModule,
-        NgCommonModule
+        CommonDynamicModule,
     ],
     declarations:
     [

@@ -1,4 +1,4 @@
-import {NgSelectOption} from "../../components/option";
+import {NgSelectOption} from '../../components/option';
 
 /**
  * Callback used for obtaining dynamic options

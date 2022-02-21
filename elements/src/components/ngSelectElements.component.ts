@@ -1,11 +1,11 @@
-import {Component, ChangeDetectionStrategy, FactoryProvider, Input, ChangeDetectorRef, ElementRef, Inject, Attribute, ComponentFactoryResolver, ApplicationRef, Injector, ClassProvider} from "@angular/core";
+import {Component, ChangeDetectionStrategy, FactoryProvider, Input, ChangeDetectorRef, ElementRef, Inject, Attribute, ComponentFactoryResolver, ApplicationRef, Injector, ClassProvider} from '@angular/core';
+import {NgSelectComponent, NG_SELECT_PLUGIN_INSTANCES, ngSelectPluginInstancesFactory, NgSelectOptions, NgSelectAction, NgSelectFunction, NgSelectPluginInstances, NgSelectPlugin, CodeOptionsGatherer, NgSelectOption, PluginBus} from '@anglr/select';
 import {isString} from '@jscrpt/common';
-import {NgSelectComponent, NG_SELECT_PLUGIN_INSTANCES, ngSelectPluginInstancesFactory, NgSelectOptions, NgSelectAction, NgSelectFunction, NgSelectPluginInstances, NgSelectPlugin, CodeOptionsGatherer, NgSelectOption, PluginBus} from "@anglr/select";
-import {Observable} from "rxjs";
+import {Observable} from 'rxjs';
 
-import {NgSelectWebComponent} from "./ngSelectElements.interface";
+import {NgSelectWebComponent} from './ngSelectElements.interface';
 
-const NG_OPTION = "NG-OPTION";
+const NG_OPTION = 'NG-OPTION';
 
 /**
  * Component that represents WebComponent implementation of NgSelect
@@ -138,11 +138,11 @@ export class NgSelectElementsComponent<TValue = any> extends NgSelectComponent<T
 
                 if(added || removed)
                 {
-                    let options: NgSelectOption<TValue>[] = [];
+                    const options: NgSelectOption<TValue>[] = [];
 
                     for(let x = 0; x < element.nativeElement.children.length; x++)
                     {
-                        let itm = element.nativeElement.children.item(x) as NgSelectOption<TValue> & HTMLElement;
+                        const itm = element.nativeElement.children.item(x) as NgSelectOption<TValue> & HTMLElement;
 
                         if(itm.nodeName == NG_OPTION)
                         {
@@ -168,7 +168,7 @@ export class NgSelectElementsComponent<TValue = any> extends NgSelectComponent<T
     /**
      * Called when component is destroyed
      */
-    public ngOnDestroy()
+    public override ngOnDestroy()
     {
         if(this._optionsObserver)
         {

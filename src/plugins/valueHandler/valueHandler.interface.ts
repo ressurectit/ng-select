@@ -1,7 +1,7 @@
-import {EventEmitter} from "@angular/core";
+import {EventEmitter} from '@angular/core';
 
-import {PluginOptions, NgSelectPlugin} from "../../misc";
-import {NgSelectOption} from "../../components/option";
+import {PluginOptions, NgSelectPlugin} from '../../misc';
+import {NgSelectOption} from '../../components/option';
 
 /**
  * Options for value handler plugin

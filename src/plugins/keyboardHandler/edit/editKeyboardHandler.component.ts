@@ -28,7 +28,7 @@ const defaultOptions: EditKeyboardHandlerOptions =
  */
 @Component(
 {
-    selector: "ng-edit-keyboard-handler",
+    selector: 'ng-edit-keyboard-handler',
     template: '',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -114,7 +114,7 @@ export class EditKeyboardHandlerComponent implements EditKeyboardHandler, NgSele
             this.pluginBus.selectElement.nativeElement.addEventListener('keydown', this._handleKeyboard);
         }
 
-        let popup = this.ngSelectPlugins[POPUP] as Popup;
+        const popup = this.ngSelectPlugins[POPUP] as Popup;
 
         if(this._popup && this._popup != popup)
         {
@@ -126,7 +126,7 @@ export class EditKeyboardHandlerComponent implements EditKeyboardHandler, NgSele
             this._popup = popup;
         }
 
-        let valueHandler = this.ngSelectPlugins[VALUE_HANDLER] as ValueHandler;
+        const valueHandler = this.ngSelectPlugins[VALUE_HANDLER] as ValueHandler;
 
         if(this._valueHandler && this._valueHandler != valueHandler)
         {
@@ -138,7 +138,7 @@ export class EditKeyboardHandlerComponent implements EditKeyboardHandler, NgSele
             this._valueHandler = valueHandler;
         }
 
-        let liveSearch = this.ngSelectPlugins[LIVE_SEARCH] as LiveSearch;
+        const liveSearch = this.ngSelectPlugins[LIVE_SEARCH] as LiveSearch;
 
         if(this._liveSearch && this._liveSearch != liveSearch)
         {
@@ -173,10 +173,10 @@ export class EditKeyboardHandlerComponent implements EditKeyboardHandler, NgSele
      */
     protected _handleKeyboard = (event: KeyboardEvent) =>
     {
-        if(event.key == "ArrowDown" || event.key == "ArrowUp")
+        if(event.key == 'ArrowDown' || event.key == 'ArrowUp')
         {
             this.pluginBus.showHidePopup.emit(true);
-            let activeOption = this.availableOptions.find(itm => itm.active);
+            const activeOption = this.availableOptions.find(itm => itm.active);
 
             //update active option
             if(activeOption)
@@ -185,7 +185,7 @@ export class EditKeyboardHandlerComponent implements EditKeyboardHandler, NgSele
                 activeOption.active = false;
 
                 //move down cursor
-                if(event.key == "ArrowDown")
+                if(event.key == 'ArrowDown')
                 {
                     index += 1;
                 }
@@ -216,9 +216,9 @@ export class EditKeyboardHandlerComponent implements EditKeyboardHandler, NgSele
         }
 
         //prevent enter if popup is opened and select option
-        if(event.key == "Enter" && this._popup.popupElement)
+        if(event.key == 'Enter' && this._popup.popupElement)
         {
-            let activeOption = this.availableOptions.find(itm => itm.active);
+            const activeOption = this.availableOptions.find(itm => itm.active);
             
             if(activeOption)
             {
@@ -240,9 +240,9 @@ export class EditKeyboardHandlerComponent implements EditKeyboardHandler, NgSele
         }
 
         //select if active if popup is opened
-        if(event.key == "Tab" && this._popup.popupElement)
+        if(event.key == 'Tab' && this._popup.popupElement)
         {
-            let active = this.availableOptions.find(itm => itm.active);
+            const active = this.availableOptions.find(itm => itm.active);
             
             if(active)
             {
@@ -265,9 +265,9 @@ export class EditKeyboardHandlerComponent implements EditKeyboardHandler, NgSele
         }
 
         //cancel event if multi and empty
-        if(event.key == "Backspace" && this.pluginBus.selectOptions.multiple && !this._liveSearch.searchValue)
+        if(event.key == 'Backspace' && this.pluginBus.selectOptions.multiple && !this._liveSearch.searchValue)
         {
-            let options = this._valueHandler.selectedOptions;
+            const options = this._valueHandler.selectedOptions;
 
             if(options && Array.isArray(options) && options.length)
             {
@@ -276,7 +276,7 @@ export class EditKeyboardHandlerComponent implements EditKeyboardHandler, NgSele
         }
 
         //close on esc
-        if(event.key == "Escape")
+        if(event.key == 'Escape')
         {
             this.pluginBus.showHidePopup.emit(false);
         }

@@ -1,4 +1,4 @@
-import {Popup, PopupOptions} from "@anglr/select";
+import {Popup, PopupOptions} from '@anglr/select';
 
 /**
  * Css classes for virtual edit popup

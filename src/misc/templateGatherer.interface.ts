@@ -1,7 +1,7 @@
-import {TemplateRef} from "@angular/core";
+import {TemplateRef} from '@angular/core';
 
-import {NormalStateContext} from "../plugins/normalState";
-import {PopupContext} from "../plugins/popup";
+import {NormalStateContext} from '../plugins/normalState';
+import {PopupContext} from '../plugins/popup';
 
 /**
  * Gatherer used for obtaining templates for NgSelect plugins

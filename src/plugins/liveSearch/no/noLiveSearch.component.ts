@@ -12,7 +12,7 @@ import {PluginBus} from '../../../misc/pluginBus/pluginBus';
  */
 @Component(
 {
-    selector: "ng-no-live-search",
+    selector: 'ng-no-live-search',
     template: '',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -42,7 +42,7 @@ export class NoLiveSearchComponent implements NoLiveSearch, NgSelectPlugin<NoLiv
      */
     public get liveSearchElement(): HTMLElement
     {
-        return this._document.createElement("span");
+        return this._document.createElement('span');
     }
 
     /**
@@ -58,7 +58,7 @@ export class NoLiveSearchComponent implements NoLiveSearch, NgSelectPlugin<NoLiv
     //######################### constructor #########################
     constructor(@Inject(NG_SELECT_PLUGIN_INSTANCES) @Optional() public ngSelectPlugins: NgSelectPluginInstances,
                 public pluginElement: ElementRef,
-                @Inject(DOCUMENT) private _document: HTMLDocument)
+                @Inject(DOCUMENT) private _document: Document)
     {
     }
 

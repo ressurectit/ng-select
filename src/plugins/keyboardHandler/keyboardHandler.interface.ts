@@ -1,4 +1,4 @@
-import {PluginOptions, NgSelectPlugin} from "../../misc";
+import {PluginOptions, NgSelectPlugin} from '../../misc';
 
 /**
  * Options for keyboard handler plugin

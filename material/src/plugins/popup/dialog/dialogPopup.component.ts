@@ -1,12 +1,12 @@
-import {NgSelectPlugin, NgSelectPluginInstances, NG_SELECT_PLUGIN_INSTANCES, PluginBus, POPUP_OPTIONS, ɵNgSelectOption} from "@anglr/select";
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, Inject, OnDestroy, Optional, resolveForwardRef} from "@angular/core";
-import {MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, Inject, OnDestroy, Optional, resolveForwardRef} from '@angular/core';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {ComponentType} from '@angular/cdk/portal';
-import {extend} from "@jscrpt/common";
-import {Subscription} from "rxjs";
+import {NgSelectPlugin, NgSelectPluginInstances, NG_SELECT_PLUGIN_INSTANCES, PluginBus, POPUP_OPTIONS, ɵNgSelectOption} from '@anglr/select';
+import {extend} from '@jscrpt/common';
+import {Subscription} from 'rxjs';
 
-import {BasicDialogPopupComponent} from "../../../components/basicDialogPopup/basicDialogPopup.component";
-import {DialogPopup, DialogPopupContentComponent, DialogPopupOptions, DialogPopupComponentData} from "./dialogPopup.interface";
+import {BasicDialogPopupComponent} from '../../../components/basicDialogPopup/basicDialogPopup.component';
+import {DialogPopup, DialogPopupContentComponent, DialogPopupOptions, DialogPopupComponentData} from './dialogPopup.interface';
 
 /**
  * Default options for popup
@@ -28,8 +28,8 @@ const defaultOptions: DialogPopupOptions =
  */
 @Component(
 {
-    selector: "div.ng-select-dialog-popup",
-    template: "",
+    selector: 'div.ng-select-dialog-popup',
+    template: '',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DialogPopupComponent<TComponent extends DialogPopupContentComponent<TDialogOptions, TValue, TCssClasses> = any, TValue = any, TDialogOptions = any, TCssClasses = any> implements DialogPopup, NgSelectPlugin<DialogPopupOptions<TComponent, TDialogOptions, TValue, TCssClasses>, TValue>, OnDestroy

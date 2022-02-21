@@ -1,4 +1,6 @@
-import {PluginOptions, NgSelectPlugin} from "../../misc";
+import type {PositionsCoordinates} from 'positions';
+
+import {PluginOptions, NgSelectPlugin} from '../../misc';
 
 /**
  * Options for positioner plugin
@@ -8,12 +10,12 @@ export interface PositionerOptions extends PluginOptions
     /**
      * Coordinates of options popup relative to select
      */
-    optionsCoordinates?: Positions.PositionsCoordinates;
+    optionsCoordinates?: PositionsCoordinates;
 
     /**
      * Coordinates of select relative to options
      */
-    selectCoordinates?: Positions.PositionsCoordinates;
+    selectCoordinates?: PositionsCoordinates;
 }
 
 /**

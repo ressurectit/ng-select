@@ -21,7 +21,7 @@ const defaultOptions: PopperJsPositionerOptions =
  */
 @Component(
 {
-    selector: "ng-popperjs-positioner",
+    selector: 'ng-popperjs-positioner',
     template: '',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -89,7 +89,7 @@ export class PopperJsPositionerComponent implements PopperJsPositioner, NgSelect
                 public pluginElement: ElementRef,
                 protected _changeDetector: ChangeDetectorRef,
                 @Inject(POSITIONER_OPTIONS) @Optional() options?: PopperJsPositionerOptions,
-                @Inject(DOCUMENT) protected _document?: HTMLDocument,
+                @Inject(DOCUMENT) protected _document?: Document,
                 @Inject(PLATFORM_ID) protected _platformId?: Object)
     {
         this._options = extend(true, {}, defaultOptions, options);
@@ -140,7 +140,7 @@ export class PopperJsPositionerComponent implements PopperJsPositioner, NgSelect
             });
         }
 
-        let popup: Popup = this.ngSelectPlugins[POPUP] as Popup;
+        const popup: Popup = this.ngSelectPlugins[POPUP] as Popup;
 
         if(this._popup && this._popup != popup)
         {

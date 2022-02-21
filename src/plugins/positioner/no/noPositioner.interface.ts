@@ -1,4 +1,4 @@
-import {Positioner, PositionerOptions} from "../positioner.interface";
+import {Positioner, PositionerOptions} from '../positioner.interface';
 
 /**
  * Public API for 'NoPositionerComponent'

@@ -30,7 +30,7 @@ export class NgSelectPlaceholderDirective implements OnInit
     /**
      * Initialize component
      */
-    public ngOnInit()
+    public ngOnInit(): void
     {
         this._select.selectOptions = 
         {

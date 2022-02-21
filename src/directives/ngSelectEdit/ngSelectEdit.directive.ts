@@ -1,9 +1,9 @@
-import {Directive, ValueProvider} from "@angular/core";
+import {Directive, ValueProvider} from '@angular/core';
 
-import {NORMAL_STATE_TYPE, LIVE_SEARCH_TYPE, POPUP_TYPE, KEYBOARD_HANDLER_TYPE} from "../../misc/types";
-import {EditNormalStateComponent} from "../../plugins/normalState/edit/editNormalState.component";
-import {EditLiveSearchComponent} from "../../plugins/liveSearch/edit/editLiveSearch.component";
-import {EditPopupComponent} from "../../plugins/popup/edit/editPopup.component";
+import {NORMAL_STATE_TYPE, LIVE_SEARCH_TYPE, POPUP_TYPE, KEYBOARD_HANDLER_TYPE} from '../../misc/types';
+import {EditNormalStateComponent} from '../../plugins/normalState/edit/editNormalState.component';
+import {EditLiveSearchComponent} from '../../plugins/liveSearch/edit/editLiveSearch.component';
+import {EditPopupComponent} from '../../plugins/popup/edit/editPopup.component';
 import {EditKeyboardHandlerComponent} from '../../plugins/keyboardHandler/components';
 import {NgSelectComponent} from '../../components/select/select.component';
 import {ExcludingOptionsGatherer} from '../../misc/optionsGatherer/types';

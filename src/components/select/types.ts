@@ -1,4 +1,4 @@
-import {InjectionToken} from "@angular/core";
+import {InjectionToken} from '@angular/core';
 
 import {NgSelectPluginInstances} from './select.interface';
 

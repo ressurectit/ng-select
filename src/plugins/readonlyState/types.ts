@@ -1,11 +1,11 @@
-import {InjectionToken} from "@angular/core";
+import {InjectionToken} from '@angular/core';
 
-import {ReadonlyStateOptions} from "./readonlyState.interface";
+import {ReadonlyStateOptions} from './readonlyState.interface';
 
 /**
  * Constant used for accessing readonly state plugin in NgSelect
  */
-export const READONLY_STATE = "READONLY_STATE";
+export const READONLY_STATE = 'READONLY_STATE';
 
 /**
  * Token for injecting options for readonly state plugin

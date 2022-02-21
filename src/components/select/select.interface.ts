@@ -1,6 +1,6 @@
-import {Observable, Subscription} from "rxjs";
+import {Observable, Subscription} from 'rxjs';
 
-import {NgSelectPlugin, NgSelectOptions, OptionsGatherer, TemplateGatherer} from "../../misc";
+import {NgSelectPlugin, NgSelectOptions, OptionsGatherer, TemplateGatherer} from '../../misc';
 import {PluginBusEvents} from '../../misc/pluginBus/pluginBus.interface';
 
 /**

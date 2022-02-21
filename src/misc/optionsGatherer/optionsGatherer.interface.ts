@@ -1,8 +1,8 @@
-import {EventEmitter} from "@angular/core";
+import {EventEmitter} from '@angular/core';
 
-import {NgSelectOption} from "../../components/option/option.interface";
-import {NgSelectPluginInstances, NgSelect} from "../../components/select";
-import {NormalizeFunc} from "../ngSelectOptions.interface";
+import {NgSelectOption} from '../../components/option/option.interface';
+import {NgSelectPluginInstances, NgSelect} from '../../components/select';
+import {NormalizeFunc} from '../ngSelectOptions.interface';
 import {PluginBus} from '../pluginBus/pluginBus';
 
 /**

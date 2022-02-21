@@ -1,4 +1,4 @@
-import {LiveSearch, LiveSearchOptions} from "../liveSearch.interface";
+import {LiveSearch, LiveSearchOptions} from '../liveSearch.interface';
 
 /**
  * Css classes for basic live search

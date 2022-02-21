@@ -1,6 +1,6 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef, Inject, Optional, ElementRef, ViewChild, EventEmitter, OnDestroy} from '@angular/core';
-import {extend} from '@jscrpt/common';
 import {STRING_LOCALIZATION, StringLocalization} from '@anglr/common';
+import {extend} from '@jscrpt/common';
 import {Subscription} from 'rxjs';
 
 import {BasicLiveSearchOptions, BasicLiveSearch} from './basicLiveSearch.interface';
@@ -36,7 +36,7 @@ const defaultOptions: BasicLiveSearchOptions =
  */
 @Component(
 {
-    selector: "ng-basic-live-search",
+    selector: 'ng-basic-live-search',
     templateUrl: 'basicLiveSearch.component.html',
     styleUrls: ['basicLiveSearch.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -163,7 +163,7 @@ export class BasicLiveSearchComponent implements BasicLiveSearch, NgSelectPlugin
     {
         this._textsChangedSubscription = this._stringLocalization.textsChange.subscribe(() => this._initTexts());
 
-        let popup = this.ngSelectPlugins[POPUP] as Popup;
+        const popup = this.ngSelectPlugins[POPUP] as Popup;
 
         if(this._popup && this._popup != popup)
         {
@@ -234,9 +234,9 @@ export class BasicLiveSearchComponent implements BasicLiveSearch, NgSelectPlugin
      */
     protected _initTexts()
     {
-        Object.keys(this.options.texts).forEach(key =>
+        Object.keys(this.options.texts).forEach((key) =>
         {
-            this.texts[key] = this._stringLocalization.get(this.options.texts[key]);
+            this.texts[key as keyof LiveSearchTexts] = this._stringLocalization.get(this.options.texts[key as keyof LiveSearchTexts]);
         });
 
         this._changeDetector.detectChanges();

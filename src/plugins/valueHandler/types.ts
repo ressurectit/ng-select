@@ -1,11 +1,11 @@
-import {InjectionToken} from "@angular/core";
+import {InjectionToken} from '@angular/core';
 
-import {ValueHandlerOptions} from "./valueHandler.interface";
+import {ValueHandlerOptions} from './valueHandler.interface';
 
 /**
  * Constant used for accessing value handler plugin in NgSelect
  */
-export const VALUE_HANDLER = "VALUE_HANDLER";
+export const VALUE_HANDLER = 'VALUE_HANDLER';
 
 /**
  * Token for injecting options for value handler plugin

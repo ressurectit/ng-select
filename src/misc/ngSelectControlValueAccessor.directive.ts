@@ -1,5 +1,5 @@
-import {NG_VALUE_ACCESSOR, ControlValueAccessor} from '@angular/forms';
 import {forwardRef, ExistingProvider, Directive, OnDestroy} from '@angular/core';
+import {NG_VALUE_ACCESSOR, ControlValueAccessor} from '@angular/forms';
 import {Subscription} from 'rxjs';
 
 import {NgSelectComponent} from '../components/select/select.component';
@@ -107,7 +107,7 @@ export class NgSelectControlValueAccessor<TValue = any> implements ControlValueA
      */
     public registerOnChange(fn: (data: TValue|Array<TValue>) => void): void
     {
-        let fnWrapper = (value: TValue|Array<TValue>) =>
+        const fnWrapper = (value: TValue|Array<TValue>) =>
         {
             //multivalue is new array in case of change
             if(Array.isArray(value) && Array.isArray(this._value))
@@ -142,7 +142,7 @@ export class NgSelectControlValueAccessor<TValue = any> implements ControlValueA
 
                 if(this._select.selectOptions.forceValueCheckOnInit)
                 {
-                    let value = this._select.executeAndReturn(ɵGetValue());
+                    const value = this._select.executeAndReturn(ɵGetValue());
 
                     fnWrapper(value);
                 }

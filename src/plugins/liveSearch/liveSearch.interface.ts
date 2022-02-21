@@ -1,6 +1,6 @@
-import {EventEmitter} from "@angular/core";
+import {EventEmitter} from '@angular/core';
 
-import {NgSelectPlugin, VisualPluginOptions} from "../../misc";
+import {NgSelectPlugin, VisualPluginOptions} from '../../misc';
 
 /**
  * Texts that are used within LiveSearch

@@ -1,11 +1,11 @@
-import {EventEmitter} from "@angular/core";
-import {Subscription} from "rxjs";
+import {EventEmitter} from '@angular/core';
+import {Subscription} from 'rxjs';
 
-import {OptionsGatherer} from "./optionsGatherer.interface";
-import {NgSelectOption} from "../../components/option";
-import {NgSelectPluginInstances, NgSelect} from "../../components/select";
-import {LiveSearch} from "../../plugins/liveSearch";
-import {LIVE_SEARCH} from "../../plugins/liveSearch/types";
+import {OptionsGatherer} from './optionsGatherer.interface';
+import {NgSelectOption} from '../../components/option';
+import {NgSelectPluginInstances, NgSelect} from '../../components/select';
+import {LiveSearch} from '../../plugins/liveSearch';
+import {LIVE_SEARCH} from '../../plugins/liveSearch/types';
 import {PluginBus} from '../pluginBus/pluginBus';
 
 /**
@@ -66,7 +66,7 @@ export class CodeOptionsGatherer<TValue = any> implements OptionsGatherer<TValue
     public get availableOptions(): NgSelectOption<TValue>[]
     {
         return this._availableOptions;
-    };
+    }
 
     /**
      * Occurs when array of visible, displayed options has changed
@@ -98,7 +98,7 @@ export class CodeOptionsGatherer<TValue = any> implements OptionsGatherer<TValue
      */
     public initializeGatherer(): void
     {
-        let liveSearch = this.ngSelectPlugins[LIVE_SEARCH] as LiveSearch;
+        const liveSearch = this.ngSelectPlugins[LIVE_SEARCH] as LiveSearch;
 
         if(this._liveSearch && this._liveSearch != liveSearch)
         {

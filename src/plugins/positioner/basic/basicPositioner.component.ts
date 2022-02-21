@@ -33,7 +33,7 @@ const defaultOptions: BasicPositionerOptions =
  */
 @Component(
 {
-    selector: "ng-basic-positioner",
+    selector: 'ng-basic-positioner',
     template: '',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -106,7 +106,7 @@ export class BasicPositionerComponent implements BasicPositioner, NgSelectPlugin
                 public pluginElement: ElementRef,
                 protected _changeDetector: ChangeDetectorRef,
                 @Inject(POSITIONER_OPTIONS) @Optional() options?: BasicPositionerOptions,
-                @Inject(DOCUMENT) protected _document?: HTMLDocument,
+                @Inject(DOCUMENT) protected _document?: Document,
                 @Inject(PLATFORM_ID) protected _platformId?: Object,
                 protected _scrollTargetSelector?: ScrollTargetSelector)
     {
@@ -161,7 +161,7 @@ export class BasicPositionerComponent implements BasicPositioner, NgSelectPlugin
             });
         }
 
-        let popup: Popup = this.ngSelectPlugins[POPUP] as Popup;
+        const popup: Popup = this.ngSelectPlugins[POPUP] as Popup;
 
         if(this._popup && this._popup != popup)
         {
@@ -252,7 +252,7 @@ export class BasicPositionerComponent implements BasicPositioner, NgSelectPlugin
             return;
         }
 
-        let minWidth = this.pluginBus.selectElement.nativeElement.clientWidth;
+        const minWidth = this.pluginBus.selectElement.nativeElement.clientWidth;
 
         if(isNaN(minWidth) || !isNumber(minWidth))
         {

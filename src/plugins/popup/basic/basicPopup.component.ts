@@ -36,7 +36,7 @@ const defaultOptions: BasicPopupOptions =
  */
 @Component(
 {
-    selector: "div.ng-select-popup",
+    selector: 'div.ng-select-popup',
     templateUrl: 'basicPopup.component.html',
     styleUrls: ['basicPopup.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -50,7 +50,7 @@ export class BasicPopupComponent extends PopupAbstractComponent<CssClassesBasicP
                 changeDetector: ChangeDetectorRef,
                 @Inject(POPUP_OPTIONS) @Optional() options: BasicPopupOptions,
                 @Inject(STRING_LOCALIZATION) stringLocalization: StringLocalization,
-                @Inject(DOCUMENT) document?: HTMLDocument)
+                @Inject(DOCUMENT) document?: Document)
     {
         super(ngSelectPlugins, pluginBus, pluginElement, changeDetector, document, stringLocalization);
 

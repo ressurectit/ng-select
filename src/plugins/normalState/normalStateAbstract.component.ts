@@ -92,7 +92,7 @@ export abstract class NormalStateAbstractComponent<TCssClasses = any, TOptions e
     {
         this._textsChangedSubscription = this._stringLocalization.textsChange.subscribe(() => this._initTexts());
 
-        let valueHandler = this.ngSelectPlugins[VALUE_HANDLER] as ValueHandler;
+        const valueHandler = this.ngSelectPlugins[VALUE_HANDLER] as ValueHandler;
 
         if(this.valueHandler && this.valueHandler != valueHandler)
         {
@@ -134,7 +134,7 @@ export abstract class NormalStateAbstractComponent<TCssClasses = any, TOptions e
     {
         Object.keys(this.options.texts).forEach(key =>
         {
-            this.texts[key] = this._stringLocalization.get(this.options.texts[key]);
+            this.texts[key as keyof NormalStateTexts] = this._stringLocalization.get(this.options.texts[key as keyof NormalStateTexts]);
         });
 
         this._changeDetector.detectChanges();

@@ -1,5 +1,5 @@
 
-import {NormalStateOptions, NormalState} from "../normalState";
+import {NormalStateOptions, NormalState} from '../normalState';
 
 /**
  * Options for readonly state plugin

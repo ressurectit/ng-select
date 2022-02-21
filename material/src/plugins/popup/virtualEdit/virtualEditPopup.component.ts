@@ -13,7 +13,7 @@ import {VirtualEditPopup, VirtualEditPopupOptions} from './virtualEditPopup.inte
  */
 @Component(
 {
-    selector: "div.ng-select-virtual-edit-popup",
+    selector: 'div.ng-select-virtual-edit-popup',
     templateUrl: 'virtualEditPopup.component.html',
     styleUrls: ['virtualEditPopup.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -53,7 +53,7 @@ export class VirtualEditPopupComponent extends EditPopupComponent implements Vir
 
     //######################### public properties #########################
 
-    public invalidateVisuals()
+    public override invalidateVisuals()
     {
         super.invalidateVisuals();
 
@@ -63,7 +63,7 @@ export class VirtualEditPopupComponent extends EditPopupComponent implements Vir
     /**
      * Toggles popup visibility
      */
-    protected togglePopup(): void
+    protected override togglePopup(): void
     {
         super.togglePopup();
 
@@ -71,11 +71,11 @@ export class VirtualEditPopupComponent extends EditPopupComponent implements Vir
         {
             this.viewPort.elementScrolled().subscribe(() =>
             {
-                let viewportElement = this.viewPort?.getElementRef().nativeElement;
+                const viewportElement = this.viewPort?.getElementRef().nativeElement;
 
                 if(viewportElement)
                 {
-                    let width = viewportElement.children.item(0).clientWidth;
+                    const width = viewportElement.children.item(0).clientWidth;
 
                     if(width > this._maxWidth)
                     {
@@ -87,7 +87,7 @@ export class VirtualEditPopupComponent extends EditPopupComponent implements Vir
 
             setTimeout(() =>
             {
-                let viewportElement = this.viewPort?.getElementRef().nativeElement;
+                const viewportElement = this.viewPort?.getElementRef().nativeElement;
                 
                 viewportElement.style.width = `${viewportElement.children.item(0).clientWidth}px`;
             }, 0);

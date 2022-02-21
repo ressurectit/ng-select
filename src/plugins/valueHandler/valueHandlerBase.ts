@@ -172,7 +172,7 @@ export abstract class ValueHandlerBase<TValue = any, TOptions extends ValueHandl
             this._optionCancelSubscription = this.pluginBus.optionCancel.subscribe(this._cancelValue);
         }
 
-        let normalState = this.ngSelectPlugins[NORMAL_STATE] as NormalState;
+        const normalState = this.ngSelectPlugins[NORMAL_STATE] as NormalState;
         this._normalState = normalState;
 
         this._loadOptions();
@@ -207,7 +207,7 @@ export abstract class ValueHandlerBase<TValue = any, TOptions extends ValueHandl
     {
         if(Array.isArray(this.selectedOptions))
         {
-            let index = this.selectedOptions.indexOf(option);
+            const index = this.selectedOptions.indexOf(option);
 
             if(index >= 0)
             {

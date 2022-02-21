@@ -23,7 +23,7 @@ const defaultOptions: DynamicValueHandlerOptions =
  */
 @Component(
 {
-    selector: "ng-dynamic-value-handler",
+    selector: 'ng-dynamic-value-handler',
     template: '',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -68,14 +68,14 @@ export class DynamicValueHandlerComponent<TValue = any> extends ValueHandlerBase
     /**
      * Initialize plugin options, all operations required to be done with plugin options are handled here
      */
-    public initOptions()
+    public override initOptions()
     {
     }
 
     /**
      * Explicitly runs invalidation of content (change detection)
      */
-    public invalidateVisuals(): void
+    public override invalidateVisuals(): void
     {
     }
 
@@ -99,7 +99,7 @@ export class DynamicValueHandlerComponent<TValue = any> extends ValueHandlerBase
                 //value exists, removing from list
                 if(this.selectedOptions.find(selOpt => this.valueComparer(selOpt.value, option.value)))
                 {
-                    let index = this.selectedOptions.indexOf(option);
+                    const index = this.selectedOptions.indexOf(option);
                     this.selectedOptions.splice(index, 1);
                 }
                 //adding value
@@ -153,10 +153,10 @@ export class DynamicValueHandlerComponent<TValue = any> extends ValueHandlerBase
         {
             if(Array.isArray(value))
             {
-                let items = value;
-                let options: ɵNgSelectOption<TValue>[] = [];
+                const items = value;
+                const options: ɵNgSelectOption<TValue>[] = [];
 
-                for(let itm of items)
+                for(const itm of items)
                 {
                     options.push(await this._loadText(itm));
                 }
@@ -176,7 +176,7 @@ export class DynamicValueHandlerComponent<TValue = any> extends ValueHandlerBase
             }
             else
             {
-                let item = value;
+                const item = value;
 
                 this.selectedOptions = await this._loadText(item);
             }
@@ -197,11 +197,11 @@ export class DynamicValueHandlerComponent<TValue = any> extends ValueHandlerBase
         //load option dynamically
         if(this.options.dynamicOptionsCallback)
         {
-            let opts = await this.options.dynamicOptionsCallback(value);
+            const opts = await this.options.dynamicOptionsCallback(value);
 
             if(opts && opts.length)
             {
-                let opt: ɵNgSelectOption<TValue> = opts[0];
+                const opt: ɵNgSelectOption<TValue> = opts[0];
 
                 opt.value = value;
                 opt.selected = true;

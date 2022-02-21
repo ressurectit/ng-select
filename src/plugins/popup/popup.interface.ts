@@ -1,7 +1,7 @@
-import {EventEmitter} from "@angular/core";
+import {EventEmitter} from '@angular/core';
 
-import {NgSelectPlugin, VisualPluginOptions} from "../../misc";
-import {NgSelectOption} from "../../components/option";
+import {NgSelectPlugin, VisualPluginOptions} from '../../misc';
+import {NgSelectOption} from '../../components/option';
 
 /**
  * Texts that are used within Popup

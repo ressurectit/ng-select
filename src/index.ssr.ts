@@ -3,8 +3,8 @@
  */
 (function(global: any) 
 {
-    if(!global.HTMLDocument)
+    if(!global.Document)
     {
-        global.HTMLDocument = function(){};
+        global.Document = function(){};
     }
 })(typeof window != 'undefined' && window || typeof self != 'undefined' && self || typeof global != 'undefined' && global);

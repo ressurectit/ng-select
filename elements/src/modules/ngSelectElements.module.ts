@@ -2,7 +2,7 @@ import {NgModule, DoBootstrap, Injector} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {BrowserModule} from '@angular/platform-browser';
 import {createCustomElement} from '@angular/elements';
-import {CommonModule as NgCommonModule} from '@anglr/common';
+import {CommonDynamicModule} from '@anglr/common';
 import {NgSelectModule, OptionComponent} from '@anglr/select';
 
 import {NgSelectElementsComponent} from '../components/ngSelectElements.component';
@@ -16,8 +16,8 @@ import {NgSelectElementsComponent} from '../components/ngSelectElements.componen
     [
         BrowserModule,
         CommonModule,
-        NgCommonModule,
-        NgSelectModule
+        CommonDynamicModule,
+        NgSelectModule,
     ],
     declarations:
     [

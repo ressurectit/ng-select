@@ -1,13 +1,13 @@
-import {Type, ElementRef} from "@angular/core";
+import {Type, ElementRef} from '@angular/core';
 
-import {NgSelectPluginInstances} from "../components/select";
-import {KeyboardHandler} from "../plugins/keyboardHandler";
-import {NormalState} from "../plugins/normalState";
-import {Popup} from "../plugins/popup";
-import {Positioner} from "../plugins/positioner";
-import {ReadonlyState} from "../plugins/readonlyState";
-import {ValueHandler} from "../plugins/valueHandler";
-import {LiveSearch} from "../plugins/liveSearch";
+import {NgSelectPluginInstances} from '../components/select';
+import {KeyboardHandler} from '../plugins/keyboardHandler';
+import {NormalState} from '../plugins/normalState';
+import {Popup} from '../plugins/popup';
+import {Positioner} from '../plugins/positioner';
+import {ReadonlyState} from '../plugins/readonlyState';
+import {ValueHandler} from '../plugins/valueHandler';
+import {LiveSearch} from '../plugins/liveSearch';
 import {PluginBus} from './pluginBus/pluginBus';
 
 /**
@@ -38,12 +38,12 @@ export interface NgSelectPlugin<TOptions = any, TValue = any>
     /**
      * Initialize plugin, to be ready to use, initialize communication with other plugins
      */
-    initialize();
+    initialize(): void;
 
     /**
      * Initialize plugin options, all operations required to be done with plugin options are handled here
      */
-    initOptions();
+    initOptions(): void;
 
     /**
      * Explicitly runs invalidation of content (change detection)

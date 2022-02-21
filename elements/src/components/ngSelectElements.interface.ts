@@ -1,5 +1,5 @@
-import {NgSelectOptions, NgSelectPlugin, NgSelectAction, NgSelectFunction} from "@anglr/select";
-import {Observable} from "rxjs";
+import {NgSelectOptions, NgSelectPlugin, NgSelectAction, NgSelectFunction} from '@anglr/select';
+import {Observable} from 'rxjs';
 
 /**
  * Public API for NgSelect WebComponent
@@ -24,12 +24,12 @@ export interface NgSelectWebComponent<TValue = any>
     /**
      * Initialize component, automatically called once if not blocked by options
      */
-    initializeWC();
+    initializeWC(): void;
 
     /**
      * Initialize options, automaticaly called during init phase, but can be used to reinitialize NgSelectOptions
      */
-    initOptionsWC();
+    initOptionsWC(): void;
 
     /**
      * Gets instance of plugin by its id
@@ -46,7 +46,7 @@ export interface NgSelectWebComponent<TValue = any>
      * Executes actions on NgSelect
      * @param actions - Array of actions that are executed over NgSelect
      */
-    executeWC(...actions: NgSelectAction<TValue>[]);
+    executeWC(...actions: NgSelectAction<TValue>[]): void;
 
     /**
      * Executes function on NgSelect and returns result
