@@ -1,5 +1,17 @@
 # Changelog
 
+## Version 11.0.0 (2022-02-21)
+
+### BREAKING CHANGES
+
+- minimal supported version of *Angular* is `13.1.0`
+- minimal supported version of `@jscrpt/common` is `2.2.0`
+- minimal supported version of `@anglr/common` is `10.0.0`
+- compiled as *Angular IVY* **only** with new *APF*
+- removed support of *es5* target and using latest package.json features
+- removed dependency `@anglr/types`, all mising types used directly here
+- dropped support of `Node.js <= 12.20`
+
 ## Version 10.0.0 (2022-02-17)
 
 ### Features

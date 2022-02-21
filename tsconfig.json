@@ -1,32 +1,36 @@
 {
     "compilerOptions":
     {
-        "target": "es5",
-        "module": "esnext",
+        "target": "es2020",
+        "module": "es2020",
         "moduleResolution": "node",
+        "sourceMap": true,
+        "inlineSources": true,
         "declaration": false,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
-        "noImplicitAny": false,
+        "noImplicitAny": true,
         "noImplicitReturns": true,
+        "noImplicitOverride": true,
+        "noImplicitThis": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
+        "strict": true,
         "strictNullChecks": false,
         "esModuleInterop": true,
+        "importHelpers": true,
+        "newLine": "lf",
+        "rootDir": ".",
+        "outDir": "es2020",
+        "baseUrl": "src",
+        "paths": 
+        {
+            "@anglr/select": ["index.ts"]
+        },
         "lib":
         [
-            "es2016",
+            "es2020",
             "dom"
-        ],
-        "types":
-        [
-            "positions",
-            "node"
-        ],
-        "typeRoots":
-        [
-            "node_modules/@types",
-            "node_modules/@anglr/types"
         ],
         "plugins":
         [
@@ -37,14 +41,13 @@
     },
     "exclude":
     [
-        "node_modules",
-        "dist",
-        "karma-test-shim.ts"
+        "node_modules"
     ],
     "angularCompilerOptions":
     {
-        "fullTemplateTypeCheck": true,
         "strictTemplates": true,
-        "enableIvy": false
+        "compilationMode": "partial",
+        "enableResourceInlining": true,
+        "strictInjectionParameters": true
     }
 }
