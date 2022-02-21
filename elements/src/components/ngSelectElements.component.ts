@@ -1,5 +1,5 @@
 import {Component, ChangeDetectionStrategy, FactoryProvider, Input, ChangeDetectorRef, ElementRef, Inject, Attribute, ComponentFactoryResolver, ApplicationRef, Injector, ClassProvider} from '@angular/core';
-import {NgSelectComponent, NG_SELECT_PLUGIN_INSTANCES, ngSelectPluginInstancesFactory, NgSelectOptions, NgSelectAction, NgSelectFunction, NgSelectPluginInstances, NgSelectPlugin, CodeOptionsGatherer, NgSelectOption, PluginBus} from '@anglr/select';
+import {NgSelectComponent, NG_SELECT_PLUGIN_INSTANCES, NgSelectOptions, NgSelectAction, NgSelectFunction, NgSelectPluginInstances, NgSelectPlugin, CodeOptionsGatherer, NgSelectOption, PluginBus} from '@anglr/select';
 import {isString} from '@jscrpt/common';
 import {Observable} from 'rxjs';
 
@@ -20,7 +20,7 @@ const NG_OPTION = 'NG-OPTION';
         <FactoryProvider>
         {
             provide: NG_SELECT_PLUGIN_INSTANCES,
-            useFactory: ngSelectPluginInstancesFactory
+            useFactory: () => {return {};}
         },
         <ClassProvider>
         {

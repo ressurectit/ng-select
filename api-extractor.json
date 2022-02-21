@@ -26,6 +26,10 @@
     {
         "compilerMessageReporting":
         {
+            "TS2307":
+            {
+                "logLevel": "none"
+            },
             "default":
             {
                 "logLevel": "warning"

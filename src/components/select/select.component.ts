@@ -100,15 +100,6 @@ const defaultOptions: NgSelectOptions =
 };
 
 /**
- * NgSelect plugin instances factory method
- * @internal
- */
-export function ngSelectPluginInstancesFactory()
-{
-    return {};
-}
-
-/**
  * Component that represents NgSelect itself, allows selection of value from options
  */
 @Component(
@@ -121,7 +112,7 @@ export function ngSelectPluginInstancesFactory()
         <FactoryProvider>
         {
             provide: NG_SELECT_PLUGIN_INSTANCES,
-            useFactory: ngSelectPluginInstancesFactory
+            useFactory: () => {return {};}
         },
         <ClassProvider>
         {
@@ -238,7 +229,6 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
 
     /**
      * Template used within normal state
-     * @internal
      */
     @ContentChild('normalStateTemplate')
     public normalStateTemplate: TemplateRef<NormalStateContext>;
@@ -254,7 +244,6 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
 
     /**
      * Array of provided options for select
-     * @internal
      */
     public get options(): NgSelectOption<TValue>[]
     {
@@ -263,7 +252,6 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
 
     /**
      * Occurs when array of provided options has changed
-     * @internal
      */
     public get optionsChange(): EventEmitter<void>
     {
@@ -272,7 +260,6 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
 
     /**
      * Array of visible, displayed options for select
-     * @internal
      */
     public get availableOptions(): NgSelectOption<TValue>[]
     {
@@ -281,7 +268,6 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
 
     /**
      * Occurs when array of visible, displayed options has changed
-     * @internal
      */
     public get availableOptionsChange(): EventEmitter<void>
     {
@@ -290,19 +276,16 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
 
     /**
      * NgSelect plugin instances available for gatherer
-     * @internal
      */
     public ngSelectPlugins: NgSelectPluginInstances;
 
     /**
      * Plugin bus used for inter plugin shared events
-     * @internal
      */
     public pluginBus: PluginBus<TValue>;
 
     /**
      * Select element that implements default gatherers
-     * @internal
      */
     public select: NgSelect<TValue>;
 
@@ -310,7 +293,6 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
 
     /**
      * Element used for live search
-     * @internal
      */
     public liveSearchElement: HTMLElement[][];
 
@@ -318,7 +300,6 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
 
     /**
      * Options children found inside ng-select
-     * @internal
      */
     @ContentChildren(OptionComponent)
     public optionsChildren: QueryList<NgSelectOption>;
@@ -327,7 +308,6 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
 
     /**
      * Options groups children found inside ng-select
-     * @internal
      */
     @ContentChildren(OptGroupComponent)
     public optGroupsChildren: QueryList<NgSelectOptGroup>;
@@ -531,7 +511,6 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
 
     /**
      * Initialize gatherer during initialization phase
-     * @internal
      */
     public initializeGatherer(): void
     {
@@ -567,7 +546,6 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
 
     /**
      * Called when gatherer needs to be destroyed
-     * @internal
      */
     public destroyGatherer(): void
     {
