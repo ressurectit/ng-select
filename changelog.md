@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 11.0.2 (2022-02-22)
+
+### Bug Fixes
+
+- fixed first import at `index`
+- fixed missing exports for `NgSelectAbsoluteDirective`
+- fixed missing exports for `NgSelectPlaceholderDirective`
+
 ## Version 11.0.1 (2022-02-22)
 
 ### Bug Fixes
