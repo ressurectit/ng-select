@@ -5,7 +5,7 @@
     "type": "module",
     "sideEffects": false,
     "scripts": {
-        "build": "ngc --declaration --declarationDir . --declarationMap && ngc -t es2015 --outDir es2015 && npm run dts:rollup",
+        "build": "ngc --declaration --declarationDir . --declarationMap && ngc -t es2015 --outDir es2015",
         "dts:rollup": "npm run api -- api-extractor.json && npm run api -- elements/api-extractor.json && npm run api -- extensions/api-extractor.json && npm run api -- material/api-extractor.json && npm run api -- popperJs/api-extractor.json",
         "api": "api-extractor run --local --verbose -c",
         "clean": "rimraf */temp temp es2015 es2020 **/tsdoc-metadata.json src/**/*.d.ts src/**/*.d.ts.map */src/**/*.d.ts */src/**/*.d.ts.map ./*.d.ts ./*.d.ts.map */*.d.ts",
@@ -33,7 +33,7 @@
         "doc:generate:elements": "rimraf docs/content/api/ng-select-elements && npm run doc:json:elements && npm run doc:md:elements && npm run doc:api:elements",
         "doc:json:elements": "api-extractor run --local --verbose -c elements/api-extractor.json",
         "doc:md:elements": "api-documenter markdown -i elements/temp -o docs/content/api/ng-select-elements",
-        "doc:api:elements": "copyfiles -u 2 elements/temp/common-elements.api.md docs/content/api/ng-common-elements && rimraf elements/temp",
+        "doc:api:elements": "copyfiles -u 2 elements/temp/select-elements.api.md docs/content/api/ng-select-elements && rimraf elements/temp",
         "doc:generate:extensions": "rimraf docs/content/api/ng-select-extensions && npm run doc:json:extensions && npm run doc:md:extensions && npm run doc:api:extensions",
         "doc:json:extensions": "api-extractor run --local --verbose -c extensions/api-extractor.json",
         "doc:md:extensions": "api-documenter markdown -i extensions/temp -o docs/content/api/ng-select-extensions",
@@ -41,11 +41,11 @@
         "doc:generate:material": "rimraf docs/content/api/ng-select-material && npm run doc:json:material && npm run doc:md:material && npm run doc:api:material",
         "doc:json:material": "api-extractor run --local --verbose -c material/api-extractor.json",
         "doc:md:material": "api-documenter markdown -i material/temp -o docs/content/api/ng-select-material",
-        "doc:api:material": "copyfiles -u 2 material/temp/common-material.api.md docs/content/api/ng-common-material && rimraf material/temp",
+        "doc:api:material": "copyfiles -u 2 material/temp/select-material.api.md docs/content/api/ng-select-material && rimraf material/temp",
         "doc:generate:popperJs": "rimraf docs/content/api/ng-select-popperJs && npm run doc:json:popperJs && npm run doc:md:popperJs && npm run doc:api:popperJs",
         "doc:json:popperJs": "api-extractor run --local --verbose -c popperJs/api-extractor.json",
         "doc:md:popperJs": "api-documenter markdown -i popperJs/temp -o docs/content/api/ng-select-popperJs",
-        "doc:api:popperJs": "copyfiles -u 2 popperJs/temp/common-popperJs.api.md docs/content/api/ng-common-popperJs && rimraf popperJs/temp"
+        "doc:api:popperJs": "copyfiles -u 2 popperJs/temp/select-popperJs.api.md docs/content/api/ng-select-popperJs && rimraf popperJs/temp"
     },
     "engines": {
         "node": "^12.20.0 || ^14.15.0 || >=16.10.0"
@@ -118,13 +118,13 @@
     "es2020": "./es2020/src/index.js",
     "es2015": "./es2015/src/index.js",
     "module": "./es2015/src/index.js",
-    "typings": "./select.d.ts",
+    "typings": "./src/index.d.ts",
     "exports": {
         "./package.json": {
             "default": "./package.json"
         },
         ".": {
-            "types": "./select.d.ts",
+            "types": "./src/index.d.ts",
             "esm2020": "./es2020/src/index.js",
             "es2020": "./es2020/src/index.js",
             "es2015": "./es2015/src/index.js",
@@ -132,7 +132,7 @@
             "default": "./es2020/src/index.js"
         },
         "./elements": {
-            "types": "./elements/select-elements.d.ts",
+            "types": "./elements/src/index.d.ts",
             "esm2020": "./es2020/elements/src/index.js",
             "es2020": "./es2020/elements/src/index.js",
             "es2015": "./es2015/elements/src/index.js",
@@ -140,7 +140,7 @@
             "default": "./es2020/elements/src/index.js"
         },
         "./extensions": {
-            "types": "./extensions/select-extensions.d.ts",
+            "types": "./extensions/src/index.d.ts",
             "esm2020": "./es2020/extensions/src/index.js",
             "es2020": "./es2020/extensions/src/index.js",
             "es2015": "./es2015/extensions/src/index.js",
@@ -148,7 +148,7 @@
             "default": "./es2020/extensions/src/index.js"
         },
         "./material": {
-            "types": "./material/select-material.d.ts",
+            "types": "./material/src/index.d.ts",
             "esm2020": "./es2020/material/src/index.js",
             "es2020": "./es2020/material/src/index.js",
             "es2015": "./es2015/material/src/index.js",
@@ -156,7 +156,7 @@
             "default": "./es2020/material/src/index.js"
         },
         "./popperJs": {
-            "types": "./popperJs/select-popperJs.d.ts",
+            "types": "./popperJs/src/index.d.ts",
             "esm2020": "./es2020/popperJs/src/index.js",
             "es2020": "./es2020/popperJs/src/index.js",
             "es2015": "./es2015/popperJs/src/index.js",
