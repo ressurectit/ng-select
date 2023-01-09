@@ -46,7 +46,7 @@ export class DefaultPositionerComponent implements DefaultPositioner, NgSelectPl
     /**
      * Occurs when flip occured during positining of popup
      */
-    protected ɵflip: EventEmitter<void>;
+    protected ɵflip: EventEmitter<void> = new EventEmitter<void>();
 
     /**
      * Options for NgSelect plugin

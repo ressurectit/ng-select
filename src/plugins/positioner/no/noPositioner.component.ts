@@ -36,7 +36,7 @@ export class NoPositionerComponent implements NoPositioner, NgSelectPlugin<NoPos
     /**
      * Occurs when flip occured during positining of popup
      */
-    protected ɵflip: EventEmitter<void>;
+    protected ɵflip: EventEmitter<void> = new EventEmitter<void>();
 
     //######################### public properties - implementation of NoPositioner #########################
 
