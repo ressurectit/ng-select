@@ -228,7 +228,11 @@ export class DefaultPositionerComponent implements DefaultPositioner, NgSelectPl
 
                 this.positioningSubscription = this.position.placeElement(this.popupElement,
                                                                           this.pluginBus.selectElement.nativeElement,
-                                                                          this.options.positionOptions,)
+                                                                          {
+                                                                              autoUpdate: true,
+                                                                              flip: true,
+                                                                              ...this.options.positionOptions
+                                                                          },)
                     .subscribe(result =>
                     {
                         this.positioningDispose = result.dispose;
