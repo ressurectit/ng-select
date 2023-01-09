@@ -1,6 +1,6 @@
 import {Component, ChangeDetectionStrategy, Inject, Optional, ElementRef, OnDestroy, PLATFORM_ID, ChangeDetectorRef, EventEmitter} from '@angular/core';
 import {isPlatformBrowser} from '@angular/common';
-import {Position, POSITION, PositionOffset, PositionPlacement} from '@anglr/common';
+import {applyPositionResult, Position, POSITION, PositionOffset, PositionPlacement} from '@anglr/common';
 import {extend, NoopAction} from '@jscrpt/common';
 import {Subscription} from 'rxjs';
 
@@ -235,6 +235,7 @@ export class DefaultPositionerComponent implements DefaultPositioner, NgSelectPl
                                                                           },)
                     .subscribe(result =>
                     {
+                        applyPositionResult(result);
                         this.positioningDispose = result.dispose;
 
                         if(result.flip)
