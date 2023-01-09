@@ -1,4 +1,5 @@
-import type {PositionsCoordinates} from 'positions';
+import {EventEmitter} from '@angular/core';
+import {PositionOptions} from '@anglr/common';
 
 import {PluginOptions, NgSelectPlugin} from '../../misc';
 
@@ -8,14 +9,9 @@ import {PluginOptions, NgSelectPlugin} from '../../misc';
 export interface PositionerOptions extends PluginOptions
 {
     /**
-     * Coordinates of options popup relative to select
+     * Options used for positioning
      */
-    optionsCoordinates?: PositionsCoordinates;
-
-    /**
-     * Coordinates of select relative to options
-     */
-    selectCoordinates?: PositionsCoordinates;
+    positionOptions?: Partial<Omit<PositionOptions, 'mouseEvent'|'autoUpdate'|'flip'>>;
 }
 
 /**
@@ -23,4 +19,8 @@ export interface PositionerOptions extends PluginOptions
  */
 export interface Positioner extends NgSelectPlugin
 {
+    /**
+     * Occurs when flip occured during positining of popup
+     */
+    readonly flip: EventEmitter<void>;
 }

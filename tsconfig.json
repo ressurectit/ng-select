@@ -27,7 +27,6 @@
         {
             "@anglr/select": ["index.ts"],
             "@anglr/select/extensions": ["../extensions/src/index.ts"],
-            "positions": ["../node_modules/@anglr/common/positions/src/types/positions.typings.d.ts"]
         },
         "lib":
         [

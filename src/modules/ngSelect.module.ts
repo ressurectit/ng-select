@@ -9,7 +9,7 @@ import {BasicNormalStateComponent} from '../plugins/normalState/basic/basicNorma
 import {NoLiveSearchComponent} from '../plugins/liveSearch/no/noLiveSearch.component';
 import {BasicLiveSearchComponent} from '../plugins/liveSearch/basic/basicLiveSearch.component';
 import {BasicPopupComponent} from '../plugins/popup/basic/basicPopup.component';
-import {BasicPositionerComponent} from '../plugins/positioner/basic/basicPositioner.component';
+import {DefaultPositionerComponent} from '../plugins/positioner/default/defaultPositioner.component';
 import {NoPositionerComponent} from '../plugins/positioner/no/noPositioner.component';
 import {BasicKeyboardHandlerComponent} from '../plugins/keyboardHandler/basic/basicKeyboardHandler.component';
 import {BasicValueHandlerComponent} from '../plugins/valueHandler/basic/basicValueHandler.component';
@@ -42,7 +42,7 @@ import {NgSelectPlaceholderDirective} from '../directives/ngSelectPlaceholder/ng
         BasicLiveSearchComponent,
         BasicPopupComponent,
         NoPositionerComponent,
-        BasicPositionerComponent,
+        DefaultPositionerComponent,
         BasicKeyboardHandlerComponent,
         BasicValueHandlerComponent,
         NgSelectAbsoluteDirective,

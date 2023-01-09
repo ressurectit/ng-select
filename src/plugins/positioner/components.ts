@@ -1,2 +1,2 @@
-export * from './basic/basicPositioner.component';
+export * from './default/defaultPositioner.component';
 export * from './no/noPositioner.component';

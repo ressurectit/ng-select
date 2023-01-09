@@ -17,7 +17,7 @@ import {POPUP} from '../../plugins/popup/types';
 import {BasicPopupComponent} from '../../plugins/popup/component';
 import {Positioner} from '../../plugins/positioner';
 import {POSITIONER} from '../../plugins/positioner/types';
-import {BasicPositionerComponent} from '../../plugins/positioner/components';
+import {DefaultPositionerComponent} from '../../plugins/positioner/components';
 import {ReadonlyState} from '../../plugins/readonlyState';
 import {READONLY_STATE} from '../../plugins/readonlyState/types';
 import {ValueHandler} from '../../plugins/valueHandler';
@@ -80,9 +80,9 @@ const defaultOptions: NgSelectOptions =
         {
             type: forwardRef(() => BasicPopupComponent)
         },
-        positioner: <PluginDescription<BasicPositionerComponent>>
+        positioner: <PluginDescription<DefaultPositionerComponent>>
         {
-            type: forwardRef(() => BasicPositionerComponent)
+            type: forwardRef(() => DefaultPositionerComponent)
         },
         keyboardHandler: <PluginDescription<BasicKeyboardHandlerComponent>>
         {

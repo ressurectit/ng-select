@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, ElementRef, Inject, Optional} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Inject, Optional} from '@angular/core';
 import {extend} from '@jscrpt/common';
 
 import {NoPositioner, NoPositionerOptions} from './noPositioner.interface';
@@ -10,7 +10,6 @@ import {PluginBus} from '../../../misc/pluginBus/pluginBus';
 
 /**
  * Default options for positioner
- * @internal
  */
 const defaultOptions: NoPositionerOptions =
 {
@@ -27,12 +26,17 @@ const defaultOptions: NoPositionerOptions =
 })
 export class NoPositionerComponent implements NoPositioner, NgSelectPlugin<NoPositionerOptions>
 {
-    //######################### private properties #########################
+    //######################### protected properties #########################
 
     /**
      * Options for NgSelect plugin
      */
-    protected _options: NoPositionerOptions;
+    protected ɵoptions: NoPositionerOptions;
+
+    /**
+     * Occurs when flip occured during positining of popup
+     */
+    protected ɵflip: EventEmitter<void>;
 
     //######################### public properties - implementation of NoPositioner #########################
 
@@ -41,11 +45,19 @@ export class NoPositionerComponent implements NoPositioner, NgSelectPlugin<NoPos
      */
     public get options(): NoPositionerOptions
     {
-        return this._options;
+        return this.ɵoptions;
     }
     public set options(options: NoPositionerOptions)
     {
-        this._options = extend(true, this._options, options);
+        this.ɵoptions = extend(true, this.ɵoptions, options);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public get flip(): EventEmitter<void>
+    {
+        return this.ɵflip;
     }
 
     /**
@@ -59,7 +71,7 @@ export class NoPositionerComponent implements NoPositioner, NgSelectPlugin<NoPos
                 public pluginElement: ElementRef,
                 @Inject(POSITIONER_OPTIONS) @Optional() options?: NoPositionerOptions)
     {
-        this._options = extend(true, {}, defaultOptions, options);
+        this.ɵoptions = extend(true, {}, defaultOptions, options);
     }
 
     //######################### public methods - implementation of NoPositioner #########################

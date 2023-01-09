@@ -1,5 +1,48 @@
 # Changelog
 
+## Version 12.0.0 (2023-01-09)
+
+### Features
+
+- new `DefaultPositioner` interface, that represents public API for 'DefaultPositionerComponent'
+   - **extends**
+       - `Positioner`
+- new `DefaultPositionerOptions` interface, that represents default positioner options
+   - **extends**
+      - `PositionerOptions`
+- new `DefaultPositionerComponent` component, that is used for positioning popup element, handles resize, scroll and collision using `Position`
+   - **implements**
+      - `DefaultPositioner`
+      - `NgSelectPlugin<DefaultPositionerOptions>`
+      - `OnDestroy`
+- updated `Positioner` interface
+   - **new properties**
+      - `flip` occurs when flip occured during positining of popup
+- updated `PositionerOptions` interface
+   - **new properties**
+      - `positionOptions` options used for positioning
+
+### BREAKING CHANGES
+
+- updated minimal version requirements for `Node.js` (`14.20.0` or `16.13.0` or `18.10.0`)
+- minimal supported version of `@angular` is now `15.0.4`
+- minimal supported version of `rxjs` is now `7.5.6`
+- minimal supported version of `@jscrpt/common` is now `3.3.0`
+- minimal supported version of `@anglr/common` is now `15.0.1`
+- minimal supported version of `tslib` is now `2.4.1`
+- removed dependency from `positions`
+- removed dependency from `@popperjs/core`
+- removed subpackage `@anglr/select/popperjs`
+- updated `PositionerOptions` interface
+   - new way of configuring displayed popup
+   - **removed properties**
+      - `optionsCoordinates`
+      - `selectCoordinates`
+- removed `ScrollTargetSelector` service
+- removed `BasicPositionerComponent` component, replaced with `DefaultPositionerComponent`
+- removed `BasicPositionerOptions` interface, replaced with `DefaultPositionerOptions`
+- removed `BasicPositioner` interface, replaced with `DefaultPositioner`
+
 ## Version 11.0.2 (2022-02-22)
 
 ### Bug Fixes
