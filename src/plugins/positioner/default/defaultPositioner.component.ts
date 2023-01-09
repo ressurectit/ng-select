@@ -1,4 +1,4 @@
-import {Component, ChangeDetectionStrategy, Inject, Optional, ElementRef, OnDestroy, PLATFORM_ID, ChangeDetectorRef, EventEmitter} from '@angular/core';
+import {Component, ChangeDetectionStrategy, Inject, Optional, ElementRef, OnDestroy, PLATFORM_ID, EventEmitter} from '@angular/core';
 import {isPlatformBrowser} from '@angular/common';
 import {applyPositionResult, Position, POSITION, PositionOffset, PositionPlacement} from '@anglr/common';
 import {extend, NoopAction} from '@jscrpt/common';
