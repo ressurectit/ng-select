@@ -59,11 +59,6 @@ export class DefaultPositionerComponent implements DefaultPositioner, NgSelectPl
     protected visibilitySubscription: Subscription|undefined|null;
 
     /**
-     * Subscription for changes of options in options gatherer
-     */
-    protected optionsChangeSubscription: Subscription|undefined|null;
-
-    /**
      * Subscription for positioning event that occured
      */
     protected positioningSubscription: Subscription|undefined|null;
@@ -115,7 +110,6 @@ export class DefaultPositionerComponent implements DefaultPositioner, NgSelectPl
                 @Optional() public pluginBus: PluginBus,
                 public pluginElement: ElementRef,
                 @Inject(POSITION) protected position: Position,
-                protected changeDetector: ChangeDetectorRef,
                 @Inject(POSITIONER_OPTIONS) @Optional() options?: DefaultPositionerOptions,
                 @Inject(PLATFORM_ID) protected platformId?: Object,)
     {
@@ -132,9 +126,6 @@ export class DefaultPositionerComponent implements DefaultPositioner, NgSelectPl
         this.visibilitySubscription?.unsubscribe();
         this.visibilitySubscription = null;
 
-        this.optionsChangeSubscription?.unsubscribe();
-        this.optionsChangeSubscription = null;
-
         this.positioningDispose?.();
 
         this.positioningSubscription?.unsubscribe();
@@ -148,27 +139,6 @@ export class DefaultPositionerComponent implements DefaultPositioner, NgSelectPl
      */
     public initialize()
     {
-        // if(this.optionsGatherer && this.optionsGatherer != this.pluginBus?.selectOptions.optionsGatherer)
-        // {
-        //     this.optionsChangeSubscription.unsubscribe();
-        //     this.optionsChangeSubscription = null;
-
-        //     this.optionsGatherer = null;
-        // }
-
-        // if(!this.optionsGatherer)
-        // {
-        //     this.optionsGatherer = this.pluginBus?.selectOptions.optionsGatherer;
-
-        //     this.optionsChangeSubscription = this.optionsGatherer.availableOptionsChange.subscribe(() =>
-        //     {
-        //         if(this.popup.popupElement && this.optionsGatherer.availableOptions)
-        //         {
-        //             this._handlePosition();
-        //         }
-        //     });
-        // }
-
         const popup: Popup = this.ngSelectPlugins[POPUP] as Popup;
 
         if(this.popup && this.popup != popup)
@@ -211,9 +181,6 @@ export class DefaultPositionerComponent implements DefaultPositioner, NgSelectPl
     protected initPosition()
     {
         this.popupElement = this.popup.popupElement;
-
-        // //this has meaning only when popup is outside of ng-element
-        // this.changeDetector.markForCheck();
 
         if(this.isBrowser)
         {
