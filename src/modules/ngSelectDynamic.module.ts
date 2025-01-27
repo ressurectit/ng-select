@@ -9,7 +9,7 @@ import {DynamicValueHandlerComponent} from '../plugins/valueHandler/dynamic/dyna
 {
     declarations:
     [
-        DynamicValueHandlerComponent
+        DynamicValueHandlerComponent,
     ]
 })
 export class NgSelectDynamicModule

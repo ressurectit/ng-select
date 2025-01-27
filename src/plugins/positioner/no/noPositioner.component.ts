@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Inject, Optional} from '@angular/core';
-import {extend} from '@jscrpt/common';
+import {extend} from '@jscrpt/common/extend';
 
 import {NoPositioner, NoPositionerOptions} from './noPositioner.interface';
 import {NgSelectPlugin} from '../../../misc';
@@ -22,6 +22,7 @@ const defaultOptions: NoPositionerOptions =
 {
     selector: 'ng-no-positioner',
     template: '',
+    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NoPositionerComponent implements NoPositioner, NgSelectPlugin<NoPositionerOptions>

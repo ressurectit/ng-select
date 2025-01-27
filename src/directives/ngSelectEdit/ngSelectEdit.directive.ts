@@ -19,24 +19,24 @@ import {ExcludingOptionsGatherer} from '../../misc/optionsGatherer/types';
         <ValueProvider>
         {
             provide: NORMAL_STATE_TYPE,
-            useValue: EditNormalStateComponent
+            useValue: EditNormalStateComponent,
         },
         <ValueProvider>
         {
             provide: LIVE_SEARCH_TYPE,
-            useValue: EditLiveSearchComponent
+            useValue: EditLiveSearchComponent,
         },
         <ValueProvider>
         {
             provide: POPUP_TYPE,
-            useValue: EditPopupComponent
+            useValue: EditPopupComponent,
         },
         <ValueProvider>
         {
             provide: KEYBOARD_HANDLER_TYPE,
-            useValue: EditKeyboardHandlerComponent
-        }
-    ]
+            useValue: EditKeyboardHandlerComponent,
+        },
+    ],
 })
 export class NgSelectEditDirective
 {
@@ -45,7 +45,7 @@ export class NgSelectEditDirective
     {
         select.selectOptions =
         {
-            optionsGatherer: new ExcludingOptionsGatherer()
+            optionsGatherer: new ExcludingOptionsGatherer(),
         };
     }
 }

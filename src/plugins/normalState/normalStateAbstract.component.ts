@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, ElementRef, OnDestroy, Directive} from '@angular/core';
 import {StringLocalization} from '@anglr/common';
-import {extend} from '@jscrpt/common';
+import {extend} from '@jscrpt/common/extend';
 import {Subscription} from 'rxjs';
 
 import {NgSelectPluginInstances} from '../../components/select';
@@ -71,7 +71,7 @@ export abstract class NormalStateAbstractComponent<TCssClasses = any, TOptions e
     }
 
     //######################### public methods - implementation of OnDestroy #########################
-    
+
     /**
      * Called when component is destroyed
      */

@@ -10,14 +10,13 @@ import {NgSelectOption} from '../components/option';
 export class NgSelectHasValuePipe<TValue = any> implements PipeTransform
 {
     //######################### public methods #########################
-    
+
     /**
      * Transforms selected option into boolean indication if there is option selected
      * @param options - Selected options to be transformed into boolean
-     */   
+     */
     public transform(options: NgSelectOption<TValue>|Array<NgSelectOption<TValue>>): boolean
     {
         return !(isBlank(options) || (Array.isArray(options) && !options.length));
     }
 }
-

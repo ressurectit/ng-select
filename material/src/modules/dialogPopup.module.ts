@@ -14,19 +14,19 @@ import {DialogPopupDirective} from '../directives/types';
     imports:
     [
         CommonModule,
-        MatDialogModule
+        MatDialogModule,
+        DialogPopupDirective,
     ],
     declarations:
     [
         DialogPopupComponent,
         BasicDialogPopupComponent,
-        DialogPopupDirective
     ],
     exports:
     [
         DialogPopupComponent,
+        DialogPopupDirective,
         BasicDialogPopupComponent,
-        DialogPopupDirective
     ]
 })
 export class NgSelectDialogPopupModule

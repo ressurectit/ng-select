@@ -44,7 +44,7 @@ export class DialogPopupDirective implements OnChanges
     }
 
     //######################### public methods - implementation of OnChanges #########################
-    
+
     /**
      * Called when input value changes
      */

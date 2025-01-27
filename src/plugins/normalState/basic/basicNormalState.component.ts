@@ -1,6 +1,6 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef, Inject, Optional, ElementRef, OnDestroy} from '@angular/core';
 import {StringLocalization, STRING_LOCALIZATION} from '@anglr/common';
-import {extend} from '@jscrpt/common';
+import {extend} from '@jscrpt/common/extend';
 
 import {BasicNormalStateOptions, BasicNormalState, CssClassesBasicNormalState} from './basicNormalState.interface';
 import {NgSelectPlugin} from '../../../misc';
@@ -36,7 +36,8 @@ const defaultOptions: BasicNormalStateOptions =
 {
     selector: 'div.normal-state',
     templateUrl: 'basicNormalState.component.html',
-    styleUrls: ['basicNormalState.component.css'],
+    styleUrl: 'basicNormalState.component.css',
+    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BasicNormalStateComponent<TValue = any> extends NormalStateAbstractComponent<CssClassesBasicNormalState, BasicNormalStateOptions<TValue>, TValue> implements BasicNormalState, NgSelectPlugin<BasicNormalStateOptions>, OnDestroy

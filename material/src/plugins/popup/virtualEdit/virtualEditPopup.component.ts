@@ -15,7 +15,8 @@ import {VirtualEditPopup, VirtualEditPopupOptions} from './virtualEditPopup.inte
 {
     selector: 'div.ng-select-virtual-edit-popup',
     templateUrl: 'virtualEditPopup.component.html',
-    styleUrls: ['virtualEditPopup.component.scss'],
+    styleUrl: 'virtualEditPopup.component.scss',
+    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VirtualEditPopupComponent extends EditPopupComponent implements VirtualEditPopup, NgSelectPlugin<VirtualEditPopupOptions>
@@ -30,7 +31,7 @@ export class VirtualEditPopupComponent extends EditPopupComponent implements Vir
     //######################### public properties - children #########################
 
     // /**
-    //  * 
+    //  *
     //  */
     // @ViewChildren('popupOptions')
     // public popupOptions: QueryList<ElementRef>;
@@ -88,10 +89,10 @@ export class VirtualEditPopupComponent extends EditPopupComponent implements Vir
             setTimeout(() =>
             {
                 const viewportElement = this.viewPort?.getElementRef().nativeElement;
-                
+
                 viewportElement.style.width = `${viewportElement.children.item(0).clientWidth}px`;
             }, 0);
-            
+
             this.viewPort.getElementRef().nativeElement.style.height = this.popupElement.style.maxHeight;
             this.viewPort.checkViewportSize();
         }
@@ -130,7 +131,7 @@ export class VirtualEditPopupComponent extends EditPopupComponent implements Vir
     //     const activeOptionsElement = this.popupOptions.toArray().find(el => el.nativeElement.classList.contains('active'))?.nativeElement;
     //     const top = activeOptionsElement?.offsetTop;
     //     const bottom = top + activeOptionsElement?.offsetHeight;
-        
+
     //     if (bottom > this.popupElement?.clientHeight + currentScrollPosition)
     //     {
     //         return Math.max(bottom - this.popupElement?.clientHeight);

@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, Optional} from '@angular/core';
 import {StringLocalization, STRING_LOCALIZATION} from '@anglr/common';
-import {extend} from '@jscrpt/common';
+import {extend} from '@jscrpt/common/extend';
 
 import {NgSelectPluginInstances} from '../../../components/select';
 import {NG_SELECT_PLUGIN_INSTANCES} from '../../../components/select/types';
@@ -46,7 +46,8 @@ const defaultOptions: EditNormalStateOptions =
 {
     selector: 'div.edit-normal-state',
     templateUrl: 'editNormalState.component.html',
-    styleUrls: ['editNormalState.component.css'],
+    styleUrl: 'editNormalState.component.css',
+    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditNormalStateComponent<TValue = any> extends NormalStateAbstractComponent<CssClassesEditNormalState, EditNormalStateOptions<TValue>, TValue> implements EditNormalState, NgSelectPlugin<EditNormalStateOptions>, OnDestroy

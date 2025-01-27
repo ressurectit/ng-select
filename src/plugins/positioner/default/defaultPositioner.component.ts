@@ -1,7 +1,8 @@
 import {Component, ChangeDetectionStrategy, Inject, Optional, ElementRef, OnDestroy, PLATFORM_ID, EventEmitter} from '@angular/core';
 import {isPlatformBrowser} from '@angular/common';
 import {applyPositionResult, Position, POSITION, PositionOffset, PositionPlacement} from '@anglr/common';
-import {extend, NoopAction} from '@jscrpt/common';
+import {NoopAction} from '@jscrpt/common';
+import {extend} from '@jscrpt/common/extend';
 import {Subscription} from 'rxjs';
 
 import {DefaultPositionerOptions, DefaultPositioner} from './defaultPositioner.interface';
@@ -32,6 +33,7 @@ const defaultOptions: DefaultPositionerOptions =
 {
     selector: 'ng-default-positioner',
     template: '',
+    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DefaultPositionerComponent implements DefaultPositioner, NgSelectPlugin<DefaultPositionerOptions>, OnDestroy
@@ -109,9 +111,9 @@ export class DefaultPositionerComponent implements DefaultPositioner, NgSelectPl
     constructor(@Inject(NG_SELECT_PLUGIN_INSTANCES) @Optional() public ngSelectPlugins: NgSelectPluginInstances,
                 @Optional() public pluginBus: PluginBus,
                 public pluginElement: ElementRef,
-                @Inject(POSITION) protected position: Position,
+                @Inject(POSITION) protected position: Position<HTMLElement>,
                 @Inject(POSITIONER_OPTIONS) @Optional() options?: DefaultPositionerOptions,
-                @Inject(PLATFORM_ID) protected platformId?: Object,)
+                @Inject(PLATFORM_ID) protected platformId?: object,)
     {
         this.ɵoptions = extend(true, {}, defaultOptions, options);
     }
@@ -189,7 +191,7 @@ export class DefaultPositionerComponent implements DefaultPositioner, NgSelectPl
             {
                 this.positioningSubscription?.unsubscribe();
                 this.positioningDispose?.();
-                
+
                 this.positioningSubscription = null;
                 this.positioningDispose = null;
 

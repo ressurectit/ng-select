@@ -2,6 +2,10 @@
 
 ## Version 13.0.0 (2025-01-27)
 
+### Features
+
+- all pipes and directives are now `standalone`
+
 ### BREAKING CHANGES
 
 - minimal supported version of `NodeJs` is `18`

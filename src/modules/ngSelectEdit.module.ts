@@ -16,11 +16,11 @@ import {NgSelectModule} from './ngSelect.module';
     imports:
     [
         CommonModule,
-        NgSelectModule
+        NgSelectModule,
+        NgSelectEditDirective,
     ],
     declarations:
     [
-        NgSelectEditDirective,
         EditNormalStateComponent,
         EditLiveSearchComponent,
         EditPopupComponent,

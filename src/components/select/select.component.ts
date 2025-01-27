@@ -1,5 +1,6 @@
 import {Component, ChangeDetectionStrategy, FactoryProvider, Input, Inject, ChangeDetectorRef, Optional, Type, AfterViewInit, OnInit, ContentChildren, QueryList, EventEmitter, forwardRef, resolveForwardRef, ElementRef, OnChanges, SimpleChanges, Attribute, OnDestroy, TemplateRef, ContentChild, ComponentFactoryResolver, ApplicationRef, Injector, EmbeddedViewRef, ComponentRef, ClassProvider} from '@angular/core';
-import {extend, nameof, isBoolean, isPresent, isString} from '@jscrpt/common';
+import {nameof, isBoolean, isPresent, isString} from '@jscrpt/common';
+import {extend} from '@jscrpt/common/extend';
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 
 import {NgSelectOptions, NgSelectPlugin, PluginDescription, NormalizeFunc, NgSelectPluginTypes} from '../../misc';
@@ -106,6 +107,7 @@ const defaultOptions: NgSelectOptions =
 {
     selector: 'ng-select',
     templateUrl: 'select.component.html',
+    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers:
     [

@@ -1,6 +1,7 @@
 import {AfterViewInit, ChangeDetectorRef, ElementRef, EventEmitter, OnDestroy, QueryList, ViewChildren, Directive} from '@angular/core';
 import {StringLocalization} from '@anglr/common';
-import {extend, isDescendant} from '@jscrpt/common';
+import {isDescendant} from '@jscrpt/common';
+import {extend} from '@jscrpt/common/extend';
 import {Subscription} from 'rxjs';
 
 import {ɵNgSelectOption} from '../../components/option';
@@ -10,7 +11,6 @@ import {PluginBus} from '../../misc/pluginBus/pluginBus';
 import {Popup, PopupOptions, PopupTexts} from './popup.interface';
 import {ValueHandler} from '../valueHandler';
 import {VALUE_HANDLER} from '../valueHandler/types';
-
 
 /**
  * Base abstract class for popup with options
@@ -122,7 +122,7 @@ export class PopupAbstractComponent<TCssClasses = any, TOptions extends PopupOpt
      * @internal
      */
     public texts: PopupTexts = {};
-    
+
     //######################### public properties - children #########################
 
     /**
@@ -321,7 +321,7 @@ export class PopupAbstractComponent<TCssClasses = any, TOptions extends PopupOpt
 
             this.pluginBus.updateDisplayedValue.emit();
         }
-    }
+    };
 
     /**
      * Handles visibility change

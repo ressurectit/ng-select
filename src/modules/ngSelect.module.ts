@@ -27,26 +27,26 @@ import {NgSelectPlaceholderDirective} from '../directives/ngSelectPlaceholder/ng
     imports:
     [
         CommonModule,
+        NgSelectValuePipe,
         CommonDynamicModule,
+        NgSelectHasValuePipe,
+        NgSelectAbsoluteDirective,
+        NgSelectPlaceholderDirective,
+        NgSelectControlValueAccessor,
     ],
     declarations:
     [
         OptionComponent,
         OptGroupComponent,
         NgSelectComponent,
-        NgSelectValuePipe,
-        NgSelectHasValuePipe,
-        NgSelectControlValueAccessor,
-        BasicNormalStateComponent,
-        NoLiveSearchComponent,
-        BasicLiveSearchComponent,
         BasicPopupComponent,
         NoPositionerComponent,
+        NoLiveSearchComponent,
+        BasicLiveSearchComponent,
+        BasicNormalStateComponent,
         DefaultPositionerComponent,
-        BasicKeyboardHandlerComponent,
         BasicValueHandlerComponent,
-        NgSelectAbsoluteDirective,
-        NgSelectPlaceholderDirective
+        BasicKeyboardHandlerComponent,
     ],
     exports:
     [
@@ -55,9 +55,9 @@ import {NgSelectPlaceholderDirective} from '../directives/ngSelectPlaceholder/ng
         NgSelectComponent,
         NgSelectValuePipe,
         NgSelectHasValuePipe,
-        NgSelectControlValueAccessor,
         NgSelectAbsoluteDirective,
-        NgSelectPlaceholderDirective
+        NgSelectControlValueAccessor,
+        NgSelectPlaceholderDirective,
     ]
 })
 export class NgSelectModule

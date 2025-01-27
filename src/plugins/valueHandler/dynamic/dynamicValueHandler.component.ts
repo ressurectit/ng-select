@@ -1,5 +1,6 @@
 import {Component, ChangeDetectionStrategy, Inject, Optional, ElementRef} from '@angular/core';
-import {extend, isBlank} from '@jscrpt/common';
+import {isBlank} from '@jscrpt/common';
+import {extend} from '@jscrpt/common/extend';
 
 import {DynamicValueHandlerOptions, DynamicValueHandler} from './dynamicValueHandler.interface';
 import {NgSelectPluginInstances} from '../../../components/select';
@@ -25,6 +26,7 @@ const defaultOptions: DynamicValueHandlerOptions =
 {
     selector: 'ng-dynamic-value-handler',
     template: '',
+    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DynamicValueHandlerComponent<TValue = any> extends ValueHandlerBase<TValue, DynamicValueHandlerOptions<TValue>> implements DynamicValueHandler<TValue>
@@ -60,7 +62,7 @@ export class DynamicValueHandlerComponent<TValue = any> extends ValueHandlerBase
      * Sets value for NgSelect
      * @param value - Value to be set
      */
-    public setValue(value:TValue|TValue[]): void
+    public setValue(value: TValue|TValue[]): void
     {
         this._useOptionsAsValue(value);
     }
@@ -82,7 +84,7 @@ export class DynamicValueHandlerComponent<TValue = any> extends ValueHandlerBase
     //######################### protected methods #########################
 
     /**
-     * Sets value 
+     * Sets value
      */
     protected _setValue = (option: ɵNgSelectOption<TValue>) =>
     {
@@ -93,7 +95,7 @@ export class DynamicValueHandlerComponent<TValue = any> extends ValueHandlerBase
             {
                 this.selectedOptions = [];
             }
-            
+
             if(Array.isArray(this.selectedOptions))
             {
                 //value exists, removing from list
@@ -122,7 +124,7 @@ export class DynamicValueHandlerComponent<TValue = any> extends ValueHandlerBase
 
         this._normalState.invalidateVisuals();
         this.valueChange.emit();
-    }
+    };
 
     /**
      * Loads options

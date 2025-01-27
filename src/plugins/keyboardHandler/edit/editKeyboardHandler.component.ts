@@ -1,5 +1,5 @@
 import {Component, ChangeDetectionStrategy, Inject, Optional, ElementRef, OnDestroy} from '@angular/core';
-import {extend} from '@jscrpt/common';
+import {extend} from '@jscrpt/common/extend';
 
 import {EditKeyboardHandlerOptions, EditKeyboardHandler} from './editKeyboardHandler.interface';
 import {NgSelectPlugin} from '../../../misc';
@@ -30,6 +30,7 @@ const defaultOptions: EditKeyboardHandlerOptions =
 {
     selector: 'ng-edit-keyboard-handler',
     template: '',
+    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditKeyboardHandlerComponent implements EditKeyboardHandler, NgSelectPlugin<EditKeyboardHandlerOptions>, OnDestroy
@@ -90,7 +91,7 @@ export class EditKeyboardHandlerComponent implements EditKeyboardHandler, NgSele
     }
 
     //######################### public methods - implementation of OnDestroy #########################
-    
+
     /**
      * Called when component is destroyed
      */
@@ -120,7 +121,7 @@ export class EditKeyboardHandlerComponent implements EditKeyboardHandler, NgSele
         {
             this._popup = null;
         }
-        
+
         if(!this._popup)
         {
             this._popup = popup;
@@ -132,7 +133,7 @@ export class EditKeyboardHandlerComponent implements EditKeyboardHandler, NgSele
         {
             this._valueHandler = null;
         }
-        
+
         if(!this._valueHandler)
         {
             this._valueHandler = valueHandler;
@@ -219,7 +220,7 @@ export class EditKeyboardHandlerComponent implements EditKeyboardHandler, NgSele
         if(event.key == 'Enter' && this._popup.popupElement)
         {
             const activeOption = this.availableOptions.find(itm => itm.active);
-            
+
             if(activeOption)
             {
                 this.pluginBus.optionSelect.emit(activeOption);
@@ -243,7 +244,7 @@ export class EditKeyboardHandlerComponent implements EditKeyboardHandler, NgSele
         if(event.key == 'Tab' && this._popup.popupElement)
         {
             const active = this.availableOptions.find(itm => itm.active);
-            
+
             if(active)
             {
                 this.pluginBus.optionSelect.emit(active);
@@ -280,5 +281,5 @@ export class EditKeyboardHandlerComponent implements EditKeyboardHandler, NgSele
         {
             this.pluginBus.showHidePopup.emit(false);
         }
-    }
+    };
 }

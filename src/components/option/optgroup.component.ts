@@ -11,6 +11,7 @@ import {OptionComponent} from './option.component';
 {
     selector: 'ng-select>ng-optgroup',
     template: '',
+    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OptGroupComponent<TValue = any> implements NgSelectOptGroup<TValue>, AfterViewInit
@@ -58,7 +59,7 @@ export class OptGroupComponent<TValue = any> implements NgSelectOptGroup<TValue>
     public text: string;
 
     //######################### public methods - implementation of AfterViewInit #########################
-    
+
     /**
      * Called when view was initialized
      */

@@ -1,5 +1,6 @@
 import {Component, ChangeDetectionStrategy, Inject, Optional, ElementRef} from '@angular/core';
-import {extend, isBlank} from '@jscrpt/common';
+import {isBlank} from '@jscrpt/common';
+import {extend} from '@jscrpt/common/extend';
 
 import {BasicValueHandlerOptions, BasicValueHandler} from './basicValueHandler.interface';
 import {NgSelectPluginInstances} from '../../../components/select';
@@ -26,6 +27,7 @@ const defaultOptions: BasicValueHandlerOptions =
 {
     selector: 'ng-basic-value-handler',
     template: '',
+    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BasicValueHandlerComponent<TValue = any> extends ValueHandlerBase<TValue, BasicValueHandlerOptions> implements BasicValueHandler<TValue>
@@ -68,7 +70,7 @@ export class BasicValueHandlerComponent<TValue = any> extends ValueHandlerBase<T
      * Sets value for NgSelect
      * @param value - Value to be set
      */
-    public setValue(value:TValue|TValue[]): void
+    public setValue(value: TValue|TValue[]): void
     {
         this._useOptionsAsValue(value);
     }
@@ -90,7 +92,7 @@ export class BasicValueHandlerComponent<TValue = any> extends ValueHandlerBase<T
     //######################### protected methods #########################
 
     /**
-     * Sets value 
+     * Sets value
      */
     protected _setValue = (option: ɵNgSelectOption<TValue>) =>
     {
@@ -131,7 +133,7 @@ export class BasicValueHandlerComponent<TValue = any> extends ValueHandlerBase<T
 
         this._normalState.invalidateVisuals();
         this.valueChange.emit();
-    }
+    };
 
     /**
      * Loads options

@@ -14,6 +14,7 @@ import {PluginBus} from '../../../misc/pluginBus/pluginBus';
 {
     selector: 'ng-no-live-search',
     template: '',
+    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NoLiveSearchComponent implements NoLiveSearch, NgSelectPlugin<NoLiveSearchOptions>

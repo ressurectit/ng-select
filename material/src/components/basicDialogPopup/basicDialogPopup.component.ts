@@ -1,7 +1,7 @@
 import {Component, ChangeDetectionStrategy, Inject, OnDestroy, OnInit, ChangeDetectorRef} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {OptionsGatherer, ɵNgSelectOption} from '@anglr/select';
-import {extend} from '@jscrpt/common';
+import {extend} from '@jscrpt/common/extend';
 import {Subscription} from 'rxjs';
 
 import {DialogPopupComponentData, DialogPopupContentComponent} from '../../plugins/popup/dialog/dialogPopup.interface';
@@ -28,7 +28,8 @@ const defaultOptions: BasicDialogPopupOptions =
 {
     selector: 'ng-select-basic-dialog-popup',
     templateUrl: 'basicDialogPopup.component.html',
-    styleUrls: ['basicDialogPopup.component.css'],
+    styleUrl: 'basicDialogPopup.component.css',
+    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BasicDialogPopupComponent<TValue = any> implements DialogPopupContentComponent<BasicDialogPopupOptions, TValue, CssClassesBasicDialogPopup>, OnInit, OnDestroy
@@ -66,7 +67,7 @@ export class BasicDialogPopupComponent<TValue = any> implements DialogPopupConte
     }
 
     //######################### public methods - implementation of OnInit #########################
-    
+
     /**
      * Initialize component
      */
@@ -94,7 +95,7 @@ export class BasicDialogPopupComponent<TValue = any> implements DialogPopupConte
     }
 
     //######################### public methods - implementation of OnDestroy #########################
-    
+
     /**
      * Called when component is destroyed
      */

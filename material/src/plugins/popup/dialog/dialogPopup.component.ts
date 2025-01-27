@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Event
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {ComponentType} from '@angular/cdk/portal';
 import {NgSelectPlugin, NgSelectPluginInstances, NG_SELECT_PLUGIN_INSTANCES, PluginBus, POPUP_OPTIONS, ɵNgSelectOption} from '@anglr/select';
-import {extend} from '@jscrpt/common';
+import {extend} from '@jscrpt/common/extend';
 import {Subscription} from 'rxjs';
 
 import {BasicDialogPopupComponent} from '../../../components/basicDialogPopup/basicDialogPopup.component';
@@ -30,6 +30,7 @@ const defaultOptions: DialogPopupOptions =
 {
     selector: 'div.ng-select-dialog-popup',
     template: '',
+    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DialogPopupComponent<TComponent extends DialogPopupContentComponent<TDialogOptions, TValue, TCssClasses> = any, TValue = any, TDialogOptions = any, TCssClasses = any> implements DialogPopup, NgSelectPlugin<DialogPopupOptions<TComponent, TDialogOptions, TValue, TCssClasses>, TValue>, OnDestroy

@@ -9,6 +9,7 @@ import {NgSelectOption} from './option.interface';
 {
     selector: 'ng-option',
     template: '',
+    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OptionComponent<TValue = any> implements NgSelectOption<TValue>
@@ -38,7 +39,7 @@ export class OptionComponent<TValue = any> implements NgSelectOption<TValue>
      */
     @Input()
     public text: string;
-    
+
     //######################### public properties #########################
 
     /**

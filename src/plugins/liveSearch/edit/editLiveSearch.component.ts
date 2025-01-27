@@ -1,6 +1,7 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef, Inject, Optional, ElementRef, ViewChild, EventEmitter, OnDestroy} from '@angular/core';
 import {STRING_LOCALIZATION, StringLocalization} from '@anglr/common';
-import {extend, isPresent} from '@jscrpt/common';
+import {isPresent} from '@jscrpt/common';
+import {extend} from '@jscrpt/common/extend';
 import {Subscription} from 'rxjs';
 
 import {EditLiveSearchOptions, EditLiveSearch} from './editLiveSearch.interface';
@@ -44,7 +45,8 @@ const defaultOptions: EditLiveSearchOptions =
 {
     selector: 'ng-edit-live-search',
     templateUrl: 'editLiveSearch.component.html',
-    styleUrls: ['editLiveSearch.component.css'],
+    styleUrl: 'editLiveSearch.component.css',
+    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditLiveSearchComponent implements EditLiveSearch, NgSelectPlugin<EditLiveSearchOptions>, OnDestroy

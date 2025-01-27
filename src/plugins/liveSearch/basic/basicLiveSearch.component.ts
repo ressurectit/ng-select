@@ -1,6 +1,6 @@
 import {Component, ChangeDetectionStrategy, ChangeDetectorRef, Inject, Optional, ElementRef, ViewChild, EventEmitter, OnDestroy} from '@angular/core';
 import {STRING_LOCALIZATION, StringLocalization} from '@anglr/common';
-import {extend} from '@jscrpt/common';
+import {extend} from '@jscrpt/common/extend';
 import {Subscription} from 'rxjs';
 
 import {BasicLiveSearchOptions, BasicLiveSearch} from './basicLiveSearch.interface';
@@ -38,7 +38,8 @@ const defaultOptions: BasicLiveSearchOptions =
 {
     selector: 'ng-basic-live-search',
     templateUrl: 'basicLiveSearch.component.html',
-    styleUrls: ['basicLiveSearch.component.css'],
+    styleUrl: 'basicLiveSearch.component.css',
+    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BasicLiveSearchComponent implements BasicLiveSearch, NgSelectPlugin<BasicLiveSearchOptions>, OnDestroy
@@ -138,7 +139,7 @@ export class BasicLiveSearchComponent implements BasicLiveSearch, NgSelectPlugin
     }
 
     //######################### public methods - implementation of OnDestroy #########################
-    
+
     /**
      * Called when component is destroyed
      */
@@ -182,7 +183,7 @@ export class BasicLiveSearchComponent implements BasicLiveSearch, NgSelectPlugin
                 if(!this.options.keepSearchValue)
                 {
                     this.handleInput('');
-                    
+
                     this._changeDetector.detectChanges();
                 }
             });
@@ -234,7 +235,7 @@ export class BasicLiveSearchComponent implements BasicLiveSearch, NgSelectPlugin
      */
     protected _initTexts()
     {
-        Object.keys(this.options.texts).forEach((key) =>
+        Object.keys(this.options.texts).forEach(key =>
         {
             this.texts[key as keyof LiveSearchTexts] = this._stringLocalization.get(this.options.texts[key as keyof LiveSearchTexts]);
         });

@@ -7,7 +7,7 @@ import {NgSelectComponent} from '../../components/select/select.component';
  */
 @Directive(
 {
-    selector: 'ng-select[absolute]'
+    selector: 'ng-select[absolute]',
 })
 export class NgSelectAbsoluteDirective
 {
@@ -16,7 +16,7 @@ export class NgSelectAbsoluteDirective
     {
         select.selectOptions =
         {
-            absolute: true
+            absolute: true,
         };
     }
 }

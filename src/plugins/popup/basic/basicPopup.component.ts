@@ -1,7 +1,7 @@
 import {AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, Optional} from '@angular/core';
 import {DOCUMENT} from '@angular/common';
 import {STRING_LOCALIZATION, StringLocalization} from '@anglr/common';
-import {extend} from '@jscrpt/common';
+import {extend} from '@jscrpt/common/extend';
 
 import {NgSelectPluginInstances} from '../../../components/select';
 import {NG_SELECT_PLUGIN_INSTANCES} from '../../../components/select/types';
@@ -38,7 +38,8 @@ const defaultOptions: BasicPopupOptions =
 {
     selector: 'div.ng-select-popup',
     templateUrl: 'basicPopup.component.html',
-    styleUrls: ['basicPopup.component.css'],
+    styleUrl: 'basicPopup.component.css',
+    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BasicPopupComponent extends PopupAbstractComponent<CssClassesBasicPopup, BasicPopupOptions> implements BasicPopup, NgSelectPlugin<BasicPopupOptions>, AfterViewInit, OnDestroy

@@ -8,7 +8,7 @@ import {LiveSearchOptions} from '../../plugins/liveSearch';
  */
 @Directive(
 {
-    selector: 'ng-select[placeholder]'
+    selector: 'ng-select[placeholder]',
 })
 export class NgSelectPlaceholderDirective implements OnInit
 {
@@ -26,13 +26,13 @@ export class NgSelectPlaceholderDirective implements OnInit
     }
 
     //######################### public methods - implementation of OnInit #########################
-    
+
     /**
      * Initialize component
      */
     public ngOnInit(): void
     {
-        this._select.selectOptions = 
+        this._select.selectOptions =
         {
             plugins:
             {
@@ -43,10 +43,10 @@ export class NgSelectPlaceholderDirective implements OnInit
                         texts:
                         {
                             inputPlaceholder: this.placeholder
-                        }
-                    }
-                }
-            }
+                        },
+                    },
+                },
+            },
         };
     }
 }

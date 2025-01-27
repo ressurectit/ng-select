@@ -1,5 +1,5 @@
 import {Component, ChangeDetectionStrategy, Inject, Optional, ElementRef, OnDestroy} from '@angular/core';
-import {extend} from '@jscrpt/common';
+import {extend} from '@jscrpt/common/extend';
 
 import {BasicKeyboardHandlerOptions, BasicKeyboardHandler} from './basicKeyboardHandler.interface';
 import {NgSelectPlugin} from '../../../misc';
@@ -26,6 +26,7 @@ const defaultOptions: BasicKeyboardHandlerOptions =
 {
     selector: 'ng-basic-keyboard-handler',
     template: '',
+    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BasicKeyboardHandlerComponent implements BasicKeyboardHandler, NgSelectPlugin<BasicKeyboardHandlerOptions>, OnDestroy
@@ -76,7 +77,7 @@ export class BasicKeyboardHandlerComponent implements BasicKeyboardHandler, NgSe
     }
 
     //######################### public methods - implementation of OnDestroy #########################
-    
+
     /**
      * Called when component is destroyed
      */
@@ -106,7 +107,7 @@ export class BasicKeyboardHandlerComponent implements BasicKeyboardHandler, NgSe
         {
             this._popup = null;
         }
-        
+
         if(!this._popup)
         {
             this._popup = popup;
@@ -192,5 +193,5 @@ export class BasicKeyboardHandlerComponent implements BasicKeyboardHandler, NgSe
         {
             this.pluginBus.showHidePopup.emit(false);
         }
-    }
+    };
 }
