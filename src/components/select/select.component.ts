@@ -1,5 +1,5 @@
 import {Component, ChangeDetectionStrategy, FactoryProvider, Input, Inject, ChangeDetectorRef, Optional, Type, AfterViewInit, OnInit, ContentChildren, QueryList, EventEmitter, forwardRef, resolveForwardRef, ElementRef, OnChanges, SimpleChanges, Attribute, OnDestroy, TemplateRef, ContentChild, ComponentFactoryResolver, ApplicationRef, Injector, EmbeddedViewRef, ComponentRef, ClassProvider} from '@angular/core';
-import {nameof, isBoolean, isPresent, isString} from '@jscrpt/common';
+import {nameof, isBoolean, isPresent, isString, renderToBody} from '@jscrpt/common';
 import {extend} from '@jscrpt/common/extend';
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 
@@ -487,7 +487,7 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
             this._optionsChange.emit();
             this._availableOptionsChange.emit();
         });
-        
+
         if(this._selectOptions.autoInitialize)
         {
             this.initialize();
@@ -642,7 +642,7 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
         }
 
         this._changeDetector.detectChanges();
-        
+
         this.selectOptions.optionsGatherer.initializeGatherer();
 
         this._pluginInstances[LIVE_SEARCH].initialize();
@@ -757,7 +757,7 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
      * Appends popup component directly to body, allows absolute positioning over page body
      * @param component - Popup component type to be appended
      */
-    protected _appendPopupToBody(component: Type<Popup>) 
+    protected _appendPopupToBody(component: Type<Popup>)
     {
         //do not reinitialize if already exists and nothing has changed
         if(this._absolutePopupType == component && this.liveSearchElement[0][0] == this._absolutePopupElement)
@@ -776,20 +776,20 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
         this._absolutePopupType = component;
         this._absolutePopupElement = this.liveSearchElement[0][0];
 
-        // 1. Create a component reference from the component 
+        // 1. Create a component reference from the component
         this._absolutePopup = this._componentFactoryResolver
             .resolveComponentFactory(component)
             .create(this._injector, this.liveSearchElement);
-        
+
         // 2. Attach component to the appRef so that it's inside the ng component tree
         this._appRef.attachView(this._absolutePopup.hostView);
-        
+
         // 3. Get DOM element from component
         const domElem = (this._absolutePopup.hostView as EmbeddedViewRef<any>)
             .rootNodes[0] as HTMLElement;
-        
+
         // 4. Append DOM element to the body
-        document.body.appendChild(domElem);
+        renderToBody(document, domElem, this._selectOptions.containerElement);
 
         this.setPopupComponent(this._absolutePopup.instance);
     }
