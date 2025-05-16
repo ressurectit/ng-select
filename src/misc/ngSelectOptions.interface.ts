@@ -100,6 +100,13 @@ export interface NgSelectOptions<TValue = any> extends PluginBusOptions<TValue>
     absolute?: boolean;
 
     /**
+     * String that defines element in which should be absolute popup rendered, if not specified, body is used, used only if absolute is set to true, otherwise it has no effect
+     *
+     * Allows also css classes to be specified (div.body-box)
+     */
+    containerElement?: string;
+
+    /**
      * Indication whether force value check on initialization of select, this allows to change value of form control to value of valueHandler
      */
     forceValueCheckOnInit?: boolean;
