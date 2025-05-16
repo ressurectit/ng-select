@@ -1,5 +1,16 @@
 # Changelog
 
+## Version 12.1.0 (2025-05-16)
+
+### Features
+
+- backported changes from 13.1.0
+- updated `NgSelectOptions` interface
+ - **new properties**
+   - `containerElement` string that defines element in which should be absolute popup rendered, if not specified, body is used, used only if absolute is set to true, otherwise it has no effect
+- updated `NgSelectComponent` component
+   - now allows to render absolute popup in container element
+
 ## Version 13.1.0 (2025-04-28)
 
 ### Features
