@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 13.1.1 (2025-06-12)
+
+### Bug Fixes
+
+- added missing export of `NgSelectHasValuePipe`
+
 ## Version 12.1.0 (2025-05-16)
 
 ### Features
