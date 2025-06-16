@@ -16,7 +16,7 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "strict": true,
-        "strictNullChecks": false,
+        "strictNullChecks": true,
         "esModuleInterop": true,
         "importHelpers": true,
         "useDefineForClassFields": false,
@@ -54,7 +54,8 @@
         "strictInjectionParameters": true,
         "strictInputAccessModifiers": true,
         "strictTemplates": true,
-        "strictStandalone": false,
+        "strictStandalone": true,
+        "typeCheckHostBindings": true,
         "extendedDiagnostics":
         {
             "checks":

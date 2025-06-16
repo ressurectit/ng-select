@@ -1,5 +1,3 @@
-import './index.ssr';
-
 export * from './components/select/types';
 export * from './components/select/select.component';
 export * from './components/option/optgroup.component';

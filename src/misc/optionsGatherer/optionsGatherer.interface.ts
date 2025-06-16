@@ -16,7 +16,7 @@ export interface LiveSearchFilter<TValue = any>
 /**
  * Gatherer used for obtaining options for select
  */
-export interface OptionsGatherer<TValue = any>
+export interface OptionsGatherer<TValue = unknown>
 {
     /**
      * Array of provided options for select

@@ -1,5 +1,20 @@
 # Changelog
 
+## Version 14.0.0 (2025-06-13)
+
+### BREAKING CHANGES
+
+- minimal supported version of `NodeJs` is `20.19`
+- minimal supported version of `@angular` is `20.0.0`
+- strict null checks
+- all generic defaults of type `any` changed to `unknown`
+- updated `TemplateGatherer` interface
+   - all properties are changed to `Signal` with possible `undefined` or `null` value
+- updated `OptionsGatherer` interface
+   - now contains only `availableOptions` (as signal with `undefined` as uninitialized lazy options) and rest of functionality moved into new *plugin* `OptionsHandler`
+- updated `NgSelectOption` interface
+   - renamed to `SelectOption`
+
 ## Version 12.1.1 (2025-07-08)
 
 ### Bug Fixes

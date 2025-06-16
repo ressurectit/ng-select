@@ -43,7 +43,7 @@
         "doc:api:material": "copyfiles -u 2 material/temp/select-material.api.md docs/content/api/ng-select-material && rimraf material/temp"
     },
     "engines": {
-        "node": "^18.13.0 || >=20.9.0"
+        "node": "^20.19.0 || ^22.12.0 || >=24.0.0"
     },
     "repository": {
         "type": "git",
@@ -62,34 +62,34 @@
     "homepage": "https://github.com/ressurectit/ng-select",
     "dependencies": {
         "@anglr/common": ">=22.0.0",
-        "@angular/common": ">=19.1.0",
-        "@angular/core": ">=19.1.0",
-        "@angular/forms": ">=19.1.0",
+        "@angular/common": ">=20.0.0",
+        "@angular/core": ">=20.0.0",
+        "@angular/forms": ">=20.0.0",
         "@jscrpt/common": ">=7.0.0",
         "rxjs": ">=7.5.7",
         "tslib": "^2.8.1"
     },
     "optionalDependencies": {
-        "@angular/cdk": ">=19.1.0",
-        "@angular/material": ">=19.1.0"
+        "@angular/cdk": ">=20.0.0",
+        "@angular/material": ">=20.0.0"
     },
     "devDependencies": {
         "@anglr/common": "22.0.0",
-        "@angular/cdk": "19.1.0",
-        "@angular/common": "19.1.0",
-        "@angular/compiler": "19.1.0",
-        "@angular/compiler-cli": "19.1.0",
-        "@angular/core": "19.1.0",
-        "@angular/forms": "19.1.0",
-        "@angular/language-service": "19.1.0",
-        "@angular/material": "19.1.0",
+        "@angular/cdk": "20.0.0",
+        "@angular/common": "20.0.0",
+        "@angular/compiler": "20.0.0",
+        "@angular/compiler-cli": "20.0.0",
+        "@angular/core": "20.0.0",
+        "@angular/forms": "20.0.0",
+        "@angular/language-service": "20.0.0",
+        "@angular/material": "20.0.0",
         "@jscrpt/common": "7.0.0",
-        "@microsoft/api-documenter": "7.26.5",
-        "@microsoft/api-extractor": "7.49.1",
-        "@stylistic/eslint-plugin": "2.13.0",
-        "@types/node": "22.7.4",
+        "@microsoft/api-documenter": "7.26.27",
+        "@microsoft/api-extractor": "7.52.8",
+        "@stylistic/eslint-plugin": "4.4.0",
+        "@types/node": "22.15.29",
         "copyfiles": "2.4.1",
-        "eslint": "9.18.0",
+        "eslint": "9.28.0",
         "eslint-plugin-ressurectit": "0.3.0",
         "npm-git-version": "2.0.0",
         "path-exists-cli": "2.0.0",
@@ -97,8 +97,8 @@
         "rimraf": "6.0.1",
         "rxjs": "7.5.7",
         "tslib": "2.8.1",
-        "typescript": "5.7.3",
-        "typescript-eslint": "8.20.0"
+        "typescript": "5.8.3",
+        "typescript-eslint": "8.33.0"
     },
     "module": "./es2022/src/index.js",
     "typings": "./src/index.d.ts",
