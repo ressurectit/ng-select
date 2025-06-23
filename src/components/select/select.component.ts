@@ -3,9 +3,9 @@ import {nameof, isBoolean, isPresent, isString, renderToBody} from '@jscrpt/comm
 import {extend} from '@jscrpt/common/extend';
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 
-import {NgSelectOptions, NgSelectPlugin, PluginDescription, NormalizeFunc, NgSelectPluginTypes} from '../../misc';
+import {SelectOptions, SelectPlugin, PluginDescription, NormalizeFunc, SelectPluginTypes} from '../../misc';
 import {NG_SELECT_OPTIONS, KEYBOARD_HANDLER_TYPE, NORMAL_STATE_TYPE, POPUP_TYPE, POSITIONER_TYPE, READONLY_STATE_TYPE, VALUE_HANDLER_TYPE, LIVE_SEARCH_TYPE} from '../../misc/types';
-import {NgSelect, NgSelectPluginInstances, NgSelectAction, NgSelectFunction} from './select.interface';
+import {Select, SelectPluginInstances, SelectAction, SelectFunction} from './select.interface';
 import {NG_SELECT_PLUGIN_INSTANCES} from './types';
 import {KeyboardHandler} from '../../plugins/keyboardHandler';
 import {BasicKeyboardHandlerComponent} from '../../plugins/keyboardHandler/components';
@@ -27,7 +27,7 @@ import {BasicValueHandlerComponent} from '../../plugins/valueHandler/components'
 import {LiveSearch} from '../../plugins/liveSearch';
 import {LIVE_SEARCH} from '../../plugins/liveSearch/types';
 import {NoLiveSearchComponent} from '../../plugins/liveSearch/components';
-import {NgSelectOption, NgSelectOptGroup} from '../option';
+import {SelectOption, SelectOptGroup} from '../option';
 import {OptionComponent} from '../option/option.component';
 import {OptGroupComponent} from '../option/optgroup.component';
 import {PluginBus} from '../../misc/pluginBus/pluginBus';
@@ -37,10 +37,10 @@ import {PluginBusEvents} from '../../misc/pluginBus/pluginBus.interface';
 //TODO - dynamic change of options gatherer destroy called properly ?
 
 /**
- * Default 'NgSelectOptions'
+ * Default 'SelectOptions'
  * @internal
  */
-const defaultOptions: NgSelectOptions =
+const defaultOptions: SelectOptions =
 {
     autoInitialize: true,
     absolute: false,
@@ -101,13 +101,12 @@ const defaultOptions: NgSelectOptions =
 };
 
 /**
- * Component that represents NgSelect itself, allows selection of value from options
+ * Component that represents Select itself, allows selection of value from options
  */
 @Component(
 {
     selector: 'ng-select',
     templateUrl: 'select.component.html',
-    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers:
     [
@@ -127,20 +126,20 @@ const defaultOptions: NgSelectOptions =
         {
             display: block;
             position: relative;
-        }`
+        }`,
     ]
 })
-export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChanges, OnInit, AfterViewInit, OnDestroy
+export class SelectComponent<TValue = any> implements Select<TValue>, OnChanges, OnInit, AfterViewInit, OnDestroy
 {
     //######################### protected fields #########################
 
     /**
-     * NgSelect options
+     * Select options
      */
-    protected _selectOptions: NgSelectOptions<TValue>;
+    protected _selectOptions: SelectOptions<TValue>;
 
     /**
-     * Subject used for indication that NgSelect was initialized
+     * Subject used for indication that Select was initialized
      */
     protected _initializedSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
@@ -157,10 +156,10 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
     /**
      * Array of available options to be displayed
      */
-    protected _availableOptions: NgSelectOption<TValue>[] = [];
+    protected _availableOptions: SelectOption<TValue>[] = [];
 
     /**
-     * Live search plugin currently used in NgSelect
+     * Live search plugin currently used in Select
      */
     protected _liveSearch: LiveSearch;
 
@@ -187,35 +186,35 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
     //######################### public properties - inputs #########################
 
     /**
-     * Gets or sets NgSelect options
+     * Gets or sets Select options
      */
     @Input()
-    public get selectOptions(): NgSelectOptions<TValue>
+    public get selectOptions(): SelectOptions<TValue>
     {
         return this._selectOptions;
     }
-    public set selectOptions(options: NgSelectOptions<TValue>)
+    public set selectOptions(options: SelectOptions<TValue>)
     {
         this._selectOptions = extend(true, this._selectOptions, options);
         this._pluginBus.selectOptions = this._selectOptions;
     }
 
     /**
-     * Indication whether should be NgSelect disabled or not
+     * Indication whether should be Select disabled or not
      */
     @Input()
     public disabled: boolean;
 
     /**
-     * Indication whether should be NgSelect readonly or not
+     * Indication whether should be Select readonly or not
      */
     @Input()
     public readonly: boolean;
 
-    //######################### public properties - implementation of NgSelect #########################
+    //######################### public properties - implementation of Select #########################
 
     /**
-     * Occurs every time when NgSelect is initialized or reinitialized, if value is false NgSelect was not initialized yet
+     * Occurs every time when Select is initialized or reinitialized, if value is false Select was not initialized yet
      */
     public get initialized(): Observable<boolean>
     {
@@ -247,7 +246,7 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
     /**
      * Array of provided options for select
      */
-    public get options(): NgSelectOption<TValue>[]
+    public get options(): SelectOption<TValue>[]
     {
         return this.optionsChildren.toArray();
     }
@@ -263,7 +262,7 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
     /**
      * Array of visible, displayed options for select
      */
-    public get availableOptions(): NgSelectOption<TValue>[]
+    public get availableOptions(): SelectOption<TValue>[]
     {
         return this._availableOptions;
     }
@@ -277,9 +276,9 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
     }
 
     /**
-     * NgSelect plugin instances available for gatherer
+     * Select plugin instances available for gatherer
      */
-    public ngSelectPlugins: NgSelectPluginInstances;
+    public SelectPlugins: SelectPluginInstances;
 
     /**
      * Plugin bus used for inter plugin shared events
@@ -289,7 +288,7 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
     /**
      * Select element that implements default gatherers
      */
-    public select: NgSelect<TValue>;
+    public select: Select<TValue>;
 
     //######################### public properties - template bindings #########################
 
@@ -304,7 +303,7 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
      * Options children found inside ng-select
      */
     @ContentChildren(OptionComponent)
-    public optionsChildren: QueryList<NgSelectOption>;
+    public optionsChildren: QueryList<SelectOption>;
 
     //######################### public properties - children #########################
 
@@ -312,7 +311,7 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
      * Options groups children found inside ng-select
      */
     @ContentChildren(OptGroupComponent)
-    public optGroupsChildren: QueryList<NgSelectOptGroup>;
+    public optGroupsChildren: QueryList<SelectOptGroup>;
 
     //######################### constructors #########################
     constructor(protected _changeDetector: ChangeDetectorRef,
@@ -321,8 +320,8 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
                 protected _appRef: ApplicationRef,
                 protected _injector: Injector,
                 protected _pluginBus: PluginBus<TValue>,
-                @Inject(NG_SELECT_PLUGIN_INSTANCES) protected _pluginInstances: NgSelectPluginInstances,
-                @Inject(NG_SELECT_OPTIONS) @Optional() options?: NgSelectOptions<TValue>,
+                @Inject(NG_SELECT_PLUGIN_INSTANCES) protected _pluginInstances: SelectPluginInstances,
+                @Inject(NG_SELECT_OPTIONS) @Optional() options?: SelectOptions<TValue>,
                 @Inject(NORMAL_STATE_TYPE) @Optional() normalStateType?: Type<NormalState>,
                 @Inject(KEYBOARD_HANDLER_TYPE) @Optional() keyboardHandlerType?: Type<KeyboardHandler>,
                 @Inject(POPUP_TYPE) @Optional() popupType?: Type<Popup>,
@@ -337,7 +336,7 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
         //at least on of following is present (value is not important)
         const readonlyDefault = isPresent(readonly) || isPresent(disabled);
         const multipleDefault = isPresent(multiple);
-        const opts: NgSelectOptions<TValue> = extend(true, {}, options);
+        const opts: SelectOptions<TValue> = extend(true, {}, options);
 
         if(!opts.plugins)
         {
@@ -415,13 +414,13 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
         }
 
         this._selectOptions = extend(true,
-                                     <NgSelectOptions<TValue>>
+                                     <SelectOptions<TValue>>
                                      {
                                          optionsGatherer: this,
                                          templateGatherer: this,
                                      },
                                      defaultOptions,
-                                     <NgSelectOptions<TValue>>
+                                     <SelectOptions<TValue>>
                                      {
                                          readonly: readonlyDefault,
                                          multiple: multipleDefault
@@ -451,14 +450,14 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
             }
         };
 
-        if(nameof<NgSelectComponent<TValue>>('disabled') in changes && isBoolean(this.disabled))
+        if(nameof<SelectComponent<TValue>>('disabled') in changes && isBoolean(this.disabled))
         {
-            updateReadonly(this.disabled, changes[nameof<NgSelectComponent<TValue>>('disabled')].firstChange);
+            updateReadonly(this.disabled, changes[nameof<SelectComponent<TValue>>('disabled')].firstChange);
         }
 
-        if(nameof<NgSelectComponent<TValue>>('readonly') in changes && isBoolean(this.readonly))
+        if(nameof<SelectComponent<TValue>>('readonly') in changes && isBoolean(this.readonly))
         {
-            updateReadonly(this.readonly, changes[nameof<NgSelectComponent<TValue>>('readonly')].firstChange);
+            updateReadonly(this.readonly, changes[nameof<SelectComponent<TValue>>('readonly')].firstChange);
         }
     }
 
@@ -658,15 +657,15 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
     }
 
     /**
-     * Initialize options, automaticaly called during init phase, but can be used to reinitialize NgSelectOptions
+     * Initialize options, automaticaly called during init phase, but can be used to reinitialize SelectOptions
      */
     public initOptions()
     {
-        this.selectOptions.optionsGatherer.ngSelectPlugins = this._pluginInstances;
+        this.selectOptions.optionsGatherer.SelectPlugins = this._pluginInstances;
         this.selectOptions.optionsGatherer.pluginBus = this._pluginBus;
         this.selectOptions.optionsGatherer.select = this;
 
-        const initOptionsPlugin = (pluginKey: string, pluginName: keyof NgSelectPluginTypes) =>
+        const initOptionsPlugin = (pluginKey: string, pluginName: keyof SelectPluginTypes) =>
         {
             if(this._selectOptions.plugins[pluginName])
             {
@@ -708,7 +707,7 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
      * Gets instance of plugin by its id
      * @param pluginId - Id of plugin, use constants
      */
-    public getPlugin<PluginType extends NgSelectPlugin>(pluginId: string): PluginType
+    public getPlugin<PluginType extends SelectPlugin>(pluginId: string): PluginType
     {
         return this._pluginInstances[pluginId] as PluginType;
     }
@@ -724,10 +723,10 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
     }
 
     /**
-     * Executes actions on NgSelect
-     * @param actions - Array of actions that are executed over NgSelect
+     * Executes actions on Select
+     * @param actions - Array of actions that are executed over Select
      */
-    public execute(...actions: NgSelectAction<TValue>[])
+    public execute(...actions: SelectAction<TValue>[])
     {
         if(!actions)
         {
@@ -738,10 +737,10 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
     }
 
     /**
-     * Executes function on NgSelect and returns result
+     * Executes function on Select and returns result
      * @param func - Function that is executed and its result is returned
      */
-    public executeAndReturn<TResult>(func: NgSelectFunction<TResult, TValue>): TResult
+    public executeAndReturn<TResult>(func: SelectFunction<TResult, TValue>): TResult
     {
         if(!func)
         {
@@ -815,7 +814,7 @@ export class NgSelectComponent<TValue = any> implements NgSelect<TValue>, OnChan
      * @param pluginKey - Key of plugin used for pluginInstances
      * @param pluginName - Name property for plugin from options
      */
-    protected _registerNewPlugin(plugin: NgSelectPlugin, pluginKey: string, pluginName: keyof NgSelectPluginTypes)
+    protected _registerNewPlugin(plugin: SelectPlugin, pluginKey: string, pluginName: keyof SelectPluginTypes)
     {
         if(!plugin)
         {

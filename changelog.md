@@ -29,6 +29,12 @@
    - `ngSelectPlugins` renamed to `selectPlugins`
 - updated `NG_SELECT_OPTIONS` injection token
    - renamed to `SELECT_OPTIONS`
+- updated `NgSelectComponent` component
+   - renamed to `SelectComponent`
+- updated `NgSelectAction` type
+   - renamed to `SelectAction`
+- updated `NgSelectFunction` type
+   - renamed to `SelectFunction`
 
 ## Version 12.1.1 (2025-07-08)
 
