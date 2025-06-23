@@ -14,6 +14,21 @@
    - now contains only `availableOptions` (as signal with `undefined` as uninitialized lazy options) and rest of functionality moved into new *plugin* `OptionsHandler`
 - updated `NgSelectOption` interface
    - renamed to `SelectOption`
+- updated `NgSelect` interface
+   - renamed to `Select`
+   - `initialized` updated to `Signal`
+   - removed `isInitialized`, use `initialized`
+- updated `NgSelectPluginInstances` interface
+   - renamed to `SelectPluginInstances`
+- updated `NgSelectOptions` interface
+   - renamed to `SelectOptions`
+- updated `NgSelectPluginTypes` interface
+   - renamed to `SelectPluginTypes`
+- updated `NgSelectPlugin` interface
+   - renamed to `SelectPlugin`
+   - `ngSelectPlugins` renamed to `selectPlugins`
+- updated `NG_SELECT_OPTIONS` injection token
+   - renamed to `SELECT_OPTIONS`
 
 ## Version 12.1.1 (2025-07-08)
 
