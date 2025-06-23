@@ -4,7 +4,7 @@ import {NormalStateContext} from '../normalStateContext/normalStateContext.inter
 import {PopupContext} from '../popupContext/popupContext.interface';
 
 /**
- * Gatherer used for obtaining templates for NgSelect
+ * Gatherer used for obtaining templates for Select
  */
 export interface TemplateGatherer
 {
