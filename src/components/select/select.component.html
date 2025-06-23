@@ -1,18 +1,22 @@
-<ng-template [ngComponentOutletEx]="selectOptions?.plugins?.liveSearch?.type" (ngComponentOutletExCreated)="setLiveSearchComponent($event)"></ng-template>
-<ng-template [ngComponentOutletEx]="selectOptions?.plugins?.positioner?.type" (ngComponentOutletExCreated)="setPositionerComponent($event)"></ng-template>
-<ng-template [ngComponentOutletEx]="selectOptions?.plugins?.keyboardHandler?.type" (ngComponentOutletExCreated)="setKeyboardHandlerComponent($event)"></ng-template>
-<ng-template [ngComponentOutletEx]="selectOptions?.plugins?.valueHandler?.type" (ngComponentOutletExCreated)="setValueHandlerComponent($event)"></ng-template>
+<ng-container #liveSearch />
+<ng-container #interactions />
+<ng-container #optionsHandler />
+<ng-container #positioner />
+<ng-container #keyboardHandler />
+<ng-container #valueHandler />
 
 <div>
-    <ng-template [ngIf]="!selectOptions?.readonly">
-        <ng-template [ngComponentOutletEx]="selectOptions?.plugins?.normalState?.type" (ngComponentOutletExCreated)="setNormalStateComponent($event)" [ngComponentOutletExContent]="liveSearchElement"></ng-template>
-    </ng-template>
+    @if(selectOptions?.readonly)
+    {
+        <ng-container #readonlyState />
+    }
+    @else
+    {
+        <ng-container #normalState />
+    }
 
-    <ng-template [ngIf]="selectOptions?.readonly">
-        <ng-template [ngComponentOutletEx]="selectOptions?.plugins?.readonlyState?.type" (ngComponentOutletExCreated)="setReadonlyStateComponent($event)"></ng-template>
-    </ng-template>
-
-    <ng-template [ngIf]="!selectOptions?.absolute">
-        <ng-template [ngComponentOutletEx]="selectOptions?.plugins?.popup?.type" (ngComponentOutletExCreated)="setPopupComponent($event)" [ngComponentOutletExContent]="liveSearchElement"></ng-template>
-    </ng-template>
+    @if(!selectOptions?.absolute)
+    {
+        <ng-container #popup />
+    }
 </div>
