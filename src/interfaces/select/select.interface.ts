@@ -1,12 +1,17 @@
 import {Signal} from '@angular/core';
+import {Invalidatable} from '@jscrpt/common';
+import {Subscription} from 'rxjs';
 
 import {OptionsGatherer} from '../optionsGatherer/optionsGatherer.interface';
 import {TemplateGatherer} from '../templateGatherer/templateGatherer.interface';
+import {SelectOptions} from '../selectOptions/selectOptions.interface';
+import {SelectPlugin} from '../selectPlugin/selectPlugin.interface';
+import {SelectAction, SelectFunction} from '../../misc/types';
 
 /**
  * Public API for Select
  */
-export interface Select<TValue = unknown> extends OptionsGatherer<TValue>, TemplateGatherer
+export interface Select<TValue = unknown> extends OptionsGatherer<TValue>, TemplateGatherer, Invalidatable
 {
     /**
      * Gets information whether is select initialized or not, changes when Select is initialized or reinitialized, if value is false Select was not initialized yet
@@ -40,11 +45,6 @@ export interface Select<TValue = unknown> extends OptionsGatherer<TValue>, Templ
      * @param handler - Function used for handling event
      */
     listenTo<TParam = void>(eventName: keyof PluginBusEvents, handler: (data: TParam) => void): Subscription;
-
-    /**
-     * Explicitly runs invalidation of content (change detection)
-     */
-    invalidateVisuals(): void;
 
     /**
      * Executes actions on Select

@@ -29,7 +29,7 @@ import {LIVE_SEARCH} from '../../plugins/liveSearch/types';
 import {NoLiveSearchComponent} from '../../plugins/liveSearch/components';
 import {SelectOption, SelectOptGroup} from '../option';
 import {OptionComponent} from '../option/option.component';
-import {OptGroupComponent} from '../option/optgroup.component';
+import {OptGroupComponent} from '../optionGroup/optgroup.component';
 import {PluginBus} from '../../misc/pluginBus/pluginBus';
 import {PluginBusEvents} from '../../misc/pluginBus/pluginBus.interface';
 

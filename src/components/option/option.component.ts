@@ -1,6 +1,6 @@
-import {Component, ChangeDetectionStrategy, Input} from '@angular/core';
+import {Component, ChangeDetectionStrategy, WritableSignal, signal, InputSignal, input, Signal} from '@angular/core';
 
-import {NgSelectOption} from './option.interface';
+import {ɵSelectOption, SelectOptionGroup} from '../../interfaces';
 
 /**
  * Component used for options in select component
@@ -9,41 +9,36 @@ import {NgSelectOption} from './option.interface';
 {
     selector: 'ng-option',
     template: '',
-    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OptionComponent<TValue = any> implements NgSelectOption<TValue>
+export class OptionComponent<TValue = unknown> implements ɵSelectOption<TValue>
 {
-    //######################### public properties - template bindings #########################
+    //######################### public properties - implementation of ɵSelectOption #########################
 
     /**
-     * Indication whether is item active
+     * @inheritdoc
      */
-    public active: boolean = false;
+    public active: WritableSignal<boolean> = signal(false);
 
     /**
-     * Indication whether this option is selected
+     * @inheritdoc
      */
-    public selected: boolean = false;
+    public selected: WritableSignal<boolean> = signal(false);
 
-    //######################### public properties - inputs #########################
+    //######################### public properties - implementation of SelectOption #########################
 
     /**
-     * Value that will be used if this option will be selected
+     * @inheritdoc
      */
-    @Input()
-    public value: TValue;
+    public value: InputSignal<TValue|undefined|null> = input();
 
     /**
-     * Text that is displayed if this value is selected
+     * @inheritdoc
      */
-    @Input()
-    public text: string;
-
-    //######################### public properties #########################
+    public text: InputSignal<string> = input('');
 
     /**
-     * If specified this option will be displayed in group
+     * @inheritdoc
      */
-    public group: string = null;
+    public group: Signal<SelectOptionGroup|undefined|null> = signal(null);
 }

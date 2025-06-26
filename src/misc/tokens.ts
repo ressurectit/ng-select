@@ -8,6 +8,12 @@ import {ReadonlyState} from '../plugins/readonlyState';
 import {ValueHandler} from '../plugins/valueHandler';
 import {LiveSearch} from '../plugins/liveSearch';
 import {SelectOptions} from '../interfaces/selectOptions/selectOptions.interface';
+import {SelectPluginInstances} from '../interfaces';
+
+/**
+ * Token used for obtaining 'SelectPluginInstances'
+ */
+export const SELECT_PLUGIN_INSTANCES: InjectionToken<SelectPluginInstances> = new InjectionToken<SelectPluginInstances>('SELECT_PLUGIN_INSTANCES');
 
 /**
  * Injection token for 'SelectOptions'

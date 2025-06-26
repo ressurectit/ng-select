@@ -1,20 +1,40 @@
+import {Signal} from '@angular/core';
+
+import {SelectOptionGroup} from '../selectOptionGroup/selectOptionGroup.interface';
+
 /**
  * Option for select
  */
-export interface SelectOption<TValue = unknown|undefined|null>
+export interface SelectOption<TValue = unknown>
 {
     /**
      * Value that will be used if this option will be selected
      */
-    value: TValue|undefined|null;
+    value: Signal<TValue|undefined|null>;
 
     /**
      * Text that is displayed if this value is selected
      */
-    text: string;
+    text: Signal<string>;
 
     /**
      * If specified this option will be displayed in group
      */
-    group?: string|null;
+    group: Signal<SelectOptionGroup|undefined|null>;
+}
+
+/**
+ * Option for ng select
+ */
+export interface ɵSelectOption<TValue = unknown> extends SelectOption<TValue>
+{
+    /**
+     * Indication whether is item active
+     */
+    active: Signal<boolean>;
+
+    /**
+     * Indication whether is this option selected
+     */
+    selected: Signal<boolean>;
 }

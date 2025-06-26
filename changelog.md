@@ -2,6 +2,14 @@
 
 ## Version 14.0.0 (2025-06-13)
 
+### Features
+
+- new `SelectOptionGroup` interface, which represents option group for Select
+    - **new properties**
+      - `template` optional template to be used for rendering option group
+      - `id` unique id of group
+      - `text` text that is displayed for this options group
+
 ### BREAKING CHANGES
 
 - minimal supported version of `NodeJs` is `20.19`
@@ -14,6 +22,7 @@
    - now contains only `availableOptions` (as signal with `undefined` as uninitialized lazy options) and rest of functionality moved into new *plugin* `OptionsHandler`
 - updated `NgSelectOption` interface
    - renamed to `SelectOption`
+   - all properties changed to `Signal`
 - updated `NgSelect` interface
    - renamed to `Select`
    - `initialized` updated to `Signal`
@@ -35,6 +44,25 @@
    - renamed to `SelectAction`
 - updated `NgSelectFunction` type
    - renamed to `SelectFunction`
+- updated `ɵNgSelectOption` interface
+   - renamed to `ɵSelectOption`
+   - all properties changed to `Signal`
+- updated `NG_SELECT_PLUGIN_INSTANCES` injection token
+   - renamed to `SELECT_PLUGIN_INSTANCES`
+- updated `NgSelectAbsoluteDirective` directive
+   - renamed to `SelectAbsoluteDirective`
+- updated `NgSelectEditDirective` directive
+   - renamed to `SelectEditDirective`
+- updated `NgSelectPlaceholderDirective` directive
+   - renamed to `SelectPlaceholderDirective`
+- updated `DisplayTextFunc` interface
+   - changed to type
+- updated `NgSelectHasValuePipe` pipe
+   - renamed to `SelectHasValuePipe`
+   - changed `name` to `selectHasValue`
+- updated `NgSelectValuePipe` pipe
+   - renamed to `SelectValuePipe`
+   - changed `name` to `selectValue`
 
 ## Version 12.1.1 (2025-07-08)
 

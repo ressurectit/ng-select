@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 
-import {NgSelectEditDirective} from '../directives/ngSelectEdit/ngSelectEdit.directive';
+import {NgSelectEditDirective} from '../directives/selectEdit/selectEdit.directive';
 import {EditNormalStateComponent} from '../plugins/normalState/edit/editNormalState.component';
 import {EditLiveSearchComponent} from '../plugins/liveSearch/edit/editLiveSearch.component';
 import {EditPopupComponent} from '../plugins/popup/edit/editPopup.component';

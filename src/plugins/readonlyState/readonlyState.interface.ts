@@ -1,4 +1,3 @@
-
 import {NormalStateOptions, NormalState} from '../normalState';
 
 /**
