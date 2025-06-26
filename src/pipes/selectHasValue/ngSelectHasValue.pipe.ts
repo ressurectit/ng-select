@@ -1,21 +1,21 @@
 import {Pipe, PipeTransform} from '@angular/core';
 import {isBlank} from '@jscrpt/common';
 
-import {NgSelectOption} from '../components/option';
+import {SelectOption} from '../../interfaces';
 
 /**
  * Pipe that checks whether select has currently any option
  */
-@Pipe({name: 'ngSelectHasValue'})
-export class NgSelectHasValuePipe<TValue = any> implements PipeTransform
+@Pipe({name: 'selectHasValue'})
+export class SelectHasValuePipe<TValue = unknown> implements PipeTransform
 {
-    //######################### public methods #########################
+    //######################### public methods - implementation of PipeTransform #########################
 
     /**
      * Transforms selected option into boolean indication if there is option selected
      * @param options - Selected options to be transformed into boolean
      */
-    public transform(options: NgSelectOption<TValue>|Array<NgSelectOption<TValue>>): boolean
+    public transform(options: SelectOption<TValue>|Array<SelectOption<TValue>>): boolean
     {
         return !(isBlank(options) || (Array.isArray(options) && !options.length));
     }

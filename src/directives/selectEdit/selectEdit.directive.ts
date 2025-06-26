@@ -5,7 +5,7 @@ import {EditNormalStateComponent} from '../../plugins/normalState/edit/editNorma
 import {EditLiveSearchComponent} from '../../plugins/liveSearch/edit/editLiveSearch.component';
 import {EditPopupComponent} from '../../plugins/popup/edit/editPopup.component';
 import {EditKeyboardHandlerComponent} from '../../plugins/keyboardHandler/components';
-import {NgSelectComponent} from '../../components/select/select.component';
+import {SelectComponent} from '../../components';
 import {ExcludingOptionsGatherer} from '../../misc/optionsGatherer/types';
 
 /**
@@ -38,10 +38,10 @@ import {ExcludingOptionsGatherer} from '../../misc/optionsGatherer/types';
         },
     ],
 })
-export class NgSelectEditDirective
+export class SelectEditDirective
 {
     //######################### constructor #########################
-    constructor(select: NgSelectComponent)
+    constructor(select: SelectComponent)
     {
         select.selectOptions =
         {

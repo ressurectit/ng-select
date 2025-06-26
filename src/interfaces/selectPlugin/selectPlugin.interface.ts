@@ -1,11 +1,12 @@
 import {ElementRef} from '@angular/core';
+import {Invalidatable} from '@jscrpt/common';
 
 import {SelectPluginInstances} from '../selectPluginInstances/selectPluginInstances.interface';
 
 /**
  * Select plugin interface
  */
-export interface SelectPlugin<TOptions = unknown, TValue = unknown>
+export interface SelectPlugin<TOptions = unknown, TValue = unknown> extends Invalidatable
 {
     /**
      * Select plugin instances available for this plugin
@@ -36,9 +37,4 @@ export interface SelectPlugin<TOptions = unknown, TValue = unknown>
      * Initialize plugin options, all operations required to be done with plugin options are handled here
      */
     initOptions(): void;
-
-    /**
-     * Explicitly runs invalidation of content (change detection)
-     */
-    invalidateVisuals(): void;
 }

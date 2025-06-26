@@ -1,3 +1,6 @@
+import {PluginDescription} from '../pluginDescription/pluginDescription.interface';
+import {NormalState, ReadonlyState} from '../plugins';
+
 /**
  * All available types of plugins for Select
  */

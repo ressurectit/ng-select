@@ -1,6 +1,6 @@
 import {Directive, OnInit, Input} from '@angular/core';
 
-import {NgSelectComponent} from '../../components/select/select.component';
+import {SelectComponent} from '../../components';
 import {LiveSearchOptions} from '../../plugins/liveSearch';
 
 /**
@@ -10,7 +10,7 @@ import {LiveSearchOptions} from '../../plugins/liveSearch';
 {
     selector: 'ng-select[placeholder]',
 })
-export class NgSelectPlaceholderDirective implements OnInit
+export class SelectPlaceholderDirective implements OnInit
 {
     //######################### public properties - inputs #########################
 
@@ -21,7 +21,7 @@ export class NgSelectPlaceholderDirective implements OnInit
     public placeholder: string;
 
     //######################### constructor #########################
-    constructor(private _select: NgSelectComponent)
+    constructor(private _select: SelectComponent)
     {
     }
 

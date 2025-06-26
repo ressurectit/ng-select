@@ -1,3 +1,4 @@
+import {DisplayTextFunc} from '../../../misc/types';
 import {SelectPlugin} from '../../selectPlugin/selectPlugin.interface';
 import {VisualPluginOptions} from '../../visualPluginOptions/visualPluginOptions.interface';
 
@@ -9,23 +10,23 @@ export interface NormalStateTexts
     /**
      * Displayed when there is no value selected, represents empty value, used if value is null or empty array
      */
-    nothingSelected?: string;
+    nothingSelected: string;
 }
 
 /**
  * Options for normal state plugin
  */
-export interface NormalStateOptions<TCssClasses = unknown, TValue = unknown> extends VisualPluginOptions<TCssClasses>
+export interface NormalStateOptions<TValue = unknown, TCssClasses = unknown> extends VisualPluginOptions<TCssClasses>
 {
     /**
      * Texts that are used within any NormalState
      */
-    texts?: NormalStateTexts;
+    texts: NormalStateTexts;
 
     /**
      * Function used for transformation of option into display text
      */
-    optionDisplayText?: DisplayTextFunc<TValue>;
+    optionDisplayText: DisplayTextFunc<TValue>;
 }
 
 /**

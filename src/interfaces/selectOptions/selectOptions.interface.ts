@@ -1,3 +1,5 @@
+import {SelectPluginTypes} from '../selectPluginTypes/selectPluginTypes.interface';
+
 /**
  * Describes select options used for Select
  */

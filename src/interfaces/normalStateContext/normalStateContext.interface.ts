@@ -1,3 +1,5 @@
+import {NormalState} from '../plugins';
+
 /**
  * Context for template that is used within normal state plugin for rendering content
  */
