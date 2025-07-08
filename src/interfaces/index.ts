@@ -1,5 +1,6 @@
 export * from './normalStateContext/normalStateContext.interface';
 export * from './optionsGatherer/optionsGatherer.interface';
+export * from './pluginBusOptions/pluginBusOptions.interface';
 export * from './pluginDescription/pluginDescription.interface';
 export * from './pluginOptions/pluginOptions.interface';
 export * from './popupContext/popupContext.interface';

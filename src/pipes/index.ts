@@ -1,2 +1,2 @@
-export * from './selectHasValue/ngSelectHasValue.pipe';
-export * from './selectValue/ngSelectValue.pipe';
+export * from './selectHasValue/selectHasValue.pipe';
+export * from './selectValue/selectValue.pipe';
