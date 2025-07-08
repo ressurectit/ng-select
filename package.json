@@ -4,9 +4,12 @@
     "description": "Angular component representing html select",
     "type": "module",
     "sideEffects": false,
+    "workspaces": [
+        "demo",
+        "."
+    ],
     "scripts": {
         "build": "ngc --declaration --declarationDir . --declarationMap",
-        "api": "api-extractor run --local --verbose -c",
         "clean": "rimraf --glob */temp temp es2022 **/tsdoc-metadata.json src/**/*.d.ts src/**/*.d.ts.map */src/**/*.d.ts */src/**/*.d.ts.map ./*.d.ts ./*.d.ts.map */*.d.ts",
         "clean:deps": "rimraf package-lock.json node_modules || echo 'node_modules removed'",
         "clean:all": "npm run clean && npm run clean:deps",
@@ -20,6 +23,8 @@
         "deploy": "npm publish --loglevel error",
         "deploy:next": "npm publish --tag next --loglevel error",
         "lint": "eslint src/**/*.ts",
+        "preclean:all": "lerna run clean:all --scope=ng-universal-demo",
+        "start": "lerna run start --scope=ng-universal-demo",
         "doc": "path-exists docs && npm run doc:generate || echo \"No docs generated!\"",
         "predoc:generate": "cd docs && git pull && cd ..",
         "postdoc:generate": "npm run doc:save",
@@ -91,6 +96,7 @@
         "copyfiles": "2.4.1",
         "eslint": "9.28.0",
         "eslint-plugin-ressurectit": "0.4.0",
+        "lerna": "8.1.3",
         "npm-git-version": "2.0.0",
         "path-exists-cli": "2.0.0",
         "replace-in-file": "8.3.0",
