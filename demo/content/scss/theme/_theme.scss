@@ -1,0 +1,47 @@
+@use "sass:meta";
+
+@use '@css-styles/common' as vars;
+@use '@css-styles/common' as mixins;
+@use '@css-styles/themes' as themes;
+@use '@anglr/common/styles' as anglrCommon;
+
+@use './themeColors';
+
+$fontSize: 14px !default;
+$theme: () !default;
+$appTheme: () !default;
+$themeName: null !default;
+$anglrCommonTheme: null !default;
+$gridTheme: null !default;
+
+//---------------------- PAGE STYLING ----------------------
+.app-page.#{$themeName}
+{
+    //############## FLUID FONT ##############
+
+    @include mixins.fluid-type(768px, 1024px, 12px, $fontSize);
+
+    //############## SIZES AND COMMON ##############
+
+    @include mixins.buildSizes($fontSize, vars.$sizes);
+    @include mixins.buildFontSizeCss($fontSize, vars.$fontSizes);
+    @include mixins.buildFixedSizes($fontSize);
+    @include mixins.buildGapsCss($fontSize, vars.$sizes);
+    @include mixins.buildBorderRadiusCss($fontSize, vars.$sizes);
+    @include mixins.buildPaddingCss($fontSize, vars.$sizes);
+    @include mixins.buildMarginCss($fontSize, vars.$sizes);
+
+    //############## THEME ##############
+
+    @include themes.buildThemeVars($theme);
+
+    //############## APP THEME ##############
+
+    @include themeColors.buildThemeColors($appTheme);
+
+    //############## PACKAGES ##############
+
+    @include anglrCommon.buildThemeColorsTooltip($anglrCommonTheme);
+    @include anglrCommon.buildThemeColorsMultiButton($anglrCommonTheme);
+    @include anglrCommon.buildThemeColorsDebugData($anglrCommonTheme);
+}

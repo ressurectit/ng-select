@@ -1,0 +1,46 @@
+{
+    "name": "ng-universal-demo",
+    "version": "1.0.0",
+    "description": "Angular sample application",
+    "type": "module",
+    "scripts": {
+        "build": "ng build",
+        "build:min": "ng build -c production",
+        "prebuild": "npm run version:build && npm run config:build",
+        "prebuild:min": "npm run clean && npm run prebuild",
+        "clean": "rimraf wwwroot config/configOverride.js config/configServerOverride.js config/configBrowserOverride.js version.json",
+        "clean:deps": "rimraf package-lock.json node_modules .angular || echo 'node_modules removed'",
+        "clean:all": "npm run clean && npm run clean:deps",
+        "version:build": "ngv -e \"node .utils/write.version.js\"",
+        "config:build": "node .utils/generateConfig.js",
+        "server": "node server.js",
+        "lint": "eslint app/**/*.ts",
+        "prestart": "npm run version:build && npm run config:build",
+        "start": "concurrently \"npm run server -- --devPort\" \"ng serve\""
+    },
+    "engines": {
+        "node": "^20.19.0 || ^22.12.0 || >=24.0.0"
+    },
+    "author": "kukjevov",
+    "license": "MIT",
+    "devDependencies": {
+        "@angular-devkit/build-angular": "20.0.0",
+        "@angular/cli": "20.0.0",
+        "@angular/platform-server": "20.0.0",
+        "@angular/ssr": "20.0.0",
+        "@css-styles/common": "2.0.0-beta.20250409080638",
+        "@css-styles/themes": "2.0.0-beta.20250410115033",
+        "@fortawesome/fontawesome-free": "6.7.2",
+        "@types/compression": "1.7.5",
+        "@types/express": "4.17.21",
+        "chalk": "4.1.2",
+        "compression": "1.7.4",
+        "concurrently": "8.2.2",
+        "dotenv": "10.0.0",
+        "envsub": "4.1.0",
+        "express": "4.19.2",
+        "http-proxy-middleware": "3.0.3",
+        "nodejs-connect-extensions": "3.0.0",
+        "yargs": "17.7.2"
+    }
+}
