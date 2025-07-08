@@ -1,9 +1,10 @@
-import {Component, ChangeDetectionStrategy, FactoryProvider, Input, Inject, ChangeDetectorRef, Optional, Type, AfterViewInit, OnInit, ContentChildren, QueryList, EventEmitter, forwardRef, resolveForwardRef, ElementRef, OnChanges, SimpleChanges, Attribute, OnDestroy, TemplateRef, ContentChild, ComponentFactoryResolver, ApplicationRef, Injector, EmbeddedViewRef, ComponentRef, ClassProvider} from '@angular/core';
-import {nameof, isBoolean, isPresent, isString, renderToBody} from '@jscrpt/common';
+import {Component, ChangeDetectionStrategy, FactoryProvider, Input, Inject, ChangeDetectorRef, Optional, Type, AfterViewInit, OnInit, ContentChildren, QueryList, EventEmitter, forwardRef, resolveForwardRef, ElementRef, OnChanges, SimpleChanges, Attribute, OnDestroy, TemplateRef, ContentChild, ComponentFactoryResolver, ApplicationRef, Injector, EmbeddedViewRef, ComponentRef, ClassProvider, input, InputSignal} from '@angular/core';
+import {nameof, isBoolean, isPresent, isString, renderToBody, RecursivePartial} from '@jscrpt/common';
 import {extend} from '@jscrpt/common/extend';
+import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 
-import {SelectOptions, SelectPlugin, PluginDescription, NormalizeFunc, SelectPluginTypes} from '../../misc';
+import {SelectPlugin, PluginDescription, NormalizeFunc, SelectPluginTypes} from '../../misc';
 import {NG_SELECT_OPTIONS, KEYBOARD_HANDLER_TYPE, NORMAL_STATE_TYPE, POPUP_TYPE, POSITIONER_TYPE, READONLY_STATE_TYPE, VALUE_HANDLER_TYPE, LIVE_SEARCH_TYPE} from '../../misc/types';
 import {Select, SelectPluginInstances, SelectAction, SelectFunction} from './select.interface';
 import {NG_SELECT_PLUGIN_INSTANCES} from './types';
@@ -32,6 +33,7 @@ import {OptionComponent} from '../option/option.component';
 import {OptGroupComponent} from '../optionGroup/optgroup.component';
 import {PluginBus} from '../../misc/pluginBus/pluginBus';
 import {PluginBusEvents} from '../../misc/pluginBus/pluginBus.interface';
+import {SelectOptions} from '../../interfaces';
 
 //TODO - dynamic change of absolute popup
 //TODO - dynamic change of options gatherer destroy called properly ?
@@ -107,29 +109,28 @@ const defaultOptions: SelectOptions =
 {
     selector: 'ng-select',
     templateUrl: 'select.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    styles:
+    `:host
+    {
+        display: block;
+        position: relative;
+    }`,
     providers:
     [
         <FactoryProvider>
         {
             provide: NG_SELECT_PLUGIN_INSTANCES,
-            useFactory: () => {return {};}
+            useFactory: () => {return {};},
         },
         <ClassProvider>
         {
             provide: PluginBus,
-            useClass: PluginBus
-        }
+            useClass: PluginBus,
+        },
     ],
-    styles: [
-        `:host
-        {
-            display: block;
-            position: relative;
-        }`,
-    ]
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SelectComponent<TValue = any> implements Select<TValue>, OnChanges, OnInit, AfterViewInit, OnDestroy
+export class SelectComponent<TValue = unknown> implements Select<TValue>, OnChanges, OnInit, AfterViewInit, OnDestroy
 {
     //######################### protected fields #########################
 
@@ -193,23 +194,21 @@ export class SelectComponent<TValue = any> implements Select<TValue>, OnChanges,
     {
         return this._selectOptions;
     }
-    public set selectOptions(options: SelectOptions<TValue>)
+    public set selectOptions(options: RecursivePartial<SelectOptions<TValue>>)
     {
-        this._selectOptions = extend(true, this._selectOptions, options);
+        this._selectOptions = deepCopyWithArrayOverride(this._selectOptions, options);
         this._pluginBus.selectOptions = this._selectOptions;
     }
 
     /**
      * Indication whether should be Select disabled or not
      */
-    @Input()
-    public disabled: boolean;
+    public disabled: InputSignal<boolean> = input(false);
 
     /**
      * Indication whether should be Select readonly or not
      */
-    @Input()
-    public readonly: boolean;
+    public readonly: InputSignal<boolean> = input(false);
 
     //######################### public properties - implementation of Select #########################
 
