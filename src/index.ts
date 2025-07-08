@@ -18,6 +18,7 @@ export * from './misc/optionsGatherer/types';
 export * from './modules/ngSelect.module';
 export * from './modules/ngSelectDynamic.module';
 export * from './modules/ngSelectEdit.module';
+export * from './pipes/ngSelectHasValue.pipe';
 export * from './pipes/ngSelectValue.pipe';
 export * from './plugins/keyboardHandler';
 export * from './plugins/keyboardHandler/types';
