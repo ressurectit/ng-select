@@ -9,6 +9,10 @@
       - `template` optional template to be used for rendering option group
       - `id` unique id of group
       - `text` text that is displayed for this options group
+- new `SelectEvent` interface, that is event that is used for 'void' events, storing information about source of event and source element
+   - **properties**
+      - `sourceElement` html element that caused the event
+      - `source` instance of select or select plugin that caused event
 
 ### BREAKING CHANGES
 
@@ -63,6 +67,10 @@
 - updated `NgSelectValuePipe` pipe
    - renamed to `SelectValuePipe`
    - changed `name` to `selectValue`
+- updated `PluginBusEvents` interface
+   - renamed to `SelectBusEvents`
+- updated `PluginBus` class
+   - renamed to `SelectBus`
 
 ## Version 12.1.1 (2025-07-08)
 

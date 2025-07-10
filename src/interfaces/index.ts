@@ -5,6 +5,8 @@ export * from './pluginDescription/pluginDescription.interface';
 export * from './pluginOptions/pluginOptions.interface';
 export * from './popupContext/popupContext.interface';
 export * from './select/select.interface';
+export * from './selectBusEvents/selectBusEvents.interface';
+export * from './selectEvent/selectEvent.interface';
 export * from './selectOption/selectOption.interface';
 export * from './selectOptionGroup/selectOptionGroup.interface';
 export * from './selectOptions/selectOptions.interface';
