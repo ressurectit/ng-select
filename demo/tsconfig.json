@@ -26,10 +26,8 @@
         "outDir": "wwwroot/app-tsc",
         "paths": 
         {
-            "@anglr/md-help": ["../src/index.ts"],
-            "@anglr/md-help/mermaid": ["../mermaid/src/index.ts"],
-            "@anglr/md-help/highlightjs": ["../highlightjs/src/index.ts"],
-            "@anglr/md-help/baseurl": ["../baseurl/src/index.ts"]
+            "@anglr/select": ["../src/index.ts"],
+            "@anglr/select/extensions": ["../extensions/src/index.ts"],
         },
         "lib":
         [

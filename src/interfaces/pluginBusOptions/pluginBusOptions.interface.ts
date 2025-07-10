@@ -1,3 +1,6 @@
+import {OptionsGatherer} from '../optionsGatherer/optionsGatherer.interface';
+import {TemplateGatherer} from '../templateGatherer/templateGatherer.interface';
+
 /**
  * Options used for plugin bus
  */
@@ -14,7 +17,7 @@ export interface PluginBusOptions<TValue = unknown>
     templateGatherer?: TemplateGatherer;
 
     /**
-     * Indication whether is NgSelect readonly or not
+     * Indication whether is Select readonly or not
      */
     readonly?: boolean;
 

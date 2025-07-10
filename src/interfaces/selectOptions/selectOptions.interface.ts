@@ -1,3 +1,4 @@
+import {PluginBusOptions} from '../pluginBusOptions/pluginBusOptions.interface';
 import {SelectPluginTypes} from '../selectPluginTypes/selectPluginTypes.interface';
 
 /**
