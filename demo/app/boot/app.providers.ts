@@ -7,7 +7,6 @@ import {LocalPermanentStorage} from '@anglr/common/store';
 import {PROGRESS_INTERCEPTOR_PROVIDER, providePosition, provideLoggerConfig, DeveloperConsoleSink, LogLevelEnricher, TimestampEnricher, LogLevel, providePermanentStorage} from '@anglr/common';
 import {MovableTitledDialogComponent, TitledDialogServiceOptions, TitledDialogService, provideConfirmationDialogOptions} from '@anglr/common/material';
 import {FloatingUiDomPosition} from '@anglr/common/floating-ui';
-// import {NORMAL_STATE_OPTIONS, NormalStateOptions} from '@anglr/select';
 
 import {routes} from './app.component.routes';
 

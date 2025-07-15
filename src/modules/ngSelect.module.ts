@@ -1,12 +1,7 @@
 import {NgModule} from '@angular/core';
 
 import {SelectValuePipe, SelectHasValuePipe} from '../pipes';
-import {NgSelectControlValueAccessor} from '../misc/ngSelectControlValueAccessor.directive';
-import {OptionComponent} from '../components/option/option.component';
-import {OptGroupComponent} from '../components/optionGroup/optgroup.component';
-import {NgSelectComponent} from '../components/select/select.component';
-import {NgSelectAbsoluteDirective} from '../directives/selectAbsolute/selectAbsolute.directive';
-import {NgSelectPlaceholderDirective} from '../directives/selectPlaceholder/selectPlaceholder.directive';
+import {OptionComponent, OptGroupComponent, SelectComponent} from '../components';
 
 /**
  * Module for select and its options
@@ -17,25 +12,25 @@ import {NgSelectPlaceholderDirective} from '../directives/selectPlaceholder/sele
     [
         OptionComponent,
         OptGroupComponent,
-        NgSelectComponent,
+        SelectComponent,
         SelectValuePipe,
         SelectHasValuePipe,
-        NgSelectAbsoluteDirective,
-        NgSelectControlValueAccessor,
-        NgSelectPlaceholderDirective,
+        // SelectAbsoluteDirective,
+        // SelectControlValueAccessor,
+        // SelectPlaceholderDirective,
     ],
     exports:
     [
         OptionComponent,
         OptGroupComponent,
-        NgSelectComponent,
+        SelectComponent,
         SelectValuePipe,
         SelectHasValuePipe,
-        NgSelectAbsoluteDirective,
-        NgSelectControlValueAccessor,
-        NgSelectPlaceholderDirective,
+        // NgSelectAbsoluteDirective,
+        // NgSelectControlValueAccessor,
+        // NgSelectPlaceholderDirective,
     ]
 })
-export class NgSelectModule
+export class SelectModule
 {
 }

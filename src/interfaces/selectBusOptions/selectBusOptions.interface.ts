@@ -2,9 +2,9 @@ import {OptionsGatherer} from '../optionsGatherer/optionsGatherer.interface';
 import {TemplateGatherer} from '../templateGatherer/templateGatherer.interface';
 
 /**
- * Options used for plugin bus
+ * Options used for select bus
  */
-export interface PluginBusOptions<TValue = unknown>
+export interface SelectBusOptions<TValue = unknown>
 {
     /**
      * Instance of options gatherer that is used for obtaining options
@@ -31,18 +31,18 @@ export interface PluginBusOptions<TValue = unknown>
      */
     useNonExistingAsValue?: boolean;
 
-    /**
-     * Function of value comparer that is used for comparison of values
-     */
-    valueComparer?: CompareValueFunc<TValue>;
+    // /**
+    //  * Function of value comparer that is used for comparison of values
+    //  */
+    // valueComparer?: CompareValueFunc<TValue>;
 
-    /**
-     * Method that is used for filtering when live search is running on static data
-     */
-    liveSearchFilter?: LiveSearchFilter<TValue>;
+    // /**
+    //  * Method that is used for filtering when live search is running on static data
+    //  */
+    // liveSearchFilter?: LiveSearchFilter<TValue>;
 
-    /**
-     * Normalizer used for normalizing values
-     */
-    normalizer?: NormalizeFunc<TValue>;
+    // /**
+    //  * Normalizer used for normalizing values
+    //  */
+    // normalizer?: NormalizeFunc<TValue>;
 }

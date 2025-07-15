@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 14.0.0 (2025-06-13)
+## Version 14.0.0 (2025-07-15)
 
 ### Features
 
@@ -71,6 +71,10 @@
    - renamed to `SelectBusEvents`
 - updated `PluginBus` class
    - renamed to `SelectBus`
+- updated `NgSelectModule` module
+   - renamed to `SelectModule`
+- updated `PluginBusOptions` interface
+   - renamed to `SelectBusOptions`
 
 ## Version 12.1.1 (2025-07-08)
 

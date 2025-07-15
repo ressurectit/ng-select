@@ -6,38 +6,38 @@ import {NormalState, ReadonlyState} from '../plugins';
  */
 export interface SelectPluginTypes
 {
-    /**
-     * Handles keyboard events
-     */
-    keyboardHandler?: PluginDescription<KeyboardHandler>;
+    // /**
+    //  * Handles keyboard events
+    //  */
+    // keyboardHandler?: PluginDescription<KeyboardHandler>;
 
     /**
      * Component used for displaying normal state of select
      */
     normalState?: PluginDescription<NormalState>;
 
-    /**
-     * Component used for displaying available options for selection
-     */
-    popup?: PluginDescription<Popup>;
+    // /**
+    //  * Component used for displaying available options for selection
+    //  */
+    // popup?: PluginDescription<Popup>;
 
-    /**
-     * Handles correct position of pop component
-     */
-    positioner?: PluginDescription<Positioner>;
+    // /**
+    //  * Handles correct position of pop component
+    //  */
+    // positioner?: PluginDescription<Positioner>;
 
     /**
      * Component used for displaying readonly/disabled state of select, can be null, in that case normal state component is used
      */
     readonlyState?: PluginDescription<ReadonlyState>;
 
-    /**
-     * Handles obtaining and setting value of component
-     */
-    valueHandler?: PluginDescription<ValueHandler>;
+    // /**
+    //  * Handles obtaining and setting value of component
+    //  */
+    // valueHandler?: PluginDescription<ValueHandler>;
 
-    /**
-     * Contains component that is used for live searching in options
-     */
-    liveSearch?: PluginDescription<LiveSearch>;
+    // /**
+    //  * Contains component that is used for live searching in options
+    //  */
+    // liveSearch?: PluginDescription<LiveSearch>;
 }

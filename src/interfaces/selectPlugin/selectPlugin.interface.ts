@@ -2,6 +2,7 @@ import {ElementRef} from '@angular/core';
 import {Invalidatable} from '@jscrpt/common';
 
 import {SelectPluginInstances} from '../selectPluginInstances/selectPluginInstances.interface';
+import {SelectBus} from '../../misc/classes';
 
 /**
  * Select plugin interface
@@ -26,7 +27,7 @@ export interface SelectPlugin<TOptions = unknown, TValue = unknown> extends Inva
     /**
      * Plugin bus used in select
      */
-    pluginBus: PluginBus<TValue>;
+    pluginBus: SelectBus<TValue>;
 
     /**
      * Initialize plugin, to be ready to use, initialize communication with other plugins

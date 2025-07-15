@@ -1,6 +1,3 @@
-import {OptionsGatherer, LiveSearchFilter} from './optionsGatherer/optionsGatherer.interface';
-import {TemplateGatherer} from './templateGatherer.interface';
-
 /**
  * Function used for comparing two values
  */

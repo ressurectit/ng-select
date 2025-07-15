@@ -1,20 +1,20 @@
 import {Injectable, EventEmitter, ElementRef} from '@angular/core';
 import {Subject} from 'rxjs';
 
-import {SelectBusEvents, SelectEvent, SelectOption} from '../../../interfaces';
+import {SelectBusEvents, SelectBusOptions, SelectEvent, SelectOption} from '../../../interfaces';
 
 /**
  * Class represents centralized bus for internal communication
  */
 @Injectable()
-export class PluginBus<TValue = unknown> implements SelectBusEvents
+export class SelectBus<TValue = unknown> implements SelectBusEvents
 {
     //######################### public properties #########################
 
     /**
      * Options passed to select
      */
-    public selectOptions: PluginBusOptions<TValue>|undefined|null;
+    public selectOptions: SelectBusOptions<TValue>|undefined|null;
 
     /**
      * HTML element that represents select itself
