@@ -10,8 +10,8 @@ export interface PopupContext
      */
     $implicit: SelectOption;
 
-    /**
-     * Instance of plugin itself
-     */
-    popup: Popup;
+    // /**
+    //  * Instance of plugin itself
+    //  */
+    // popup: Popup;
 }

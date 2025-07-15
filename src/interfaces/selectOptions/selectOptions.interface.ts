@@ -1,10 +1,10 @@
-import {PluginBusOptions} from '../pluginBusOptions/pluginBusOptions.interface';
+import {SelectBusOptions} from '../selectBusOptions/selectBusOptions.interface';
 import {SelectPluginTypes} from '../selectPluginTypes/selectPluginTypes.interface';
 
 /**
  * Describes select options used for Select
  */
-export interface SelectOptions<TValue = unknown> extends PluginBusOptions<TValue>
+export interface SelectOptions<TValue = unknown> extends SelectBusOptions<TValue>
 {
     /**
      * Indication whether Select should be initialized automaticaly during 'NgOnInit' phase

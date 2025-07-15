@@ -71,6 +71,10 @@
    - renamed to `SelectBusEvents`
 - updated `PluginBus` class
    - renamed to `SelectBus`
+- updated `NgSelectModule` module
+   - renamed to `SelectModule`
+- updated `PluginBusOptions` interface
+   - renamed to `SelectBusOptions`
 
 ## Version 15.0.0 (2026-02-10)
 

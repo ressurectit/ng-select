@@ -7,6 +7,7 @@ import {TemplateGatherer} from '../templateGatherer/templateGatherer.interface';
 import {SelectOptions} from '../selectOptions/selectOptions.interface';
 import {SelectPlugin} from '../selectPlugin/selectPlugin.interface';
 import {SelectAction, SelectFunction} from '../../misc/types';
+import {SelectBusEvents} from '../selectBusEvents/selectBusEvents.interface';
 
 /**
  * Public API for Select
@@ -44,7 +45,7 @@ export interface Select<TValue = unknown> extends OptionsGatherer<TValue>, Templ
      * @param eventName - Name of event that should be listened to
      * @param handler - Function used for handling event
      */
-    listenTo<TParam = void>(eventName: keyof PluginBusEvents, handler: (data: TParam) => void): Subscription;
+    listenTo<TParam = void>(eventName: keyof SelectBusEvents, handler: (data: TParam) => void): Subscription;
 
     /**
      * Executes actions on Select

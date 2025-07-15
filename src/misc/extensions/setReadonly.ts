@@ -1,23 +1,23 @@
-import {NgSelectAction} from '../../components/select';
+// import {NgSelectAction} from '../../components/select';
 
-/**
- * Sets NgSelect as readonly, non editable
- * @param readonly - Indication whether is select readonly or not, if omitted defaults to true
- * @internal
- */
-export function ɵSetReadonly<TValue>(readonly: boolean = true): NgSelectAction<TValue>
-{
-    return ngSelect =>
-    {
-        ngSelect.selectOptions =
-        {
-            readonly: readonly
-        };
+// /**
+//  * Sets NgSelect as readonly, non editable
+//  * @param readonly - Indication whether is select readonly or not, if omitted defaults to true
+//  * @internal
+//  */
+// export function ɵSetReadonly<TValue>(readonly: boolean = true): NgSelectAction<TValue>
+// {
+//     return ngSelect =>
+//     {
+//         ngSelect.selectOptions =
+//         {
+//             readonly: readonly
+//         };
 
-        if(ngSelect.isInitialized)
-        {
-            ngSelect.initOptions();
-            ngSelect.initialize();
-        }
-    };
-}
+//         if(ngSelect.isInitialized)
+//         {
+//             ngSelect.initOptions();
+//             ngSelect.initialize();
+//         }
+//     };
+// }
