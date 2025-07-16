@@ -1,75 +1,78 @@
-import {Component, ChangeDetectionStrategy, Input} from '@angular/core';
+import {Component, ChangeDetectionStrategy, Input, viewChild, ViewContainerRef, Signal, WritableSignal, signal, Inject, Optional, ChangeDetectorRef, Type, resolveForwardRef, FactoryProvider, effect} from '@angular/core';
 import {RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
-import {SelectOptions} from '../../interfaces';
+import {PluginDescription, SelectOptions, SelectPlugin} from '../../interfaces';
+import {SELECT_OPTIONS} from '../../misc/tokens';
+import {SelectPluginType} from '../../misc/enums';
+import {SelectPluginInstances} from '../../misc/classes';
 
 //TODO - dynamic change of absolute popup
 //TODO - dynamic change of options gatherer destroy called properly ?
 
-// /**
-//  * Default 'SelectOptions'
-//  * @internal
-//  */
-// const defaultOptions: SelectOptions =
-// {
-//     autoInitialize: true,
-//     absolute: false,
-//     forceValueCheckOnInit: false,
-//     multiple: false,
-//     readonly: false,
-//     // valueComparer: (source, target) =>
-//     // {
-//     //     return source === target;
-//     // },
-//     // liveSearchFilter: (query: string, normalizer: NormalizeFunc = value => value) =>
-//     // {
-//     //     return itm => normalizer(itm.text).indexOf(normalizer(query)) >= 0;
-//     // },
-//     // normalizer: value =>
-//     // {
-//     //     if(isString(value))
-//     //     {
-//     //         return value.toLowerCase();
-//     //     }
+/**
+ * Default 'SelectOptions'
+ * @internal
+ */
+const defaultOptions: SelectOptions =
+{
+    autoInitialize: true,
+    absolute: false,
+    forceValueCheckOnInit: false,
+    multiple: false,
+    readonly: false,
+    // valueComparer: (source, target) =>
+    // {
+    //     return source === target;
+    // },
+    // liveSearchFilter: (query: string, normalizer: NormalizeFunc = value => value) =>
+    // {
+    //     return itm => normalizer(itm.text).indexOf(normalizer(query)) >= 0;
+    // },
+    // normalizer: value =>
+    // {
+    //     if(isString(value))
+    //     {
+    //         return value.toLowerCase();
+    //     }
 
-//     //     return value;
-//     // },
-//     cssClasses:
-//     {
-//     },
-//     plugins:
-//     {
-//         normalState: <PluginDescription<BasicNormalStateComponent>>
-//         {
-//             type: forwardRef(() => BasicNormalStateComponent),
-//         },
-//         liveSearch: <PluginDescription<NoLiveSearchComponent>>
-//         {
-//             type: forwardRef(() => NoLiveSearchComponent),
-//         },
-//         popup: <PluginDescription<BasicPopupComponent>>
-//         {
-//             type: forwardRef(() => BasicPopupComponent),
-//         },
-//         positioner: <PluginDescription<DefaultPositionerComponent>>
-//         {
-//             type: forwardRef(() => DefaultPositionerComponent),
-//         },
-//         keyboardHandler: <PluginDescription<BasicKeyboardHandlerComponent>>
-//         {
-//             type: forwardRef(() => BasicKeyboardHandlerComponent),
-//         },
-//         readonlyState: <PluginDescription<ReadonlyState>>
-//         {
-//             type: forwardRef(() => BasicNormalStateComponent),
-//         },
-//         valueHandler: <PluginDescription<BasicValueHandlerComponent>>
-//         {
-//             type: forwardRef(() => BasicValueHandlerComponent),
-//         },
-//     },
-// };
+    //     return value;
+    // },
+    cssClasses:
+    {
+    },
+    // plugins:
+    // {
+    //     normalState: <PluginDescription<BasicNormalStateComponent>>
+    //     {
+    //         type: forwardRef(() => BasicNormalStateComponent),
+    //     },
+    //     liveSearch: <PluginDescription<NoLiveSearchComponent>>
+    //     {
+    //         type: forwardRef(() => NoLiveSearchComponent),
+    //     },
+    //     popup: <PluginDescription<BasicPopupComponent>>
+    //     {
+    //         type: forwardRef(() => BasicPopupComponent),
+    //     },
+    //     positioner: <PluginDescription<DefaultPositionerComponent>>
+    //     {
+    //         type: forwardRef(() => DefaultPositionerComponent),
+    //     },
+    //     keyboardHandler: <PluginDescription<BasicKeyboardHandlerComponent>>
+    //     {
+    //         type: forwardRef(() => BasicKeyboardHandlerComponent),
+    //     },
+    //     readonlyState: <PluginDescription<ReadonlyState>>
+    //     {
+    //         type: forwardRef(() => BasicNormalStateComponent),
+    //     },
+    //     valueHandler: <PluginDescription<BasicValueHandlerComponent>>
+    //     {
+    //         type: forwardRef(() => BasicValueHandlerComponent),
+    //     },
+    // },
+};
 
 /**
  * Component that represents Select itself, allows selection of value from options
@@ -86,11 +89,11 @@ import {SelectOptions} from '../../interfaces';
     }`,
     providers:
     [
-        // <FactoryProvider>
-        // {
-        //     provide: NG_SELECT_PLUGIN_INSTANCES,
-        //     useFactory: () => {return {};},
-        // },
+        <FactoryProvider>
+        {
+            provide: SelectPluginInstances,
+            useFactory: () => {return new SelectPluginInstances();},
+        },
         // <ClassProvider>
         // {
         //     provide: PluginBus,
@@ -104,9 +107,25 @@ export class SelectComponent<TValue = unknown>
     //######################### protected fields #########################
 
     /**
-     * Select options
+     * Select options as signal
      */
-    protected _selectOptions!: SelectOptions<TValue>;
+    protected selectOptionsSignal: WritableSignal<SelectOptions<TValue>>;
+
+    /**
+     * Object storing current used plugin type
+     */
+    protected pluginTypes: Record<SelectPluginType, Type<SelectPlugin>|undefined|null> =
+    {
+        Interactions: null,
+        KeyboardHandler: null,
+        LiveSearch: null,
+        NormalState: null,
+        OptionsHandler: null,
+        Popup: null,
+        Positioner: null,
+        ReadonlyState: null,
+        ValueHandler: null,
+    };
 
     // /**
     //  * Subject used for indication that Select was initialized
@@ -153,6 +172,53 @@ export class SelectComponent<TValue = unknown>
     //  */
     // protected _absolutePopupElement: HTMLElement;
 
+    //######################### protected properties - children #########################
+
+    /**
+     * Container used for rendering live search plugin
+     */
+    protected liveSearchContainer: Signal<ViewContainerRef> = viewChild.required('liveSearch', {read: ViewContainerRef});
+
+    /**
+     * Container used for rendering interactions plugin
+     */
+    protected interactionsContainer: Signal<ViewContainerRef> = viewChild.required('interactions', {read: ViewContainerRef});
+
+    /**
+     * Container used for rendering options handler plugin
+     */
+    protected optionsHandlerContainer: Signal<ViewContainerRef> = viewChild.required('optionsHandler', {read: ViewContainerRef});
+
+    /**
+     * Container used for rendering positioner plugin
+     */
+    protected positionerContainer: Signal<ViewContainerRef> = viewChild.required('positioner', {read: ViewContainerRef});
+
+    /**
+     * Container used for rendering keyboard handler plugin
+     */
+    protected keyboardHandlerContainer: Signal<ViewContainerRef> = viewChild.required('keyboardHandler', {read: ViewContainerRef});
+
+    /**
+     * Container used for rendering value handler plugin
+     */
+    protected valueHandlerContainer: Signal<ViewContainerRef> = viewChild.required('valueHandler', {read: ViewContainerRef});
+
+    /**
+     * Container used for rendering readonly state plugin
+     */
+    protected readonlyStateContainer: Signal<ViewContainerRef|undefined|null> = viewChild('readonlyState', {read: ViewContainerRef});
+
+    /**
+     * Container used for rendering normal state plugin
+     */
+    protected normalStateContainer: Signal<ViewContainerRef|undefined|null> = viewChild('normalState', {read: ViewContainerRef});
+
+    /**
+     * Container used for rendering popup plugin
+     */
+    protected popupContainer: Signal<ViewContainerRef|undefined|null> = viewChild('popup', {read: ViewContainerRef});
+
     // //######################### public properties - inputs #########################
 
     /**
@@ -161,11 +227,11 @@ export class SelectComponent<TValue = unknown>
     @Input()
     public get selectOptions(): SelectOptions<TValue>
     {
-        return this._selectOptions;
+        return this.selectOptionsSignal();
     }
     public set selectOptions(options: RecursivePartial<SelectOptions<TValue>>)
     {
-        this._selectOptions = deepCopyWithArrayOverride(this._selectOptions, options);
+        this.selectOptionsSignal.set(deepCopyWithArrayOverride({}, this.selectOptionsSignal(), options));
         // this._pluginBus.selectOptions = this._selectOptions;
     }
 
@@ -281,7 +347,53 @@ export class SelectComponent<TValue = unknown>
     // @ContentChildren(OptGroupComponent)
     // public optGroupsChildren: QueryList<SelectOptGroup>;
 
-    // //######################### constructors #########################
+    //######################### constructors #########################
+    constructor(protected changeDetector: ChangeDetectorRef,
+                protected pluginInstances: SelectPluginInstances,
+                @Inject(SELECT_OPTIONS) @Optional() options?: RecursivePartial<SelectOptions<TValue>>,)
+    {
+        this.selectOptionsSignal = signal((deepCopyWithArrayOverride(
+                                                                     <RecursivePartial<SelectOptions<TValue>>>
+                                                                     {
+                                                                         optionsGatherer: this,
+                                                                         templateGatherer: this,
+                                                                     },
+                                                                     defaultOptions as SelectOptions<TValue>,
+                                                                    //  <RecursivePartial<SelectOptions<TValue>>>
+                                                                    //  {
+                                                                    //      readonly: readonlyDefault,
+                                                                    //      multiple: multipleDefault
+                                                                    //  },
+                                                                     options)));
+
+        effect(() =>
+        {
+            const selectOptions = this.selectOptions;
+
+            this.createPlugin(selectOptions.plugins?.liveSearch, SelectPluginType.LiveSearch, this.liveSearchContainer);
+            this.createPlugin(selectOptions.plugins?.interactions, SelectPluginType.Interactions, this.interactionsContainer);
+            this.createPlugin(selectOptions.plugins?.optionsHandler, SelectPluginType.OptionsHandler, this.optionsHandlerContainer);
+            this.createPlugin(selectOptions.plugins?.positioner, SelectPluginType.Positioner, this.positionerContainer);
+            this.createPlugin(selectOptions.plugins?.keyboardHandler, SelectPluginType.KeyboardHandler, this.keyboardHandlerContainer);
+            this.createPlugin(selectOptions.plugins?.valueHandler, SelectPluginType.ValueHandler, this.valueHandlerContainer);
+        });
+
+        effect(() =>
+        {
+            this.createPlugin(this.selectOptions.plugins?.readonlyState, SelectPluginType.ReadonlyState, this.readonlyStateContainer);
+        });
+
+        effect(() =>
+        {
+            this.createPlugin(this.selectOptions.plugins?.normalState, SelectPluginType.NormalState, this.normalStateContainer);
+        });
+
+        effect(() =>
+        {
+            this.createPlugin(this.selectOptions.plugins?.popup, SelectPluginType.Popup, this.popupContainer);
+        });
+    }
+
     // constructor(protected _changeDetector: ChangeDetectorRef,
     //             protected _element: ElementRef<HTMLElement>,
     //             protected _componentFactoryResolver: ComponentFactoryResolver,
@@ -429,37 +541,37 @@ export class SelectComponent<TValue = unknown>
     //     }
     // }
 
-    // //######################### public methods - implementation of OnInit #########################
+    //######################### public methods - implementation of OnInit #########################
 
-    // /**
-    //  * Initialize component
-    //  */
-    // public ngOnInit()
-    // {
-    //     this.initOptions();
-    // }
+    /**
+     * Initialize component
+     */
+    public ngOnInit()
+    {
+        // this.initOptions();
+    }
 
-    // //######################### public methods - implementation of AfterViewInit #########################
+    //######################### public methods - implementation of AfterViewInit #########################
 
-    // /**
-    //  * Called when view was initialized
-    //  */
-    // public ngAfterViewInit()
-    // {
-    //     this._availableOptions = this.options;
+    /**
+     * Called when view was initialized
+     */
+    public ngAfterViewInit()
+    {
+        // this._availableOptions = this.options;
 
-    //     this.optionsChildren.changes.subscribe(() =>
-    //     {
-    //         this._availableOptions = this.options;
-    //         this._optionsChange.emit();
-    //         this._availableOptionsChange.emit();
-    //     });
+        // this.optionsChildren.changes.subscribe(() =>
+        // {
+        //     this._availableOptions = this.options;
+        //     this._optionsChange.emit();
+        //     this._availableOptionsChange.emit();
+        // });
 
-    //     if(this._selectOptions.autoInitialize)
-    //     {
-    //         this.initialize();
-    //     }
-    // }
+        // if(this._selectOptions.autoInitialize)
+        // {
+        //     this.initialize();
+        // }
+    }
 
     // //######################### public methods - implementation of OnDestroy #########################
 
@@ -663,13 +775,13 @@ export class SelectComponent<TValue = unknown>
     //     }
     // }
 
-    // /**
-    //  * Explicitly runs invalidation of content (change detection)
-    //  */
-    // public invalidateVisuals(): void
-    // {
-    //     this._changeDetector.detectChanges();
-    // }
+    /**
+     * Explicitly runs invalidation of content (change detection)
+     */
+    public invalidateVisuals(): void
+    {
+        this.changeDetector.detectChanges();
+    }
 
     // /**
     //  * Gets instance of plugin by its id
@@ -776,33 +888,51 @@ export class SelectComponent<TValue = unknown>
     //     }
     // }
 
-    // /**
-    //  * Registers newly created plugin
-    //  * @param plugin - Plugin to be registered
-    //  * @param pluginKey - Key of plugin used for pluginInstances
-    //  * @param pluginName - Name property for plugin from options
-    //  */
-    // protected _registerNewPlugin(plugin: SelectPlugin, pluginKey: string, pluginName: keyof SelectPluginTypes)
-    // {
-    //     if(!plugin)
-    //     {
-    //         this._pluginInstances[pluginKey] = null;
+    /**
+     * Creates plugin
+     * @param plugin - Plugin to be registered
+     * @param pluginType - Key of plugin used for pluginInstances
+     * @param pluginName - Name property for plugin from options
+     */
+    protected createPlugin<TPlugin extends SelectPlugin>(pluginDescription: PluginDescription<TPlugin>,
+                                                         pluginType: SelectPluginType,
+                                                         pluginViewContainer: ViewContainerRef,
+                                                         initOptions: WritableSignal<boolean>,)
+    {
+        if(!pluginDescription.type)
+        {
+            throw new Error(`SelectComponent: missing type for plugin '${pluginType}'`);
+        }
 
-    //         return;
-    //     }
+        const type = resolveForwardRef(pluginDescription.type);
+        let newInstance = false;
+        initOptions.set(false);
 
-    //     this._pluginInstances[pluginKey] = plugin;
+        //new type provided
+        if(type != this.pluginTypes[pluginType])
+        {
+            this.pluginTypes[pluginType] = type;
+            pluginViewContainer.clear();
 
-    //     if(this._selectOptions.plugins && this._selectOptions.plugins[pluginName] && this._selectOptions.plugins[pluginName].options)
-    //     {
-    //         plugin.options = this._selectOptions.plugins[pluginName].options;
-    //     }
+            const component = pluginViewContainer.createComponent(type);
+            component.changeDetectorRef.detectChanges();
+            this.pluginInstances[pluginType] = component.instance;
+            newInstance = true;
+        }
 
-    //     plugin.initOptions();
+        //only call when new instance of plugin was created
+        if(newInstance)
+        {
+            pluginDescription.instanceCallback?.(this.pluginInstances[pluginType] as TPlugin);
+        }
 
-    //     if(this._selectOptions.plugins && this._selectOptions.plugins[pluginName] && this._selectOptions.plugins[pluginName].instanceCallback)
-    //     {
-    //         this._selectOptions.plugins[pluginName].instanceCallback(plugin);
-    //     }
-    // }
+        //options are available, set them
+        if(pluginDescription.options)
+        {
+            this.pluginInstances[pluginType].options = pluginDescription.options;
+        }
+
+        // await this.pluginInstances[pluginType].initOptions();
+        // initOptions.set(true);
+    }
 }

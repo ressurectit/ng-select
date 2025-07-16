@@ -6,38 +6,48 @@ import {NormalState, ReadonlyState} from '../plugins';
  */
 export interface SelectPluginTypes
 {
-    // /**
-    //  * Handles keyboard events
-    //  */
-    // keyboardHandler?: PluginDescription<KeyboardHandler>;
+    /**
+     * Handles interactions of plugins and select
+     */
+    interactions?: PluginDescription<Interactions>;
 
     /**
-     * Component used for displaying normal state of select
+     * Handles keyboard input from user
+     */
+    keyboardHandler?: PluginDescription<KeyboardHandler>;
+
+    /**
+     * Contains component that is used for live search of options
+     */
+    liveSearch?: PluginDescription<LiveSearch>;
+
+    /**
+     * Component used for displaying normal state of selected value
      */
     normalState?: PluginDescription<NormalState>;
 
-    // /**
-    //  * Component used for displaying available options for selection
-    //  */
-    // popup?: PluginDescription<Popup>;
-
-    // /**
-    //  * Handles correct position of pop component
-    //  */
-    // positioner?: PluginDescription<Positioner>;
+    /**
+     * Component used for handling available options
+     */
+    optionsHandler?: PluginDescription<OptionsHandler>;
 
     /**
-     * Component used for displaying readonly/disabled state of select, can be null, in that case normal state component is used
+     * Component that handles positioning of popup
+     */
+    popup?: PluginDescription<Popup>;
+
+    /**
+     * Handles correct position of pop component
+     */
+    positioner?: PluginDescription<Positioner>;
+
+    /**
+     * Component that is used for displaying readonly state of selected value, can be ommited, in that case normal state is used
      */
     readonlyState?: PluginDescription<ReadonlyState>;
 
-    // /**
-    //  * Handles obtaining and setting value of component
-    //  */
-    // valueHandler?: PluginDescription<ValueHandler>;
-
-    // /**
-    //  * Contains component that is used for live searching in options
-    //  */
-    // liveSearch?: PluginDescription<LiveSearch>;
+    /**
+     * Component that is used for storing and handling value of select
+     */
+    valueHandler?: PluginDescription<ValueHandler>;
 }
