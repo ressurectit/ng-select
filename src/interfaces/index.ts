@@ -11,7 +11,6 @@ export * from './selectOption/selectOption.interface';
 export * from './selectOptionGroup/selectOptionGroup.interface';
 export * from './selectOptions/selectOptions.interface';
 export * from './selectPlugin/selectPlugin.interface';
-export * from './selectPluginInstances/selectPluginInstances.interface';
 export * from './selectPluginTypes/selectPluginTypes.interface';
 export * from './templateGatherer/templateGatherer.interface';
 export * from './visualPluginOptions/visualPluginOptions.interface';

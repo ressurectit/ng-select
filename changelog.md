@@ -13,11 +13,27 @@
    - **properties**
       - `sourceElement` html element that caused the event
       - `source` instance of select or select plugin that caused event
+- new `SelectPluginType` enum
+   - **values**
+      - `Interactions` plugin that handles interactions of plugins and select
+      - `KeyboardHandler` plugin that handles keyboard input from user
+      - `LiveSearch` plugin that is used for live search of options
+      - `NormalState` plugin that is used for displaying normal state of selected value
+      - `OptionsHandler` plugin that is used for handling available options
+      - `Popup` plugin that handles displaying popup
+      - `Positioner` plugin that handles positioning of popup
+      - `ReadonlyState` plugin that is used for displaying readonly state of selected value
+      - `ValueHandler` plugin that is used for storing and handling value of select
+- updated `SelectPluginTypes` interface
+   - **new properties**
+      - `Interactions` handles interactions of plugins and select
+      - `OptionsHandler` component used for handling available options
 
 ### BREAKING CHANGES
 
 - minimal supported version of `NodeJs` is `20.19`
 - minimal supported version of `@angular` is `20.0.0`
+- minimal supported version of `@jscrpt/common` is `7.1.0`
 - strict null checks
 - all generic defaults of type `any` changed to `unknown`
 - updated `TemplateGatherer` interface
@@ -33,6 +49,9 @@
    - removed `isInitialized`, use `initialized`
 - updated `NgSelectPluginInstances` interface
    - renamed to `SelectPluginInstances`
+   - changed to class
+   - all can now be undefined
+   - new *safe* accessors for plugins with null check
 - updated `NgSelectOptions` interface
    - renamed to `SelectOptions`
 - updated `NgSelectPluginTypes` interface
@@ -51,8 +70,7 @@
 - updated `ɵNgSelectOption` interface
    - renamed to `ɵSelectOption`
    - all properties changed to `Signal`
-- updated `NG_SELECT_PLUGIN_INSTANCES` injection token
-   - renamed to `SELECT_PLUGIN_INSTANCES`
+- removed `NG_SELECT_PLUGIN_INSTANCES` injection token, replaced with class `SelectPluginInstances`
 - updated `NgSelectAbsoluteDirective` directive
    - renamed to `SelectAbsoluteDirective`
 - updated `NgSelectEditDirective` directive
