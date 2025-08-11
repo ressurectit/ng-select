@@ -6,17 +6,7 @@
 <ng-container #valueHandler />
 
 <div>
-    @if(selectOptions.readonly)
-    {
-        <ng-container #readonlyState />
-    }
-    @else
-    {
-        <ng-container #normalState />
-    }
-
-    @if(!selectOptions.absolute)
-    {
-        <ng-container #popup />
-    }
+    <ng-container #readonlyState />
+    <ng-container #normalState />
+    <ng-container #popup />
 </div>

@@ -1,5 +1,5 @@
 import {PluginDescription} from '../pluginDescription/pluginDescription.interface';
-import {NormalState, ReadonlyState} from '../plugins';
+import {Interactions, KeyboardHandler, LiveSearch, NormalState, OptionsHandler, Popup, Positioner, ReadonlyState, ValueHandler} from '../plugins';
 
 /**
  * All available types of plugins for Select

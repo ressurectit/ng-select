@@ -1,8 +1,7 @@
 import {ElementRef} from '@angular/core';
-import {Invalidatable} from '@jscrpt/common';
+import {Invalidatable, PromiseOr} from '@jscrpt/common';
 
-import {SelectPluginInstances} from '../selectPluginInstances/selectPluginInstances.interface';
-import {SelectBus} from '../../misc/classes';
+import {SelectBus, SelectPluginInstances} from '../../misc/classes';
 
 /**
  * Select plugin interface
@@ -32,10 +31,10 @@ export interface SelectPlugin<TOptions = unknown, TValue = unknown> extends Inva
     /**
      * Initialize plugin, to be ready to use, initialize communication with other plugins
      */
-    initialize(): void;
+    initialize(): PromiseOr<void>;
 
     /**
      * Initialize plugin options, all operations required to be done with plugin options are handled here
      */
-    initOptions(): void;
+    initOptions(): PromiseOr<void>;
 }

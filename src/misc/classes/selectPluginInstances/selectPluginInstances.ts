@@ -1,4 +1,4 @@
-import {SelectPlugin} from '../../../interfaces';
+import {Interactions, KeyboardHandler, LiveSearch, NormalState, OptionsHandler, Popup, Positioner, ReadonlyState, SelectPlugin, ValueHandler} from '../../../interfaces';
 import {SelectPluginType} from '../../enums';
 
 /**
@@ -6,7 +6,7 @@ import {SelectPluginType} from '../../enums';
  */
 export class SelectPluginInstances implements Record<SelectPluginType, SelectPlugin>
 {
-    //######################### public properties - implementation of SelectPluginInstances #########################
+    //######################### public properties #########################
 
     /**
      * Instance of plugin that handles interactions of plugins and select
@@ -143,7 +143,7 @@ export class SelectPluginInstances implements Record<SelectPluginType, SelectPlu
      */
     public get Popup(): Popup
     {
-        if(!this.popups)
+        if(!this.popup)
         {
             throw new Error('SelectPluginInstances: missing plugin instance of Popup');
         }

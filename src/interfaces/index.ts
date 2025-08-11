@@ -3,6 +3,7 @@ export * from './optionsGatherer/optionsGatherer.interface';
 export * from './selectBusOptions/selectBusOptions.interface';
 export * from './pluginDescription/pluginDescription.interface';
 export * from './pluginOptions/pluginOptions.interface';
+export * from './plugins';
 export * from './popupContext/popupContext.interface';
 export * from './select/select.interface';
 export * from './selectBusEvents/selectBusEvents.interface';

@@ -1,11 +1,13 @@
-import {Component, ChangeDetectionStrategy, Input, viewChild, ViewContainerRef, Signal, WritableSignal, signal, Inject, Optional, ChangeDetectorRef, Type, resolveForwardRef, FactoryProvider, effect} from '@angular/core';
+import {Component, ChangeDetectionStrategy, Input, viewChild, ViewContainerRef, Signal, WritableSignal, signal, Inject, Optional, ChangeDetectorRef, Type, resolveForwardRef, FactoryProvider, effect, forwardRef} from '@angular/core';
 import {RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
+import {BehaviorSubject, Subject} from 'rxjs';
 
-import {PluginDescription, SelectOptions, SelectPlugin} from '../../interfaces';
+import {KeyboardHandler, LiveSearch, NormalState, PluginDescription, Popup, Positioner, ReadonlyState, SelectOptions, SelectPlugin, ValueHandler} from '../../interfaces';
 import {SELECT_OPTIONS} from '../../misc/tokens';
 import {SelectPluginType} from '../../misc/enums';
-import {SelectPluginInstances} from '../../misc/classes';
+import {SelectBus, SelectPluginInstances} from '../../misc/classes';
+import {BasicPositionerComponent, BasicValueHandlerComponent, NoLiveSearchComponent, SimpleKeyboardHandlerComponent, SimpleNormalStateComponent, SimplePopupComponent} from '../../plugins';
 
 //TODO - dynamic change of absolute popup
 //TODO - dynamic change of options gatherer destroy called properly ?
@@ -41,37 +43,37 @@ const defaultOptions: SelectOptions =
     cssClasses:
     {
     },
-    // plugins:
-    // {
-    //     normalState: <PluginDescription<BasicNormalStateComponent>>
-    //     {
-    //         type: forwardRef(() => BasicNormalStateComponent),
-    //     },
-    //     liveSearch: <PluginDescription<NoLiveSearchComponent>>
-    //     {
-    //         type: forwardRef(() => NoLiveSearchComponent),
-    //     },
-    //     popup: <PluginDescription<BasicPopupComponent>>
-    //     {
-    //         type: forwardRef(() => BasicPopupComponent),
-    //     },
-    //     positioner: <PluginDescription<DefaultPositionerComponent>>
-    //     {
-    //         type: forwardRef(() => DefaultPositionerComponent),
-    //     },
-    //     keyboardHandler: <PluginDescription<BasicKeyboardHandlerComponent>>
-    //     {
-    //         type: forwardRef(() => BasicKeyboardHandlerComponent),
-    //     },
-    //     readonlyState: <PluginDescription<ReadonlyState>>
-    //     {
-    //         type: forwardRef(() => BasicNormalStateComponent),
-    //     },
-    //     valueHandler: <PluginDescription<BasicValueHandlerComponent>>
-    //     {
-    //         type: forwardRef(() => BasicValueHandlerComponent),
-    //     },
-    // },
+    plugins:
+    {
+        normalState: <PluginDescription<NormalState>>
+        {
+            type: forwardRef(() => SimpleNormalStateComponent),
+        },
+        liveSearch: <PluginDescription<LiveSearch>>
+        {
+            type: forwardRef(() => NoLiveSearchComponent),
+        },
+        popup: <PluginDescription<Popup>>
+        {
+            type: forwardRef(() => SimplePopupComponent),
+        },
+        positioner: <PluginDescription<Positioner>>
+        {
+            type: forwardRef(() => BasicPositionerComponent),
+        },
+        keyboardHandler: <PluginDescription<KeyboardHandler>>
+        {
+            type: forwardRef(() => SimpleKeyboardHandlerComponent),
+        },
+        readonlyState: <PluginDescription<ReadonlyState>>
+        {
+            type: forwardRef(() => SimpleNormalStateComponent),
+        },
+        valueHandler: <PluginDescription<ValueHandler>>
+        {
+            type: forwardRef(() => BasicValueHandlerComponent),
+        },
+    },
 };
 
 /**
@@ -94,11 +96,7 @@ const defaultOptions: SelectOptions =
             provide: SelectPluginInstances,
             useFactory: () => {return new SelectPluginInstances();},
         },
-        // <ClassProvider>
-        // {
-        //     provide: PluginBus,
-        //     useClass: PluginBus,
-        // },
+        SelectBus,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -126,6 +124,51 @@ export class SelectComponent<TValue = unknown>
         ReadonlyState: null,
         ValueHandler: null,
     };
+
+    /**
+     * Subject that holds init state of live search plugin
+     */
+    protected liveSearchInit: Subject<boolean> = new BehaviorSubject<boolean>(false);
+
+    /**
+     * Subject that holds init state of interactions plugin
+     */
+    protected interactionsInit: Subject<boolean> = new BehaviorSubject<boolean>(false);
+
+    /**
+     * Subject that holds init state of options handler plugin
+     */
+    protected optionsHandlerInit: Subject<boolean> = new BehaviorSubject<boolean>(false);
+
+    /**
+     * Subject that holds init state of positioner plugin
+     */
+    protected positionerInit: Subject<boolean> = new BehaviorSubject<boolean>(false);
+
+    /**
+     * Subject that holds init state of keyboard plugin
+     */
+    protected keyboardInit: Subject<boolean> = new BehaviorSubject<boolean>(false);
+
+    /**
+     * Subject that holds init state of value handler plugin
+     */
+    protected valueHandlerInit: Subject<boolean> = new BehaviorSubject<boolean>(false);
+
+    /**
+     * Subject that holds init state of readonly state plugin
+     */
+    protected readonlyStateInit: Subject<boolean> = new BehaviorSubject<boolean>(false);
+
+    /**
+     * Subject that holds init state of normal state plugin
+     */
+    protected normalStateInit: Subject<boolean> = new BehaviorSubject<boolean>(false);
+
+    /**
+     * Subject that holds init state of popup plugin
+     */
+    protected popupInit: Subject<boolean> = new BehaviorSubject<boolean>(false);
 
     // /**
     //  * Subject used for indication that Select was initialized
@@ -207,17 +250,17 @@ export class SelectComponent<TValue = unknown>
     /**
      * Container used for rendering readonly state plugin
      */
-    protected readonlyStateContainer: Signal<ViewContainerRef|undefined|null> = viewChild('readonlyState', {read: ViewContainerRef});
+    protected readonlyStateContainer: Signal<ViewContainerRef> = viewChild.required('readonlyState', {read: ViewContainerRef});
 
     /**
      * Container used for rendering normal state plugin
      */
-    protected normalStateContainer: Signal<ViewContainerRef|undefined|null> = viewChild('normalState', {read: ViewContainerRef});
+    protected normalStateContainer: Signal<ViewContainerRef> = viewChild.required('normalState', {read: ViewContainerRef});
 
     /**
      * Container used for rendering popup plugin
      */
-    protected popupContainer: Signal<ViewContainerRef|undefined|null> = viewChild('popup', {read: ViewContainerRef});
+    protected popupContainer: Signal<ViewContainerRef> = viewChild.required('popup', {read: ViewContainerRef});
 
     // //######################### public properties - inputs #########################
 
@@ -366,31 +409,57 @@ export class SelectComponent<TValue = unknown>
                                                                     //  },
                                                                      options)));
 
+        effect(async () =>
+        {
+            const selectOptions = this.selectOptions;
+            const liveSearchContainer = this.liveSearchContainer();
+            const interactionsContainer = this.interactionsContainer();
+            const optionsHandlerContainer = this.optionsHandlerContainer();
+            const positionerContainer = this.positionerContainer();
+            const keyboardHandlerContainer = this.keyboardHandlerContainer();
+            const valueHandlerContainer = this.valueHandlerContainer();
+
+            await this.createPlugin(selectOptions.plugins?.liveSearch, SelectPluginType.LiveSearch, liveSearchContainer, this.liveSearchInit);
+            await this.createPlugin(selectOptions.plugins?.interactions, SelectPluginType.Interactions, interactionsContainer, this.interactionsInit);
+            await this.createPlugin(selectOptions.plugins?.optionsHandler, SelectPluginType.OptionsHandler, optionsHandlerContainer, this.optionsHandlerInit);
+            await this.createPlugin(selectOptions.plugins?.positioner, SelectPluginType.Positioner, positionerContainer, this.positionerInit);
+            await this.createPlugin(selectOptions.plugins?.keyboardHandler, SelectPluginType.KeyboardHandler, keyboardHandlerContainer, this.keyboardInit);
+            await this.createPlugin(selectOptions.plugins?.valueHandler, SelectPluginType.ValueHandler, valueHandlerContainer, this.valueHandlerInit);
+        });
+
+        effect(() =>
+        {
+            const readonlyStateContainer = this.readonlyStateContainer();
+            const normalStateContainer = this.normalStateContainer();
+            const selectOptions = this.selectOptions;
+
+            if(selectOptions.readonly)
+            {
+                this.destroyPlugin(SelectPluginType.NormalState, normalStateContainer, this.normalStateInit);
+                this.normalStateInit.next(true);
+                this.createPlugin(this.selectOptions.plugins?.readonlyState, SelectPluginType.ReadonlyState, readonlyStateContainer, this.readonlyStateInit);
+            }
+            else
+            {
+                this.destroyPlugin(SelectPluginType.ReadonlyState, readonlyStateContainer, this.readonlyStateInit);
+                this.readonlyStateInit.next(true);
+                this.createPlugin(this.selectOptions.plugins?.normalState, SelectPluginType.NormalState, normalStateContainer, this.normalStateInit);
+            }
+        });
+
         effect(() =>
         {
             const selectOptions = this.selectOptions;
+            const popupContainer = this.popupContainer();
 
-            this.createPlugin(selectOptions.plugins?.liveSearch, SelectPluginType.LiveSearch, this.liveSearchContainer);
-            this.createPlugin(selectOptions.plugins?.interactions, SelectPluginType.Interactions, this.interactionsContainer);
-            this.createPlugin(selectOptions.plugins?.optionsHandler, SelectPluginType.OptionsHandler, this.optionsHandlerContainer);
-            this.createPlugin(selectOptions.plugins?.positioner, SelectPluginType.Positioner, this.positionerContainer);
-            this.createPlugin(selectOptions.plugins?.keyboardHandler, SelectPluginType.KeyboardHandler, this.keyboardHandlerContainer);
-            this.createPlugin(selectOptions.plugins?.valueHandler, SelectPluginType.ValueHandler, this.valueHandlerContainer);
-        });
-
-        effect(() =>
-        {
-            this.createPlugin(this.selectOptions.plugins?.readonlyState, SelectPluginType.ReadonlyState, this.readonlyStateContainer);
-        });
-
-        effect(() =>
-        {
-            this.createPlugin(this.selectOptions.plugins?.normalState, SelectPluginType.NormalState, this.normalStateContainer);
-        });
-
-        effect(() =>
-        {
-            this.createPlugin(this.selectOptions.plugins?.popup, SelectPluginType.Popup, this.popupContainer);
+            if(selectOptions.absolute)
+            {
+                this.destroyPlugin(SelectPluginType.Popup, popupContainer, this.popupInit);
+            }
+            else
+            {
+                this.createPlugin(this.selectOptions.plugins?.popup, SelectPluginType.Popup, this.popupContainer(), this.popupInit);
+            }
         });
     }
 
@@ -890,27 +959,30 @@ export class SelectComponent<TValue = unknown>
 
     /**
      * Creates plugin
-     * @param plugin - Plugin to be registered
+     * @param pluginDescription - Information about plugin that should be created
      * @param pluginType - Key of plugin used for pluginInstances
-     * @param pluginName - Name property for plugin from options
+     * @param pluginViewContainer - Container where should be plugin created
+     * @param initOptions - Subject that hold information about init options state for this plugin
      */
-    protected createPlugin<TPlugin extends SelectPlugin>(pluginDescription: PluginDescription<TPlugin>,
-                                                         pluginType: SelectPluginType,
-                                                         pluginViewContainer: ViewContainerRef,
-                                                         initOptions: WritableSignal<boolean>,)
+    protected async createPlugin<TPlugin extends SelectPlugin>(pluginDescription: PluginDescription<TPlugin>|undefined|null,
+                                                               pluginType: SelectPluginType,
+                                                               pluginViewContainer: ViewContainerRef,
+                                                               initOptions: Subject<boolean>,): Promise<void>
     {
-        if(!pluginDescription.type)
+        if(!pluginDescription?.type)
         {
-            throw new Error(`SelectComponent: missing type for plugin '${pluginType}'`);
+            this.destroyPlugin(pluginType, pluginViewContainer, initOptions);
+
+            return;
         }
 
         const type = resolveForwardRef(pluginDescription.type);
         let newInstance = false;
-        initOptions.set(false);
 
         //new type provided
         if(type != this.pluginTypes[pluginType])
         {
+            initOptions.next(false);
             this.pluginTypes[pluginType] = type;
             pluginViewContainer.clear();
 
@@ -929,10 +1001,37 @@ export class SelectComponent<TValue = unknown>
         //options are available, set them
         if(pluginDescription.options)
         {
+            initOptions.next(false);
             this.pluginInstances[pluginType].options = pluginDescription.options;
         }
 
-        // await this.pluginInstances[pluginType].initOptions();
-        // initOptions.set(true);
+        await this.initOption(pluginType, initOptions);
+    }
+
+    /**
+     * Init options for single plugin
+     * @param pluginType - Type of plugin to be initialized
+     * @param initOptions - Init options subject for this plugin
+     */
+    protected async initOption(pluginType: SelectPluginType,
+                               initOptions: Subject<boolean>,): Promise<void>
+    {
+        await this.pluginInstances[pluginType].initOptions();
+        initOptions.next(true);
+    }
+
+    /**
+     * Destroys plugin
+     * @param pluginType - Plugin type to be destroyed
+     * @param plugiViewContainer - Container which will be emptied
+     * @param initOptions - Subject that hold information about init options state for this plugin
+     */
+    protected destroyPlugin(pluginType: SelectPluginType,
+                            pluginViewContainer: ViewContainerRef,
+                            initOptions: Subject<boolean>,): void
+    {
+        pluginViewContainer.clear();
+        initOptions.next(false);
+        this.pluginTypes[pluginType] = null;
     }
 }
