@@ -1,5 +1,22 @@
 # Changelog
 
+## Version 14.0.0 (2026-02-09)
+
+### BREAKING CHANGES
+
+- minimal supported version of `NodeJs` is `20`
+- minimal supported version of `angular` is `21.1.3`
+- minimal supported version of `@anglr/common` is `24.0.0`
+- minimal supported version of `@jscrpt/common` is `7.1.0`
+- updated `BasicLiveSearchComponent` component
+   - does not support automatic update of text when language has changed
+- updated `EditLiveSearchComponent` component
+   - does not support automatic update of text when language has changed
+- updated `NormalStateAbstractComponent` component
+   - does not support automatic update of text when language has changed
+- updated `PopupAbstractComponent` component
+   - does not support automatic update of text when language has changed
+
 ## Version 12.1.1 (2025-07-08)
 
 ### Bug Fixes

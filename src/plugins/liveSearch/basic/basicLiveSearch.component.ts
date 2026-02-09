@@ -52,11 +52,6 @@ export class BasicLiveSearchComponent implements BasicLiveSearch, NgSelectPlugin
     protected _popup: Popup;
 
     /**
-     * Subscription for changes in texts
-     */
-    protected _textsChangedSubscription: Subscription;
-
-    /**
      * Subscription for changes of popup visibility
      */
     protected _visibilityChangeSubscription: Subscription;
@@ -148,9 +143,6 @@ export class BasicLiveSearchComponent implements BasicLiveSearch, NgSelectPlugin
         this._visibilityChangeSubscription?.unsubscribe();
         this._visibilityChangeSubscription = null;
 
-        this._textsChangedSubscription?.unsubscribe();
-        this._textsChangedSubscription = null;
-
         this._liveSearchFocusSubscription?.unsubscribe();
         this._liveSearchFocusSubscription = null;
     }
@@ -162,8 +154,6 @@ export class BasicLiveSearchComponent implements BasicLiveSearch, NgSelectPlugin
      */
     public initialize()
     {
-        this._textsChangedSubscription = this._stringLocalization.textsChange.subscribe(() => this._initTexts());
-
         const popup = this.ngSelectPlugins[POPUP] as Popup;
 
         if(this._popup && this._popup != popup)
@@ -237,7 +227,7 @@ export class BasicLiveSearchComponent implements BasicLiveSearch, NgSelectPlugin
     {
         Object.keys(this.options.texts).forEach(key =>
         {
-            this.texts[key as keyof LiveSearchTexts] = this._stringLocalization.get(this.options.texts[key as keyof LiveSearchTexts]);
+            this.texts[key as keyof LiveSearchTexts] = this._stringLocalization.get(this.options.texts[key as keyof LiveSearchTexts])();
         });
 
         this._changeDetector.detectChanges();

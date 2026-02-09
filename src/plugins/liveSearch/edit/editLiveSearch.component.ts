@@ -74,11 +74,6 @@ export class EditLiveSearchComponent implements EditLiveSearch, NgSelectPlugin<E
     protected _optionsChangeSubscription: Subscription;
 
     /**
-     * Subscription for changes in texts
-     */
-    protected _textsChangedSubscription: Subscription;
-
-    /**
      * Subscription for changes of selected value
      */
     protected _valueChangedSubscription: Subscription;
@@ -191,9 +186,6 @@ export class EditLiveSearchComponent implements EditLiveSearch, NgSelectPlugin<E
         this._optionsChangeSubscription?.unsubscribe();
         this._optionsChangeSubscription = null;
 
-        this._textsChangedSubscription?.unsubscribe();
-        this._textsChangedSubscription = null;
-
         this._valueChangedSubscription?.unsubscribe();
         this._valueChangedSubscription = null;
 
@@ -211,8 +203,6 @@ export class EditLiveSearchComponent implements EditLiveSearch, NgSelectPlugin<E
      */
     public initialize()
     {
-        this._textsChangedSubscription = this._stringLocalization.textsChange.subscribe(() => this._initTexts());
-
         if(this._optionsGatherer && this._optionsGatherer != this.pluginBus.selectOptions.optionsGatherer)
         {
             this._optionsChangeSubscription.unsubscribe();
@@ -234,7 +224,7 @@ export class EditLiveSearchComponent implements EditLiveSearch, NgSelectPlugin<E
                     if(this.searchValue)
                     {
                         const option: ɵNgSelectOption = this.pluginBus.selectOptions.optionsGatherer.availableOptions.find(itm => this.pluginBus.selectOptions.liveSearchFilter(this.searchValue, this.pluginBus.selectOptions.normalizer)(itm));
-    
+
                         if(option)
                         {
                             this.pluginBus.selectOptions.optionsGatherer.options.forEach((option: ɵNgSelectOption) => option.active = false);
@@ -441,7 +431,7 @@ export class EditLiveSearchComponent implements EditLiveSearch, NgSelectPlugin<E
     {
         Object.keys(this.options.texts).forEach(key =>
         {
-            this.texts[key as keyof LiveSearchTexts] = this._stringLocalization.get(this.options.texts[key as keyof LiveSearchTexts]);
+            this.texts[key as keyof LiveSearchTexts] = this._stringLocalization.get(this.options.texts[key as keyof LiveSearchTexts])();
         });
 
         this._changeDetector.detectChanges();

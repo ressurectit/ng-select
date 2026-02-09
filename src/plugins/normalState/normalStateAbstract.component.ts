@@ -1,7 +1,6 @@
 import {ChangeDetectorRef, ElementRef, OnDestroy, Directive} from '@angular/core';
 import {StringLocalization} from '@anglr/common';
 import {extend} from '@jscrpt/common/extend';
-import {Subscription} from 'rxjs';
 
 import {NgSelectPluginInstances} from '../../components/select';
 import {NgSelectPlugin} from '../../misc';
@@ -17,11 +16,6 @@ import {VALUE_HANDLER} from '../valueHandler/types';
 export abstract class NormalStateAbstractComponent<TCssClasses = any, TOptions extends NormalStateOptions<TCssClasses, TValue> = any, TValue = any> implements NormalState, NgSelectPlugin<TOptions>, OnDestroy
 {
     //######################### protected fields #########################
-
-    /**
-     * Subscription for changes in texts
-     */
-    protected _textsChangedSubscription: Subscription;
 
     /**
      * Options for NgSelect plugin
@@ -78,9 +72,6 @@ export abstract class NormalStateAbstractComponent<TCssClasses = any, TOptions e
     public ngOnDestroy()
     {
         this._destroyed = true;
-
-        this._textsChangedSubscription?.unsubscribe();
-        this._textsChangedSubscription = null;
     }
 
     //######################### public methods - implementation of NormalState #########################
@@ -90,8 +81,6 @@ export abstract class NormalStateAbstractComponent<TCssClasses = any, TOptions e
      */
     public initialize()
     {
-        this._textsChangedSubscription = this._stringLocalization.textsChange.subscribe(() => this._initTexts());
-
         const valueHandler = this.ngSelectPlugins[VALUE_HANDLER] as ValueHandler;
 
         if(this.valueHandler && this.valueHandler != valueHandler)
@@ -134,7 +123,7 @@ export abstract class NormalStateAbstractComponent<TCssClasses = any, TOptions e
     {
         Object.keys(this.options.texts).forEach(key =>
         {
-            this.texts[key as keyof NormalStateTexts] = this._stringLocalization.get(this.options.texts[key as keyof NormalStateTexts]);
+            this.texts[key as keyof NormalStateTexts] = this._stringLocalization.get(this.options.texts[key as keyof NormalStateTexts])();
         });
 
         this._changeDetector.detectChanges();

@@ -51,11 +51,6 @@ export class PopupAbstractComponent<TCssClasses = any, TOptions extends PopupOpt
     protected _valueChangedSubscription: Subscription;
 
     /**
-     * Subscription for changes in texts
-     */
-    protected _textsChangedSubscription: Subscription;
-
-    /**
      * Indication whether is popup visible
      */
     protected _popupVisible: boolean = false;
@@ -191,9 +186,6 @@ export class PopupAbstractComponent<TCssClasses = any, TOptions extends PopupOpt
         this._visibilityRequestSubscription?.unsubscribe();
         this._visibilityRequestSubscription = null;
 
-        this._textsChangedSubscription?.unsubscribe();
-        this._textsChangedSubscription = null;
-
         this._document.removeEventListener('mouseup', this._handleClickOutside);
     }
 
@@ -204,8 +196,6 @@ export class PopupAbstractComponent<TCssClasses = any, TOptions extends PopupOpt
      */
     public initialize()
     {
-        this._textsChangedSubscription = this._stringLocalization.textsChange.subscribe(() => this._initTexts());
-
         if(this._optionsGatherer && this._optionsGatherer != this.pluginBus.selectOptions.optionsGatherer)
         {
             this._optionsChangeSubscription.unsubscribe();
@@ -282,7 +272,7 @@ export class PopupAbstractComponent<TCssClasses = any, TOptions extends PopupOpt
     {
         Object.keys(this.options.texts).forEach(key =>
         {
-            this.texts[key as keyof PopupTexts] = this._stringLocalization.get(this.options.texts[key as keyof PopupTexts]);
+            this.texts[key as keyof PopupTexts] = this._stringLocalization.get(this.options.texts[key as keyof PopupTexts])();
         });
 
         this._changeDetector.detectChanges();
