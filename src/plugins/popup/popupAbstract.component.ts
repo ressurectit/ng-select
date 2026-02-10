@@ -272,7 +272,7 @@ export class PopupAbstractComponent<TCssClasses = any, TOptions extends PopupOpt
     {
         Object.keys(this.options.texts).forEach(key =>
         {
-            this.texts[key as keyof PopupTexts] = this._stringLocalization.get(this.options.texts[key as keyof PopupTexts])();
+            this.texts[key as keyof PopupTexts] = this._stringLocalization.get(this.options.texts[key as keyof PopupTexts], null, true)();
         });
 
         this._changeDetector.detectChanges();

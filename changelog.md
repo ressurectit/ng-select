@@ -1,5 +1,15 @@
 # Changelog
 
+## Version 15.0.0 (2026-02-10)
+
+### Bug Fixes
+
+- fixes missing value for localized select values
+
+### BREAKING CHANGES
+
+- minimal supported version of `@anglr/common` is `24.1.0`
+
 ## Version 14.0.0 (2026-02-09)
 
 ### BREAKING CHANGES

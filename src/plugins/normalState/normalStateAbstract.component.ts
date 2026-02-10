@@ -123,7 +123,7 @@ export abstract class NormalStateAbstractComponent<TCssClasses = any, TOptions e
     {
         Object.keys(this.options.texts).forEach(key =>
         {
-            this.texts[key as keyof NormalStateTexts] = this._stringLocalization.get(this.options.texts[key as keyof NormalStateTexts])();
+            this.texts[key as keyof NormalStateTexts] = this._stringLocalization.get(this.options.texts[key as keyof NormalStateTexts], null, true)();
         });
 
         this._changeDetector.detectChanges();

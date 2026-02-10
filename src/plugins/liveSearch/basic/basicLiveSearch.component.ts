@@ -227,7 +227,7 @@ export class BasicLiveSearchComponent implements BasicLiveSearch, NgSelectPlugin
     {
         Object.keys(this.options.texts).forEach(key =>
         {
-            this.texts[key as keyof LiveSearchTexts] = this._stringLocalization.get(this.options.texts[key as keyof LiveSearchTexts])();
+            this.texts[key as keyof LiveSearchTexts] = this._stringLocalization.get(this.options.texts[key as keyof LiveSearchTexts], null, true)();
         });
 
         this._changeDetector.detectChanges();

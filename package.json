@@ -61,7 +61,7 @@
     },
     "homepage": "https://github.com/ressurectit/ng-select",
     "dependencies": {
-        "@anglr/common": ">=24.0.0",
+        "@anglr/common": ">=24.1.0",
         "@angular/common": ">=21.1.3",
         "@angular/core": ">=21.1.3",
         "@angular/forms": ">=21.1.3",
@@ -74,7 +74,7 @@
         "@angular/material": ">=21.1.3"
     },
     "devDependencies": {
-        "@anglr/common": "24.0.0",
+        "@anglr/common": "24.1.0",
         "@angular/cdk": "21.1.3",
         "@angular/common": "21.1.3",
         "@angular/compiler": "21.1.3",
