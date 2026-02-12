@@ -1,6 +1,6 @@
 import {Directive} from '@angular/core';
 
-import {SelectComponent} from '../../components';
+import {Select} from '../../components';
 
 /**
  * Directive used for setting absolute option for ng-select
@@ -12,7 +12,7 @@ import {SelectComponent} from '../../components';
 export class SelectAbsoluteDirective
 {
     //######################### constructor #########################
-    constructor(select: SelectComponent)
+    constructor(select: Select)
     {
         select.selectOptions =
         {

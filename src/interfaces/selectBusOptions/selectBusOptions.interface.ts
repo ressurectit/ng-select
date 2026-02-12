@@ -9,27 +9,27 @@ export interface SelectBusOptions<TValue = unknown>
     /**
      * Instance of options gatherer that is used for obtaining options
      */
-    optionsGatherer?: OptionsGatherer<TValue>;
+    optionsGatherer: OptionsGatherer<TValue>;
 
     /**
      * Instance of template gatherer used for obtaining custom templates
      */
-    templateGatherer?: TemplateGatherer;
+    templateGatherer: TemplateGatherer;
 
     /**
      * Indication whether is Select readonly or not
      */
-    readonly?: boolean;
+    readonly: boolean;
 
     /**
      * Indication that multiple values can be selected
      */
-    multiple?: boolean;
+    multiple: boolean;
 
-    /**
-     * Indication whether use non existing value in live search as new value, use with dynamic value handler
-     */
-    useNonExistingAsValue?: boolean;
+    // /**
+    //  * Indication whether use non existing value in live search as new value, use with dynamic value handler
+    //  */
+    // useNonExistingAsValue: boolean;
 
     // /**
     //  * Function of value comparer that is used for comparison of values

@@ -1,18 +1,19 @@
 import {Signal} from '@angular/core';
 import {Invalidatable} from '@jscrpt/common';
-import {Subscription} from 'rxjs';
 
 import {OptionsGatherer} from '../optionsGatherer/optionsGatherer.interface';
 import {TemplateGatherer} from '../templateGatherer/templateGatherer.interface';
 import {SelectOptions} from '../selectOptions/selectOptions.interface';
 import {SelectPlugin} from '../selectPlugin/selectPlugin.interface';
 import {SelectAction, SelectFunction} from '../../misc/types';
-import {SelectBusEvents} from '../selectBusEvents/selectBusEvents.interface';
+import {SelectEvents} from '../selectEvents/selectEvents.interface';
+import {SelectPluginType} from '../../misc/enums';
+import {Interactions, KeyboardHandler, LiveSearch, NormalState, OptionsHandler, Popup, Positioner, ReadonlyState, ValueHandler} from '../plugins';
 
 /**
  * Public API for Select
  */
-export interface Select<TValue = unknown> extends OptionsGatherer<TValue>, TemplateGatherer, Invalidatable
+export interface SelectApi<TValue = unknown> extends OptionsGatherer<TValue>, TemplateGatherer, Invalidatable
 {
     /**
      * Gets information whether is select initialized or not, changes when Select is initialized or reinitialized, if value is false Select was not initialized yet
@@ -25,6 +26,11 @@ export interface Select<TValue = unknown> extends OptionsGatherer<TValue>, Templ
     selectOptions: SelectOptions<TValue>;
 
     /**
+     * Select public events, signal based
+     */
+    events: SelectEvents;
+
+    /**
      * Initialize component, automatically called once if not blocked by options
      */
     initialize(): void;
@@ -35,17 +41,19 @@ export interface Select<TValue = unknown> extends OptionsGatherer<TValue>, Templ
     initOptions(): void;
 
     /**
-     * Gets instance of plugin by its id
+     * Gets instance of plugin by its type
      * @param pluginType - Type of plugin
      */
-    getPlugin<PluginType extends SelectPlugin>(pluginType: string): PluginType;
-
-    /**
-     * Subscribes for event
-     * @param eventName - Name of event that should be listened to
-     * @param handler - Function used for handling event
-     */
-    listenTo<TParam = void>(eventName: keyof SelectBusEvents, handler: (data: TParam) => void): Subscription;
+    getPlugin(pluginType: SelectPluginType.Interactions): Interactions;
+    getPlugin(pluginType: SelectPluginType.KeyboardHandler): KeyboardHandler;
+    getPlugin(pluginType: SelectPluginType.LiveSearch): LiveSearch;
+    getPlugin(pluginType: SelectPluginType.NormalState): NormalState;
+    getPlugin(pluginType: SelectPluginType.OptionsHandler): OptionsHandler;
+    getPlugin(pluginType: SelectPluginType.Popup): Popup;
+    getPlugin(pluginType: SelectPluginType.Positioner): Positioner;
+    getPlugin(pluginType: SelectPluginType.ReadonlyState): ReadonlyState;
+    getPlugin(pluginType: SelectPluginType.ValueHandler): ValueHandler;
+    getPlugin<PluginInstance extends SelectPlugin>(pluginType: SelectPluginType): PluginInstance;
 
     /**
      * Executes actions on Select

@@ -13,7 +13,7 @@ export interface SelectOptionGroup
     /**
      * Unique id of group
      */
-    id: string;
+    readonly id: string;
 
     /**
      * Text that is displayed for this options group

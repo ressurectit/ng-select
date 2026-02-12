@@ -1,4 +1,4 @@
-import {Select} from '../select/select.interface';
+import {SelectApi} from '../selectApi/selectApi.interface';
 import {SelectPlugin} from '../selectPlugin/selectPlugin.interface';
 
 /**
@@ -14,7 +14,7 @@ export interface SelectEvent<TData = void>
     /**
      * Instance of select or select plugin that caused event
      */
-    source: Select|SelectPlugin;
+    source: SelectApi|SelectPlugin;
 
     /**
      * Data passed with event that occured

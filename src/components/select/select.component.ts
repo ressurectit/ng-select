@@ -3,26 +3,25 @@ import {RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 import {BehaviorSubject, Subject} from 'rxjs';
 
-import {KeyboardHandler, LiveSearch, NormalState, PluginDescription, Popup, Positioner, ReadonlyState, SelectOptions, SelectPlugin, ValueHandler} from '../../interfaces';
+import {Interactions, KeyboardHandler, LiveSearch, NormalState, OptionsHandler, PluginDescription, Popup, Positioner, ReadonlyState, SelectApi, SelectOptions, SelectPlugin, ValueHandler} from '../../interfaces';
 import {SELECT_OPTIONS} from '../../misc/tokens';
 import {SelectPluginType} from '../../misc/enums';
 import {SelectBus, SelectPluginInstances} from '../../misc/classes';
-import {BasicPositionerComponent, BasicValueHandlerComponent, NoLiveSearchComponent, SimpleKeyboardHandlerComponent, SimpleNormalStateComponent, SimplePopupComponent} from '../../plugins';
+import {BasicPositionerComponent, BasicValueHandlerComponent, NoInteractionsComponent, NoLiveSearchComponent, NoOptionsHandlerComponent, SimpleKeyboardHandlerComponent, SimpleNormalStateComponent, SimplePopupComponent} from '../../plugins';
 
 //TODO - dynamic change of absolute popup
 //TODO - dynamic change of options gatherer destroy called properly ?
 
 /**
  * Default 'SelectOptions'
- * @internal
  */
-const defaultOptions: SelectOptions =
+const defaultOptions: Omit<SelectOptions, 'optionsGatherer'|'templateGatherer'> =
 {
     autoInitialize: true,
     absolute: false,
-    forceValueCheckOnInit: false,
     multiple: false,
     readonly: false,
+    containerElement: null,
     // valueComparer: (source, target) =>
     // {
     //     return source === target;
@@ -45,13 +44,25 @@ const defaultOptions: SelectOptions =
     },
     plugins:
     {
-        normalState: <PluginDescription<NormalState>>
+        interactions: <PluginDescription<Interactions>>
         {
-            type: forwardRef(() => SimpleNormalStateComponent),
+            type: forwardRef(() => NoInteractionsComponent),
+        },
+        keyboardHandler: <PluginDescription<KeyboardHandler>>
+        {
+            type: forwardRef(() => SimpleKeyboardHandlerComponent),
         },
         liveSearch: <PluginDescription<LiveSearch>>
         {
             type: forwardRef(() => NoLiveSearchComponent),
+        },
+        normalState: <PluginDescription<NormalState>>
+        {
+            type: forwardRef(() => SimpleNormalStateComponent),
+        },
+        optionsHandler: <PluginDescription<OptionsHandler>>
+        {
+            type: forwardRef(() => NoOptionsHandlerComponent),
         },
         popup: <PluginDescription<Popup>>
         {
@@ -60,10 +71,6 @@ const defaultOptions: SelectOptions =
         positioner: <PluginDescription<Positioner>>
         {
             type: forwardRef(() => BasicPositionerComponent),
-        },
-        keyboardHandler: <PluginDescription<KeyboardHandler>>
-        {
-            type: forwardRef(() => SimpleKeyboardHandlerComponent),
         },
         readonlyState: <PluginDescription<ReadonlyState>>
         {
@@ -83,12 +90,7 @@ const defaultOptions: SelectOptions =
 {
     selector: 'ng-select',
     templateUrl: 'select.component.html',
-    styles:
-    `:host
-    {
-        display: block;
-        position: relative;
-    }`,
+    styleUrl: 'select.component.css',
     providers:
     [
         <FactoryProvider>
@@ -100,7 +102,7 @@ const defaultOptions: SelectOptions =
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SelectComponent<TValue = unknown>
+export class Select<TValue = unknown> implements SelectApi
 {
     //######################### protected fields #########################
 

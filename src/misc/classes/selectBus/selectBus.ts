@@ -1,13 +1,13 @@
 import {Injectable, EventEmitter, ElementRef} from '@angular/core';
 import {Subject} from 'rxjs';
 
-import {SelectBusEvents, SelectBusOptions, SelectEvent, SelectOption} from '../../../interfaces';
+import {SelectEvents, SelectBusOptions, SelectEvent, SelectOption} from '../../../interfaces';
 
 /**
  * Class represents centralized bus for internal communication
  */
 @Injectable()
-export class SelectBus<TValue = unknown> implements SelectBusEvents
+export class SelectBus<TValue = unknown> implements SelectEvents
 {
     //######################### public properties #########################
 

@@ -1,12 +1,12 @@
 import {ElementRef} from '@angular/core';
-import {Invalidatable, PromiseOr} from '@jscrpt/common';
+import {PromiseOr} from '@jscrpt/common';
 
 import {SelectBus, SelectPluginInstances} from '../../misc/classes';
 
 /**
  * Select plugin interface
  */
-export interface SelectPlugin<TOptions = unknown, TValue = unknown> extends Invalidatable
+export interface SelectPlugin<TOptions = unknown, TValue = unknown>
 {
     /**
      * Select plugin instances available for this plugin
@@ -24,7 +24,7 @@ export interface SelectPlugin<TOptions = unknown, TValue = unknown> extends Inva
     options: TOptions;
 
     /**
-     * Plugin bus used in select
+     * Plugin bus used in Select
      */
     pluginBus: SelectBus<TValue>;
 

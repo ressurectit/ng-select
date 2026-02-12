@@ -1,3 +1,4 @@
+import {Popup} from '../plugins';
 import {SelectOption} from '../selectOption/selectOption.interface';
 
 /**
@@ -10,8 +11,8 @@ export interface PopupContext
      */
     $implicit: SelectOption;
 
-    // /**
-    //  * Instance of plugin itself
-    //  */
-    // popup: Popup;
+    /**
+     * Instance of plugin itself
+     */
+    popup: Popup;
 }

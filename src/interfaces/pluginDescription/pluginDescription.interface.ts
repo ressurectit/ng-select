@@ -11,15 +11,15 @@ export interface PluginDescription<PluginType = unknown>
     /**
      * Type of plugin that will be dynamically instantiated
      */
-    type?: Type<PluginType>|null;
+    type: Type<PluginType>|undefined|null;
 
     /**
      * Options that will be passed to dynamically instantiated plugin
      */
-    options?: PluginOptions;
+    options: PluginOptions|undefined|null;
 
     /**
      * Optional callback used for obtaining dynamic instance of plugin (allows direct communication with plugin)
      */
-    instanceCallback?: (instance: SelectPlugin|undefined|null) => void;
+    instanceCallback: ((instance: SelectPlugin|undefined|null) => void)|undefined|null;
 }

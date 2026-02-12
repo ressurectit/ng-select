@@ -11,7 +11,7 @@ import {ɵSelectOption, SelectOptionGroup} from '../../interfaces';
     template: '',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OptionComponent<TValue = unknown> implements ɵSelectOption<TValue>
+export class Option<TValue = unknown> implements ɵSelectOption<TValue>
 {
     //######################### public properties - implementation of ɵSelectOption #########################
 

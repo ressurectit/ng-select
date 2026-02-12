@@ -44,9 +44,11 @@
    - renamed to `SelectOption`
    - all properties changed to `Signal`
 - updated `NgSelect` interface
-   - renamed to `Select`
+   - renamed to `SelectApi`
    - `initialized` updated to `Signal`
    - removed `isInitialized`, use `initialized`
+   - removed `listenTo` method, use `events` property
+   - new `events`property, select public events
 - updated `NgSelectPluginInstances` interface
    - renamed to `SelectPluginInstances`
    - changed to class
@@ -54,6 +56,7 @@
    - new *safe* accessors for plugins with null check
 - updated `NgSelectOptions` interface
    - renamed to `SelectOptions`
+   - removed `forceValueCheckOnInit` property, no use
 - updated `NgSelectPluginTypes` interface
    - renamed to `SelectPluginTypes`
 - updated `NgSelectPlugin` interface
@@ -62,7 +65,11 @@
 - updated `NG_SELECT_OPTIONS` injection token
    - renamed to `SELECT_OPTIONS`
 - updated `NgSelectComponent` component
-   - renamed to `SelectComponent`
+   - renamed to `Select`
+- updated `OptionComponent` component
+   - renamed to `Option`
+- updated `OptGroupComponent` component
+   - renamed to `OptGroup`
 - updated `NgSelectAction` type
    - renamed to `SelectAction`
 - updated `NgSelectFunction` type
@@ -86,13 +93,17 @@
    - renamed to `SelectValuePipe`
    - changed `name` to `selectValue`
 - updated `PluginBusEvents` interface
-   - renamed to `SelectBusEvents`
+   - renamed to `SelectEvents`
 - updated `PluginBus` class
    - renamed to `SelectBus`
 - updated `NgSelectModule` module
    - renamed to `SelectModule`
 - updated `PluginBusOptions` interface
    - renamed to `SelectBusOptions`
+   - removed `useNonExistingAsValue` TODO ?????????????????
+   - removed `valueComparer` TODO ?????????????????
+   - removed `liveSearchFilter` TODO ?????????????????
+   - removed `normalizer` TODO ?????????????????
 
 ## Version 15.0.0 (2026-02-10)
 

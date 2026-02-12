@@ -6,7 +6,7 @@ import {SelectOption} from '../selectOption/selectOption.interface';
 /**
  * Represents all events implemented by select bus
  */
-export interface SelectBusEvents
+export interface SelectEvents
 {
     //######################### public properties - events #########################
 

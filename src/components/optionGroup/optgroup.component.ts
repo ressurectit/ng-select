@@ -12,7 +12,7 @@ import {SelectOptionGroup} from '../../interfaces';
     template: '',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OptGroupComponent implements SelectOptionGroup
+export class OptGroup implements SelectOptionGroup
 {
     //######################### public properties - implementation of SelectOptionGroup #########################
 
@@ -24,7 +24,7 @@ export class OptGroupComponent implements SelectOptionGroup
     /**
      * @inheritdoc
      */
-    public id: string = generateId(10);
+    public readonly id: string = generateId(10);
 
     /**
      * @inheritdoc
