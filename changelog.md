@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 16.0.0 (2026-02-10)
+## Version 16.0.0 (2026-02-23)
 
 ### Features
 
@@ -24,6 +24,17 @@
       - `Positioner` plugin that handles positioning of popup
       - `ReadonlyState` plugin that is used for displaying readonly state of selected value
       - `ValueHandler` plugin that is used for storing and handling value of select
+- new `CopyOptionsAsSignal` decorator, which creates backing field for this property as WritableSignal, reads and write to it, and merges options
+- new `provideSelectOptions` provider function, that provides options for select globally
+- new `provideKeyboardHandlerType` provider function, that provides type of keyboard handler that will be used for select globally
+- new `provideNormalStateType` provider function, that provides type of normal state that will be used for select globally
+- new `providePopupType` provider function, that provides type of popup that will be used for select globally
+- new `providePositionerType` provider function, that provides type of positioner that will be used for select globally
+- new `provideReadonlyStateType` provider function, that provides type of readonly state that will be used for select globally
+- new `provideValueHandlerType` provider function, that provides type of value handler that will be used for select globally
+- new `provideLiveSearchType` provider function, that provides type of live search that will be used for select globally
+- new `provideInteractionsType` provider function, that provides type of interactions that will be used for select globally
+- new `provideOptionsHandlerType` provider function, that provides type of options handler that will be used for select globally
 - updated `SelectPluginTypes` interface
    - **new properties**
       - `Interactions` handles interactions of plugins and select
@@ -33,6 +44,7 @@
 
 - minimal supported version of `NodeJs` is `20.19`
 - minimal supported version of `@angular` is `20.0.0`
+- minimal supported version of `@anglr/common` is `24.2.0`
 - minimal supported version of `@jscrpt/common` is `7.1.0`
 - strict null checks
 - all generic defaults of type `any` changed to `unknown`

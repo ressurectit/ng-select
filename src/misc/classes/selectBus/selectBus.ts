@@ -1,4 +1,4 @@
-import {Injectable, EventEmitter, ElementRef} from '@angular/core';
+import {Injectable, EventEmitter, ElementRef, signal, WritableSignal, Signal} from '@angular/core';
 import {Subject} from 'rxjs';
 
 import {SelectEvents, SelectBusOptions, SelectEvent, SelectOption} from '../../../interfaces';
@@ -13,13 +13,15 @@ export class SelectBus<TValue = unknown> implements SelectEvents
 
     /**
      * Options passed to select
+     *
+     * Initialized in constructor of select
      */
-    public selectOptions: SelectBusOptions<TValue>|undefined|null;
+    public selectOptions!: Signal<SelectBusOptions<TValue>>;
 
     /**
      * HTML element that represents select itself
      */
-    public selectElement: ElementRef<HTMLElement>|undefined|null;
+    public selectElement: WritableSignal<ElementRef<HTMLElement>|undefined|null> = signal(null);
 
     //######################### public properties - events #########################
 

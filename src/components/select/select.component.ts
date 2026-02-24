@@ -1,13 +1,13 @@
-import {Component, ChangeDetectionStrategy, Input, viewChild, ViewContainerRef, Signal, WritableSignal, signal, Inject, Optional, ChangeDetectorRef, Type, resolveForwardRef, FactoryProvider, effect, forwardRef} from '@angular/core';
-import {RecursivePartial} from '@jscrpt/common';
+import {Component, ChangeDetectionStrategy, Input, viewChild, ViewContainerRef, Signal, WritableSignal, signal, Inject, Optional, Type, resolveForwardRef, FactoryProvider, effect, forwardRef, Attribute, ElementRef, computed} from '@angular/core';
+import {isPresent, RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
-import {BehaviorSubject, Subject} from 'rxjs';
 
-import {Interactions, KeyboardHandler, LiveSearch, NormalState, OptionsHandler, PluginDescription, Popup, Positioner, ReadonlyState, SelectApi, SelectOptions, SelectPlugin, ValueHandler} from '../../interfaces';
-import {SELECT_OPTIONS} from '../../misc/tokens';
+import {Interactions, KeyboardHandler, LiveSearch, NormalState, OptionsHandler, PluginDescription, Popup, Positioner, ReadonlyState, SelectApi, SelectCssClasses, SelectOptions, SelectPlugin, ValueHandler} from '../../interfaces';
+import {INTERACTIONS_TYPE, KEYBOARD_HANDLER_TYPE, LIVE_SEARCH_TYPE, NORMAL_STATE_TYPE, OPTIONS_HANDLER_TYPE, POPUP_TYPE, POSITIONER_TYPE, READONLY_STATE_TYPE, SELECT_OPTIONS, VALUE_HANDLER_TYPE} from '../../misc/tokens';
 import {SelectPluginType} from '../../misc/enums';
 import {SelectBus, SelectPluginInstances} from '../../misc/classes';
 import {BasicPositionerComponent, BasicValueHandlerComponent, NoInteractionsComponent, NoLiveSearchComponent, NoOptionsHandlerComponent, SimpleKeyboardHandlerComponent, SimpleNormalStateComponent, SimplePopupComponent} from '../../plugins';
+import {CopyOptionsAsSignal} from '../../decorators';
 
 //TODO - dynamic change of absolute popup
 //TODO - dynamic change of options gatherer destroy called properly ?
@@ -96,20 +96,15 @@ const defaultOptions: Omit<SelectOptions, 'optionsGatherer'|'templateGatherer'> 
         <FactoryProvider>
         {
             provide: SelectPluginInstances,
-            useFactory: () => {return new SelectPluginInstances();},
+            useFactory: () => new SelectPluginInstances(),
         },
         SelectBus,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Select<TValue = unknown> implements SelectApi
+export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements SelectApi<TValue, TCssClasses>
 {
     //######################### protected fields #########################
-
-    /**
-     * Select options as signal
-     */
-    protected selectOptionsSignal: WritableSignal<SelectOptions<TValue>>;
 
     /**
      * Object storing current used plugin type
@@ -130,52 +125,52 @@ export class Select<TValue = unknown> implements SelectApi
     /**
      * Subject that holds init state of live search plugin
      */
-    protected liveSearchInit: Subject<boolean> = new BehaviorSubject<boolean>(false);
+    protected liveSearchInit: WritableSignal<boolean> = signal(false);
 
     /**
      * Subject that holds init state of interactions plugin
      */
-    protected interactionsInit: Subject<boolean> = new BehaviorSubject<boolean>(false);
+    protected interactionsInit: WritableSignal<boolean> = signal(false);
 
     /**
      * Subject that holds init state of options handler plugin
      */
-    protected optionsHandlerInit: Subject<boolean> = new BehaviorSubject<boolean>(false);
+    protected optionsHandlerInit: WritableSignal<boolean> = signal(false);
 
     /**
      * Subject that holds init state of positioner plugin
      */
-    protected positionerInit: Subject<boolean> = new BehaviorSubject<boolean>(false);
+    protected positionerInit: WritableSignal<boolean> = signal(false);
 
     /**
      * Subject that holds init state of keyboard plugin
      */
-    protected keyboardInit: Subject<boolean> = new BehaviorSubject<boolean>(false);
+    protected keyboardInit: WritableSignal<boolean> = signal(false);
 
     /**
      * Subject that holds init state of value handler plugin
      */
-    protected valueHandlerInit: Subject<boolean> = new BehaviorSubject<boolean>(false);
+    protected valueHandlerInit: WritableSignal<boolean> = signal(false);
 
     /**
      * Subject that holds init state of readonly state plugin
      */
-    protected readonlyStateInit: Subject<boolean> = new BehaviorSubject<boolean>(false);
+    protected readonlyStateInit: WritableSignal<boolean> = signal(false);
 
     /**
      * Subject that holds init state of normal state plugin
      */
-    protected normalStateInit: Subject<boolean> = new BehaviorSubject<boolean>(false);
+    protected normalStateInit: WritableSignal<boolean> = signal(false);
 
     /**
      * Subject that holds init state of popup plugin
      */
-    protected popupInit: Subject<boolean> = new BehaviorSubject<boolean>(false);
+    protected popupInit: WritableSignal<boolean> = signal(false);
 
     // /**
     //  * Subject used for indication that Select was initialized
     //  */
-    // protected _initializedSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    // protected _initializedSubject: WritableSignal<boolean> = signal(false);
 
     // /**
     //  * Occurs when array of provided options has changed
@@ -267,18 +262,11 @@ export class Select<TValue = unknown> implements SelectApi
     // //######################### public properties - inputs #########################
 
     /**
-     * Gets or sets Select options
+     * @inheritdoc
      */
+    @CopyOptionsAsSignal()
     @Input()
-    public get selectOptions(): SelectOptions<TValue>
-    {
-        return this.selectOptionsSignal();
-    }
-    public set selectOptions(options: RecursivePartial<SelectOptions<TValue>>)
-    {
-        this.selectOptionsSignal.set(deepCopyWithArrayOverride({}, this.selectOptionsSignal(), options));
-        // this._pluginBus.selectOptions = this._selectOptions;
-    }
+    public selectOptions: SelectOptions<TValue, TCssClasses>;
 
     // /**
     //  * Indication whether should be Select disabled or not
@@ -393,23 +381,100 @@ export class Select<TValue = unknown> implements SelectApi
     // public optGroupsChildren: QueryList<SelectOptGroup>;
 
     //######################### constructors #########################
-    constructor(protected changeDetector: ChangeDetectorRef,
-                protected pluginInstances: SelectPluginInstances,
-                @Inject(SELECT_OPTIONS) @Optional() options?: RecursivePartial<SelectOptions<TValue>>,)
+    constructor(protected pluginInstances: SelectPluginInstances,
+                protected bus: SelectBus<TValue>,
+                element: ElementRef<HTMLElement>,
+                @Attribute('readonly') readonly?: string|null,
+                @Attribute('disabled') disabled?: string|null,
+                @Attribute('multiple') multiple?: string|null,
+                @Inject(NORMAL_STATE_TYPE) @Optional() normalStateType?: Type<NormalState>|null,
+                @Inject(KEYBOARD_HANDLER_TYPE) @Optional() keyboardHandlerType?: Type<KeyboardHandler>|null,
+                @Inject(POPUP_TYPE) @Optional() popupType?: Type<Popup>|null,
+                @Inject(POSITIONER_TYPE) @Optional() positionerType?: Type<Positioner>|null,
+                @Inject(READONLY_STATE_TYPE) @Optional() readonlyStateType?: Type<ReadonlyState>|null,
+                @Inject(VALUE_HANDLER_TYPE) @Optional() valueHandlerType?: Type<ValueHandler>|null,
+                @Inject(LIVE_SEARCH_TYPE) @Optional() liveSearchType?: Type<LiveSearch>|null,
+                @Inject(INTERACTIONS_TYPE) @Optional() interactionsType?: Type<Interactions>|null,
+                @Inject(OPTIONS_HANDLER_TYPE) @Optional() optionsHandlerType?: Type<OptionsHandler>|null,
+                @Inject(SELECT_OPTIONS) @Optional() options?: RecursivePartial<SelectOptions<TValue, TCssClasses>>|null,)
     {
-        this.selectOptionsSignal = signal((deepCopyWithArrayOverride(
-                                                                     <RecursivePartial<SelectOptions<TValue>>>
-                                                                     {
-                                                                         optionsGatherer: this,
-                                                                         templateGatherer: this,
-                                                                     },
-                                                                     defaultOptions as SelectOptions<TValue>,
-                                                                    //  <RecursivePartial<SelectOptions<TValue>>>
-                                                                    //  {
-                                                                    //      readonly: readonlyDefault,
-                                                                    //      multiple: multipleDefault
-                                                                    //  },
-                                                                     options)));
+        //at least on of following is present (value is not important)
+        const readonlyDefault = isPresent(readonly) || isPresent(disabled);
+        const multipleDefault = isPresent(multiple);
+        const opts: RecursivePartial<SelectOptions<TValue, TCssClasses>> = deepCopyWithArrayOverride({}, options);
+
+        opts.plugins ??= {};
+
+        if(keyboardHandlerType)
+        {
+            opts.plugins.keyboardHandler ??= {};
+            opts.plugins.keyboardHandler.type = keyboardHandlerType;
+        }
+
+        if(normalStateType)
+        {
+            opts.plugins.normalState ??= {};
+            opts.plugins.normalState.type = normalStateType;
+        }
+
+        if(popupType)
+        {
+            opts.plugins.popup ??= {};
+            opts.plugins.popup.type = popupType;
+        }
+
+        if(positionerType)
+        {
+            opts.plugins.positioner ??= {};
+            opts.plugins.positioner.type = positionerType;
+        }
+
+        if(readonlyStateType)
+        {
+            opts.plugins.readonlyState ??= {};
+            opts.plugins.readonlyState.type = readonlyStateType;
+        }
+
+        if(valueHandlerType)
+        {
+            opts.plugins.valueHandler ??= {};
+            opts.plugins.valueHandler.type = valueHandlerType;
+        }
+
+        if(liveSearchType)
+        {
+            opts.plugins.liveSearch ??= {};
+            opts.plugins.liveSearch.type = liveSearchType;
+        }
+
+        if(interactionsType)
+        {
+            opts.plugins.interactions ??= {};
+            opts.plugins.interactions.type = interactionsType;
+        }
+
+        if(optionsHandlerType)
+        {
+            opts.plugins.optionsHandler ??= {};
+            opts.plugins.optionsHandler.type = optionsHandlerType;
+        }
+
+        this.selectOptions = deepCopyWithArrayOverride(
+            <RecursivePartial<SelectOptions<TValue, TCssClasses>>>
+            {
+                optionsGatherer: this,
+                templateGatherer: this,
+            },
+            defaultOptions as SelectOptions<TValue, TCssClasses>,
+            <RecursivePartial<SelectOptions<TValue>>>
+            {
+                readonly: readonlyDefault,
+                multiple: multipleDefault,
+            },
+            opts);
+
+        bus.selectElement.set(element);
+        bus.selectOptions = computed(() => this.selectOptions);
 
         effect(async () =>
         {
@@ -438,13 +503,13 @@ export class Select<TValue = unknown> implements SelectApi
             if(selectOptions.readonly)
             {
                 this.destroyPlugin(SelectPluginType.NormalState, normalStateContainer, this.normalStateInit);
-                this.normalStateInit.next(true);
+                this.normalStateInit.set(true);
                 this.createPlugin(this.selectOptions.plugins?.readonlyState, SelectPluginType.ReadonlyState, readonlyStateContainer, this.readonlyStateInit);
             }
             else
             {
                 this.destroyPlugin(SelectPluginType.ReadonlyState, readonlyStateContainer, this.readonlyStateInit);
-                this.readonlyStateInit.next(true);
+                this.readonlyStateInit.set(true);
                 this.createPlugin(this.selectOptions.plugins?.normalState, SelectPluginType.NormalState, normalStateContainer, this.normalStateInit);
             }
         });
@@ -454,133 +519,15 @@ export class Select<TValue = unknown> implements SelectApi
             const selectOptions = this.selectOptions;
             const popupContainer = this.popupContainer();
 
+            this.destroyPlugin(SelectPluginType.Popup, popupContainer, this.popupInit);
+            this.createPlugin(this.selectOptions.plugins?.popup, SelectPluginType.Popup, this.popupContainer(), this.popupInit);
+
             if(selectOptions.absolute)
             {
-                this.destroyPlugin(SelectPluginType.Popup, popupContainer, this.popupInit);
-            }
-            else
-            {
-                this.createPlugin(this.selectOptions.plugins?.popup, SelectPluginType.Popup, this.popupContainer(), this.popupInit);
+                //TODO: position absolute popup properly
             }
         });
     }
-
-    // constructor(protected _changeDetector: ChangeDetectorRef,
-    //             protected _element: ElementRef<HTMLElement>,
-    //             protected _componentFactoryResolver: ComponentFactoryResolver,
-    //             protected _appRef: ApplicationRef,
-    //             protected _injector: Injector,
-    //             protected _pluginBus: PluginBus<TValue>,
-    //             @Inject(NG_SELECT_PLUGIN_INSTANCES) protected _pluginInstances: SelectPluginInstances,
-    //             @Inject(NG_SELECT_OPTIONS) @Optional() options?: SelectOptions<TValue>,
-    //             @Inject(NORMAL_STATE_TYPE) @Optional() normalStateType?: Type<NormalState>,
-    //             @Inject(KEYBOARD_HANDLER_TYPE) @Optional() keyboardHandlerType?: Type<KeyboardHandler>,
-    //             @Inject(POPUP_TYPE) @Optional() popupType?: Type<Popup>,
-    //             @Inject(POSITIONER_TYPE) @Optional() positionerType?: Type<Positioner>,
-    //             @Inject(READONLY_STATE_TYPE) @Optional() readonlyStateType?: Type<ReadonlyState>,
-    //             @Inject(VALUE_HANDLER_TYPE) @Optional() valueHandlerType?: Type<ValueHandler>,
-    //             @Inject(LIVE_SEARCH_TYPE) @Optional() liveSearchType?: Type<LiveSearch>,
-    //             @Attribute('readonly') readonly?: string,
-    //             @Attribute('disabled') disabled?: string,
-    //             @Attribute('multiple') multiple?: string)
-    // {
-    //     //at least on of following is present (value is not important)
-    //     const readonlyDefault = isPresent(readonly) || isPresent(disabled);
-    //     const multipleDefault = isPresent(multiple);
-    //     const opts: SelectOptions<TValue> = extend(true, {}, options);
-
-    //     if(!opts.plugins)
-    //     {
-    //         opts.plugins = {};
-    //     }
-
-    //     if(keyboardHandlerType)
-    //     {
-    //         if(!opts.plugins.keyboardHandler)
-    //         {
-    //             opts.plugins.keyboardHandler = {};
-    //         }
-
-    //         opts.plugins.keyboardHandler.type = keyboardHandlerType;
-    //     }
-
-    //     if(normalStateType)
-    //     {
-    //         if(!opts.plugins.normalState)
-    //         {
-    //             opts.plugins.normalState = {};
-    //         }
-
-    //         opts.plugins.normalState.type = normalStateType;
-    //     }
-
-    //     if(popupType)
-    //     {
-    //         if(!opts.plugins.popup)
-    //         {
-    //             opts.plugins.popup = {};
-    //         }
-
-    //         opts.plugins.popup.type = popupType;
-    //     }
-
-    //     if(positionerType)
-    //     {
-    //         if(!opts.plugins.positioner)
-    //         {
-    //             opts.plugins.positioner = {};
-    //         }
-
-    //         opts.plugins.positioner.type = positionerType;
-    //     }
-
-    //     if(readonlyStateType)
-    //     {
-    //         if(!opts.plugins.readonlyState)
-    //         {
-    //             opts.plugins.readonlyState = {};
-    //         }
-
-    //         opts.plugins.readonlyState.type = readonlyStateType;
-    //     }
-
-    //     if(valueHandlerType)
-    //     {
-    //         if(!opts.plugins.valueHandler)
-    //         {
-    //             opts.plugins.valueHandler = {};
-    //         }
-
-    //         opts.plugins.valueHandler.type = valueHandlerType;
-    //     }
-
-    //     if(liveSearchType)
-    //     {
-    //         if(!opts.plugins.liveSearch)
-    //         {
-    //             opts.plugins.liveSearch = {};
-    //         }
-
-    //         opts.plugins.liveSearch.type = liveSearchType;
-    //     }
-
-    //     this._selectOptions = extend(true,
-    //                                  <SelectOptions<TValue>>
-    //                                  {
-    //                                      optionsGatherer: this,
-    //                                      templateGatherer: this,
-    //                                  },
-    //                                  defaultOptions,
-    //                                  <SelectOptions<TValue>>
-    //                                  {
-    //                                      readonly: readonlyDefault,
-    //                                      multiple: multipleDefault
-    //                                  },
-    //                                  opts);
-
-    //     this._pluginBus.selectElement = this._element;
-    //     this._pluginBus.selectOptions = this._selectOptions;
-    // }
 
     // //######################### public methods - implementation of OnChanges #########################
 
@@ -846,14 +793,6 @@ export class Select<TValue = unknown> implements SelectApi
     //     }
     // }
 
-    /**
-     * Explicitly runs invalidation of content (change detection)
-     */
-    public invalidateVisuals(): void
-    {
-        this.changeDetector.detectChanges();
-    }
-
     // /**
     //  * Gets instance of plugin by its id
     //  * @param pluginId - Id of plugin, use constants
@@ -964,12 +903,12 @@ export class Select<TValue = unknown> implements SelectApi
      * @param pluginDescription - Information about plugin that should be created
      * @param pluginType - Key of plugin used for pluginInstances
      * @param pluginViewContainer - Container where should be plugin created
-     * @param initOptions - Subject that hold information about init options state for this plugin
+     * @param initOptions - Signal that hold information about init options state for this plugin
      */
     protected async createPlugin<TPlugin extends SelectPlugin>(pluginDescription: PluginDescription<TPlugin>|undefined|null,
                                                                pluginType: SelectPluginType,
                                                                pluginViewContainer: ViewContainerRef,
-                                                               initOptions: Subject<boolean>,): Promise<void>
+                                                               initOptions: WritableSignal<boolean>,): Promise<void>
     {
         if(!pluginDescription?.type)
         {
@@ -984,7 +923,7 @@ export class Select<TValue = unknown> implements SelectApi
         //new type provided
         if(type != this.pluginTypes[pluginType])
         {
-            initOptions.next(false);
+            initOptions.set(false);
             this.pluginTypes[pluginType] = type;
             pluginViewContainer.clear();
 
@@ -1003,7 +942,7 @@ export class Select<TValue = unknown> implements SelectApi
         //options are available, set them
         if(pluginDescription.options)
         {
-            initOptions.next(false);
+            initOptions.set(false);
             this.pluginInstances[pluginType].options = pluginDescription.options;
         }
 
@@ -1013,27 +952,27 @@ export class Select<TValue = unknown> implements SelectApi
     /**
      * Init options for single plugin
      * @param pluginType - Type of plugin to be initialized
-     * @param initOptions - Init options subject for this plugin
+     * @param initOptions - Init options signal for this plugin
      */
     protected async initOption(pluginType: SelectPluginType,
-                               initOptions: Subject<boolean>,): Promise<void>
+                               initOptions: WritableSignal<boolean>,): Promise<void>
     {
         await this.pluginInstances[pluginType].initOptions();
-        initOptions.next(true);
+        initOptions.set(true);
     }
 
     /**
      * Destroys plugin
      * @param pluginType - Plugin type to be destroyed
      * @param plugiViewContainer - Container which will be emptied
-     * @param initOptions - Subject that hold information about init options state for this plugin
+     * @param initOptions - Signal that hold information about init options state for this plugin
      */
     protected destroyPlugin(pluginType: SelectPluginType,
                             pluginViewContainer: ViewContainerRef,
-                            initOptions: Subject<boolean>,): void
+                            initOptions: WritableSignal<boolean>,): void
     {
         pluginViewContainer.clear();
-        initOptions.next(false);
+        initOptions.set(false);
         this.pluginTypes[pluginType] = null;
     }
 }

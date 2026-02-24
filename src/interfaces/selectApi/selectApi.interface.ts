@@ -1,5 +1,4 @@
 import {Signal} from '@angular/core';
-import {Invalidatable} from '@jscrpt/common';
 
 import {OptionsGatherer} from '../optionsGatherer/optionsGatherer.interface';
 import {TemplateGatherer} from '../templateGatherer/templateGatherer.interface';
@@ -9,11 +8,12 @@ import {SelectAction, SelectFunction} from '../../misc/types';
 import {SelectEvents} from '../selectEvents/selectEvents.interface';
 import {SelectPluginType} from '../../misc/enums';
 import {Interactions, KeyboardHandler, LiveSearch, NormalState, OptionsHandler, Popup, Positioner, ReadonlyState, ValueHandler} from '../plugins';
+import {SelectCssClasses} from '../selectCssClasses/selectCssClasses.interface';
 
 /**
  * Public API for Select
  */
-export interface SelectApi<TValue = unknown> extends OptionsGatherer<TValue>, TemplateGatherer, Invalidatable
+export interface SelectApi<TValue = unknown, TCssClasses = SelectCssClasses> extends OptionsGatherer<TValue>, TemplateGatherer
 {
     /**
      * Gets information whether is select initialized or not, changes when Select is initialized or reinitialized, if value is false Select was not initialized yet
@@ -23,7 +23,7 @@ export interface SelectApi<TValue = unknown> extends OptionsGatherer<TValue>, Te
     /**
      * Gets or sets Select options
      */
-    selectOptions: SelectOptions<TValue>;
+    selectOptions: SelectOptions<TValue, TCssClasses>;
 
     /**
      * Select public events, signal based

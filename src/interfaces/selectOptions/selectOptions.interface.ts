@@ -1,10 +1,11 @@
 import {SelectBusOptions} from '../selectBusOptions/selectBusOptions.interface';
+import {SelectCssClasses} from '../selectCssClasses/selectCssClasses.interface';
 import {SelectPluginTypes} from '../selectPluginTypes/selectPluginTypes.interface';
 
 /**
  * Describes select options used for Select
  */
-export interface SelectOptions<TValue = unknown, TCssClasses = unknown> extends SelectBusOptions<TValue>
+export interface SelectOptions<TValue = unknown, TCssClasses = SelectCssClasses> extends SelectBusOptions<TValue>
 {
     /**
      * Indication whether select should be initialized automaticaly during 'initialization' phase
