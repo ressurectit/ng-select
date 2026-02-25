@@ -27,7 +27,6 @@
         "paths": 
         {
             "@anglr/select": ["../src/index.ts"],
-            "@anglr/select/extensions": ["../extensions/src/index.ts"],
         },
         "lib":
         [
@@ -64,6 +63,7 @@
         "strictInputAccessModifiers": true,
         "strictTemplates": true,
         "strictStandalone": true,
+        "typeCheckHostBindings": true,
         "extendedDiagnostics":
         {
             "checks":

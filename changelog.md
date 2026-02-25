@@ -4,8 +4,11 @@
 
 ### Features
 
+- new `InitState` initerface, that wraps state of initialization
+   - **properties**
+      - `initialized` represents state of initialization
 - new `SelectOptionGroup` interface, which represents option group for Select
-    - **new properties**
+    - **properties**
       - `template` optional template to be used for rendering option group
       - `id` unique id of group
       - `text` text that is displayed for this options group
@@ -41,6 +44,7 @@
 - new `NormalStateTemplate` directive, that is used for obtaining template for normal state
    - **properties**
       - `template` instance of template for options in normal state
+- new `GetPlugin` pipe, that gets instance of select plugin from another plugin instance
 - updated `SelectPluginTypes` interface
    - **new properties**
       - `Interactions` handles interactions of plugins and select
@@ -49,7 +53,7 @@
 ### BREAKING CHANGES
 
 - minimal supported version of `NodeJs` is `20.19`
-- minimal supported version of `@angular` is `20.0.0`
+- minimal supported version of `@angular` is `21.1.5`
 - minimal supported version of `@anglr/common` is `24.2.0`
 - minimal supported version of `@jscrpt/common` is `7.1.0`
 - strict null checks
@@ -66,6 +70,8 @@
    - `initialized` updated to `Signal`
    - removed `isInitialized`, use `initialized`
    - removed `listenTo` method, use `events` property
+   - removed `initOptions` method, now using signal to automatically init options of plugins
+   - removed `initialize` method, now called automatically when options are initialized
    - new `events`property, select public events
 - updated `NgSelectPluginInstances` interface
    - renamed to `SelectPluginInstances`
@@ -75,6 +81,7 @@
 - updated `NgSelectOptions` interface
    - renamed to `SelectOptions`
    - removed `forceValueCheckOnInit` property, no use
+   - removed `autoInitialize` property, now it always happens automatically using signals when `SelectOptions` have been changed
 - updated `NgSelectPluginTypes` interface
    - renamed to `SelectPluginTypes`
 - updated `NgSelectPlugin` interface

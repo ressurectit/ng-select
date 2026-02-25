@@ -1,1 +1,1 @@
-export * from './basicDialogPopup.interface';
+// export * from './basicDialogPopup.interface';

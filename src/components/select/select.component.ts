@@ -1,9 +1,9 @@
-import {Component, ChangeDetectionStrategy, Input, viewChild, ViewContainerRef, Signal, WritableSignal, signal, Inject, Optional, Type, resolveForwardRef, FactoryProvider, effect, forwardRef, Attribute, ElementRef, computed, input, booleanAttribute, InputSignalWithTransform, ComponentRef, DOCUMENT, TemplateRef, contentChild, contentChildren} from '@angular/core';
+import {Component, ChangeDetectionStrategy, Input, viewChild, ViewContainerRef, Signal, WritableSignal, signal, Inject, Optional, Type, resolveForwardRef, FactoryProvider, effect, forwardRef, Attribute, ElementRef, computed, input, booleanAttribute, InputSignalWithTransform, ComponentRef, DOCUMENT, TemplateRef, contentChild, contentChildren, untracked} from '@angular/core';
 import {getHostElement} from '@anglr/common';
 import {isPresent, RecursivePartial, renderToBody} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
-import {Interactions, KeyboardHandler, LiveSearch, NormalState, NormalStateContext, OptionsGatherer, OptionsHandler, PluginDescription, Popup, PopupContext, Positioner, ReadonlyState, SelectApi, SelectCssClasses, SelectEvents, SelectOption, SelectOptions, SelectPlugin, TemplateGatherer, ValueHandler} from '../../interfaces';
+import {InitState, Interactions, KeyboardHandler, LiveSearch, NormalState, NormalStateContext, OptionsGatherer, OptionsHandler, PluginDescription, Popup, PopupContext, Positioner, ReadonlyState, SelectApi, SelectCssClasses, SelectEvents, SelectOption, SelectOptions, SelectPlugin, TemplateGatherer, ValueHandler} from '../../interfaces';
 import {INTERACTIONS_TYPE, KEYBOARD_HANDLER_TYPE, LIVE_SEARCH_TYPE, NORMAL_STATE_TYPE, OPTIONS_HANDLER_TYPE, POPUP_TYPE, POSITIONER_TYPE, READONLY_STATE_TYPE, SELECT_OPTIONS, VALUE_HANDLER_TYPE} from '../../misc/tokens';
 import {SelectPluginType} from '../../misc/enums';
 import {SelectBus, SelectPluginInstances} from '../../misc/classes';
@@ -19,7 +19,6 @@ import {NormalStateTemplate, OptionTemplate} from '../../directives';
  */
 const defaultOptions: Omit<SelectOptions, 'optionsGatherer'|'templateGatherer'> =
 {
-    autoInitialize: true,
     absolute: false,
     multiple: false,
     readonly: false,
@@ -130,49 +129,67 @@ export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements
     };
 
     /**
-     * Subject that holds init state of live search plugin
+     * Signal that holds init state of live search plugin
      */
     protected liveSearchInit: WritableSignal<boolean> = signal(false);
 
     /**
-     * Subject that holds init state of interactions plugin
+     * Signal that holds init state of interactions plugin
      */
     protected interactionsInit: WritableSignal<boolean> = signal(false);
 
     /**
-     * Subject that holds init state of options handler plugin
+     * Signal that holds init state of options handler plugin
      */
     protected optionsHandlerInit: WritableSignal<boolean> = signal(false);
 
     /**
-     * Subject that holds init state of positioner plugin
+     * Signal that holds init state of positioner plugin
      */
     protected positionerInit: WritableSignal<boolean> = signal(false);
 
     /**
-     * Subject that holds init state of keyboard plugin
+     * Signal that holds init state of keyboard plugin
      */
     protected keyboardInit: WritableSignal<boolean> = signal(false);
 
     /**
-     * Subject that holds init state of value handler plugin
+     * Signal that holds init state of value handler plugin
      */
     protected valueHandlerInit: WritableSignal<boolean> = signal(false);
 
     /**
-     * Subject that holds init state of readonly state plugin
+     * Signal that holds init state of readonly state plugin
      */
     protected readonlyStateInit: WritableSignal<boolean> = signal(false);
 
     /**
-     * Subject that holds init state of normal state plugin
+     * Signal that holds init state of normal state plugin
      */
     protected normalStateInit: WritableSignal<boolean> = signal(false);
 
     /**
-     * Subject that holds init state of popup plugin
+     * Signal that holds init state of popup plugin
      */
     protected popupInit: WritableSignal<boolean> = signal(false);
+
+    /**
+     * Initialization state of all plugin init options
+     */
+    protected optionsInit: Signal<InitState> = computed(() => ({initialized: this.normalStateInit() &&
+                                                                             this.keyboardInit() &&
+                                                                             this.popupInit() &&
+                                                                             this.positionerInit() &&
+                                                                             this.readonlyStateInit() &&
+                                                                             this.valueHandlerInit() &&
+                                                                             this.liveSearchInit() &&
+                                                                             this.interactionsInit() &&
+                                                                             this.optionsHandlerInit()}));
+
+    /**
+     * Information whether is select initialized or not, changes when Select is initialized or reinitialized, if value is false Select was not initialized yet
+     */
+    protected initializedSignal: WritableSignal<boolean> = signal(false);
 
     //######################### protected properties - children #########################
 
@@ -245,15 +262,10 @@ export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements
     /**
      * @inheritdoc
      */
-    public readonly initialized: Signal<boolean> = computed(() => this.normalStateInit() &&
-                                                                  this.keyboardInit() &&
-                                                                  this.popupInit() &&
-                                                                  this.positionerInit() &&
-                                                                  this.readonlyStateInit() &&
-                                                                  this.valueHandlerInit() &&
-                                                                  this.liveSearchInit() &&
-                                                                  this.interactionsInit() &&
-                                                                  this.optionsHandlerInit());
+    public get initialized(): Signal<boolean>
+    {
+        return this.initializedSignal.asReadonly();
+    }
 
     /**
      * @inheritdoc
@@ -281,29 +293,6 @@ export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements
      * Array of all available options for select
      */
     public readonly availableOptions: Signal<readonly SelectOption<TValue>[]|undefined|null> = contentChildren<SelectOption<TValue>>(Option);
-
-    // //######################### public properties - template bindings #########################
-
-    // /**
-    //  * Element used for live search
-    //  */
-    // public liveSearchElement: HTMLElement[][];
-
-    // //######################### public properties - children #########################
-
-    // /**
-    //  * Options children found inside ng-select
-    //  */
-    // @ContentChildren(OptionComponent)
-    // public optionsChildren: QueryList<SelectOption>;
-
-    // //######################### public properties - children #########################
-
-    // /**
-    //  * Options groups children found inside ng-select
-    //  */
-    // @ContentChildren(OptGroupComponent)
-    // public optGroupsChildren: QueryList<SelectOptGroup>;
 
     //######################### constructors #########################
     constructor(protected pluginInstances: SelectPluginInstances,
@@ -408,6 +397,7 @@ export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements
             } as SelectOptions<TValue, TCssClasses>;
         });
 
+        //create and initialize options for static plugins
         effect(async () =>
         {
             const selectOptions = this.selectOptions;
@@ -426,6 +416,7 @@ export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements
             await this.createPlugin(selectOptions.plugins?.valueHandler, SelectPluginType.ValueHandler, valueHandlerContainer, this.valueHandlerInit);
         });
 
+        //create and initialize options for state plugins (normal and readonly)
         effect(() =>
         {
             const readonlyStateContainer = this.readonlyStateContainer();
@@ -446,6 +437,7 @@ export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements
             }
         });
 
+        //create and initialize options for popup plugin, allows absolute positioning
         effect(() =>
         {
             const selectOptions = this.selectOptions;
@@ -466,77 +458,31 @@ export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements
                 renderToBody(document, element, selectOptions.containerElement);
             }
         });
+
+        //initialize plugins when all options are initialized
+        effect(() =>
+        {
+            if(this.optionsInit())
+            {
+                untracked(() =>
+                {
+                    this.pluginInstances.OptionsHandler.initialize();
+                    this.pluginInstances.LiveSearch.initialize();
+                    this.pluginInstances.KeyboardHandler.initialize();
+                    this.pluginInstances.ValueHandler.initialize();
+                    this.pluginInstances.normalState()?.initialize();
+                    this.pluginInstances.readonlyState()?.initialize();
+                    this.pluginInstances.Popup.initialize();
+                    this.pluginInstances.Positioner.initialize();
+                    this.pluginInstances.Interactions.initialize();
+                });
+
+                this.initializedSignal.set(true);
+            }
+        });
     }
 
     //######################### public methods #########################
-
-    // /**
-    //  * Initialize component, automatically called once if not blocked by options
-    //  */
-    // public initialize()
-    // {
-    //     const liveSearchPlugin = this._pluginInstances[LIVE_SEARCH] as LiveSearch;
-    //     this.liveSearchElement = [[liveSearchPlugin.liveSearchElement]];
-
-    //     if(this.selectOptions.absolute)
-    //     {
-    //         this._appendPopupToBody(this._selectOptions.plugins.popup.type);
-    //     }
-
-    //     this._changeDetector.detectChanges();
-
-    //     this.selectOptions.optionsGatherer.initializeGatherer();
-
-    //     this._pluginInstances[LIVE_SEARCH].initialize();
-    //     this._pluginInstances[KEYBOARD_HANDLER].initialize();
-    //     this._pluginInstances[VALUE_HANDLER].initialize();
-    //     this._pluginInstances[NORMAL_STATE]?.initialize();
-    //     this._pluginInstances[READONLY_STATE]?.initialize();
-    //     this._pluginInstances[POPUP].initialize();
-    //     this._pluginInstances[POSITIONER].initialize();
-
-    //     this.isInitialized = true;
-    //     this._initializedSubject.next(true);
-    // }
-
-    // /**
-    //  * Initialize options, automaticaly called during init phase, but can be used to reinitialize SelectOptions
-    //  */
-    // public initOptions()
-    // {
-    //     this.selectOptions.optionsGatherer.SelectPlugins = this._pluginInstances;
-    //     this.selectOptions.optionsGatherer.pluginBus = this._pluginBus;
-    //     this.selectOptions.optionsGatherer.select = this;
-
-    //     const initOptionsPlugin = (pluginKey: string, pluginName: keyof SelectPluginTypes) =>
-    //     {
-    //         if(this._selectOptions.plugins[pluginName])
-    //         {
-    //             this._selectOptions.plugins[pluginName].type = resolveForwardRef(this._selectOptions.plugins[pluginName].type);
-
-    //             if(this._pluginInstances[pluginKey])
-    //             {
-    //                 if(this._selectOptions.plugins && this._selectOptions.plugins[pluginName] && this._selectOptions.plugins[pluginName].options)
-    //                 {
-    //                     this._pluginInstances[pluginKey].options = this._selectOptions.plugins[pluginName].options;
-    //                 }
-
-    //                 this._pluginInstances[pluginKey].initOptions();
-    //             }
-    //         }
-    //     };
-
-    //     if(this._selectOptions.plugins)
-    //     {
-    //         initOptionsPlugin(NORMAL_STATE, 'normalState');
-    //         initOptionsPlugin(KEYBOARD_HANDLER, 'keyboardHandler');
-    //         initOptionsPlugin(POPUP, 'popup');
-    //         initOptionsPlugin(POSITIONER, 'positioner');
-    //         initOptionsPlugin(READONLY_STATE, 'readonlyState');
-    //         initOptionsPlugin(VALUE_HANDLER, 'valueHandler');
-    //         initOptionsPlugin(LIVE_SEARCH, 'liveSearch');
-    //     }
-    // }
 
     /**
      * @inheritdoc
@@ -549,7 +495,7 @@ export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements
     /**
      * @inheritdoc
      */
-    public execute(...actions: SelectAction<TValue>[])
+    public execute(...actions: SelectAction<TValue, TCssClasses>[])
     {
         if(!actions)
         {
@@ -562,7 +508,7 @@ export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements
     /**
      * @inheritdoc
      */
-    public executeAndReturn<TResult>(func: SelectFunction<TResult, TValue>): TResult
+    public executeAndReturn<TResult>(func: SelectFunction<TResult, TValue, TCssClasses>): TResult
     {
         if(!func)
         {

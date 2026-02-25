@@ -8,11 +8,6 @@ import {SelectPluginTypes} from '../selectPluginTypes/selectPluginTypes.interfac
 export interface SelectOptions<TValue = unknown, TCssClasses = SelectCssClasses> extends SelectBusOptions<TValue>
 {
     /**
-     * Indication whether select should be initialized automaticaly during 'initialization' phase
-     */
-    autoInitialize: boolean;
-
-    /**
      * Css classes applied to select component
      */
     cssClasses: TCssClasses;

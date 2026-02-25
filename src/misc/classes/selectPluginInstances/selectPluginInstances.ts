@@ -1,3 +1,5 @@
+import {signal, WritableSignal} from '@angular/core';
+
 import {Interactions, KeyboardHandler, LiveSearch, NormalState, OptionsHandler, Popup, Positioner, ReadonlyState, SelectPlugin, ValueHandler} from '../../../interfaces';
 import {SelectPluginType} from '../../enums';
 
@@ -11,63 +13,65 @@ export class SelectPluginInstances implements Record<SelectPluginType, SelectPlu
     /**
      * Instance of plugin that handles interactions of plugins and select
      */
-    public interactions?: Interactions;
+    public interactions: WritableSignal<Interactions|undefined|null> = signal(null);
 
     /**
      * Instance of plugin that handles keyboard input from user
      */
-    public keyboardHandler?: KeyboardHandler;
+    public keyboardHandler: WritableSignal<KeyboardHandler|undefined|null> = signal(null);
 
     /**
      * Instance of plugin that is used for live search of options
      */
-    public liveSearch?: LiveSearch;
+    public liveSearch: WritableSignal<LiveSearch|undefined|null> = signal(null);
 
     /**
      * Instance of plugin that is used for displaying normal state of selected value
      */
-    public normalState?: NormalState;
+    public normalState: WritableSignal<NormalState|undefined|null> = signal(null);
 
     /**
      * Instance of plugin that is used for handling available options
      */
-    public optionsHandler?: OptionsHandler;
+    public optionsHandler: WritableSignal<OptionsHandler|undefined|null> = signal(null);
 
     /**
      * Instance of plugin that handles displaying popup
      */
-    public popup?: Popup;
+    public popup: WritableSignal<Popup|undefined|null> = signal(null);
 
     /**
      * Instance of plugin that handles positioning of popup
      */
-    public positioner?: Positioner;
+    public positioner: WritableSignal<Positioner|undefined|null> = signal(null);
 
     /**
      * Instance of plugin that is used for displaying readonly state of selected value
      */
-    public readonlyState?: ReadonlyState;
+    public readonlyState: WritableSignal<ReadonlyState|undefined|null> = signal(null);
 
     /**
      * Instance of plugin that is used for storing and handling value of select
      */
-    public valueHandler?: ValueHandler;
+    public valueHandler: WritableSignal<ValueHandler|undefined|null> = signal(null);
 
     /**
      * Instance of plugin that handles interactions of plugins and select
      */
     public get Interactions(): Interactions
     {
-        if(!this.interactions)
+        const interactions = this.interactions();
+
+        if(!interactions)
         {
             throw new Error('SelectPluginInstances: missing plugin instance of Interactions');
         }
 
-        return this.interactions;
+        return interactions;
     }
     public set Interactions(value: Interactions)
     {
-        this.interactions = value;
+        this.interactions.set(value);
     }
 
     /**
@@ -75,16 +79,18 @@ export class SelectPluginInstances implements Record<SelectPluginType, SelectPlu
      */
     public get KeyboardHandler(): KeyboardHandler
     {
-        if(!this.keyboardHandler)
+        const keyboardHandler = this.keyboardHandler();
+
+        if(!keyboardHandler)
         {
             throw new Error('SelectPluginInstances: missing plugin instance of KeyboardHandler');
         }
 
-        return this.keyboardHandler;
+        return keyboardHandler;
     }
     public set KeyboardHandler(value: KeyboardHandler)
     {
-        this.keyboardHandler = value;
+        this.keyboardHandler.set(value);
     }
 
     /**
@@ -92,16 +98,18 @@ export class SelectPluginInstances implements Record<SelectPluginType, SelectPlu
      */
     public get LiveSearch(): LiveSearch
     {
-        if(!this.liveSearch)
+        const liveSearch = this.liveSearch();
+
+        if(!liveSearch)
         {
             throw new Error('SelectPluginInstances: missing plugin instance of LiveSearch');
         }
 
-        return this.liveSearch;
+        return liveSearch;
     }
     public set LiveSearch(value: LiveSearch)
     {
-        this.liveSearch = value;
+        this.liveSearch.set(value);
     }
 
     /**
@@ -109,16 +117,18 @@ export class SelectPluginInstances implements Record<SelectPluginType, SelectPlu
      */
     public get NormalState(): NormalState
     {
-        if(!this.normalState)
+        const normalState = this.normalState();
+
+        if(!normalState)
         {
             throw new Error('SelectPluginInstances: missing plugin instance of NormalState');
         }
 
-        return this.normalState;
+        return normalState;
     }
     public set NormalState(value: NormalState)
     {
-        this.normalState = value;
+        this.normalState.set(value);
     }
 
     /**
@@ -126,16 +136,18 @@ export class SelectPluginInstances implements Record<SelectPluginType, SelectPlu
      */
     public get OptionsHandler(): OptionsHandler
     {
-        if(!this.optionsHandler)
+        const optionsHandler = this.optionsHandler();
+
+        if(!optionsHandler)
         {
             throw new Error('SelectPluginInstances: missing plugin instance of OptionsHandler');
         }
 
-        return this.optionsHandler;
+        return optionsHandler;
     }
     public set OptionsHandler(value: OptionsHandler)
     {
-        this.optionsHandler = value;
+        this.optionsHandler.set(value);
     }
 
     /**
@@ -143,16 +155,18 @@ export class SelectPluginInstances implements Record<SelectPluginType, SelectPlu
      */
     public get Popup(): Popup
     {
-        if(!this.popup)
+        const popup = this.popup();
+
+        if(!popup)
         {
             throw new Error('SelectPluginInstances: missing plugin instance of Popup');
         }
 
-        return this.popup;
+        return popup;
     }
     public set Popup(value: Popup)
     {
-        this.popup = value;
+        this.popup.set(value);
     }
 
     /**
@@ -160,16 +174,18 @@ export class SelectPluginInstances implements Record<SelectPluginType, SelectPlu
      */
     public get Positioner(): Positioner
     {
-        if(!this.positioner)
+        const positioner = this.positioner();
+
+        if(!positioner)
         {
             throw new Error('SelectPluginInstances: missing plugin instance of Positioner');
         }
 
-        return this.positioner;
+        return positioner;
     }
     public set Positioner(value: Positioner)
     {
-        this.positioner = value;
+        this.positioner.set(value);
     }
 
     /**
@@ -177,16 +193,18 @@ export class SelectPluginInstances implements Record<SelectPluginType, SelectPlu
      */
     public get ReadonlyState(): ReadonlyState
     {
-        if(!this.readonlyState)
+        const readonlyState = this.readonlyState();
+
+        if(!readonlyState)
         {
             throw new Error('SelectPluginInstances: missing plugin instance of ReadonlyState');
         }
 
-        return this.readonlyState;
+        return readonlyState;
     }
     public set ReadonlyState(value: ReadonlyState)
     {
-        this.readonlyState = value;
+        this.readonlyState.set(value);
     }
 
     /**
@@ -194,15 +212,17 @@ export class SelectPluginInstances implements Record<SelectPluginType, SelectPlu
      */
     public get ValueHandler(): ValueHandler
     {
-        if(!this.valueHandler)
+        const valueHandler = this.valueHandler();
+
+        if(!valueHandler)
         {
             throw new Error('SelectPluginInstances: missing plugin instance of ValueHandler');
         }
 
-        return this.valueHandler;
+        return valueHandler;
     }
     public set ValueHandler(value: ValueHandler)
     {
-        this.valueHandler = value;
+        this.valueHandler.set(value);
     }
 }

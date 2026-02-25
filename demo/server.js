@@ -9,6 +9,7 @@ import yargs from 'yargs/yargs';
 import {hideBin} from 'yargs/helpers';
 import {extendConnectUse} from 'nodejs-connect-extensions';
 import dotenv from 'dotenv';
+import mime from 'mime-types';
 
 const consoleLog = console.log;
 const consoleError = console.error;
@@ -70,13 +71,15 @@ async function run()
         port = 8880;
     }
 
+    server.get('/consoleLog', (_, res) => res.send(logs));
+
     function error(err, req, res)
     {
         if(err.code == 'ECONNREFUSED' || err.code == 'ECONNRESET')
         {
             res.writeHead?.(503,
             {
-                'Content-Type': 'text/plain'
+                'Content-Type': 'text/plain',
             });
     
             res.end('Remote server is offline.');
@@ -86,7 +89,7 @@ async function run()
     
         res.writeHead?.(504,
         {
-            'Content-Type': 'text/plain'
+            'Content-Type': 'text/plain',
         });
     
         res.end('Failed to proxy request.');
@@ -109,12 +112,13 @@ async function run()
     server.set('views', wwwroot);
     
     // Serve static files from /browser
-    server.get('*.*', express.static(wwwroot, 
+    server.use(express.static(wwwroot, 
     {
         maxAge: '1y',
         setHeaders: (res, path) => 
         {
-            if (express.static.mime.lookup(path) === 'text/html') 
+            if (mime.lookup(path) === 'text/html' ||
+                path.indexOf('configBrowserOverride') >= 0) 
             {
                 // Skip cache on html to load new builds.
                 res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
@@ -132,7 +136,7 @@ async function run()
     }
     else
     {
-        server.get('/*', (_, res) =>
+        server.use((_, res) =>
         {
             res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
             res.setHeader('Expires', '-1');
@@ -143,10 +147,24 @@ async function run()
     }
     
     //create node.js http server and listen on port
-    server.listen(port, () =>
+    const runningServer = server.listen(port, () =>
     {
         console.log(`Listening on port ${port} => http://localhost:${port}`);
     });
+
+    process.on('SIGINT', shutdown);
+
+    // Do graceful shutdown
+    function shutdown()
+    {
+        console.log('Shutting down server!');
+
+        runningServer.close(() =>
+        {
+            console.log('Server has stopped, closing application');
+            process.exit();
+        });
+    }
 }
 
 run();

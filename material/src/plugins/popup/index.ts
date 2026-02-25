@@ -1,2 +1,1 @@
-export * from './dialog/dialogPopup.interface';
-export * from './virtualEdit/virtualEditPopup.interface';
+export const z = 1000;

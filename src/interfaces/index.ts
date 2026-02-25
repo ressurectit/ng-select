@@ -1,3 +1,4 @@
+export * from './initState/initState.interface';
 export * from './normalStateContext/normalStateContext.interface';
 export * from './optionsGatherer/optionsGatherer.interface';
 export * from './pluginDescription/pluginDescription.interface';

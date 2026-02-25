@@ -1,28 +1,28 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {ScrollingModule} from '@angular/cdk/scrolling';
+// import {NgModule} from '@angular/core';
+// import {CommonModule} from '@angular/common';
+// import {ScrollingModule} from '@angular/cdk/scrolling';
 
-import {VirtualEditPopupComponent} from '../plugins/popup/virtualEdit/virtualEditPopup.component';
+// import {VirtualEditPopupComponent} from '../plugins/popup/virtualEdit/virtualEditPopup.component';
 
-/**
- * Module for VirtualEditPopup components, can also by used for non edit version
- */
-@NgModule(
-{
-    imports:
-    [
-        CommonModule,
-        ScrollingModule
-    ],
-    declarations:
-    [
-        VirtualEditPopupComponent
-    ],
-    exports:
-    [
-        VirtualEditPopupComponent
-    ]
-})
-export class VirtualEditPopupModule
-{
-}
+// /**
+//  * Module for VirtualEditPopup components, can also by used for non edit version
+//  */
+// @NgModule(
+// {
+//     imports:
+//     [
+//         CommonModule,
+//         ScrollingModule
+//     ],
+//     declarations:
+//     [
+//         VirtualEditPopupComponent
+//     ],
+//     exports:
+//     [
+//         VirtualEditPopupComponent
+//     ]
+// })
+// export class VirtualEditPopupModule
+// {
+// }

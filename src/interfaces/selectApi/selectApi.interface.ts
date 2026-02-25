@@ -29,16 +29,6 @@ export interface SelectApi<TValue = unknown, TCssClasses = SelectCssClasses>
     readonly events: SelectEvents;
 
     /**
-     * Initialize component, automatically called once if not blocked by options
-     */
-    initialize(): void;
-
-    /**
-     * Initialize options, automaticaly called during init phase, but can be used to reinitialize SelectOptions
-     */
-    initOptions(): void;
-
-    /**
      * Gets instance of plugin by its type
      * @param pluginType - Type of plugin
      */
@@ -57,11 +47,11 @@ export interface SelectApi<TValue = unknown, TCssClasses = SelectCssClasses>
      * Executes actions on Select
      * @param actions - Array of actions that are executed over Select
      */
-    execute(...actions: SelectAction<TValue>[]): void;
+    execute(...actions: SelectAction<TValue, TCssClasses>[]): void;
 
     /**
      * Executes function on Select and returns result
      * @param func - Function that is executed and its result is returned
      */
-    executeAndReturn<TResult>(func: SelectFunction<TResult, TValue>): TResult;
+    executeAndReturn<TResult>(func: SelectFunction<TResult, TValue, TCssClasses>): TResult;
 }
