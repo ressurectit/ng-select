@@ -10,5 +10,5 @@ export interface OptionsGatherer<TValue = unknown>
     /**
      * Array of all available options for select
      */
-    readonly availableOptions: Signal<SelectOption<TValue>[]|undefined|null>;
+    readonly availableOptions: Signal<readonly SelectOption<TValue>[]|undefined|null>;
 }

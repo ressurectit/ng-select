@@ -35,6 +35,12 @@
 - new `provideLiveSearchType` provider function, that provides type of live search that will be used for select globally
 - new `provideInteractionsType` provider function, that provides type of interactions that will be used for select globally
 - new `provideOptionsHandlerType` provider function, that provides type of options handler that will be used for select globally
+- new `OptionTemplate` directive, that is used for obtaining template for option in popup
+   - **properties**
+      - `template` instance of template for options in popup
+- new `NormalStateTemplate` directive, that is used for obtaining template for normal state
+   - **properties**
+      - `template` instance of template for options in normal state
 - updated `SelectPluginTypes` interface
    - **new properties**
       - `Interactions` handles interactions of plugins and select

@@ -1,16 +1,18 @@
-import {Component, ChangeDetectionStrategy, Input, viewChild, ViewContainerRef, Signal, WritableSignal, signal, Inject, Optional, Type, resolveForwardRef, FactoryProvider, effect, forwardRef, Attribute, ElementRef, computed} from '@angular/core';
-import {isPresent, RecursivePartial} from '@jscrpt/common';
+import {Component, ChangeDetectionStrategy, Input, viewChild, ViewContainerRef, Signal, WritableSignal, signal, Inject, Optional, Type, resolveForwardRef, FactoryProvider, effect, forwardRef, Attribute, ElementRef, computed, input, booleanAttribute, InputSignalWithTransform, ComponentRef, DOCUMENT, TemplateRef, contentChild, contentChildren} from '@angular/core';
+import {getHostElement} from '@anglr/common';
+import {isPresent, RecursivePartial, renderToBody} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
-import {Interactions, KeyboardHandler, LiveSearch, NormalState, OptionsHandler, PluginDescription, Popup, Positioner, ReadonlyState, SelectApi, SelectCssClasses, SelectOptions, SelectPlugin, ValueHandler} from '../../interfaces';
+import {Interactions, KeyboardHandler, LiveSearch, NormalState, NormalStateContext, OptionsGatherer, OptionsHandler, PluginDescription, Popup, PopupContext, Positioner, ReadonlyState, SelectApi, SelectCssClasses, SelectEvents, SelectOption, SelectOptions, SelectPlugin, TemplateGatherer, ValueHandler} from '../../interfaces';
 import {INTERACTIONS_TYPE, KEYBOARD_HANDLER_TYPE, LIVE_SEARCH_TYPE, NORMAL_STATE_TYPE, OPTIONS_HANDLER_TYPE, POPUP_TYPE, POSITIONER_TYPE, READONLY_STATE_TYPE, SELECT_OPTIONS, VALUE_HANDLER_TYPE} from '../../misc/tokens';
 import {SelectPluginType} from '../../misc/enums';
 import {SelectBus, SelectPluginInstances} from '../../misc/classes';
 import {BasicPositionerComponent, BasicValueHandlerComponent, NoInteractionsComponent, NoLiveSearchComponent, NoOptionsHandlerComponent, SimpleKeyboardHandlerComponent, SimpleNormalStateComponent, SimplePopupComponent} from '../../plugins';
 import {CopyOptionsAsSignal} from '../../decorators';
+import {SelectAction, SelectFunction} from '../../misc/types';
+import {NormalStateTemplate, OptionTemplate} from '../../directives';
 
-//TODO - dynamic change of absolute popup
-//TODO - dynamic change of options gatherer destroy called properly ?
+//TODO: optimize options change detection, currently it is based on reference change, but it could be optimized by checking only changed properties, or by using signals for options properties
 
 /**
  * Default 'SelectOptions'
@@ -102,9 +104,14 @@ const defaultOptions: Omit<SelectOptions, 'optionsGatherer'|'templateGatherer'> 
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements SelectApi<TValue, TCssClasses>
+export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements SelectApi<TValue, TCssClasses>, OptionsGatherer<TValue>, TemplateGatherer
 {
     //######################### protected fields #########################
+
+    /**
+     * Instance of popup component used for positioning over page body when absolute option is true
+     */
+    protected popupComponentRef: ComponentRef<Popup>|undefined|null;
 
     /**
      * Object storing current used plugin type
@@ -167,51 +174,6 @@ export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements
      */
     protected popupInit: WritableSignal<boolean> = signal(false);
 
-    // /**
-    //  * Subject used for indication that Select was initialized
-    //  */
-    // protected _initializedSubject: WritableSignal<boolean> = signal(false);
-
-    // /**
-    //  * Occurs when array of provided options has changed
-    //  */
-    // protected _optionsChange: EventEmitter<void> = new EventEmitter<void>();
-
-    // /**
-    //  * Occurs when array of visible, displayed options has changed
-    //  */
-    // protected _availableOptionsChange: EventEmitter<void> = new EventEmitter<void>();
-
-    // /**
-    //  * Array of available options to be displayed
-    //  */
-    // protected _availableOptions: SelectOption<TValue>[] = [];
-
-    // /**
-    //  * Live search plugin currently used in Select
-    //  */
-    // protected _liveSearch: LiveSearch;
-
-    // /**
-    //  * Subscription for changes of live search value
-    //  */
-    // protected _searchValueChangeSubscription: Subscription;
-
-    // /**
-    //  * Instance of component ref for absolute popup
-    //  */
-    // protected _absolutePopup: ComponentRef<Popup>;
-
-    // /**
-    //  * Instance of type that is used as absolute popup
-    //  */
-    // protected _absolutePopupType: Type<Popup>;
-
-    // /**
-    //  * Instance of html element that is used
-    //  */
-    // protected _absolutePopupElement: HTMLElement;
-
     //######################### protected properties - children #########################
 
     /**
@@ -268,94 +230,57 @@ export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements
     @Input()
     public selectOptions: SelectOptions<TValue, TCssClasses>;
 
-    // /**
-    //  * Indication whether should be Select disabled or not
-    //  */
-    // public disabled: InputSignal<boolean> = input(false);
+    /**
+     * Indication whether should be Select disabled or not
+     */
+    public disabled: InputSignalWithTransform<boolean, string | boolean> = input<boolean, boolean|string>(false, {transform: booleanAttribute});
 
-    // /**
-    //  * Indication whether should be Select readonly or not
-    //  */
-    // public readonly: InputSignal<boolean> = input(false);
+    /**
+     * Indication whether should be Select readonly or not
+     */
+    public readonly: InputSignalWithTransform<boolean, string | boolean> = input<boolean, boolean|string>(false, {transform: booleanAttribute});
 
-    // //######################### public properties - implementation of Select #########################
+    //######################### public properties - implementation of SelectApi #########################
 
-    // /**
-    //  * Occurs every time when Select is initialized or reinitialized, if value is false Select was not initialized yet
-    //  */
-    // public get initialized(): Observable<boolean>
-    // {
-    //     return this._initializedSubject.asObservable();
-    // }
+    /**
+     * @inheritdoc
+     */
+    public readonly initialized: Signal<boolean> = computed(() => this.normalStateInit() &&
+                                                                  this.keyboardInit() &&
+                                                                  this.popupInit() &&
+                                                                  this.positionerInit() &&
+                                                                  this.readonlyStateInit() &&
+                                                                  this.valueHandlerInit() &&
+                                                                  this.liveSearchInit() &&
+                                                                  this.interactionsInit() &&
+                                                                  this.optionsHandlerInit());
 
-    // /**
-    //  * Gets current state of initialization
-    //  */
-    // public isInitialized: boolean = false;
+    /**
+     * @inheritdoc
+     */
+    public get events(): SelectEvents
+    {
+        return this.bus;
+    }
 
-    // //######################### public properties - implementation of TemplateGatherer #########################
+    //######################### public properties - implementation of TemplateGatherer #########################
 
-    // /**
-    //  * Template used within normal state
-    //  */
-    // @ContentChild('normalStateTemplate')
-    // public normalStateTemplate: TemplateRef<NormalStateContext>;
+    /**
+     * @inheritdoc
+     */
+    public readonly normalStateTemplate: Signal<TemplateRef<NormalStateContext>|undefined|null> = contentChild(NormalStateTemplate, {read: TemplateRef});
 
-    // /**
-    //  * Template that is used within Popup as option
-    //  * @internal
-    //  */
-    // @ContentChild('optionTemplate')
-    // public optionTemplate?: TemplateRef<PopupContext>;
+    /**
+     * @inheritdoc
+     */
+    public readonly optionTemplate: Signal<TemplateRef<PopupContext>|undefined|null> = contentChild(OptionTemplate, {read: TemplateRef});
 
-    // //######################### public properties - implementation of OptionsGatherer #########################
+    //######################### public properties - implementation of OptionsGatherer #########################
 
-    // /**
-    //  * Array of provided options for select
-    //  */
-    // public get options(): SelectOption<TValue>[]
-    // {
-    //     return this.optionsChildren.toArray();
-    // }
-
-    // /**
-    //  * Occurs when array of provided options has changed
-    //  */
-    // public get optionsChange(): EventEmitter<void>
-    // {
-    //     return this._optionsChange;
-    // }
-
-    // /**
-    //  * Array of visible, displayed options for select
-    //  */
-    // public get availableOptions(): SelectOption<TValue>[]
-    // {
-    //     return this._availableOptions;
-    // }
-
-    // /**
-    //  * Occurs when array of visible, displayed options has changed
-    //  */
-    // public get availableOptionsChange(): EventEmitter<void>
-    // {
-    //     return this._availableOptionsChange;
-    // }
-
-    // /**
-    //  * Select plugin instances available for gatherer
-    //  */
-    // public SelectPlugins: SelectPluginInstances;
-
-    // /**
-    //  * Plugin bus used for inter plugin shared events
-    //  */
-    // public pluginBus: PluginBus<TValue>;
-
-    // /**
-    //  * Select element that implements default gatherers
-    //  */
-    // public select: Select<TValue>;
+    /**
+     * Array of all available options for select
+     */
+    public readonly availableOptions: Signal<readonly SelectOption<TValue>[]|undefined|null> = contentChildren<SelectOption<TValue>>(Option);
 
     // //######################### public properties - template bindings #########################
 
@@ -384,8 +309,7 @@ export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements
     constructor(protected pluginInstances: SelectPluginInstances,
                 protected bus: SelectBus<TValue>,
                 element: ElementRef<HTMLElement>,
-                @Attribute('readonly') readonly?: string|null,
-                @Attribute('disabled') disabled?: string|null,
+                @Inject(DOCUMENT) document: HTMLDocument,
                 @Attribute('multiple') multiple?: string|null,
                 @Inject(NORMAL_STATE_TYPE) @Optional() normalStateType?: Type<NormalState>|null,
                 @Inject(KEYBOARD_HANDLER_TYPE) @Optional() keyboardHandlerType?: Type<KeyboardHandler>|null,
@@ -398,8 +322,7 @@ export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements
                 @Inject(OPTIONS_HANDLER_TYPE) @Optional() optionsHandlerType?: Type<OptionsHandler>|null,
                 @Inject(SELECT_OPTIONS) @Optional() options?: RecursivePartial<SelectOptions<TValue, TCssClasses>>|null,)
     {
-        //at least on of following is present (value is not important)
-        const readonlyDefault = isPresent(readonly) || isPresent(disabled);
+        //is present (value is not important)
         const multipleDefault = isPresent(multiple);
         const opts: RecursivePartial<SelectOptions<TValue, TCssClasses>> = deepCopyWithArrayOverride({}, options);
 
@@ -468,13 +391,22 @@ export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements
             defaultOptions as SelectOptions<TValue, TCssClasses>,
             <RecursivePartial<SelectOptions<TValue>>>
             {
-                readonly: readonlyDefault,
                 multiple: multipleDefault,
             },
             opts);
 
         bus.selectElement.set(element);
         bus.selectOptions = computed(() => this.selectOptions);
+
+        //dynamic update of readonly state in options
+        effect(() =>
+        {
+            this.selectOptions =
+            <RecursivePartial<SelectOptions<TValue>>>
+            {
+                readonly: this.readonly() || this.disabled(),
+            } as SelectOptions<TValue, TCssClasses>;
+        });
 
         effect(async () =>
         {
@@ -522,208 +454,21 @@ export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements
             this.destroyPlugin(SelectPluginType.Popup, popupContainer, this.popupInit);
             this.createPlugin(this.selectOptions.plugins?.popup, SelectPluginType.Popup, this.popupContainer(), this.popupInit);
 
-            if(selectOptions.absolute)
+            if(selectOptions.absolute && this.popupComponentRef)
             {
-                //TODO: position absolute popup properly
+                const element = getHostElement(this.popupComponentRef);
+
+                if(!element)
+                {
+                    throw new Error('Could not get element of popup component');
+                }
+
+                renderToBody(document, element, selectOptions.containerElement);
             }
         });
     }
 
-    // //######################### public methods - implementation of OnChanges #########################
-
-    // /**
-    //  * Called when input value changes
-    //  */
-    // public ngOnChanges(changes: SimpleChanges): void
-    // {
-    //     const updateReadonly = (state: boolean, firstChange: boolean) =>
-    //     {
-    //         //update options
-    //         this.selectOptions.readonly = state;
-
-    //         if(!firstChange)
-    //         {
-    //             this.initOptions();
-    //             this.initialize();
-    //         }
-    //     };
-
-    //     if(nameof<SelectComponent<TValue>>('disabled') in changes && isBoolean(this.disabled))
-    //     {
-    //         updateReadonly(this.disabled, changes[nameof<SelectComponent<TValue>>('disabled')].firstChange);
-    //     }
-
-    //     if(nameof<SelectComponent<TValue>>('readonly') in changes && isBoolean(this.readonly))
-    //     {
-    //         updateReadonly(this.readonly, changes[nameof<SelectComponent<TValue>>('readonly')].firstChange);
-    //     }
-    // }
-
-    //######################### public methods - implementation of OnInit #########################
-
-    /**
-     * Initialize component
-     */
-    public ngOnInit()
-    {
-        // this.initOptions();
-    }
-
-    //######################### public methods - implementation of AfterViewInit #########################
-
-    /**
-     * Called when view was initialized
-     */
-    public ngAfterViewInit()
-    {
-        // this._availableOptions = this.options;
-
-        // this.optionsChildren.changes.subscribe(() =>
-        // {
-        //     this._availableOptions = this.options;
-        //     this._optionsChange.emit();
-        //     this._availableOptionsChange.emit();
-        // });
-
-        // if(this._selectOptions.autoInitialize)
-        // {
-        //     this.initialize();
-        // }
-    }
-
-    // //######################### public methods - implementation of OnDestroy #########################
-
-    // /**
-    //  * Called when component is destroyed
-    //  */
-    // public ngOnDestroy()
-    // {
-    //     this._searchValueChangeSubscription?.unsubscribe();
-    //     this._searchValueChangeSubscription = null;
-
-    //     this.selectOptions.optionsGatherer?.destroyGatherer();
-
-    //     this._destroyAbsolutePopup();
-    // }
-
-    // //######################### public methods - implementation of OptionsGatherer #########################
-
-    // /**
-    //  * Initialize gatherer during initialization phase
-    //  */
-    // public initializeGatherer(): void
-    // {
-    //     const liveSearch = this._pluginInstances[LIVE_SEARCH] as LiveSearch;
-
-    //     if(this._liveSearch && this._liveSearch != liveSearch)
-    //     {
-    //         this._searchValueChangeSubscription.unsubscribe();
-    //         this._searchValueChangeSubscription = null;
-
-    //         this._liveSearch = null;
-    //     }
-
-    //     if(!this._liveSearch)
-    //     {
-    //         this._liveSearch = liveSearch;
-
-    //         this._searchValueChangeSubscription = this._liveSearch.searchValueChange.subscribe(() =>
-    //         {
-    //             if(!this._liveSearch.searchValue)
-    //             {
-    //                 this._availableOptions = this.options;
-    //                 this._availableOptionsChange.emit();
-
-    //                 return;
-    //             }
-
-    //             this._availableOptions = this.options.filter(this.selectOptions.liveSearchFilter(this._liveSearch.searchValue, this.selectOptions.normalizer));
-    //             this._availableOptionsChange.emit();
-    //         });
-    //     }
-    // }
-
-    // /**
-    //  * Called when gatherer needs to be destroyed
-    //  */
-    // public destroyGatherer(): void
-    // {
-    // }
-
-    // //######################### public methods - template bindings #########################
-
-    // /**
-    //  * Sets normal state component
-    //  * @param normalState - Created normal state that is rendered
-    //  * @internal
-    //  */
-    // public setNormalStateComponent(normalState: NormalState)
-    // {
-    //     this._registerNewPlugin(normalState, NORMAL_STATE, 'normalState');
-    // }
-
-    // /**
-    //  * Sets keyboard handler component
-    //  * @param keyboardHandler - Created keyboard handler that is rendered
-    //  * @internal
-    //  */
-    // public setKeyboardHandlerComponent(keyboardHandler: KeyboardHandler)
-    // {
-    //     this._registerNewPlugin(keyboardHandler, KEYBOARD_HANDLER, 'keyboardHandler');
-    // }
-
-    // /**
-    //  * Sets popup component
-    //  * @param popup - Created popup that is rendered
-    //  * @internal
-    //  */
-    // public setPopupComponent(popup: Popup)
-    // {
-    //     this._registerNewPlugin(popup, POPUP, 'popup');
-    // }
-
-    // /**
-    //  * Sets positioner component
-    //  * @param positioner - Created positioner that is rendered
-    //  * @internal
-    //  */
-    // public setPositionerComponent(positioner: Positioner)
-    // {
-    //     this._registerNewPlugin(positioner, POSITIONER, 'positioner');
-    // }
-
-    // /**
-    //  * Sets readonly state component
-    //  * @param readonlyState - Created readonly state that is rendered
-    //  * @internal
-    //  */
-    // public setReadonlyStateComponent(readonlyState: ReadonlyState)
-    // {
-    //     this._registerNewPlugin(readonlyState, READONLY_STATE, 'readonlyState');
-    //     this._pluginInstances[NORMAL_STATE] = this._pluginInstances[READONLY_STATE];
-    // }
-
-    // /**
-    //  * Sets value handler component
-    //  * @param valueHandler - Created value handler that is rendered
-    //  * @internal
-    //  */
-    // public setValueHandlerComponent(valueHandler: ValueHandler<TValue>)
-    // {
-    //     this._registerNewPlugin(valueHandler, VALUE_HANDLER, 'valueHandler');
-    // }
-
-    // /**
-    //  * Sets live search component
-    //  * @param liveSearch - Created live search that is rendered
-    //  * @internal
-    //  */
-    // public setLiveSearchComponent(liveSearch: LiveSearch)
-    // {
-    //     this._registerNewPlugin(liveSearch, LIVE_SEARCH, 'liveSearch');
-    // }
-
-    // //######################### public methods #########################
+    //######################### public methods #########################
 
     // /**
     //  * Initialize component, automatically called once if not blocked by options
@@ -793,110 +538,41 @@ export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements
     //     }
     // }
 
-    // /**
-    //  * Gets instance of plugin by its id
-    //  * @param pluginId - Id of plugin, use constants
-    //  */
-    // public getPlugin<PluginType extends SelectPlugin>(pluginId: string): PluginType
-    // {
-    //     return this._pluginInstances[pluginId] as PluginType;
-    // }
+    /**
+     * @inheritdoc
+     */
+    public getPlugin<PluginInstance extends SelectPlugin>(pluginType: SelectPluginType): PluginInstance
+    {
+        return this.pluginInstances[pluginType] as PluginInstance;
+    }
 
-    // /**
-    //  * Subscribes for event
-    //  * @param eventName - Name of event that should be listened to
-    //  * @param handler - Function used for handling event
-    //  */
-    // public listenTo<TParam = void>(eventName: keyof PluginBusEvents, handler: (data: TParam) => void): Subscription
-    // {
-    //     return this._pluginBus[eventName].subscribe(handler);
-    // }
+    /**
+     * @inheritdoc
+     */
+    public execute(...actions: SelectAction<TValue>[])
+    {
+        if(!actions)
+        {
+            return;
+        }
 
-    // /**
-    //  * Executes actions on Select
-    //  * @param actions - Array of actions that are executed over Select
-    //  */
-    // public execute(...actions: SelectAction<TValue>[])
-    // {
-    //     if(!actions)
-    //     {
-    //         return;
-    //     }
+        actions.forEach(action => action(this));
+    }
 
-    //     actions.forEach(action => action(this));
-    // }
+    /**
+     * @inheritdoc
+     */
+    public executeAndReturn<TResult>(func: SelectFunction<TResult, TValue>): TResult
+    {
+        if(!func)
+        {
+            throw new Error('Function is required');
+        }
 
-    // /**
-    //  * Executes function on Select and returns result
-    //  * @param func - Function that is executed and its result is returned
-    //  */
-    // public executeAndReturn<TResult>(func: SelectFunction<TResult, TValue>): TResult
-    // {
-    //     if(!func)
-    //     {
-    //         return null;
-    //     }
-
-    //     return func(this);
-    // }
+        return func(this);
+    }
 
     // //######################### protected methods #########################
-
-    // /**
-    //  * Appends popup component directly to body, allows absolute positioning over page body
-    //  * @param component - Popup component type to be appended
-    //  */
-    // protected _appendPopupToBody(component: Type<Popup>)
-    // {
-    //     //do not reinitialize if already exists and nothing has changed
-    //     if(this._absolutePopupType == component && this.liveSearchElement[0][0] == this._absolutePopupElement)
-    //     {
-    //         return;
-    //     }
-
-    //     // 0. Destroyes absolute popup if it exists
-    //     this._destroyAbsolutePopup();
-
-    //     if(!component)
-    //     {
-    //         return;
-    //     }
-
-    //     this._absolutePopupType = component;
-    //     this._absolutePopupElement = this.liveSearchElement[0][0];
-
-    //     // 1. Create a component reference from the component
-    //     this._absolutePopup = this._componentFactoryResolver
-    //         .resolveComponentFactory(component)
-    //         .create(this._injector, this.liveSearchElement);
-
-    //     // 2. Attach component to the appRef so that it's inside the ng component tree
-    //     this._appRef.attachView(this._absolutePopup.hostView);
-
-    //     // 3. Get DOM element from component
-    //     const domElem = (this._absolutePopup.hostView as EmbeddedViewRef<any>)
-    //         .rootNodes[0] as HTMLElement;
-
-    //     // 4. Append DOM element to the body
-    //     renderToBody(document, domElem, this._selectOptions.containerElement);
-
-    //     this.setPopupComponent(this._absolutePopup.instance);
-    // }
-
-    // /**
-    //  * Destroyes absolute popup if it exists
-    //  */
-    // protected _destroyAbsolutePopup()
-    // {
-    //     if(this._absolutePopup)
-    //     {
-    //         this._appRef.detachView(this._absolutePopup.hostView);
-    //         this._absolutePopup.destroy();
-    //         this._absolutePopup = null;
-    //         this._absolutePopupType = null;
-    //         this._absolutePopupElement = null;
-    //     }
-    // }
 
     /**
      * Creates plugin
@@ -931,6 +607,11 @@ export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements
             component.changeDetectorRef.detectChanges();
             this.pluginInstances[pluginType] = component.instance;
             newInstance = true;
+
+            if(pluginType == SelectPluginType.Popup)
+            {
+                this.popupComponentRef = component;
+            }
         }
 
         //only call when new instance of plugin was created
@@ -971,6 +652,11 @@ export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements
                             pluginViewContainer: ViewContainerRef,
                             initOptions: WritableSignal<boolean>,): void
     {
+        if(pluginType == SelectPluginType.Popup)
+        {
+            this.popupComponentRef = null;
+        }
+
         pluginViewContainer.clear();
         initOptions.set(false);
         this.pluginTypes[pluginType] = null;

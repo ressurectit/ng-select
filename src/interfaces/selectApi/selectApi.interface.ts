@@ -1,7 +1,5 @@
 import {Signal} from '@angular/core';
 
-import {OptionsGatherer} from '../optionsGatherer/optionsGatherer.interface';
-import {TemplateGatherer} from '../templateGatherer/templateGatherer.interface';
 import {SelectOptions} from '../selectOptions/selectOptions.interface';
 import {SelectPlugin} from '../selectPlugin/selectPlugin.interface';
 import {SelectAction, SelectFunction} from '../../misc/types';
@@ -13,7 +11,7 @@ import {SelectCssClasses} from '../selectCssClasses/selectCssClasses.interface';
 /**
  * Public API for Select
  */
-export interface SelectApi<TValue = unknown, TCssClasses = SelectCssClasses> extends OptionsGatherer<TValue>, TemplateGatherer
+export interface SelectApi<TValue = unknown, TCssClasses = SelectCssClasses>
 {
     /**
      * Gets information whether is select initialized or not, changes when Select is initialized or reinitialized, if value is false Select was not initialized yet
@@ -28,7 +26,7 @@ export interface SelectApi<TValue = unknown, TCssClasses = SelectCssClasses> ext
     /**
      * Select public events, signal based
      */
-    events: SelectEvents;
+    readonly events: SelectEvents;
 
     /**
      * Initialize component, automatically called once if not blocked by options

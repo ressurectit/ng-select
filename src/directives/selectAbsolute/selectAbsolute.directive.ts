@@ -1,6 +1,8 @@
 import {Directive} from '@angular/core';
+import {RecursivePartial} from '@jscrpt/common';
 
 import {Select} from '../../components';
+import {SelectCssClasses, SelectOptions} from '../../interfaces';
 
 /**
  * Directive used for setting absolute option for ng-select
@@ -9,14 +11,15 @@ import {Select} from '../../components';
 {
     selector: 'ng-select[absolute]',
 })
-export class SelectAbsoluteDirective
+export class SelectAbsoluteDirective<TValue = unknown, TCssClasses = SelectCssClasses>
 {
     //######################### constructor #########################
-    constructor(select: Select)
+    constructor(select: Select<TValue, TCssClasses>)
     {
         select.selectOptions =
+        <RecursivePartial<SelectOptions<TValue, TCssClasses>>>
         {
             absolute: true,
-        };
+        } as SelectOptions<TValue, TCssClasses>;
     }
 }
