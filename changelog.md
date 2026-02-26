@@ -53,15 +53,12 @@
 - new `NoOptionsHandler` plugin component, that is options handler that does not modify available options in any way. It just returns them as they are provided from options gatherer
    - **implements**
       - `OptionsHandler`
-- new `OptionsEqualityFunc` function, that represents definition of function used for checking equality of select options
+- new `ValueEqualityFunc` function, that represents definition of function used for checking equality of select value
 - new `ValueExtractorFunc` function, that represents definition of function used for extracting value from select option
 - new `INTERACTIONS_TYPE` injection token for 'Interactions' implementation
 - new `OPTIONS_HANDLER_TYPE` injection token for 'OptionsHandler' implementation
 - new `INTERACTIONS_OPTIONS` injection token for 'InteractionsOptions' implementation
 - new `OPTIONS_HANDLER_OPTIONS` injection token for 'OptionsHandlerOptions' implementation
-- updated `ValueHandlerOptions` interface
-   - **new properties**
-      - `valueExtractor` function used to extract value from option, if not provided, select option value will be used as value
 - updated `SelectPluginTypes` interface
    - **new properties**
       - `Interactions` handles interactions of plugins and select
@@ -139,16 +136,18 @@
    - renamed to `SelectEvents`
 - updated `PluginBus` class
    - renamed to `SelectBus`
+   - new property `selectedOptions` that represents currently selected options of Select
 - updated `NgSelectModule` module
    - renamed to `SelectModule`
 - updated `PluginBusOptions` interface
    - renamed to `SelectBusOptions`
+   - new property `valueExtractor` function used to extract value from option, if not provided, select option value will be used as value
    - removed `useNonExistingAsValue` TODO ?????????????????
    - removed `valueComparer` TODO ?????????????????
    - removed `liveSearchFilter` TODO ?????????????????
    - removed `normalizer` TODO ?????????????????
 - updated `ValueHandler` interface
-   - property `selectedOptions` renamed to `selected`
+   - property `selectedOptions` removed, moved to `SelectBus`
    - removed `valueChange` property use `value` signal
    - updated `value` property, changed to `Signal` value
 - updated `BasicValueHandlerComponent` plugin component

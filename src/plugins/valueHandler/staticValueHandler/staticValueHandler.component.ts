@@ -1,15 +1,14 @@
-import {Component, ElementRef, Inject, inject, Optional, Signal, signal, WritableSignal} from '@angular/core';
-import {RecursivePartial} from '@jscrpt/common';
+import {Component, computed, ElementRef, Inject, inject, Optional, Signal} from '@angular/core';
+import {isBlank, RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
-import {SelectOption, ValueHandler, ValueHandlerOptions} from '../../../interfaces';
+import {ValueHandler, ValueHandlerOptions} from '../../../interfaces';
 import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {VALUE_HANDLER_OPTIONS} from '../../../misc/tokens';
 
 const defaultOptions: ValueHandlerOptions =
 {
-    valueExtractor: (option: SelectOption) => option.value,
 };
 
 /**
@@ -20,27 +19,15 @@ const defaultOptions: ValueHandlerOptions =
     selector: 'static-value-handler',
     template: '',
 })
-export class StaticValueHandler<TValue = unknown> implements ValueHandler<TValue, ValueHandlerOptions<TValue>>
+export class StaticValueHandler<TValue = unknown> implements ValueHandler<TValue, ValueHandlerOptions>
 {
-    //######################### protected fields #########################
-
-    /**
-     * Current selected options of Select
-     */
-    protected selectedSignal: WritableSignal<SelectOption<TValue>|SelectOption<TValue>[]|undefined|null> = signal(null);
-
-    /**
-     * Current selected value of Select
-     */
-    protected valueSignal: WritableSignal<TValue|TValue[]|undefined|null> = signal(null);
-
     //######################### public properties - implementation of SelectPlugin #########################
 
     /**
      * @inheritdoc
      */
     @CopyOptionsAsSignal()
-    public options: ValueHandlerOptions<TValue>;
+    public options: ValueHandlerOptions;
 
     /**
      * @inheritdoc
@@ -62,23 +49,28 @@ export class StaticValueHandler<TValue = unknown> implements ValueHandler<TValue
     /**
      * @inheritdoc
      */
-    public get selected(): Signal<SelectOption<TValue>|SelectOption<TValue>[]|undefined|null>
+    public readonly value: Signal<TValue|TValue[]|undefined|null> = computed(() =>
     {
-        return this.selectedSignal.asReadonly();
-    }
+        const selected = this.pluginBus.selectedOptions();
+        const valueExtractor = this.pluginBus.selectOptions().valueExtractor;
 
-    /**
-     * @inheritdoc
-     */
-    public get value(): Signal<TValue|TValue[]|undefined|null>
-    {
-        return this.valueSignal.asReadonly();
-    }
+        if(isBlank(selected))
+        {
+            return selected;
+        }
+
+        if(Array.isArray(selected))
+        {
+            return selected.map(option => valueExtractor(option));
+        }
+
+        return valueExtractor(selected);
+    });
 
     //######################### constructor #########################
-    constructor(@Inject(VALUE_HANDLER_OPTIONS) @Optional() options?: RecursivePartial<ValueHandlerOptions<TValue>>|null,)
+    constructor(@Inject(VALUE_HANDLER_OPTIONS) @Optional() options?: RecursivePartial<ValueHandlerOptions>|null,)
     {
-        this.options = deepCopyWithArrayOverride(defaultOptions as ValueHandlerOptions<TValue>,
+        this.options = deepCopyWithArrayOverride(defaultOptions as ValueHandlerOptions,
                                                  options);
     }
 
@@ -103,8 +95,7 @@ export class StaticValueHandler<TValue = unknown> implements ValueHandler<TValue
     /**
      * @inheritdoc
      */
-    public setValue(value: TValue|TValue[]|undefined|null): void
+    public setValue(_value: TValue|TValue[]|undefined|null): void
     {
-        this.valueSignal.set(value);
     }
 }

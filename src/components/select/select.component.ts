@@ -23,6 +23,7 @@ const defaultOptions: Omit<SelectOptions, 'optionsGatherer'|'templateGatherer'> 
     multiple: false,
     readonly: false,
     containerElement: null,
+    valueExtractor: (option: SelectOption) => option.value,
     // valueComparer: (source, target) =>
     // {
     //     return source === target;

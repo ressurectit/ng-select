@@ -23,6 +23,11 @@ export class SelectBus<TValue = unknown> implements SelectEvents
      */
     public selectElement: WritableSignal<ElementRef<HTMLElement>|undefined|null> = signal(null);
 
+    /**
+     * Currently selected options of Select
+     */
+    public selectedOptions: WritableSignal<SelectOption<TValue>|SelectOption<TValue>[]|undefined|null> = signal(null);
+
     //######################### public properties - events #########################
 
     /**

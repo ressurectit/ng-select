@@ -69,9 +69,9 @@ export class SelectPluginInstances implements Record<SelectPluginType, SelectPlu
 
         return interactions;
     }
-    public set Interactions(value: Interactions)
+    public set Interactions(value: SelectPlugin)
     {
-        this.interactions.set(value);
+        this.interactions.set(value as Interactions);
     }
 
     /**
@@ -88,9 +88,9 @@ export class SelectPluginInstances implements Record<SelectPluginType, SelectPlu
 
         return keyboardHandler;
     }
-    public set KeyboardHandler(value: KeyboardHandler)
+    public set KeyboardHandler(value: SelectPlugin)
     {
-        this.keyboardHandler.set(value);
+        this.keyboardHandler.set(value as KeyboardHandler);
     }
 
     /**
@@ -107,9 +107,9 @@ export class SelectPluginInstances implements Record<SelectPluginType, SelectPlu
 
         return liveSearch;
     }
-    public set LiveSearch(value: LiveSearch)
+    public set LiveSearch(value: SelectPlugin)
     {
-        this.liveSearch.set(value);
+        this.liveSearch.set(value as LiveSearch);
     }
 
     /**
@@ -126,9 +126,9 @@ export class SelectPluginInstances implements Record<SelectPluginType, SelectPlu
 
         return normalState;
     }
-    public set NormalState(value: NormalState)
+    public set NormalState(value: SelectPlugin)
     {
-        this.normalState.set(value);
+        this.normalState.set(value as NormalState);
     }
 
     /**
@@ -145,9 +145,9 @@ export class SelectPluginInstances implements Record<SelectPluginType, SelectPlu
 
         return optionsHandler;
     }
-    public set OptionsHandler(value: OptionsHandler)
+    public set OptionsHandler(value: SelectPlugin)
     {
-        this.optionsHandler.set(value);
+        this.optionsHandler.set(value as OptionsHandler);
     }
 
     /**
@@ -164,9 +164,9 @@ export class SelectPluginInstances implements Record<SelectPluginType, SelectPlu
 
         return popup;
     }
-    public set Popup(value: Popup)
+    public set Popup(value: SelectPlugin)
     {
-        this.popup.set(value);
+        this.popup.set(value as Popup);
     }
 
     /**
@@ -183,9 +183,9 @@ export class SelectPluginInstances implements Record<SelectPluginType, SelectPlu
 
         return positioner;
     }
-    public set Positioner(value: Positioner)
+    public set Positioner(value: SelectPlugin)
     {
-        this.positioner.set(value);
+        this.positioner.set(value as Positioner);
     }
 
     /**
@@ -202,9 +202,9 @@ export class SelectPluginInstances implements Record<SelectPluginType, SelectPlu
 
         return readonlyState;
     }
-    public set ReadonlyState(value: ReadonlyState)
+    public set ReadonlyState(value: SelectPlugin)
     {
-        this.readonlyState.set(value);
+        this.readonlyState.set(value as ReadonlyState);
     }
 
     /**
@@ -221,8 +221,8 @@ export class SelectPluginInstances implements Record<SelectPluginType, SelectPlu
 
         return valueHandler;
     }
-    public set ValueHandler(value: ValueHandler)
+    public set ValueHandler(value: SelectPlugin)
     {
-        this.valueHandler.set(value);
+        this.valueHandler.set(value as ValueHandler);
     }
 }
