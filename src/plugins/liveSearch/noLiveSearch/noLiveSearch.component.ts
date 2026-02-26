@@ -41,11 +41,4 @@ export class NoLiveSearchComponent implements LiveSearch
     public initOptions(): void
     {
     }
-
-    /**
-     * @inheritdoc
-     */
-    public invalidateVisuals(): void
-    {
-    }
 }

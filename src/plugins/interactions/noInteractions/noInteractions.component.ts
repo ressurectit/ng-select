@@ -41,11 +41,4 @@ export class NoInteractionsComponent implements Interactions
     public initOptions(): void
     {
     }
-
-    /**
-     * @inheritdoc
-     */
-    public invalidateVisuals(): void
-    {
-    }
 }

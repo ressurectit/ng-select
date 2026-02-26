@@ -41,11 +41,4 @@ export class SimplePopupComponent implements Popup
     public initOptions(): void
     {
     }
-
-    /**
-     * @inheritdoc
-     */
-    public invalidateVisuals(): void
-    {
-    }
 }

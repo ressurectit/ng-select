@@ -41,11 +41,4 @@ export class BasicPositionerComponent implements Positioner
     public initOptions(): void
     {
     }
-
-    /**
-     * @inheritdoc
-     */
-    public invalidateVisuals(): void
-    {
-    }
 }

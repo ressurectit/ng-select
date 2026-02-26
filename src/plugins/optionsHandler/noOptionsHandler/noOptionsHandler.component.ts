@@ -1,29 +1,51 @@
-import {Component, ElementRef} from '@angular/core';
+import {Component, computed, ElementRef, inject, Signal} from '@angular/core';
 
-import {OptionsHandler} from '../../../interfaces';
+import {OptionsHandler, OptionsHandlerOptions, SelectOption} from '../../../interfaces';
 import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 
 /**
- *
+ * Options handler that does not modify available options in any way. It just returns them as they are provided from options gatherer
  */
 @Component(
 {
     selector: 'no-options-handler',
     template: '',
 })
-export class NoOptionsHandlerComponent implements OptionsHandler
+export class NoOptionsHandler<TValue = unknown> implements OptionsHandler<TValue, OptionsHandlerOptions>
 {
+    //######################### public properties - implementation of SelectPlugin #########################
+
     /**
      * @inheritdoc
      */
-    public options: unknown;
+    public options: OptionsHandlerOptions = {};
+
+    /**
+     * @inheritdoc
+     */
+    public selectPlugins: SelectPluginInstances = inject(SelectPluginInstances);
+
+    /**
+     * @inheritdoc
+     */
+    public pluginElement: ElementRef<HTMLElement> = inject(ElementRef);
+
+    /**
+     * @inheritdoc
+     */
+    public pluginBus: SelectBus<TValue> = inject(SelectBus);
+
+    //######################### public properties - implementation of OptionsHandler #########################
+
+    /**
+     * @inheritdoc
+     */
+    public readonly availableOptions: Signal<readonly SelectOption<TValue>[]|undefined|null>;
 
     //######################### constructor #########################
-    constructor(public pluginElement: ElementRef<HTMLElement>,
-                public selectPlugins: SelectPluginInstances,
-                public pluginBus: SelectBus<unknown>,)
+    constructor()
     {
-
+        this.availableOptions = computed(() => this.pluginBus.selectOptions().optionsGatherer.availableOptions());
     }
 
     //######################### public methods - implementation of SelectPlugin #########################
@@ -39,13 +61,6 @@ export class NoOptionsHandlerComponent implements OptionsHandler
      * @inheritdoc
      */
     public initOptions(): void
-    {
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public invalidateVisuals(): void
     {
     }
 }

@@ -1,8 +1,7 @@
 import {Component, ChangeDetectionStrategy} from '@angular/core';
 import {ComponentRedirectRoute, ComponentRoute} from '@anglr/common/router';
-import {DebugDataCopyClickModule} from '@anglr/common/material';
 import {WithScrollableCssClass} from '@anglr/common';
-import {SelectModule} from '@anglr/select';
+import {Select, Option} from '@anglr/select';
 
 /**
  * Home component
@@ -14,8 +13,8 @@ import {SelectModule} from '@anglr/select';
     standalone: true,
     imports:
     [
-        SelectModule,
-        DebugDataCopyClickModule,
+        Select,
+        Option,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

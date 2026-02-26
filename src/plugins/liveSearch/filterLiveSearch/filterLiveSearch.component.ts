@@ -41,11 +41,4 @@ export class FilterLiveSearchComponent implements LiveSearch
     public initOptions(): void
     {
     }
-
-    /**
-     * @inheritdoc
-     */
-    public invalidateVisuals(): void
-    {
-    }
 }

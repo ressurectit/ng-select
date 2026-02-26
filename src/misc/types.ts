@@ -14,3 +14,13 @@ export type SelectFunction<TResult = unknown, TValue = unknown, TCssClasses = Se
  * Definition of function used for transformation of select option into display text
  */
 export type DisplayTextFunc<TValue = unknown> = (option: SelectOption<TValue>) => string;
+
+/**
+ * Definition of function used for checking equality of select options
+ */
+export type OptionsEqualityFunc<TValue = unknown> = (value: SelectOption<TValue>, compare: SelectOption<TValue>) => boolean;
+
+/**
+ * Definition of function used for extracting value from select option
+ */
+export type ValueExtractorFunc<TValue = unknown> = (option: SelectOption<TValue>) => TValue;

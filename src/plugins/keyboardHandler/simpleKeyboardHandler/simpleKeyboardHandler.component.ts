@@ -41,11 +41,4 @@ export class SimpleKeyboardHandlerComponent implements KeyboardHandler
     public initOptions(): void
     {
     }
-
-    /**
-     * @inheritdoc
-     */
-    public invalidateVisuals(): void
-    {
-    }
 }

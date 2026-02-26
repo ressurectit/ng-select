@@ -2,7 +2,7 @@ import {InjectionToken, Type} from '@angular/core';
 import {RecursivePartial} from '@jscrpt/common';
 
 import {SelectOptions} from '../interfaces/selectOptions/selectOptions.interface';
-import {Interactions, KeyboardHandler, LiveSearch, NormalState, OptionsHandler, Popup, Positioner, ReadonlyState, ValueHandler} from '../interfaces';
+import {Interactions, InteractionsOptions, KeyboardHandler, KeyboardHandlerOptions, LiveSearch, LiveSearchOptions, NormalState, NormalStateOptions, OptionsHandler, OptionsHandlerOptions, Popup, PopupOptions, Positioner, PositionerOptions, ReadonlyState, ReadonlyStateOptions, ValueHandler, ValueHandlerOptions} from '../interfaces';
 
 /**
  * Injection token for 'SelectOptions'
@@ -53,3 +53,48 @@ export const INTERACTIONS_TYPE: InjectionToken<Type<Interactions>> = new Injecti
  * Injection token for 'OptionsHandler' implementation
  */
 export const OPTIONS_HANDLER_TYPE: InjectionToken<Type<OptionsHandler>> = new InjectionToken<Type<OptionsHandler>>('OPTIONS_HANDLER_TYPE');
+
+/**
+ * Injection token for 'KeyboardHandlerOptions' implementation
+ */
+export const KEYBOARD_HANDLER_OPTIONS: InjectionToken<KeyboardHandlerOptions> = new InjectionToken<KeyboardHandlerOptions>('KEYBOARD_HANDLER_OPTIONS');
+
+/**
+ * Injection token for 'NormalStateOptions' implementation
+ */
+export const NORMAL_STATE_OPTIONS: InjectionToken<NormalStateOptions> = new InjectionToken<NormalStateOptions>('NORMAL_STATE_OPTIONS');
+
+/**
+ * Injection token for 'PopupOptions' implementation
+ */
+export const POPUP_OPTIONS: InjectionToken<PopupOptions> = new InjectionToken<PopupOptions>('POPUP_OPTIONS');
+
+/**
+ * Injection token for 'PositionerOptions' implementation
+ */
+export const POSITIONER_OPTIONS: InjectionToken<PositionerOptions> = new InjectionToken<PositionerOptions>('POSITIONER_OPTIONS');
+
+/**
+ * Injection token for 'ReadonlyStateOptions' implementation
+ */
+export const READONLY_STATE_OPTIONS: InjectionToken<ReadonlyStateOptions> = new InjectionToken<ReadonlyStateOptions>('READONLY_STATE_OPTIONS');
+
+/**
+ * Injection token for 'ValueHandlerOptions' implementation
+ */
+export const VALUE_HANDLER_OPTIONS: InjectionToken<ValueHandlerOptions> = new InjectionToken<ValueHandlerOptions>('VALUE_HANDLER_OPTIONS');
+
+/**
+ * Injection token for 'LiveSearchOptions' implementation
+ */
+export const LIVE_SEARCH_OPTIONS: InjectionToken<LiveSearchOptions> = new InjectionToken<LiveSearchOptions>('LIVE_SEARCH_OPTIONS');
+
+/**
+ * Injection token for 'InteractionsOptions' implementation
+ */
+export const INTERACTIONS_OPTIONS: InjectionToken<InteractionsOptions> = new InjectionToken<InteractionsOptions>('INTERACTIONS_OPTIONS');
+
+/**
+ * Injection token for 'OptionsHandlerOptions' implementation
+ */
+export const OPTIONS_HANDLER_OPTIONS: InjectionToken<OptionsHandlerOptions> = new InjectionToken<OptionsHandlerOptions>('OPTIONS_HANDLER_OPTIONS');

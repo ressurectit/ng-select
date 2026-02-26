@@ -45,6 +45,23 @@
    - **properties**
       - `template` instance of template for options in normal state
 - new `GetPlugin` pipe, that gets instance of select plugin from another plugin instance
+- new `WithDirectAccess` directive, that allows direct access to select properties using inputs, outputs
+- new `OptionsHandler` plugin interface, that represents options handler
+   - **properties**
+      - `availableOptions` array of options that are available for displaying in select
+- new `OptionsHandlerOptions` interface, that represents options for options handler plugin
+- new `NoOptionsHandler` plugin component, that is options handler that does not modify available options in any way. It just returns them as they are provided from options gatherer
+   - **implements**
+      - `OptionsHandler`
+- new `OptionsEqualityFunc` function, that represents definition of function used for checking equality of select options
+- new `ValueExtractorFunc` function, that represents definition of function used for extracting value from select option
+- new `INTERACTIONS_TYPE` injection token for 'Interactions' implementation
+- new `OPTIONS_HANDLER_TYPE` injection token for 'OptionsHandler' implementation
+- new `INTERACTIONS_OPTIONS` injection token for 'InteractionsOptions' implementation
+- new `OPTIONS_HANDLER_OPTIONS` injection token for 'OptionsHandlerOptions' implementation
+- updated `ValueHandlerOptions` interface
+   - **new properties**
+      - `valueExtractor` function used to extract value from option, if not provided, select option value will be used as value
 - updated `SelectPluginTypes` interface
    - **new properties**
       - `Interactions` handles interactions of plugins and select
@@ -56,6 +73,7 @@
 - minimal supported version of `@angular` is `21.1.5`
 - minimal supported version of `@anglr/common` is `24.2.0`
 - minimal supported version of `@jscrpt/common` is `7.1.0`
+- new dependency `lodash-es` minimal supported version is `4.17.23`
 - strict null checks
 - all generic defaults of type `any` changed to `unknown`
 - updated `TemplateGatherer` interface
@@ -129,6 +147,12 @@
    - removed `valueComparer` TODO ?????????????????
    - removed `liveSearchFilter` TODO ?????????????????
    - removed `normalizer` TODO ?????????????????
+- updated `ValueHandler` interface
+   - property `selectedOptions` renamed to `selected`
+   - removed `valueChange` property use `value` signal
+   - updated `value` property, changed to `Signal` value
+- updated `BasicValueHandlerComponent` plugin component
+   - renamed to `StaticValueHandler`
 
 ## Version 15.0.0 (2026-02-10)
 

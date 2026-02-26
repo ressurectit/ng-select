@@ -41,11 +41,4 @@ export class SimpleNormalStateComponent implements NormalState
     public initOptions(): void
     {
     }
-
-    /**
-     * @inheritdoc
-     */
-    public invalidateVisuals(): void
-    {
-    }
 }

@@ -7,7 +7,7 @@ import {InitState, Interactions, KeyboardHandler, LiveSearch, NormalState, Norma
 import {INTERACTIONS_TYPE, KEYBOARD_HANDLER_TYPE, LIVE_SEARCH_TYPE, NORMAL_STATE_TYPE, OPTIONS_HANDLER_TYPE, POPUP_TYPE, POSITIONER_TYPE, READONLY_STATE_TYPE, SELECT_OPTIONS, VALUE_HANDLER_TYPE} from '../../misc/tokens';
 import {SelectPluginType} from '../../misc/enums';
 import {SelectBus, SelectPluginInstances} from '../../misc/classes';
-import {BasicPositionerComponent, BasicValueHandlerComponent, NoInteractionsComponent, NoLiveSearchComponent, NoOptionsHandlerComponent, SimpleKeyboardHandlerComponent, SimpleNormalStateComponent, SimplePopupComponent} from '../../plugins';
+import {BasicPositionerComponent, StaticValueHandler, NoInteractionsComponent, NoLiveSearchComponent, NoOptionsHandler, SimpleKeyboardHandlerComponent, SimpleNormalStateComponent, SimplePopupComponent} from '../../plugins';
 import {CopyOptionsAsSignal} from '../../decorators';
 import {SelectAction, SelectFunction} from '../../misc/types';
 import {NormalStateTemplate, OptionTemplate} from '../../directives';
@@ -63,7 +63,7 @@ const defaultOptions: Omit<SelectOptions, 'optionsGatherer'|'templateGatherer'> 
         },
         optionsHandler: <PluginDescription<OptionsHandler>>
         {
-            type: forwardRef(() => NoOptionsHandlerComponent),
+            type: forwardRef(() => NoOptionsHandler),
         },
         popup: <PluginDescription<Popup>>
         {
@@ -79,7 +79,7 @@ const defaultOptions: Omit<SelectOptions, 'optionsGatherer'|'templateGatherer'> 
         },
         valueHandler: <PluginDescription<ValueHandler>>
         {
-            type: forwardRef(() => BasicValueHandlerComponent),
+            type: forwardRef(() => StaticValueHandler),
         },
     },
 };
@@ -462,7 +462,7 @@ export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements
         //initialize plugins when all options are initialized
         effect(() =>
         {
-            if(this.optionsInit())
+            if(this.optionsInit().initialized)
             {
                 untracked(() =>
                 {

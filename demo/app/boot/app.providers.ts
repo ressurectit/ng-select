@@ -1,11 +1,8 @@
-import {ValueProvider, Provider, EnvironmentProviders, importProvidersFrom, provideZonelessChangeDetection} from '@angular/core';
+import {Provider, EnvironmentProviders} from '@angular/core';
 import {provideClientHydration} from '@angular/platform-browser';
-import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {provideHttpClient, withInterceptors} from '@angular/common/http';
 import {provideRouter, withComponentInputBinding} from '@angular/router';
-import {MatDialogModule} from '@angular/material/dialog';
-import {LocalPermanentStorage} from '@anglr/common/store';
-import {PROGRESS_INTERCEPTOR_PROVIDER, providePosition, provideLoggerConfig, DeveloperConsoleSink, LogLevelEnricher, TimestampEnricher, LogLevel, providePermanentStorage} from '@anglr/common';
-import {MovableTitledDialogComponent, TitledDialogServiceOptions, TitledDialogService, provideConfirmationDialogOptions} from '@anglr/common/material';
+import {providePosition, provideLoggerConfig, DeveloperConsoleSink, LogLevelEnricher, TimestampEnricher, LogLevel, progressInterceptor} from '@anglr/common';
 import {FloatingUiDomPosition} from '@anglr/common/floating-ui';
 
 import {routes} from './app.component.routes';
@@ -23,16 +20,7 @@ export const appProviders: (Provider|EnvironmentProviders)[] =
     provideClientHydration(),
 
     //######################### HTTP CLIENT #########################
-    provideHttpClient(withInterceptorsFromDi(),),
-
-    //######################### ZONELESS #########################
-    provideZonelessChangeDetection(),
-
-    //######################### HTTP INTERCEPTORS #########################
-    PROGRESS_INTERCEPTOR_PROVIDER,
-
-    //######################### PERMANENT STORAGE #########################
-    providePermanentStorage(LocalPermanentStorage),
+    provideHttpClient(withInterceptors([progressInterceptor])),
 
     //######################### LOGGER #########################
     provideLoggerConfig(config => config
@@ -41,27 +29,6 @@ export const appProviders: (Provider|EnvironmentProviders)[] =
         .enrichWith(TimestampEnricher)
         .minimumLevel(LogLevel.Information)
         .messageTemplate('{{timestamp}} [{{logLevel}}] {{messageLog}}')),
-
-    //######################### TITLED DIALOG #########################
-    importProvidersFrom(MatDialogModule),
-    TitledDialogService,
-    <ValueProvider>
-    {
-        provide: TitledDialogServiceOptions,
-        useValue: new TitledDialogServiceOptions(MovableTitledDialogComponent),
-    },
-
-    //######################### CONFIRMATION DIALOG #########################
-    provideConfirmationDialogOptions(
-    {
-        cssClasses:
-        {
-            closeButton: 'btn btn-danger margin-right-small',
-        },
-        confirmationText: 'Prajete si pokračovať?',
-        dialogCancelText: 'Nie',
-        dialogConfirmText: 'Áno',
-    }),
 
     //######################### POSITION #########################
     providePosition(FloatingUiDomPosition),

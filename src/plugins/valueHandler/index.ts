@@ -1,1 +1,1 @@
-export * from './basicValueHandler/basicValueHandler.component';
+export * from './staticValueHandler/staticValueHandler.component';
