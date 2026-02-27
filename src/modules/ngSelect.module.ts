@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 
-import {SelectValuePipe, SelectHasValuePipe} from '../pipes';
+import {DisplayValue, SelectHasValuePipe} from '../pipes';
 import {Option, OptGroup, Select} from '../components';
 
 /**
@@ -13,7 +13,7 @@ import {Option, OptGroup, Select} from '../components';
         Option,
         OptGroup,
         Select,
-        SelectValuePipe,
+        DisplayValue,
         SelectHasValuePipe,
         // SelectAbsoluteDirective,
         // SelectControlValueAccessor,
@@ -24,7 +24,7 @@ import {Option, OptGroup, Select} from '../components';
         Option,
         OptGroup,
         Select,
-        SelectValuePipe,
+        DisplayValue,
         SelectHasValuePipe,
         // NgSelectAbsoluteDirective,
         // NgSelectControlValueAccessor,

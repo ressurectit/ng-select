@@ -9,7 +9,7 @@ import {ɵSelectOption, SelectOptionGroup} from '../../interfaces';
 {
     selector: 'ng-option',
     template: '',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Option<TValue = unknown> implements ɵSelectOption<TValue>
 {

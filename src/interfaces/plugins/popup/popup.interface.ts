@@ -6,6 +6,10 @@ import {SelectPlugin} from '../../selectPlugin/selectPlugin.interface';
  */
 export interface PopupOptions extends PluginOptions
 {
+    // /**
+    //  * Function used for transformation options into display text in options list popup
+    //  */
+    // optionDisplayText: DisplayTextFunc<TValue>;
 }
 
 /**

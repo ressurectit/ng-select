@@ -1,4 +1,4 @@
-import {Component, computed, ElementRef, inject, Signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, ElementRef, inject, Signal} from '@angular/core';
 
 import {OptionsHandler, OptionsHandlerOptions, SelectOption} from '../../../interfaces';
 import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
@@ -10,6 +10,7 @@ import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 {
     selector: 'no-options-handler',
     template: '',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NoOptionsHandler<TValue = unknown> implements OptionsHandler<TValue, OptionsHandlerOptions>
 {

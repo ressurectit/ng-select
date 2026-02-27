@@ -7,10 +7,11 @@ import {InitState, Interactions, KeyboardHandler, LiveSearch, NormalState, Norma
 import {INTERACTIONS_TYPE, KEYBOARD_HANDLER_TYPE, LIVE_SEARCH_TYPE, NORMAL_STATE_TYPE, OPTIONS_HANDLER_TYPE, POPUP_TYPE, POSITIONER_TYPE, READONLY_STATE_TYPE, SELECT_OPTIONS, VALUE_HANDLER_TYPE} from '../../misc/tokens';
 import {SelectPluginType} from '../../misc/enums';
 import {SelectBus, SelectPluginInstances} from '../../misc/classes';
-import {BasicPositionerComponent, StaticValueHandler, NoInteractionsComponent, NoLiveSearchComponent, NoOptionsHandler, SimpleKeyboardHandlerComponent, SimpleNormalStateComponent, SimplePopupComponent} from '../../plugins';
+import {BasicPositionerComponent, StaticValueHandler, NoInteractionsComponent, NoLiveSearchComponent, NoOptionsHandler, SimpleKeyboardHandlerComponent, SimpleNormalState, SimplePopupComponent} from '../../plugins';
 import {CopyOptionsAsSignal} from '../../decorators';
 import {SelectAction, SelectFunction} from '../../misc/types';
 import {NormalStateTemplate, OptionTemplate} from '../../directives';
+import {Option} from '../option/option.component';
 
 //TODO: optimize options change detection, currently it is based on reference change, but it could be optimized by checking only changed properties, or by using signals for options properties
 
@@ -23,6 +24,8 @@ const defaultOptions: Omit<SelectOptions, 'optionsGatherer'|'templateGatherer'> 
     multiple: false,
     readonly: false,
     containerElement: null,
+    placeholder: 'please select value',
+    displaySelectedValue: option => option.text(),
     valueExtractor: (option: SelectOption) => option.value,
     valueComparer: (source, target) => source === target,
     // valueComparer: (source, target) =>
@@ -61,7 +64,7 @@ const defaultOptions: Omit<SelectOptions, 'optionsGatherer'|'templateGatherer'> 
         },
         normalState: <PluginDescription<NormalState>>
         {
-            type: forwardRef(() => SimpleNormalStateComponent),
+            type: forwardRef(() => SimpleNormalState),
         },
         optionsHandler: <PluginDescription<OptionsHandler>>
         {
@@ -77,7 +80,7 @@ const defaultOptions: Omit<SelectOptions, 'optionsGatherer'|'templateGatherer'> 
         },
         readonlyState: <PluginDescription<ReadonlyState>>
         {
-            type: forwardRef(() => SimpleNormalStateComponent),
+            type: forwardRef(() => SimpleNormalState),
         },
         valueHandler: <PluginDescription<ValueHandler>>
         {

@@ -1,4 +1,4 @@
-import {Injectable, EventEmitter, ElementRef, signal, WritableSignal, Signal} from '@angular/core';
+import {Injectable, ElementRef, signal, WritableSignal, Signal} from '@angular/core';
 import {Subject} from 'rxjs';
 
 import {SelectEvents, SelectBusOptions, SelectEvent, SelectOption} from '../../../interfaces';
@@ -31,37 +31,42 @@ export class SelectBus<TValue = unknown> implements SelectEvents
     //######################### public properties - events #########################
 
     /**
-     * Occurs when popup visibility should be toggled
+     * @inheritdoc
      */
     public readonly togglePopup: Subject<SelectEvent> = new Subject<SelectEvent>();
 
     /**
-     * Occurs when popup visibility should be changed
+     * @inheritdoc
      */
-    public readonly showHidePopup: Subject<SelectEvent<boolean>> = new EventEmitter<SelectEvent<boolean>>();
+    public readonly showHidePopup: Subject<SelectEvent<boolean>> = new Subject<SelectEvent<boolean>>();
 
     /**
-     * Occurs when option should be selected
+     * @inheritdoc
      */
-    public readonly optionSelect: Subject<SelectEvent<SelectOption>> = new EventEmitter<SelectEvent<SelectOption>>();
+    public readonly optionSelect: Subject<SelectEvent<SelectOption>> = new Subject<SelectEvent<SelectOption>>();
 
     /**
-     * Occurs when option should be canceled
+     * @inheritdoc
      */
-    public readonly optionCancel: Subject<SelectEvent<SelectOption>> = new EventEmitter<SelectEvent<SelectOption>>();
+    public readonly optionCancel: Subject<SelectEvent<SelectOption>> = new Subject<SelectEvent<SelectOption>>();
 
     /**
-     * Occurs when any part of select gains focus
+     * @inheritdoc
      */
-    public readonly focus: Subject<SelectEvent> = new EventEmitter<SelectEvent>();
+    public readonly focus: Subject<SelectEvent> = new Subject<SelectEvent>();
 
     /**
-     * Occurs when live search should gain focus
+     * @inheritdoc
      */
-    public readonly liveSearchFocus: Subject<SelectEvent> = new EventEmitter<SelectEvent>();
+    public readonly liveSearchFocus: Subject<SelectEvent> = new Subject<SelectEvent>();
 
     /**
-     * Occurs when there is need for updating displayed value
+     * @inheritdoc
      */
-    public readonly updateDisplayedValue: Subject<SelectEvent> = new EventEmitter<SelectEvent>();
+    public readonly updateDisplayedValue: Subject<SelectEvent> = new Subject<SelectEvent>();
+
+    /**
+     * @inheritdoc
+     */
+    public readonly click: Subject<SelectEvent> = new Subject<SelectEvent>();
 }

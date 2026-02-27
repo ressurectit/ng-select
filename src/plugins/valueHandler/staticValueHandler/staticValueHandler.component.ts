@@ -1,4 +1,4 @@
-import {Component, computed, effect, ElementRef, Inject, inject, Optional, Signal, untracked} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, effect, ElementRef, Inject, inject, Optional, Signal, untracked} from '@angular/core';
 import {isBlank, isPresent, RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
@@ -19,6 +19,7 @@ const defaultOptions: ValueHandlerOptions =
 {
     selector: 'static-value-handler',
     template: '',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StaticValueHandler<TValue = unknown> implements ValueHandler<TValue, ValueHandlerOptions>
 {

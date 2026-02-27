@@ -1,4 +1,4 @@
-import {ValueEqualityFunc, ValueExtractorFunc} from '../../misc/types';
+import {DisplayTextFunc, ValueEqualityFunc, ValueExtractorFunc} from '../../misc/types';
 import {OptionsGatherer} from '../optionsGatherer/optionsGatherer.interface';
 import {TemplateGatherer} from '../templateGatherer/templateGatherer.interface';
 
@@ -28,6 +28,16 @@ export interface SelectBusOptions<TValue = unknown>
      * Indication that multiple values can be selected
      */
     multiple: boolean;
+
+    /**
+     * Placeholder text shown when there is no value selected
+     */
+    placeholder: string;
+
+    /**
+     * Function used for transformation of selected option into display text
+     */
+    displaySelectedValue: DisplayTextFunc<TValue>;
 
     // /**
     //  * Indication whether use non existing value in live search as new value, use with dynamic value handler

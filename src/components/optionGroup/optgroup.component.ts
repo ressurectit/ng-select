@@ -10,7 +10,7 @@ import {SelectOptionGroup} from '../../interfaces';
 {
     selector: 'ng-option-group',
     template: '',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OptGroup implements SelectOptionGroup
 {

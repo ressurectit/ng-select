@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 16.0.0 (2026-02-23)
+## Version 16.0.0 (2026-02-27)
 
 ### Features
 
@@ -16,6 +16,7 @@
    - **properties**
       - `sourceElement` html element that caused the event
       - `source` instance of select or select plugin that caused event
+      - `data` data passed with event that occured
 - new `SelectPluginType` enum
    - **values**
       - `Interactions` plugin that handles interactions of plugins and select
@@ -76,6 +77,8 @@
 - new dependency `lodash-es` minimal supported version is `4.17.23`
 - strict null checks
 - all generic defaults of type `any` changed to `unknown`
+- removed `NormalStateTexts` interface
+   - `nothingSelected` property renamed to `placeholder` and moved into `SelectBusOptions`
 - updated `TemplateGatherer` interface
    - all properties are changed to `Signal` with possible `undefined` or `null` value
 - updated `OptionsGatherer` interface
@@ -138,6 +141,7 @@
    - changed `name` to `selectValue`
 - updated `PluginBusEvents` interface
    - renamed to `SelectEvents`
+   - new property `click` occurs when there is click on select itself (normal state)
 - updated `PluginBus` class
    - renamed to `SelectBus`
    - new property `selectedOptions` that represents currently selected options of Select
@@ -146,6 +150,8 @@
 - updated `PluginBusOptions` interface
    - renamed to `SelectBusOptions`
    - new property `valueExtractor` function used to extract value from option, if not provided, select option value will be used as value
+   - new property `placeholder` placeholder text shown when there is no value selected
+   - new property `displaySelectedValue` function used for transformation of selected option into display text
    - removed `useNonExistingAsValue` TODO ?????????????????
    - removed `liveSearchFilter` TODO ?????????????????
    - removed `normalizer` TODO ?????????????????
@@ -155,6 +161,19 @@
    - updated `value` property, changed to `Signal` value
 - updated `BasicValueHandlerComponent` plugin component
    - renamed to `StaticValueHandler`
+- updated `SimpleNormalStateComponent` plugin component
+   - rename to `SimpleNormalState`
+- updated `NormalStateOptions` interface
+   - removed `texts` property, see `NormalStateTexts` for replacement
+   - `optionDisplayText` property moved into `SelectBusOptions` and renamed to `selectedDisplayText`
+- updated `SelectValuePipe` pipe
+   - renamed to `DisplayValue`
+   - changed parameters, now accepts only `value`
+- updated `CssClassesBasicNormalState` interface
+   - renamed to `SimpleNormalStateCssClasses`
+   - property `selectedValue` renamed to `value`
+   - property `selectedCarret` renamed to `carret`
+   - property `normalStateElement` renamed to `containerElement`
 
 ## Version 15.0.0 (2026-02-10)
 

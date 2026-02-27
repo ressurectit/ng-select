@@ -44,4 +44,9 @@ export interface SelectEvents
      * Occurs when there is need for updating displayed value
      */
     readonly updateDisplayedValue: Observable<SelectEvent>;
+
+    /**
+     * Occurs when there is click on select itself (normal state)
+     */
+    readonly click: Observable<SelectEvent>;
 }

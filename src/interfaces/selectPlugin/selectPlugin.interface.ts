@@ -24,7 +24,7 @@ export interface SelectPlugin<TOptions = unknown, TValue = unknown>
     options: TOptions;
 
     /**
-     * Select bus used in Select for counication between plugins and Select
+     * Select bus used in Select for comunication between plugins and Select
      */
     selectBus: SelectBus<TValue>;
 

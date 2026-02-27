@@ -1,0 +1,14 @@
+<ng-template #defaultLook>{{selectBus.selectedOptions() | displayValue | localize}}</ng-template>
+
+<button type="button"
+        [class]="options.cssClasses.containerElement"
+        [disabled]="!!selectBus.selectOptions().readonly"
+        [tooltip]="selectBus.selectedOptions() | displayValue | localize"
+        (click)="click()"
+        (focus)="focus()">
+    <span [class]="options.cssClasses.value">
+        <ng-container *ngTemplateOutlet="selectBus.selectOptions().templateGatherer.normalStateTemplate() || defaultLook; context: {$implicit: this}"/>
+    </span>
+
+    <span [class]="options.cssClasses.carret"></span>
+</button>
