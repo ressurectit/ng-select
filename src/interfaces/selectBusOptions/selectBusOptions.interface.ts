@@ -1,4 +1,4 @@
-import {ValueExtractorFunc} from '../../misc/types';
+import {ValueEqualityFunc, ValueExtractorFunc} from '../../misc/types';
 import {OptionsGatherer} from '../optionsGatherer/optionsGatherer.interface';
 import {TemplateGatherer} from '../templateGatherer/templateGatherer.interface';
 
@@ -38,6 +38,11 @@ export interface SelectBusOptions<TValue = unknown>
      * Function used to extract value from option, if not provided, select option value will be used as value
      */
     valueExtractor: ValueExtractorFunc<TValue>;
+
+    /**
+     * Function used for comparing values of select options
+     */
+    valueComparer: ValueEqualityFunc<TValue>;
 
     // /**
     //  * Method that is used for filtering when live search is running on static data

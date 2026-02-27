@@ -19,7 +19,12 @@ export interface OptionsHandler<TValue = unknown, TOptions extends OptionsHandle
     //######################### properties #########################
 
     /**
-     * Array of options that are available for displaying in select
+     * Array of options that are available for processing
      */
     readonly availableOptions: Signal<readonly SelectOption<TValue>[]|undefined|null>;
+
+    /**
+     * Array of options that are available for listing/displaying
+     */
+    readonly listOptions: Signal<readonly SelectOption<TValue>[]|undefined|null>;
 }

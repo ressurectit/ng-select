@@ -21,7 +21,7 @@ export class SimpleKeyboardHandlerComponent implements KeyboardHandler
     //######################### constructor #########################
     constructor(public pluginElement: ElementRef<HTMLElement>,
                 public selectPlugins: SelectPluginInstances,
-                public pluginBus: SelectBus<unknown>,)
+                public selectBus: SelectBus<unknown>,)
     {
 
     }

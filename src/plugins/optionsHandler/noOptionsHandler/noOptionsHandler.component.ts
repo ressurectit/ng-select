@@ -33,7 +33,7 @@ export class NoOptionsHandler<TValue = unknown> implements OptionsHandler<TValue
     /**
      * @inheritdoc
      */
-    public pluginBus: SelectBus<TValue> = inject(SelectBus);
+    public selectBus: SelectBus<TValue> = inject(SelectBus);
 
     //######################### public properties - implementation of OptionsHandler #########################
 
@@ -42,10 +42,16 @@ export class NoOptionsHandler<TValue = unknown> implements OptionsHandler<TValue
      */
     public readonly availableOptions: Signal<readonly SelectOption<TValue>[]|undefined|null>;
 
+    /**
+     * @inheritdoc
+     */
+    public readonly listOptions: Signal<readonly SelectOption<TValue>[]|undefined|null>;
+
     //######################### constructor #########################
     constructor()
     {
-        this.availableOptions = computed(() => this.pluginBus.selectOptions().optionsGatherer.availableOptions());
+        this.availableOptions = computed(() => this.selectBus.selectOptions().optionsGatherer.availableOptions());
+        this.listOptions = computed(() => this.availableOptions());
     }
 
     //######################### public methods - implementation of SelectPlugin #########################

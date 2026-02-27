@@ -48,7 +48,8 @@
 - new `WithDirectAccess` directive, that allows direct access to select properties using inputs, outputs
 - new `OptionsHandler` plugin interface, that represents options handler
    - **properties**
-      - `availableOptions` array of options that are available for displaying in select
+      - `availableOptions` array of options that are available for processing
+      - `listOptions` array of options that are available for listing/displaying
 - new `OptionsHandlerOptions` interface, that represents options for options handler plugin
 - new `NoOptionsHandler` plugin component, that is options handler that does not modify available options in any way. It just returns them as they are provided from options gatherer
    - **implements**
@@ -59,6 +60,8 @@
 - new `OPTIONS_HANDLER_TYPE` injection token for 'OptionsHandler' implementation
 - new `INTERACTIONS_OPTIONS` injection token for 'InteractionsOptions' implementation
 - new `OPTIONS_HANDLER_OPTIONS` injection token for 'OptionsHandlerOptions' implementation
+- new `compareValueAndOption` function, that compares value and select option
+- new `compareSelectOptions` function, that compares two select options
 - updated `SelectPluginTypes` interface
    - **new properties**
       - `Interactions` handles interactions of plugins and select
@@ -102,6 +105,7 @@
 - updated `NgSelectPlugin` interface
    - renamed to `SelectPlugin`
    - `ngSelectPlugins` renamed to `selectPlugins`
+   - `pluginBus` renamed to `selectBus`
 - updated `NG_SELECT_OPTIONS` injection token
    - renamed to `SELECT_OPTIONS`
 - updated `NgSelectComponent` component
@@ -143,7 +147,6 @@
    - renamed to `SelectBusOptions`
    - new property `valueExtractor` function used to extract value from option, if not provided, select option value will be used as value
    - removed `useNonExistingAsValue` TODO ?????????????????
-   - removed `valueComparer` TODO ?????????????????
    - removed `liveSearchFilter` TODO ?????????????????
    - removed `normalizer` TODO ?????????????????
 - updated `ValueHandler` interface

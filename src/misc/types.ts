@@ -18,7 +18,7 @@ export type DisplayTextFunc<TValue = unknown> = (option: SelectOption<TValue>) =
 /**
  * Definition of function used for checking equality of select value
  */
-export type ValueEqualityFunc<TValue = unknown> = (value: TValue, compare: TValue) => boolean;
+export type ValueEqualityFunc<TValue = unknown> = (source: TValue, target: TValue) => boolean;
 
 /**
  * Definition of function used for extracting value from select option
