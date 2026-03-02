@@ -5,7 +5,7 @@
     {
         @let listOptions = selectPlugins.OptionsHandler.listOptions() | groupedListOptions;
         
-        <div [class]="options.cssClasses.popupDiv">
+        <div [class]="options.cssClasses.popupContainer">
             @for(optionsGroups of listOptions; track optionsGroups)
             {
                 @let group = optionsGroups[1];
@@ -18,11 +18,11 @@
 
                 @for(option of opts; track option)
                 {
-                    <div [class]="options.cssClasses.optionItemDiv"
+                    <div [class]="options.cssClasses.option"
                          [class.selected]="option.selected()"
                          [class.active]="option.active()"
                          (click)="optionClick(option)">
-                        <div [class]="options.cssClasses.optionItemTextDiv">
+                        <div [class]="options.cssClasses.optionText">
                             <ng-container *ngTemplateOutlet="selectBus.selectOptions().templateGatherer.optionTemplate() || defaultOptionLook; context: {$implicit: option, popup: this}"/>
                         </div>
         

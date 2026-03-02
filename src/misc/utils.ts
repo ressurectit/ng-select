@@ -1,7 +1,8 @@
 import {untracked} from '@angular/core';
+import {Subscription} from 'rxjs';
 
 import {SelectOption} from '../interfaces';
-import {SelectBus} from './classes';
+import {SelectBus, SelectPluginInstances} from './classes';
 
 /**
  * Compares value and select option
@@ -23,4 +24,41 @@ export function compareValueAndOption<TValue>(value: TValue, option: SelectOptio
 export function compareSelectOptions<TValue>(source: SelectOption<TValue>, target: SelectOption<TValue>, selectBus: SelectBus<TValue>): boolean
 {
     return untracked(() => selectBus.selectOptions().valueComparer(selectBus.selectOptions().valueExtractor(source), selectBus.selectOptions().valueExtractor(target)));
+}
+
+/**
+ * Toggles popup on click on select
+ * @param selectBus - Instance of select bus
+ * @param subscriptions - Subscriptions to used
+ */
+export function togglePopupOnClick<TValue>(selectBus: SelectBus<TValue>, subscriptions: Subscription): void
+{
+    subscriptions.add(selectBus.click.subscribe(() => selectBus.popupVisible.update(val => !val)));
+}
+
+export function handleOptionClick<TValue>(selectBus: SelectBus<TValue>, selectPlugins: SelectPluginInstances, subscriptions: Subscription): void
+{
+    subscriptions.add(selectBus.optionClick.subscribe(event =>
+    {
+        //handle multiselect
+        if(selectBus.selectOptions().multiple)
+        {
+        }
+        //handle single select
+        else
+        {
+            const selected = (selectPlugins.OptionsHandler.availableOptions() ?? []).find(itm => itm.selected());
+
+            //select new option
+            if(selected !== event.data)
+            {
+                selected?.selected.set(false);
+                event.data?.selected.set(true);
+
+                selectBus.selectedOptions.set(event.data);
+            }
+
+            selectBus.popupVisible.set(false);
+        }
+    }));
 }

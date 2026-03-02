@@ -17,10 +17,10 @@ const defaultOptions: PopupOptions<SimplePopupCssClasses> =
     cssClasses:
     {
         componentElement: 'popup-component',
-        optionItemDiv: '',
-        optionItemTextDiv: '',
+        option: '',
+        optionText: '',
         optionChecked: '',
-        popupDiv: '',
+        popupContainer: '',
     },
     texts:
     {
@@ -46,7 +46,7 @@ const defaultOptions: PopupOptions<SimplePopupCssClasses> =
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SimplePopupComponent<TValue = unknown> implements Popup<TValue, PopupOptions<SimplePopupCssClasses>>
+export class SimplePopup<TValue = unknown> implements Popup<TValue, PopupOptions<SimplePopupCssClasses>>
 {
     //######################### public properties - implementation of SelectPlugin #########################
 

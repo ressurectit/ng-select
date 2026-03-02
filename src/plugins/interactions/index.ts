@@ -1,1 +1,1 @@
-export * from './noInteractions/noInteractions.component';
+export * from './simpleInteractions/simpleInteractions.component';

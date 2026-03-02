@@ -7,7 +7,7 @@ import {InitState, Interactions, KeyboardHandler, LiveSearch, NormalState, Norma
 import {INTERACTIONS_TYPE, KEYBOARD_HANDLER_TYPE, LIVE_SEARCH_TYPE, NORMAL_STATE_TYPE, OPTIONS_HANDLER_TYPE, POPUP_TYPE, POSITIONER_TYPE, READONLY_STATE_TYPE, SELECT_OPTIONS, VALUE_HANDLER_TYPE} from '../../misc/tokens';
 import {SelectPluginType} from '../../misc/enums';
 import {SelectBus, SelectPluginInstances} from '../../misc/classes';
-import {BasicPositionerComponent, StaticValueHandler, NoInteractionsComponent, NoLiveSearchComponent, NoOptionsHandler, SimpleKeyboardHandlerComponent, SimpleNormalState, SimplePopupComponent} from '../../plugins';
+import {BasicPositionerComponent, StaticValueHandler, SimpleInteractions, NoLiveSearchComponent, NoOptionsHandler, SimpleKeyboardHandlerComponent, SimpleNormalState, SimplePopup} from '../../plugins';
 import {CopyOptionsAsSignal} from '../../decorators';
 import {SelectAction, SelectFunction} from '../../misc/types';
 import {NormalStateTemplate, OptionTemplate} from '../../directives';
@@ -52,7 +52,7 @@ const defaultOptions: Omit<SelectOptions, 'optionsGatherer'|'templateGatherer'> 
     {
         interactions: <PluginDescription<Interactions>>
         {
-            type: forwardRef(() => NoInteractionsComponent),
+            type: forwardRef(() => SimpleInteractions),
         },
         keyboardHandler: <PluginDescription<KeyboardHandler>>
         {
@@ -72,7 +72,7 @@ const defaultOptions: Omit<SelectOptions, 'optionsGatherer'|'templateGatherer'> 
         },
         popup: <PluginDescription<Popup>>
         {
-            type: forwardRef(() => SimplePopupComponent),
+            type: forwardRef(() => SimplePopup),
         },
         positioner: <PluginDescription<Positioner>>
         {

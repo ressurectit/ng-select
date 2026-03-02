@@ -32,7 +32,7 @@ export interface PopupOptions<TCssClasses extends PopupCssClasses = PopupCssClas
     // optionDisplayText: DisplayTextFunc<TValue>;
 
     /**
-     * Indication whether are popup options visible, or not, initial value when displaying select
+     * Indication whether are popup options visible, or not, force popup to be visible if set to true
      */
     visible: boolean;
 

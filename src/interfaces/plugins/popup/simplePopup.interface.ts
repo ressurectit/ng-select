@@ -11,14 +11,14 @@ export interface SimplePopupCssClasses extends PopupCssClasses
     componentElement: string;
 
     /**
-     * Css class applied to each option div
+     * Css class applied to each option
      */
-    optionItemDiv: string;
+    option: string;
 
     /**
-     * Css class applied to each option text div
+     * Css class applied to each option text
      */
-    optionItemTextDiv: string;
+    optionText: string;
 
     /**
      * Css class used as icons indicating that option is selected (only when multiple)
@@ -26,7 +26,7 @@ export interface SimplePopupCssClasses extends PopupCssClasses
     optionChecked: string;
 
     /**
-     * Css class applied directly to css popup
+     * Css class applied directly to css popup container
      */
-    popupDiv: string;
+    popupContainer: string;
 }

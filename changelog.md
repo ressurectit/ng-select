@@ -64,6 +64,9 @@
 - new `compareValueAndOption` function, that compares value and select option
 - new `compareSelectOptions` function, that compares two select options
 - new `GroupedListOptions` pipe, that gets list of options grouped
+- new `SimpleInteractions` plugin component, that provides simple interactions within select among plugins
+- new `Interactions` plugin interface, that represents interactions plugin interface
+- new `InteractionsOptions` interface, that represents options for interactions plugin
 - updated `SelectPluginTypes` interface
    - **new properties**
       - `Interactions` handles interactions of plugins and select
@@ -182,6 +185,9 @@
 - updated `CssClassesBasicPopup` interface
     - renamed to `SimplePopupCssClasses`
     - new property `componentElement css class applied to component itself`
+    - renamed `popupDiv` to `popupContainer` 
+    - renamed `optionItemDiv` to `option` 
+    - renamed `optionItemTextDiv` to `optionText` 
 
 ## Version 15.0.0 (2026-02-10)
 
