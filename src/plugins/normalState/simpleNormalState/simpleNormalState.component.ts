@@ -16,6 +16,7 @@ const defaultOptions: NormalStateOptions<SimpleNormalStateCssClasses> =
 {
     cssClasses:
     {
+        componentElement: 'normal-state-component',
         containerElement: 'select-normal-state select-flex-row select-align-items-center',
         value: 'select-flex-1',
         carret: 'fas fa-caret-down',
@@ -29,6 +30,10 @@ const defaultOptions: NormalStateOptions<SimpleNormalStateCssClasses> =
 {
     selector: 'simple-normal-state',
     templateUrl: 'simpleNormalState.component.html',
+    host:
+    {
+        '[class]': 'options.cssClasses.componentElement',
+    },
     imports:
     [
         DisplayValue,

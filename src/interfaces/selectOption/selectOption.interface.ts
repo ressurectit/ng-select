@@ -1,4 +1,4 @@
-import {Signal, WritableSignal} from '@angular/core';
+import {Signal} from '@angular/core';
 
 import {SelectOptionGroup} from '../selectOptionGroup/selectOptionGroup.interface';
 
@@ -21,20 +21,4 @@ export interface SelectOption<TValue = unknown>
      * If specified this option will be displayed in group
      */
     group: Signal<SelectOptionGroup|undefined|null>;
-}
-
-/**
- * Option for ng select
- */
-export interface ɵSelectOption<TValue = unknown> extends SelectOption<TValue>
-{
-    /**
-     * Indication whether is item active
-     */
-    active: WritableSignal<boolean>;
-
-    /**
-     * Indication whether is this option selected
-     */
-    selected: WritableSignal<boolean>;
 }

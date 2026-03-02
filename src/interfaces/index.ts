@@ -12,6 +12,7 @@ export * from './selectEvent/selectEvent.interface';
 export * from './selectEvents/selectEvents.interface';
 export * from './selectOption/selectOption.interface';
 export * from './selectOptionGroup/selectOptionGroup.interface';
+export * from './selectOptionState/selectOptionState.interface';
 export * from './selectOptions/selectOptions.interface';
 export * from './selectPlugin/selectPlugin.interface';
 export * from './selectPluginTypes/selectPluginTypes.interface';

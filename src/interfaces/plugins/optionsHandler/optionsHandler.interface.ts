@@ -2,7 +2,7 @@ import {Signal} from '@angular/core';
 
 import {PluginOptions} from '../../pluginOptions/pluginOptions.interface';
 import {SelectPlugin} from '../../selectPlugin/selectPlugin.interface';
-import {SelectOption} from '../../selectOption/selectOption.interface';
+import {SelectOptionState} from '../../selectOptionState/selectOptionState.interface';
 
 /**
  * Options for options handler plugin
@@ -21,10 +21,10 @@ export interface OptionsHandler<TValue = unknown, TOptions extends OptionsHandle
     /**
      * Array of options that are available for processing
      */
-    readonly availableOptions: Signal<readonly SelectOption<TValue>[]|undefined|null>;
+    readonly availableOptions: Signal<readonly SelectOptionState<TValue>[]|undefined|null>;
 
     /**
      * Array of options that are available for listing/displaying
      */
-    readonly listOptions: Signal<readonly SelectOption<TValue>[]|undefined|null>;
+    readonly listOptions: Signal<readonly SelectOptionState<TValue>[]|undefined|null>;
 }

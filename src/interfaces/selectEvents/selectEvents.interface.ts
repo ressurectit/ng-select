@@ -1,12 +1,12 @@
 import {Observable} from 'rxjs';
 
 import {SelectEvent} from '../selectEvent/selectEvent.interface';
-import {SelectOption} from '../selectOption/selectOption.interface';
+import {SelectOptionState} from '../selectOptionState/selectOptionState.interface';
 
 /**
  * Represents all events implemented by select bus
  */
-export interface SelectEvents
+export interface SelectEvents<TValue = unknown>
 {
     //######################### public properties - events #########################
 
@@ -21,14 +21,9 @@ export interface SelectEvents
     readonly showHidePopup: Observable<SelectEvent<boolean>>;
 
     /**
-     * Occurs when option should be selected
+     * Occurs when option in popup was clicked
      */
-    readonly optionSelect: Observable<SelectEvent<SelectOption>>;
-
-    /**
-     * Occurs when option should be canceled
-     */
-    readonly optionCancel: Observable<SelectEvent<SelectOption>>;
+    readonly optionClick: Observable<SelectEvent<SelectOptionState<TValue>>>;
 
     /**
      * Occurs when any part of select gains focus

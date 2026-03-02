@@ -26,7 +26,7 @@ export interface SelectApi<TValue = unknown, TCssClasses = SelectCssClasses>
     /**
      * Select public events, signal based
      */
-    readonly events: SelectEvents;
+    readonly events: SelectEvents<TValue>;
 
     /**
      * Gets instance of plugin by its type

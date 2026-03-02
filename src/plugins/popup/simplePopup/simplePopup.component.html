@@ -1,0 +1,42 @@
+<ng-template #defaultOptionLook let-option>{{option.text()}}</ng-template>
+
+<div #popupDiv>
+    @if(selectBus.popupVisible() || options.visible)
+    {
+        @let listOptions = selectPlugins.OptionsHandler.listOptions() | groupedListOptions;
+        
+        <div [class]="options.cssClasses.popupDiv">
+            @for(optionsGroups of listOptions; track optionsGroups)
+            {
+                @let group = optionsGroups[1];
+                @let opts = optionsGroups[0];
+
+                @if(group)
+                {
+                    
+                }
+
+                @for(option of opts; track option)
+                {
+                    <div [class]="options.cssClasses.optionItemDiv"
+                         [class.selected]="option.selected()"
+                         [class.active]="option.active()"
+                         (click)="optionClick(option)">
+                        <div [class]="options.cssClasses.optionItemTextDiv">
+                            <ng-container *ngTemplateOutlet="selectBus.selectOptions().templateGatherer.optionTemplate() || defaultOptionLook; context: {$implicit: option, popup: this}"/>
+                        </div>
+        
+                        @if(option.selected() && selectBus.selectOptions().multiple)
+                        {
+                            <div [class]="options.cssClasses.optionChecked"></div>
+                        }
+                    </div>
+                }
+            }
+            @empty 
+            {
+                <div>{{options.texts.noAvailableOptions}}</div>
+            }
+        </div>
+    }
+</div>

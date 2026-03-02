@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, computed, ElementRef, inject, Signal} from '@angular/core';
 
-import {OptionsHandler, OptionsHandlerOptions, SelectOption} from '../../../interfaces';
+import {OptionsHandler, OptionsHandlerOptions, SelectOptionState} from '../../../interfaces';
 import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 
 /**
@@ -41,12 +41,12 @@ export class NoOptionsHandler<TValue = unknown> implements OptionsHandler<TValue
     /**
      * @inheritdoc
      */
-    public readonly availableOptions: Signal<readonly SelectOption<TValue>[]|undefined|null>;
+    public readonly availableOptions: Signal<readonly SelectOptionState<TValue>[]|undefined|null>;
 
     /**
      * @inheritdoc
      */
-    public readonly listOptions: Signal<readonly SelectOption<TValue>[]|undefined|null>;
+    public readonly listOptions: Signal<readonly SelectOptionState<TValue>[]|undefined|null>;
 
     //######################### constructor #########################
     constructor()

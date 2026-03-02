@@ -63,6 +63,7 @@
 - new `OPTIONS_HANDLER_OPTIONS` injection token for 'OptionsHandlerOptions' implementation
 - new `compareValueAndOption` function, that compares value and select option
 - new `compareSelectOptions` function, that compares two select options
+- new `GroupedListOptions` pipe, that gets list of options grouped
 - updated `SelectPluginTypes` interface
    - **new properties**
       - `Interactions` handles interactions of plugins and select
@@ -109,6 +110,7 @@
    - renamed to `SelectPlugin`
    - `ngSelectPlugins` renamed to `selectPlugins`
    - `pluginBus` renamed to `selectBus`
+   - new property `popupVisible` which indicates whether is popup visible or not
 - updated `NG_SELECT_OPTIONS` injection token
    - renamed to `SELECT_OPTIONS`
 - updated `NgSelectComponent` component
@@ -122,7 +124,7 @@
 - updated `NgSelectFunction` type
    - renamed to `SelectFunction`
 - updated `ɵNgSelectOption` interface
-   - renamed to `ɵSelectOption`
+   - renamed to `SelectOptionState`
    - all properties changed to `Signal`
 - removed `NG_SELECT_PLUGIN_INSTANCES` injection token, replaced with class `SelectPluginInstances`
 - updated `NgSelectAbsoluteDirective` directive
@@ -142,6 +144,8 @@
 - updated `PluginBusEvents` interface
    - renamed to `SelectEvents`
    - new property `click` occurs when there is click on select itself (normal state)
+   - property `optionSelect` was renamed to `optionClick`
+   - property `optionCancel` was removed in favor of `optionClick`
 - updated `PluginBus` class
    - renamed to `SelectBus`
    - new property `selectedOptions` that represents currently selected options of Select
@@ -174,6 +178,10 @@
    - property `selectedValue` renamed to `value`
    - property `selectedCarret` renamed to `carret`
    - property `normalStateElement` renamed to `containerElement`
+   - new property `componentElement` applied to HTML element that represents whole component
+- updated `CssClassesBasicPopup` interface
+    - renamed to `SimplePopupCssClasses`
+    - new property `componentElement css class applied to component itself`
 
 ## Version 15.0.0 (2026-02-10)
 

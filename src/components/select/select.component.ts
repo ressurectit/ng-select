@@ -3,7 +3,7 @@ import {getHostElement} from '@anglr/common';
 import {isPresent, RecursivePartial, renderToBody} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
-import {InitState, Interactions, KeyboardHandler, LiveSearch, NormalState, NormalStateContext, OptionsGatherer, OptionsHandler, PluginDescription, Popup, PopupContext, Positioner, ReadonlyState, SelectApi, SelectCssClasses, SelectEvents, SelectOption, SelectOptions, SelectPlugin, TemplateGatherer, ValueHandler} from '../../interfaces';
+import {InitState, Interactions, KeyboardHandler, LiveSearch, NormalState, NormalStateContext, OptionsGatherer, OptionsHandler, PluginDescription, Popup, PopupContext, Positioner, ReadonlyState, SelectApi, SelectCssClasses, SelectEvents, SelectOption, SelectOptions, SelectOptionState, SelectPlugin, TemplateGatherer, ValueHandler} from '../../interfaces';
 import {INTERACTIONS_TYPE, KEYBOARD_HANDLER_TYPE, LIVE_SEARCH_TYPE, NORMAL_STATE_TYPE, OPTIONS_HANDLER_TYPE, POPUP_TYPE, POSITIONER_TYPE, READONLY_STATE_TYPE, SELECT_OPTIONS, VALUE_HANDLER_TYPE} from '../../misc/tokens';
 import {SelectPluginType} from '../../misc/enums';
 import {SelectBus, SelectPluginInstances} from '../../misc/classes';
@@ -275,7 +275,7 @@ export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements
     /**
      * @inheritdoc
      */
-    public get events(): SelectEvents
+    public get events(): SelectEvents<TValue>
     {
         return this.bus;
     }
@@ -297,7 +297,7 @@ export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements
     /**
      * Array of all available options for select
      */
-    public readonly availableOptions: Signal<readonly SelectOption<TValue>[]|undefined|null> = contentChildren<SelectOption<TValue>>(Option);
+    public readonly availableOptions: Signal<readonly SelectOptionState<TValue>[]|undefined|null> = contentChildren<SelectOptionState<TValue>>(Option);
 
     //######################### constructors #########################
     constructor(protected pluginInstances: SelectPluginInstances,
@@ -561,7 +561,7 @@ export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements
 
             if(pluginType == SelectPluginType.Popup)
             {
-                this.popupComponentRef = component;
+                this.popupComponentRef = component as ComponentRef<Popup>;
             }
         }
 

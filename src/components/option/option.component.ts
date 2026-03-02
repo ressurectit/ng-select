@@ -1,6 +1,6 @@
 import {Component, ChangeDetectionStrategy, WritableSignal, signal, InputSignal, input, Signal} from '@angular/core';
 
-import {ɵSelectOption, SelectOptionGroup} from '../../interfaces';
+import {SelectOptionGroup, SelectOptionState} from '../../interfaces';
 
 /**
  * Component used for options in select component
@@ -11,7 +11,7 @@ import {ɵSelectOption, SelectOptionGroup} from '../../interfaces';
     template: '',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Option<TValue = unknown> implements ɵSelectOption<TValue>
+export class Option<TValue = unknown> implements SelectOptionState<TValue>
 {
     //######################### public properties - implementation of ɵSelectOption #########################
 

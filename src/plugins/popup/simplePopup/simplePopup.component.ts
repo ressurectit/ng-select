@@ -1,29 +1,81 @@
-import {Component, ElementRef} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ElementRef, Inject, inject, Optional} from '@angular/core';
+import {NgTemplateOutlet} from '@angular/common';
+import {RecursivePartial} from '@jscrpt/common';
+import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
-import {Popup} from '../../../interfaces';
+import {Popup, PopupOptions, SelectOptionState, SelectPlugin, SimplePopupCssClasses} from '../../../interfaces';
 import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
+import {CopyOptionsAsSignal} from '../../../decorators';
+import {POPUP_OPTIONS} from '../../../misc/tokens';
+import {GroupedListOptions} from '../../../pipes';
+
+//TODO: support groups
+
+const defaultOptions: PopupOptions<SimplePopupCssClasses> =
+{
+    visible: false,
+    cssClasses:
+    {
+        componentElement: 'popup-component',
+        optionItemDiv: '',
+        optionItemTextDiv: '',
+        optionChecked: '',
+        popupDiv: '',
+    },
+    texts:
+    {
+        noAvailableOptions: 'no options available',
+    },
+};
 
 /**
- *
+ * Simple popup displaying options in column.
  */
 @Component(
 {
     selector: 'simple-popup',
-    template: '',
+    templateUrl: 'simplePopup.component.html',
+    host:
+    {
+        '[class]': 'options.cssClasses.componentElement',
+    },
+    imports:
+    [
+        NgTemplateOutlet,
+        GroupedListOptions,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SimplePopupComponent implements Popup
+export class SimplePopupComponent<TValue = unknown> implements Popup<TValue, PopupOptions<SimplePopupCssClasses>>
 {
+    //######################### public properties - implementation of SelectPlugin #########################
+
     /**
      * @inheritdoc
      */
-    public options: unknown;
+    @CopyOptionsAsSignal()
+    public options: PopupOptions<SimplePopupCssClasses>;
+
+    /**
+     * @inheritdoc
+     */
+    public selectPlugins: SelectPluginInstances = inject(SelectPluginInstances);
+
+    /**
+     * @inheritdoc
+     */
+    public pluginElement: ElementRef<HTMLElement> = inject(ElementRef);
+
+    /**
+     * @inheritdoc
+     */
+    public selectBus: SelectBus<TValue> = inject(SelectBus);
 
     //######################### constructor #########################
-    constructor(public pluginElement: ElementRef<HTMLElement>,
-                public selectPlugins: SelectPluginInstances,
-                public selectBus: SelectBus<unknown>,)
+    constructor(@Inject(POPUP_OPTIONS) @Optional() options?: RecursivePartial<PopupOptions<SimplePopupCssClasses>>|null,)
     {
-
+        this.options = deepCopyWithArrayOverride(defaultOptions as PopupOptions<SimplePopupCssClasses>,
+                                                 options);
     }
 
     //######################### public methods - implementation of SelectPlugin #########################
@@ -40,5 +92,17 @@ export class SimplePopupComponent implements Popup
      */
     public initOptions(): void
     {
+    }
+
+    //######################### protected methods - template bindings #########################
+
+    protected optionClick(option: SelectOptionState): void
+    {
+        this.selectBus.optionClick.next(
+        {
+            source: this as SelectPlugin,
+            sourceElement: this.pluginElement.nativeElement,
+            data: option as SelectOptionState<TValue>,
+        });
     }
 }

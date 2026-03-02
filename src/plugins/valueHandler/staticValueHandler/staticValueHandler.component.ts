@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, computed, effect, ElementRef, Inject
 import {isBlank, isPresent, RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
-import {OptionsHandler, SelectOption, ValueHandler, ValueHandlerOptions} from '../../../interfaces';
+import {OptionsHandler, SelectOptionState, ValueHandler, ValueHandlerOptions} from '../../../interfaces';
 import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {VALUE_HANDLER_OPTIONS} from '../../../misc/tokens';
@@ -137,7 +137,7 @@ export class StaticValueHandler<TValue = unknown> implements ValueHandler<TValue
      * @param value - Value to be set
      * @param availableOptions - Available options that are checked whether they contain value that is being set, so we can set value only if it is available in options
      */
-    protected setValueInternal(value: TValue|TValue[]|undefined|null, availableOptions: readonly SelectOption<TValue>[]): void
+    protected setValueInternal(value: TValue|TValue[]|undefined|null, availableOptions: readonly SelectOptionState<TValue>[]): void
     {
         //this keeps only values that are available in options
         untracked(() =>
@@ -149,7 +149,7 @@ export class StaticValueHandler<TValue = unknown> implements ValueHandler<TValue
                     throw new Error('Value must be an array when multiple is set');
                 }
 
-                const selectedOptions: SelectOption<TValue>[] = [];
+                const selectedOptions: SelectOptionState<TValue>[] = [];
 
                 for(const val of value)
                 {

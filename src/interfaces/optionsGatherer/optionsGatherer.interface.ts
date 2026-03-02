@@ -1,6 +1,7 @@
 import {Signal} from '@angular/core';
 
-import {SelectOption} from '../selectOption/selectOption.interface';
+import {SelectOptionState} from '../selectOptionState/selectOptionState.interface';
+
 
 /**
  * Gatherer used for obtaining options for select
@@ -10,5 +11,5 @@ export interface OptionsGatherer<TValue = unknown>
     /**
      * Array of all available options for select
      */
-    readonly availableOptions: Signal<readonly SelectOption<TValue>[]|undefined|null>;
+    readonly availableOptions: Signal<readonly SelectOptionState<TValue>[]|undefined|null>;
 }

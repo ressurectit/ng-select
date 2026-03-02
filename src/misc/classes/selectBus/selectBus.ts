@@ -1,13 +1,13 @@
 import {Injectable, ElementRef, signal, WritableSignal, Signal} from '@angular/core';
 import {Subject} from 'rxjs';
 
-import {SelectEvents, SelectBusOptions, SelectEvent, SelectOption} from '../../../interfaces';
+import {SelectEvents, SelectBusOptions, SelectEvent, SelectOptionState} from '../../../interfaces';
 
 /**
  * Class represents centralized bus for internal communication
  */
 @Injectable()
-export class SelectBus<TValue = unknown> implements SelectEvents
+export class SelectBus<TValue = unknown> implements SelectEvents<TValue>
 {
     //######################### public properties #########################
 
@@ -26,7 +26,7 @@ export class SelectBus<TValue = unknown> implements SelectEvents
     /**
      * Currently selected options of Select
      */
-    public selectedOptions: WritableSignal<SelectOption<TValue>|SelectOption<TValue>[]|undefined|null> = signal(null);
+    public selectedOptions: WritableSignal<SelectOptionState<TValue>|SelectOptionState<TValue>[]|undefined|null> = signal(null);
 
     //######################### public properties - events #########################
 
@@ -43,12 +43,7 @@ export class SelectBus<TValue = unknown> implements SelectEvents
     /**
      * @inheritdoc
      */
-    public readonly optionSelect: Subject<SelectEvent<SelectOption>> = new Subject<SelectEvent<SelectOption>>();
-
-    /**
-     * @inheritdoc
-     */
-    public readonly optionCancel: Subject<SelectEvent<SelectOption>> = new Subject<SelectEvent<SelectOption>>();
+    public readonly optionClick: Subject<SelectEvent<SelectOptionState<TValue>>> = new Subject<SelectEvent<SelectOptionState<TValue>>>();
 
     /**
      * @inheritdoc
@@ -69,4 +64,11 @@ export class SelectBus<TValue = unknown> implements SelectEvents
      * @inheritdoc
      */
     public readonly click: Subject<SelectEvent> = new Subject<SelectEvent>();
+
+    //######################### public properties - state #########################
+
+    /**
+     * Indicates whether is popup visible or not
+     */
+    public readonly popupVisible: WritableSignal<boolean> = signal(false);
 }
