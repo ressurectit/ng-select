@@ -1,4 +1,5 @@
 @use '@anglr/common/styles/themes/light' as anglrCommonTheme;
+@use '@anglr/select/styles/themes/light' as anglrSelectTheme;
 @use '@css-styles/themes' as themes;
 
 @use './scss/theme/defaultTheme' as defaultTheme;
@@ -8,4 +9,5 @@
                               $theme: themes.defineTheme(appTheme.$fontSize, defaultTheme.$defaultTheme, appTheme.$appTheme),
                               $appTheme: defaultTheme.defineTheme(appTheme.$appTheme),
                               $themeName: 'light',
-                              $anglrCommonTheme: anglrCommonTheme.defineTheme(),);
+                              $anglrCommonTheme: anglrCommonTheme.defineTheme(),
+                              $anglrSelectTheme: anglrSelectTheme.defineTheme(),);

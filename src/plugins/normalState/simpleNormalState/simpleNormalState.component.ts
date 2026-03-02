@@ -16,8 +16,8 @@ const defaultOptions: NormalStateOptions<SimpleNormalStateCssClasses> =
 {
     cssClasses:
     {
-        containerElement: '',
-        value: '',
+        containerElement: 'select-normal-state select-flex-row select-align-items-center',
+        value: 'select-flex-1',
         carret: 'fas fa-caret-down',
     },
 };

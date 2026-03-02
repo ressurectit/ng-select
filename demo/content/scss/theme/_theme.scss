@@ -4,6 +4,7 @@
 @use '@css-styles/common' as mixins;
 @use '@css-styles/themes' as themes;
 @use '@anglr/common/styles' as anglrCommon;
+@use '@anglr/select/styles' as anglrSelect;
 
 @use './themeColors';
 
@@ -12,6 +13,7 @@ $theme: () !default;
 $appTheme: () !default;
 $themeName: null !default;
 $anglrCommonTheme: null !default;
+$anglrSelectTheme: null !default;
 $gridTheme: null !default;
 
 //---------------------- PAGE STYLING ----------------------
@@ -44,4 +46,5 @@ $gridTheme: null !default;
     @include anglrCommon.buildThemeColorsTooltip($anglrCommonTheme);
     @include anglrCommon.buildThemeColorsMultiButton($anglrCommonTheme);
     @include anglrCommon.buildThemeColorsDebugData($anglrCommonTheme);
+    @include anglrSelect.buildThemeVars($anglrSelectTheme);
 }

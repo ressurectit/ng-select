@@ -1,44 +1,24 @@
-@use 'sass:meta';
-@use 'sass:map';
+@use '@css-styles/common' as mixins;
 
 @use 'misc';
-@use '../components/basic-paging' as basicPaging;
-@use '../components/css-divs-content-renderer' as cssDivsContentRenderer;
-@use '../components/dialog-metadata-selector' as dialogMetadataSelector;
-@use '../components/grid' as grid;
-@use '../components/matrix-content-renderer' as matrixContentRenderer;
-@use '../components/next-previous-paging' as nextPreviousPaging;
-@use '../components/simple-no-data-renderer' as simpleNoDataRenderer;
-@use '../components/table-content-renderer' as tableContentRenderer;
-@use '../components/vertical-drag-drop-selection' as verticalDragDropSelection;
+@use '../components/normalState' as normalState;
 
-@mixin buildThemeColors($theme)
+@mixin buildThemeVars($theme)
 {
-    @if $theme 
+    @if $theme
     {
-        --grid-pagingCommon-anchor-background: #{map.get(map.get(map.get($theme, 'pagingCommon'), 'anchor'), 'background')};
-        --grid-pagingCommon-anchor-foreground: #{map.get(map.get(map.get($theme, 'pagingCommon'), 'anchor'), 'foreground')};
-        --grid-pagingCommon-anchor-active-background: #{map.get(map.get(map.get(map.get($theme, 'pagingCommon'), 'anchor'), 'active'), 'background')};
-        --grid-pagingCommon-anchor-active-foreground: #{map.get(map.get(map.get(map.get($theme, 'pagingCommon'), 'anchor'), 'active'), 'foreground')};
+        @include mixins.buildCssVars('-', $theme);
     }
 }
 
 @mixin buildThemeCss
 {
     @include misc.misc;
-    @include basicPaging.css;
-    @include cssDivsContentRenderer.css;
-    @include dialogMetadataSelector.css;
-    @include grid.css;
-    @include matrixContentRenderer.css;
-    @include nextPreviousPaging.css;
-    @include simpleNoDataRenderer.css;
-    @include tableContentRenderer.css;
-    @include verticalDragDropSelection.css;
+    @include normalState.css;
 }
 
 @mixin buildTheme($theme)
 {
-    @include buildThemeColors($theme);
+    @include buildThemeVars($theme);
     @include buildThemeCss;
 }

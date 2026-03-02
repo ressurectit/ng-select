@@ -1,0 +1,16 @@
+@use 'sass:map';
+
+@function defineTheme($fontSize: 14px, $colors)
+{
+    $defaultTheme:
+    (
+        normalState:
+        (
+            background: #fff,
+        ),
+    );
+
+    $theme: map.deep-merge($defaultTheme, $colors);
+
+    @return $theme;
+}

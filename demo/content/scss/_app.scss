@@ -2,6 +2,7 @@
 @use '@css-styles/common' as misc;
 @use '@css-styles/themes' as themes;
 @use '@anglr/common/styles' as anglrCommon;
+@use '@anglr/select/styles' as anglrSelect;
 
 @use 'parts/app' as app;
 
@@ -17,6 +18,7 @@
     //############## PACKAGES ##############
 
     @include anglrCommon.buildThemeCss;
+    @include anglrSelect.buildThemeCss;
 
     //############## SCROLLBAR ##############
 
