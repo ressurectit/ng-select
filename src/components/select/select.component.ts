@@ -7,7 +7,7 @@ import {InitState, Interactions, KeyboardHandler, LiveSearch, NormalState, Norma
 import {INTERACTIONS_TYPE, KEYBOARD_HANDLER_TYPE, LIVE_SEARCH_TYPE, NORMAL_STATE_TYPE, OPTIONS_HANDLER_TYPE, POPUP_TYPE, POSITIONER_TYPE, READONLY_STATE_TYPE, SELECT_OPTIONS, VALUE_HANDLER_TYPE} from '../../misc/tokens';
 import {SelectPluginType} from '../../misc/enums';
 import {SelectBus, SelectPluginInstances} from '../../misc/classes';
-import {BasicPositionerComponent, StaticValueHandler, SimpleInteractions, NoLiveSearchComponent, NoOptionsHandler, SimpleKeyboardHandlerComponent, SimpleNormalState, SimplePopup} from '../../plugins';
+import {CommonPositioner, StaticValueHandler, SimpleInteractions, NoLiveSearchComponent, NoOptionsHandler, SimpleKeyboardHandlerComponent, SimpleNormalState, SimplePopup} from '../../plugins';
 import {CopyOptionsAsSignal} from '../../decorators';
 import {SelectAction, SelectFunction} from '../../misc/types';
 import {NormalStateTemplate, OptionTemplate} from '../../directives';
@@ -23,7 +23,7 @@ const defaultOptions: Omit<SelectOptions, 'optionsGatherer'|'templateGatherer'> 
     absolute: false,
     multiple: false,
     readonly: false,
-    containerElement: null,
+    containerElement: 'div.select-component',
     placeholder: 'please select value',
     displaySelectedValue: option => option.text(),
     valueExtractor: (option: SelectOption) => option.value,
@@ -48,6 +48,7 @@ const defaultOptions: Omit<SelectOptions, 'optionsGatherer'|'templateGatherer'> 
     cssClasses:
     {
         visualContainer: 'visual-container',
+        selectElement: 'select-component',
     },
     plugins:
     {
@@ -77,7 +78,7 @@ const defaultOptions: Omit<SelectOptions, 'optionsGatherer'|'templateGatherer'> 
         },
         positioner: <PluginDescription<Positioner>>
         {
-            type: forwardRef(() => BasicPositionerComponent),
+            type: forwardRef(() => CommonPositioner),
         },
         readonlyState: <PluginDescription<ReadonlyState>>
         {
@@ -98,6 +99,10 @@ const defaultOptions: Omit<SelectOptions, 'optionsGatherer'|'templateGatherer'> 
     selector: 'ng-select',
     templateUrl: 'select.component.html',
     styleUrl: 'select.component.css',
+    host:
+    {
+        '[class]': 'selectOptions.cssClasses.selectElement',
+    },
     providers:
     [
         <FactoryProvider>
@@ -390,7 +395,7 @@ export class Select<TValue = unknown> implements SelectApi<TValue, SelectCssClas
             },
             opts);
 
-        bus.selectElement.set(element);
+        bus.selectElement = signal(element).asReadonly();
         bus.selectOptions = computed(() => this.selectOptions);
 
         //dynamic update of readonly state in options

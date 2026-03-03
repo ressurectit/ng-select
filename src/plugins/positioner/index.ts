@@ -1,1 +1,1 @@
-export * from './basicPositioner/basicPositioner.component';
+export * from './commonPositioner/commonPositioner.component';

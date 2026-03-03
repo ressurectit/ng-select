@@ -1,21 +1,50 @@
 @mixin css
 {
-    ng-select
+    ng-select,
+    .select-component
     {
         .popup-component
         {
             display: block;
-
-            .in-group
-            {
-                padding: var(--select-popup-option-inGroup-padding);
-            }
 
             .option-group
             {
                 font-style: var(--select-popup-optionGroup-fontStyle);
                 letter-spacing: var(--select-popup-optionGroup-letterSpacing);
                 font-weight: var(--select-popup-optionGroup-fontWeight);
+            }
+
+            .popup-container
+            {
+                padding: var(--select-popup-container-padding);
+                background-color: var(--select-popup-container-background);
+                border-radius: var(--select-popup-container-borderRadius);
+            }
+
+            .option
+            {
+                padding: var(--select-popup-option-padding);
+                border-radius: var(--select-popup-option-borderRadius);
+
+                &.selected
+                {
+                    background-color: var(--select-popup-option-selected-background);
+                }
+
+                &.active
+                {
+                    background-color: var(--select-popup-option-active-background);
+                }
+
+                &:hover
+                {
+                    background-color: var(--select-popup-option-hover-background);
+                }
+
+                &.in-group
+                {
+                    margin: var(--select-popup-option-inGroup-margin);
+                }
             }
         }
     }

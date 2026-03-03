@@ -6,6 +6,16 @@
 {
     $_lightDefaultTheme:
     (
+        select:
+        (
+            popup:
+            (
+                container:
+                (
+                    background: #F0F0F0,
+                ),
+            ),
+        ),
     );
 
     $colors: map.deep-merge($_lightDefaultTheme, $colors);

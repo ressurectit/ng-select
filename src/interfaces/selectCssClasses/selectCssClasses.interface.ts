@@ -9,4 +9,9 @@ export interface SelectCssClasses
      * Css class applied to container storing visual parts of Select
      */
     visualContainer: string;
+
+    /**
+     * Css class applied directly to css select
+     */
+    selectElement: string;
 }

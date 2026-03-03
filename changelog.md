@@ -72,6 +72,7 @@
       - `template` instance of template for options group in popup
 - new `SelectCssClasses` interface, that represents css classes for Select
    - `visualContainer` css class applied to container storing visual parts of Select
+   - `selectElement` css class applied directly to css select
 - updated `SelectPluginTypes` interface
    - **new properties**
       - `Interactions` handles interactions of plugins and select
@@ -136,11 +137,11 @@
    - all properties changed to `Signal`
 - removed `NG_SELECT_PLUGIN_INSTANCES` injection token, replaced with class `SelectPluginInstances`
 - updated `NgSelectAbsoluteDirective` directive
-   - renamed to `SelectAbsoluteDirective`
+   - renamed to `SelectAbsolute`
 - updated `NgSelectEditDirective` directive
    - renamed to `SelectEditDirective`
 - updated `NgSelectPlaceholderDirective` directive
-   - renamed to `SelectPlaceholderDirective`
+   - renamed to `SelectPlaceholder`
 - updated `DisplayTextFunc` interface
    - changed to type
 - updated `NgSelectHasValuePipe` pipe
@@ -191,9 +192,11 @@
     - renamed to `SimplePopupCssClasses`
     - new property `componentElement` css class applied to component itself
     - new property `optionGroup` css class applied to each option group
-    - renamed `popupDiv` to `popupContainer` 
-    - renamed `optionItemDiv` to `option` 
-    - renamed `optionItemTextDiv` to `optionText` 
+    - renamed `popupDiv` to `popupContainer`
+    - renamed `optionItemDiv` to `option`
+    - renamed `optionItemTextDiv` to `optionText`
+- updated `DefaultPositionerComponent` plugin component
+   - renamed to `CommonPositioner`
 
 ## Version 15.0.0 (2026-02-10)
 

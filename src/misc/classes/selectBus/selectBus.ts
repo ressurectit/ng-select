@@ -20,8 +20,10 @@ export class SelectBus<TValue = unknown> implements SelectEvents<TValue>
 
     /**
      * HTML element that represents select itself
+     *
+     * Initialized in constructor of select
      */
-    public selectElement: WritableSignal<ElementRef<HTMLElement>|undefined|null> = signal(null);
+    public selectElement!: Signal<ElementRef<HTMLElement>>;
 
     /**
      * Currently selected options of Select

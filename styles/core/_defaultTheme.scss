@@ -1,5 +1,8 @@
 @use 'sass:map';
 
+@use '@css-styles/common' as mixins;
+
+
 @function defineTheme($fontSize: 14px, $colors)
 {
     $defaultTheme:
@@ -8,12 +11,31 @@
         (
             popup:
             (
+                container:
+                (
+                    padding: mixins.getSize($fontSize, 4),
+                    borderRadius: mixins.getSize($fontSize, 4),
+                ),
                 option:
                 (
+                    selected:
+                    (
+                        background: hsl(from var(--select-popup-container-background) h s 90%),
+                    ),
+                    active:
+                    (
+                        background: hsl(from var(--select-popup-container-background) h s 86%),
+                    ),
+                    hover:
+                    (
+                        background: hsl(from var(--select-popup-container-background) h s 82%),
+                    ),
                     inGroup:
                     (
-                        padding: 0 0 0 var(--size-sm, .6em),
+                        margin: 0 0 0 var(--size-sm, .5em),
                     ),
+                    padding: mixins.getSize($fontSize, 2) mixins.getSize($fontSize, 4),
+                    borderRadius: mixins.getSize($fontSize, 2),
                 ),
                 optionGroup:
                 (

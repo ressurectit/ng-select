@@ -11,6 +11,6 @@ export interface PositionerOptions extends PluginOptions
 /**
  * Positioner plugin interface
  */
-export interface Positioner extends SelectPlugin
+export interface Positioner<TValue = unknown, TOptions extends PositionOptions = PositionOptions> extends SelectPlugin<TOptions, TValue>
 {
 }
