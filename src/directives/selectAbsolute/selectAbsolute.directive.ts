@@ -11,15 +11,15 @@ import {SelectCssClasses, SelectOptions} from '../../interfaces';
 {
     selector: 'ng-select[absolute]',
 })
-export class SelectAbsoluteDirective<TValue = unknown, TCssClasses = SelectCssClasses>
+export class SelectAbsoluteDirective<TValue = unknown>
 {
     //######################### constructor #########################
-    constructor(select: Select<TValue, TCssClasses>)
+    constructor(select: Select<TValue>)
     {
         select.selectOptions =
-        <RecursivePartial<SelectOptions<TValue, TCssClasses>>>
+        <RecursivePartial<SelectOptions<TValue, SelectCssClasses>>>
         {
             absolute: true,
-        } as SelectOptions<TValue, TCssClasses>;
+        } as SelectOptions<TValue, SelectCssClasses>;
     }
 }

@@ -2,12 +2,6 @@ import {Pipe, PipeTransform} from '@angular/core';
 
 import {SelectOptionGroup, SelectOptionState} from '../../interfaces';
 
-interface GroupInfo<TValue = unknown>
-{
-    group: SelectOptionGroup|null;
-    options: SelectOptionState<TValue>[];
-}
-
 /**
  * Gets list of options grouped
  */
@@ -20,39 +14,35 @@ export class GroupedListOptions<TValue = unknown> implements PipeTransform
      */
     public transform(value: readonly SelectOptionState<TValue>[]|null|undefined): [readonly SelectOptionState<TValue>[], SelectOptionGroup|null][]
     {
-        const groups: Record<string, GroupInfo<TValue>> = {};
-        const ungrouped: SelectOptionState<TValue>[] = [];
-
         if(!value?.length)
         {
             return [];
         }
 
+        const result: [SelectOptionState<TValue>[], SelectOptionGroup|null][] = [];
+
         for(const option of value)
         {
             const group = option.group();
 
-            if(group)
+            //first one
+            if(!result.length)
             {
-                const grp = groups[group.id] ??=
-                {
-                    group: group,
-                    options: [],
-                };
-
-                grp.options.push(option);
+                result.push([[option], group ?? null]);
             }
             else
             {
-                ungrouped.push(option);
+                const last = result[result.length - 1];
+
+                if(last[1] === group)
+                {
+                    last[0].push(option);
+                }
+                else
+                {
+                    result.push([[option], group ?? null]);
+                }
             }
-        }
-
-        const result: [readonly SelectOptionState<TValue>[], SelectOptionGroup|null][] = Object.values(groups).map(g => [g.options, g.group]);
-
-        if(ungrouped.length)
-        {
-            result.unshift([ungrouped, null]);
         }
 
         return result;

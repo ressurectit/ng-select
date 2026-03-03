@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 
 import {DisplayValue, SelectHasValuePipe} from '../pipes';
-import {Option, OptGroup, Select} from '../components';
+import {Option, OptionGroup, Select} from '../components';
 
 /**
  * Module for select and its options
@@ -11,7 +11,7 @@ import {Option, OptGroup, Select} from '../components';
     imports:
     [
         Option,
-        OptGroup,
+        OptionGroup,
         Select,
         DisplayValue,
         SelectHasValuePipe,
@@ -22,7 +22,7 @@ import {Option, OptGroup, Select} from '../components';
     exports:
     [
         Option,
-        OptGroup,
+        OptionGroup,
         Select,
         DisplayValue,
         SelectHasValuePipe,

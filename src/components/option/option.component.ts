@@ -1,6 +1,7 @@
-import {Component, ChangeDetectionStrategy, WritableSignal, signal, InputSignal, input, Signal} from '@angular/core';
+import {Component, ChangeDetectionStrategy, WritableSignal, signal, InputSignal, input, Signal, inject} from '@angular/core';
 
 import {SelectOptionGroup, SelectOptionState} from '../../interfaces';
+import {OptionGroup} from '../optionGroup/optgroup.component';
 
 /**
  * Component used for options in select component
@@ -40,5 +41,5 @@ export class Option<TValue = unknown> implements SelectOptionState<TValue>
     /**
      * @inheritdoc
      */
-    public group: Signal<SelectOptionGroup|undefined|null> = signal(null);
+    public group: Signal<SelectOptionGroup|undefined|null> = signal(inject(OptionGroup, {optional: true}));
 }

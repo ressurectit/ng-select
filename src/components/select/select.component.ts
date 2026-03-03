@@ -47,6 +47,7 @@ const defaultOptions: Omit<SelectOptions, 'optionsGatherer'|'templateGatherer'> 
     // },
     cssClasses:
     {
+        visualContainer: 'visual-container',
     },
     plugins:
     {
@@ -108,7 +109,7 @@ const defaultOptions: Omit<SelectOptions, 'optionsGatherer'|'templateGatherer'> 
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements SelectApi<TValue, TCssClasses>, OptionsGatherer<TValue>, TemplateGatherer
+export class Select<TValue = unknown> implements SelectApi<TValue, SelectCssClasses>, OptionsGatherer<TValue>, TemplateGatherer
 {
     //######################### protected fields #########################
 
@@ -250,7 +251,7 @@ export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements
      */
     @CopyOptionsAsSignal()
     @Input()
-    public selectOptions: SelectOptions<TValue, TCssClasses>;
+    public selectOptions: SelectOptions<TValue, SelectCssClasses>;
 
     /**
      * Indication whether should be Select disabled or not
@@ -297,7 +298,7 @@ export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements
     /**
      * Array of all available options for select
      */
-    public readonly availableOptions: Signal<readonly SelectOptionState<TValue>[]|undefined|null> = contentChildren<SelectOptionState<TValue>>(Option);
+    public readonly availableOptions: Signal<readonly SelectOptionState<TValue>[]|undefined|null> = contentChildren<SelectOptionState<TValue>>(Option, {descendants: true});
 
     //######################### constructors #########################
     constructor(protected pluginInstances: SelectPluginInstances,
@@ -314,11 +315,11 @@ export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements
                 @Inject(LIVE_SEARCH_TYPE) @Optional() liveSearchType?: Type<LiveSearch>|null,
                 @Inject(INTERACTIONS_TYPE) @Optional() interactionsType?: Type<Interactions>|null,
                 @Inject(OPTIONS_HANDLER_TYPE) @Optional() optionsHandlerType?: Type<OptionsHandler>|null,
-                @Inject(SELECT_OPTIONS) @Optional() options?: RecursivePartial<SelectOptions<TValue, TCssClasses>>|null,)
+                @Inject(SELECT_OPTIONS) @Optional() options?: RecursivePartial<SelectOptions<TValue, SelectCssClasses>>|null,)
     {
         //is present (value is not important)
         const multipleDefault = isPresent(multiple);
-        const opts: RecursivePartial<SelectOptions<TValue, TCssClasses>> = deepCopyWithArrayOverride({}, options);
+        const opts: RecursivePartial<SelectOptions<TValue, SelectCssClasses>> = deepCopyWithArrayOverride({}, options);
 
         opts.plugins ??= {};
 
@@ -377,12 +378,12 @@ export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements
         }
 
         this.selectOptions = deepCopyWithArrayOverride(
-            <RecursivePartial<SelectOptions<TValue, TCssClasses>>>
+            <RecursivePartial<SelectOptions<TValue, SelectCssClasses>>>
             {
                 optionsGatherer: this,
                 templateGatherer: this,
             },
-            defaultOptions as SelectOptions<TValue, TCssClasses>,
+            defaultOptions as SelectOptions<TValue, SelectCssClasses>,
             <RecursivePartial<SelectOptions<TValue>>>
             {
                 multiple: multipleDefault,
@@ -399,7 +400,7 @@ export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements
             <RecursivePartial<SelectOptions<TValue>>>
             {
                 readonly: this.readonly() || this.disabled(),
-            } as SelectOptions<TValue, TCssClasses>;
+            } as SelectOptions<TValue, SelectCssClasses>;
         });
 
         //create and initialize options for static plugins
@@ -500,7 +501,7 @@ export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements
     /**
      * @inheritdoc
      */
-    public execute(...actions: SelectAction<TValue, TCssClasses>[])
+    public execute(...actions: SelectAction<TValue, SelectCssClasses>[])
     {
         if(!actions)
         {
@@ -513,7 +514,7 @@ export class Select<TValue = unknown, TCssClasses = SelectCssClasses> implements
     /**
      * @inheritdoc
      */
-    public executeAndReturn<TResult>(func: SelectFunction<TResult, TValue, TCssClasses>): TResult
+    public executeAndReturn<TResult>(func: SelectFunction<TResult, TValue, SelectCssClasses>): TResult
     {
         if(!func)
         {

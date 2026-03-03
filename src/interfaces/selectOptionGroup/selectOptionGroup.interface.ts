@@ -8,7 +8,7 @@ export interface SelectOptionGroup
     /**
      * Optional template to be used for rendering option group
      */
-    template: TemplateRef<{$implicit: string}>|undefined|null;
+    template: Signal<TemplateRef<{$implicit: string}>|undefined|null>;
 
     /**
      * Unique id of group

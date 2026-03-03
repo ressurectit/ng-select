@@ -67,6 +67,11 @@
 - new `SimpleInteractions` plugin component, that provides simple interactions within select among plugins
 - new `Interactions` plugin interface, that represents interactions plugin interface
 - new `InteractionsOptions` interface, that represents options for interactions plugin
+- new `OptionGroupTemplate` directive, used for obtaining template for option group in popup
+   - **properties**
+      - `template` instance of template for options group in popup
+- new `SelectCssClasses` interface, that represents css classes for Select
+   - `visualContainer` css class applied to container storing visual parts of Select
 - updated `SelectPluginTypes` interface
    - **new properties**
       - `Interactions` handles interactions of plugins and select
@@ -121,7 +126,7 @@
 - updated `OptionComponent` component
    - renamed to `Option`
 - updated `OptGroupComponent` component
-   - renamed to `OptGroup`
+   - renamed to `OptionGroup`
 - updated `NgSelectAction` type
    - renamed to `SelectAction`
 - updated `NgSelectFunction` type
@@ -184,7 +189,8 @@
    - new property `componentElement` applied to HTML element that represents whole component
 - updated `CssClassesBasicPopup` interface
     - renamed to `SimplePopupCssClasses`
-    - new property `componentElement css class applied to component itself`
+    - new property `componentElement` css class applied to component itself
+    - new property `optionGroup` css class applied to each option group
     - renamed `popupDiv` to `popupContainer` 
     - renamed `optionItemDiv` to `option` 
     - renamed `optionItemTextDiv` to `optionText` 

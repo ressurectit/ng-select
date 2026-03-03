@@ -16,6 +16,11 @@ export interface SimplePopupCssClasses extends PopupCssClasses
     option: string;
 
     /**
+     * Css class applied to each option group
+     */
+    optionGroup: string;
+
+    /**
      * Css class applied to each option text
      */
     optionText: string;

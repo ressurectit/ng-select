@@ -17,10 +17,11 @@ const defaultOptions: PopupOptions<SimplePopupCssClasses> =
     cssClasses:
     {
         componentElement: 'popup-component',
-        option: '',
-        optionText: '',
-        optionChecked: '',
-        popupContainer: '',
+        option: 'option',
+        optionGroup: 'option-group',
+        optionText: 'option-text',
+        optionChecked: 'fas fa-check',
+        popupContainer: 'popup-container',
     },
     texts:
     {
@@ -96,6 +97,10 @@ export class SimplePopup<TValue = unknown> implements Popup<TValue, PopupOptions
 
     //######################### protected methods - template bindings #########################
 
+    /**
+     * Handles option click
+     * @param option - Option that was clicked
+     */
     protected optionClick(option: SelectOptionState): void
     {
         this.selectBus.optionClick.next(

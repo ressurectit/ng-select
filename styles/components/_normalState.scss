@@ -1,12 +1,15 @@
 @mixin css
 {
-    .select-normal-state
+    ng-select
     {
-        cursor: pointer;
-    }
-
-    .normal-state-component
-    {
-        display: contents;
+        .normal-state-component
+        {
+            display: contents;
+    
+            .select-normal-state
+            {
+                cursor: pointer;
+            }
+        }
     }
 }

@@ -1,7 +1,7 @@
 import {Component, ChangeDetectionStrategy} from '@angular/core';
 import {ComponentRedirectRoute, ComponentRoute} from '@anglr/common/router';
 import {WithScrollableCssClass} from '@anglr/common';
-import {Select, Option} from '@anglr/select';
+import {Select, Option, OptionGroup, OptionGroupTemplate} from '@anglr/select';
 
 /**
  * Home component
@@ -15,6 +15,8 @@ import {Select, Option} from '@anglr/select';
     [
         Select,
         Option,
+        OptionGroup,
+        OptionGroupTemplate,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

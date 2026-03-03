@@ -4,9 +4,24 @@
 {
     $defaultTheme:
     (
-        normalState:
+        select:
         (
-            background: #fff,
+            popup:
+            (
+                option:
+                (
+                    inGroup:
+                    (
+                        padding: 0 0 0 var(--size-sm, .6em),
+                    ),
+                ),
+                optionGroup:
+                (
+                    fontStyle: italic,
+                    letterSpacing: 1px,
+                    fontWeight: 500,
+                ),
+            ),
         ),
     );
 

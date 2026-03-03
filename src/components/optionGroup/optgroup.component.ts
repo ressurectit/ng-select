@@ -1,7 +1,8 @@
-import {Component, ChangeDetectionStrategy, input, InputSignal, TemplateRef} from '@angular/core';
+import {Component, ChangeDetectionStrategy, input, InputSignal, TemplateRef, contentChild, Signal} from '@angular/core';
 import {generateId} from '@jscrpt/common';
 
 import {SelectOptionGroup} from '../../interfaces';
+import {OptionGroupTemplate} from '../../directives';
 
 /**
  * Component used for option group in select component
@@ -12,14 +13,14 @@ import {SelectOptionGroup} from '../../interfaces';
     template: '',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OptGroup implements SelectOptionGroup
+export class OptionGroup implements SelectOptionGroup
 {
     //######################### public properties - implementation of SelectOptionGroup #########################
 
     /**
      * @inheritdoc
      */
-    public template: TemplateRef<{$implicit: string}>|undefined|null;
+    public template: Signal<TemplateRef<{$implicit: string}>|undefined|null> = contentChild(OptionGroupTemplate, {read: TemplateRef});
 
     /**
      * @inheritdoc

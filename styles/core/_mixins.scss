@@ -2,6 +2,8 @@
 
 @use 'misc';
 @use '../components/normalState' as normalState;
+@use '../components/popup' as popup;
+@use '../components/select' as select;
 
 @mixin buildThemeVars($theme)
 {
@@ -15,6 +17,8 @@
 {
     @include misc.misc;
     @include normalState.css;
+    @include popup.css;
+    @include select.css;
 }
 
 @mixin buildTheme($theme)
