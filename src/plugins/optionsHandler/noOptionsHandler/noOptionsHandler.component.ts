@@ -34,7 +34,7 @@ export class NoOptionsHandler<TValue = unknown> implements OptionsHandler<TValue
     /**
      * @inheritdoc
      */
-    public selectBus: SelectBus<TValue> = inject(SelectBus);
+    public selectBus: SelectBus<TValue> = inject(SelectBus) as SelectBus<TValue>;
 
     //######################### public properties - implementation of OptionsHandler #########################
 

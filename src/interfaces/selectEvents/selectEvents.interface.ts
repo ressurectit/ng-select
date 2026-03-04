@@ -2,23 +2,14 @@ import {Observable} from 'rxjs';
 
 import {SelectEvent} from '../selectEvent/selectEvent.interface';
 import {SelectOptionState} from '../selectOptionState/selectOptionState.interface';
+import {KeyboardAction} from '../keyboardAction/keyboardAction.interface';
 
 /**
  * Represents all events implemented by select bus
  */
-export interface SelectEvents<TValue = unknown>
+export interface SelectEvents<TValue = unknown, TAction extends string = string>
 {
     //######################### public properties - events #########################
-
-    /**
-     * Occurs when popup visibility should be toggled
-     */
-    readonly togglePopup: Observable<SelectEvent>;
-
-    /**
-     * Occurs when popup visibility should be changed
-     */
-    readonly showHidePopup: Observable<SelectEvent<boolean>>;
 
     /**
      * Occurs when option in popup was clicked
@@ -31,17 +22,12 @@ export interface SelectEvents<TValue = unknown>
     readonly focus: Observable<SelectEvent>;
 
     /**
-     * Occurs when live search should gain focus
-     */
-    readonly liveSearchFocus: Observable<SelectEvent>;
-
-    /**
-     * Occurs when there is need for updating displayed value
-     */
-    readonly updateDisplayedValue: Observable<SelectEvent>;
-
-    /**
      * Occurs when there is click on select itself (normal state)
      */
     readonly click: Observable<SelectEvent>;
+
+    /**
+     * Occurs when certain keys on keyboard are pressed
+     */
+    readonly keyboardAction: Observable<SelectEvent<KeyboardAction<TAction>>>;
 }

@@ -66,7 +66,7 @@ export class SimpleNormalState<TValue = unknown> implements NormalState<TValue, 
     /**
      * @inheritdoc
      */
-    public selectBus: SelectBus<TValue> = inject(SelectBus);
+    public selectBus: SelectBus<TValue> = inject(SelectBus) as SelectBus<TValue>;
 
     //######################### constructor #########################
     constructor(@Inject(NORMAL_STATE_OPTIONS) @Optional() options?: RecursivePartial<NormalStateOptions<SimpleNormalStateCssClasses>>|null,)

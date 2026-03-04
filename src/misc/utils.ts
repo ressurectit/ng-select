@@ -1,4 +1,5 @@
 import {untracked} from '@angular/core';
+import {isDescendant, NoopAction} from '@jscrpt/common';
 import {Subscription} from 'rxjs';
 
 import {SelectOption} from '../interfaces';
@@ -36,6 +37,12 @@ export function togglePopupOnClick<TValue>(selectBus: SelectBus<TValue>, subscri
     subscriptions.add(selectBus.click.subscribe(() => selectBus.popupVisible.update(val => !val)));
 }
 
+/**
+ * Handles option click, handles selection of options
+ * @param selectBus  - Instance of select bus
+ * @param selectPlugins - Instance with select plugins
+ * @param subscriptions - Subscriptions to used
+ */
 export function handleOptionClick<TValue>(selectBus: SelectBus<TValue>, selectPlugins: SelectPluginInstances, subscriptions: Subscription): void
 {
     subscriptions.add(selectBus.optionClick.subscribe(event =>
@@ -61,4 +68,31 @@ export function handleOptionClick<TValue>(selectBus: SelectBus<TValue>, selectPl
             selectBus.popupVisible.set(false);
         }
     }));
+}
+
+/**
+ * Handles click outside of select for closing popover
+ *
+ * Returns function that unregisters callback
+ *
+ * @param document - HTML document instance
+ * @param selectBus  - Instance of select bus
+ * @param selectPlugins - Instance with select plugins
+ */
+export function handleClickOutside<TValue>(document: Document, selectBus: SelectBus<TValue>, selectPlugins: SelectPluginInstances): NoopAction
+{
+    const handleClick = (event: MouseEvent) =>
+    {
+        if(selectBus.selectElement().nativeElement != event.target &&
+           !isDescendant(selectBus.selectElement().nativeElement, event.target as HTMLElement) &&
+           (!selectPlugins.Popup.pluginElement.nativeElement || (selectPlugins.Popup.pluginElement.nativeElement != event.target &&
+                                                                 !isDescendant(selectPlugins.Popup.pluginElement.nativeElement, event.target as HTMLElement))))
+        {
+            selectBus.popupVisible.set(false);
+        }
+    };
+
+    document.addEventListener('mouseup', handleClick);
+
+    return () => document.removeEventListener('mouseup', handleClick);
 }

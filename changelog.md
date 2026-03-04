@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 16.0.0 (2026-02-27)
+## Version 16.0.0 (2026-03-04)
 
 ### Features
 
@@ -73,6 +73,18 @@
 - new `SelectCssClasses` interface, that represents css classes for Select
    - `visualContainer` css class applied to container storing visual parts of Select
    - `selectElement` css class applied directly to css select
+- new `togglePopupOnClick` function, that toggles popup on click on select
+- new `handleOptionClick` function, that handles option click, handles selection of options
+- new `handleClickOutside` function, that handles click outside of select for closing popover
+- new `KeyboardAction` interface, that defines keyboard action that is used as data when keyboard event occurs
+   - **properties**
+      - `type` type of keyboard action
+- new `MarkActiveKeyboardAction` interface, that defines keyboard action that should mark option as active
+   - **properties**
+      - `index` index of option to be marked as active
+- new `SelectActiveKeyboardAction` interface, that defines keyboard action that should select active option
+- new `HidePopupKeyboardAction` interface, that defines keyboard action that should hide popup
+- new `ShowPopupKeyboardAction` interface, that defines keyboard action that should show popup
 - updated `SelectPluginTypes` interface
    - **new properties**
       - `Interactions` handles interactions of plugins and select
@@ -153,8 +165,13 @@
 - updated `PluginBusEvents` interface
    - renamed to `SelectEvents`
    - new property `click` occurs when there is click on select itself (normal state)
+   - new property `keyboardAction` occurs when certain keys on keyboard are pressed
    - property `optionSelect` was renamed to `optionClick`
    - property `optionCancel` was removed in favor of `optionClick`
+   - property `togglePopup` was removed
+   - property `showHidePopup` was removed
+   - property `liveSearchFocus` was removed
+   - property `updateDisplayedValue` was removed
 - updated `PluginBus` class
    - renamed to `SelectBus`
    - new property `selectedOptions` that represents currently selected options of Select

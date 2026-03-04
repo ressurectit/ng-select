@@ -67,7 +67,7 @@ export class CommonPositioner<TValue = unknown> implements Positioner<TValue, Po
     /**
      * @inheritdoc
      */
-    public selectBus: SelectBus<TValue> = inject(SelectBus);
+    public selectBus: SelectBus<TValue> = inject(SelectBus) as SelectBus<TValue>;
 
     //######################### constructor #########################
     constructor(@Inject(POSITIONER_OPTIONS) @Optional() options?: RecursivePartial<PositionOptions>|null,)

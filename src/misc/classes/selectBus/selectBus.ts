@@ -1,13 +1,13 @@
 import {Injectable, ElementRef, signal, WritableSignal, Signal} from '@angular/core';
 import {Subject} from 'rxjs';
 
-import {SelectEvents, SelectBusOptions, SelectEvent, SelectOptionState} from '../../../interfaces';
+import {SelectEvents, SelectBusOptions, SelectEvent, SelectOptionState, KeyboardAction} from '../../../interfaces';
 
 /**
  * Class represents centralized bus for internal communication
  */
 @Injectable()
-export class SelectBus<TValue = unknown> implements SelectEvents<TValue>
+export class SelectBus<TValue = unknown, TAction extends string = string> implements SelectEvents<TValue, TAction>
 {
     //######################### public properties #########################
 
@@ -35,16 +35,6 @@ export class SelectBus<TValue = unknown> implements SelectEvents<TValue>
     /**
      * @inheritdoc
      */
-    public readonly togglePopup: Subject<SelectEvent> = new Subject<SelectEvent>();
-
-    /**
-     * @inheritdoc
-     */
-    public readonly showHidePopup: Subject<SelectEvent<boolean>> = new Subject<SelectEvent<boolean>>();
-
-    /**
-     * @inheritdoc
-     */
     public readonly optionClick: Subject<SelectEvent<SelectOptionState<TValue>>> = new Subject<SelectEvent<SelectOptionState<TValue>>>();
 
     /**
@@ -55,17 +45,12 @@ export class SelectBus<TValue = unknown> implements SelectEvents<TValue>
     /**
      * @inheritdoc
      */
-    public readonly liveSearchFocus: Subject<SelectEvent> = new Subject<SelectEvent>();
-
-    /**
-     * @inheritdoc
-     */
-    public readonly updateDisplayedValue: Subject<SelectEvent> = new Subject<SelectEvent>();
-
-    /**
-     * @inheritdoc
-     */
     public readonly click: Subject<SelectEvent> = new Subject<SelectEvent>();
+
+    /**
+     * @inheritdoc
+     */
+    public readonly keyboardAction: Subject<SelectEvent<KeyboardAction<TAction>>> = new Subject<SelectEvent<KeyboardAction<TAction>>>();
 
     //######################### public properties - state #########################
 

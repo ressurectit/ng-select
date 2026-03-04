@@ -70,7 +70,7 @@ export class SimplePopup<TValue = unknown> implements Popup<TValue, PopupOptions
     /**
      * @inheritdoc
      */
-    public selectBus: SelectBus<TValue> = inject(SelectBus);
+    public selectBus: SelectBus<TValue> = inject(SelectBus) as SelectBus<TValue>;
 
     //######################### constructor #########################
     constructor(@Inject(POPUP_OPTIONS) @Optional() options?: RecursivePartial<PopupOptions<SimplePopupCssClasses>>|null,)

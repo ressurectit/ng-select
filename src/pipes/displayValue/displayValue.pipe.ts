@@ -15,7 +15,7 @@ export class DisplayValue<TValue = unknown> implements PipeTransform
     /**
      * Select bus used in Select for comunication between plugins and Select
      */
-    protected selectBus: SelectBus<TValue> = inject(SelectBus);
+    protected selectBus: SelectBus<TValue> = inject(SelectBus) as SelectBus<TValue>;
 
     //######################### public methods - implementation of PipeTransform #########################
 
