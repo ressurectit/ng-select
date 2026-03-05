@@ -73,8 +73,8 @@
 - new `SelectCssClasses` interface, that represents css classes for Select
    - `visualContainer` css class applied to container storing visual parts of Select
    - `selectElement` css class applied directly to css select
-- new `togglePopupOnClick` function, that toggles popup on click on select
-- new `handleOptionClick` function, that handles option click, handles selection of options
+- new `togglePopup` function, that toggles popup visibility
+- new `selectOption` function, that handles selection of options
 - new `handleClickOutside` function, that handles click outside of select for closing popover
 - new `KeyboardAction` interface, that defines keyboard action that is used as data when keyboard event occurs
    - **properties**

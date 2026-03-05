@@ -1,8 +1,8 @@
 import {Component, effect, ElementRef, Inject, inject, OnDestroy, Optional} from '@angular/core';
-import {BindThis, RecursivePartial} from '@jscrpt/common';
+import {BindThis, isPresent, RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
-import {HidePopupKeyboardAction, KeyboardHandler, KeyboardHandlerOptions, MarkActiveKeyboardAction, SelectActiveKeyboardAction, SelectPlugin, ShowPopupKeyboardAction} from '../../../interfaces';
+import {HidePopupKeyboardAction, KeyboardHandler, KeyboardHandlerOptions, MarkActiveKeyboardAction, SelectActiveKeyboardAction, SelectFirstKeyboardAction, SelectPlugin, ShowPopupKeyboardAction} from '../../../interfaces';
 import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {KEYBOARD_HANDLER_OPTIONS} from '../../../misc/tokens';
@@ -22,6 +22,18 @@ const defaultOptions: KeyboardHandlerOptions =
 })
 export class SimpleKeyboardHandlerComponent<TValue = unknown> implements KeyboardHandler<TValue, KeyboardHandlerOptions, SimpleKeyboardActionTypes>, OnDestroy
 {
+    //######################### protected fields #########################
+
+    /**
+     * Searched text
+     */
+    protected search: string = '';
+
+    /**
+     * Debounce timeout for search
+     */
+    protected searchDebounceTimeout: number|undefined|null;
+
     //######################### public properties - implementation of SelectPlugin #########################
 
     /**
@@ -82,6 +94,11 @@ export class SimpleKeyboardHandlerComponent<TValue = unknown> implements Keyboar
     public ngOnDestroy(): void
     {
         this.selectBus.selectElement().nativeElement.removeEventListener('keydown', this.handleKeyboardEvents);
+
+        if(isPresent(this.searchDebounceTimeout))
+        {
+            clearTimeout(this.searchDebounceTimeout);
+        }
     }
 
     //######################### protected methods #########################
@@ -97,7 +114,7 @@ export class SimpleKeyboardHandlerComponent<TValue = unknown> implements Keyboar
 
         if(event.key == 'ArrowDown' || event.key == 'ArrowUp')
         {
-            const activeOption = options?.find(itm => itm.active);
+            const activeOption = options?.find(itm => itm.active());
 
             if(activeOption && options)
             {
@@ -180,6 +197,29 @@ export class SimpleKeyboardHandlerComponent<TValue = unknown> implements Keyboar
             });
 
             event.preventDefault();
+        }
+
+        if(event.key.match(/^[a-z0-9]$/i))
+        {
+            this.search += event.key;
+
+            if(isPresent(this.searchDebounceTimeout))
+            {
+                clearTimeout(this.searchDebounceTimeout);
+            }
+
+            //TODO: move this into option
+            this.searchDebounceTimeout = setTimeout(() =>
+            {
+                this.selectBus.keyboardAction.next(
+                {
+                    source: this as SelectPlugin,
+                    sourceElement: this.selectBus.selectElement().nativeElement,
+                    data: <SelectFirstKeyboardAction>{type: 'SELECT_FIRST', search: this.search},
+                });
+
+                this.search = '';
+            }, 300) as unknown as number;
         }
     }
 }

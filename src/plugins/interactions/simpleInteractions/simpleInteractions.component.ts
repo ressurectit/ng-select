@@ -3,11 +3,11 @@ import {NoopAction, RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 import {Observable, Subscription} from 'rxjs';
 
-import {Interactions, InteractionsOptions, SelectEvent} from '../../../interfaces';
+import {Interactions, InteractionsOptions, SelectEvent, SelectOptionState} from '../../../interfaces';
 import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {INTERACTIONS_OPTIONS} from '../../../misc/tokens';
-import {handleClickOutside, handleOptionClick, togglePopupOnClick} from '../../../misc/utils';
+import {handleClickOutside, selectOption, togglePopup} from '../../../misc/utils';
 import {SimpleKeyboardActions, SimpleKeyboardActionTypes} from '../../../misc/types';
 
 const defaultOptions: InteractionsOptions =
@@ -81,8 +81,8 @@ export class SimpleInteractions<TValue = unknown> implements Interactions<TValue
         this.options = deepCopyWithArrayOverride(defaultOptions as InteractionsOptions,
                                                  options);
 
-        togglePopupOnClick(this.selectBus, this.clickPopupVisibleToggle);
-        handleOptionClick(this.selectBus, this.selectPlugins, this.optionClick);
+        this.clickPopupVisibleToggle.add(this.selectBus.click.subscribe(() => togglePopup(this.selectBus)));
+        this.optionClick.add(this.selectBus.optionClick.subscribe(event => selectOption(this.selectBus, this.selectPlugins, event.data)));
 
         effect(() =>
         {
@@ -120,7 +120,7 @@ export class SimpleInteractions<TValue = unknown> implements Interactions<TValue
                 {
                     this.selectBus.popupVisible.set(true);
                     const options = this.selectPlugins.OptionsHandler.listOptions();
-                    const activeOption = options?.find(itm => itm.active);
+                    const activeOption = options?.find(itm => itm.active());
 
                     activeOption?.active.set(false);
                     options?.[event.data?.index ?? 0].active.set(true);
@@ -129,11 +129,30 @@ export class SimpleInteractions<TValue = unknown> implements Interactions<TValue
                 }
                 case 'SELECT_ACTIVE':
                 {
-                    this.selectBus.popupVisible.set(false);
                     const options = this.selectPlugins.OptionsHandler.listOptions();
-                    const activeOption = options?.find(itm => itm.active);
+                    const activeOption = options?.find(itm => itm.active()) as SelectOptionState<TValue>|undefined;
 
-                    activeOption?.selected.set(true);
+                    //TODO: handle removed option from list options
+                    selectOption(this.selectBus, this.selectPlugins, activeOption);
+
+                    const actOption = options?.find(itm => itm.active());
+
+                    if(!actOption)
+                    {
+                        activeOption?.active.set(false);
+                    }
+
+                    break;
+                }
+                case 'SELECT_FIRST':
+                {
+                    const options = this.selectPlugins.OptionsHandler.listOptions();
+                    const e = event.data;
+
+                    const foundOption = options?.find(itm => itm.text().startsWith(e.search)) as SelectOptionState<TValue>|undefined;
+
+                    //TODO: handle removed option from list options
+                    selectOption(this.selectBus, this.selectPlugins, foundOption);
 
                     break;
                 }
@@ -164,6 +183,7 @@ export class SimpleInteractions<TValue = unknown> implements Interactions<TValue
      */
     public ngOnDestroy(): void
     {
+        this.clickOutsideUnregister?.();
         this.clickPopupVisibleToggle.unsubscribe();
         this.keyboardActions.unsubscribe();
         this.optionClick.unsubscribe();

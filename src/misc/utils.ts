@@ -1,8 +1,7 @@
 import {untracked} from '@angular/core';
 import {isDescendant, NoopAction} from '@jscrpt/common';
-import {Subscription} from 'rxjs';
 
-import {SelectOption} from '../interfaces';
+import {SelectOption, SelectOptionState} from '../interfaces';
 import {SelectBus, SelectPluginInstances} from './classes';
 
 /**
@@ -28,46 +27,42 @@ export function compareSelectOptions<TValue, TAction>(source: SelectOption<TValu
 }
 
 /**
- * Toggles popup on click on select
+ * Toggles popup visiblity
  * @param selectBus - Instance of select bus
- * @param subscriptions - Subscriptions to used
  */
-export function togglePopupOnClick<TValue, TAction>(selectBus: SelectBus<TValue, TAction>, subscriptions: Subscription): void
+export function togglePopup<TValue, TAction>(selectBus: SelectBus<TValue, TAction>): void
 {
-    subscriptions.add(selectBus.click.subscribe(() => selectBus.popupVisible.update(val => !val)));
+    selectBus.popupVisible.update(val => !val);
 }
 
 /**
- * Handles option click, handles selection of options
+ * Handles selection of options
  * @param selectBus  - Instance of select bus
  * @param selectPlugins - Instance with select plugins
- * @param subscriptions - Subscriptions to used
+ * @param option - Option that was 'clicked'
  */
-export function handleOptionClick<TValue, TAction>(selectBus: SelectBus<TValue, TAction>, selectPlugins: SelectPluginInstances, subscriptions: Subscription): void
+export function selectOption<TValue, TAction>(selectBus: SelectBus<TValue, TAction>, selectPlugins: SelectPluginInstances, option: SelectOptionState<TValue>|undefined|null): void
 {
-    subscriptions.add(selectBus.optionClick.subscribe(event =>
-    {
         //handle multiselect
-        if(selectBus.selectOptions().multiple)
+    if(selectBus.selectOptions().multiple)
+    {
+    }
+    //handle single select
+    else
+    {
+        const selected = (selectPlugins.OptionsHandler.availableOptions() ?? []).find(itm => itm.selected());
+
+        //select new option
+        if(selected !== option)
         {
+            selected?.selected.set(false);
+            option?.selected.set(true);
+
+            selectBus.selectedOptions.set(option);
         }
-        //handle single select
-        else
-        {
-            const selected = (selectPlugins.OptionsHandler.availableOptions() ?? []).find(itm => itm.selected());
 
-            //select new option
-            if(selected !== event.data)
-            {
-                selected?.selected.set(false);
-                event.data?.selected.set(true);
-
-                selectBus.selectedOptions.set(event.data);
-            }
-
-            selectBus.popupVisible.set(false);
-        }
-    }));
+        selectBus.popupVisible.set(false);
+    }
 }
 
 /**
