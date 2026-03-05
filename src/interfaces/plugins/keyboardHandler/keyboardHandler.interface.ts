@@ -11,6 +11,6 @@ export interface KeyboardHandlerOptions extends PluginOptions
 /**
  * Keyboard handler plugin interface
  */
-export interface KeyboardHandler extends SelectPlugin
+export interface KeyboardHandler<TValue = unknown, TOptions extends KeyboardHandlerOptions = KeyboardHandlerOptions, TAction = string> extends SelectPlugin<TOptions, TValue, TAction>
 {
 }

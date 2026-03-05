@@ -11,7 +11,7 @@ import {SelectBus, SelectPluginInstances} from './classes';
  * @param option - Option to be compared with
  * @param selectBus - Instance of select bus use for obtaining value comparerer and value extractor functions
  */
-export function compareValueAndOption<TValue>(value: TValue, option: SelectOption<TValue>, selectBus: SelectBus<TValue>): boolean
+export function compareValueAndOption<TValue, TAction>(value: TValue, option: SelectOption<TValue>, selectBus: SelectBus<TValue, TAction>): boolean
 {
     return untracked(() => selectBus.selectOptions().valueComparer(value, selectBus.selectOptions().valueExtractor(option)));
 }
@@ -22,7 +22,7 @@ export function compareValueAndOption<TValue>(value: TValue, option: SelectOptio
  * @param target - Target option to be compared with
  * @param selectBus - Instance of select bus use for obtaining value comparerer and value extractor functions
  */
-export function compareSelectOptions<TValue>(source: SelectOption<TValue>, target: SelectOption<TValue>, selectBus: SelectBus<TValue>): boolean
+export function compareSelectOptions<TValue, TAction>(source: SelectOption<TValue>, target: SelectOption<TValue>, selectBus: SelectBus<TValue, TAction>): boolean
 {
     return untracked(() => selectBus.selectOptions().valueComparer(selectBus.selectOptions().valueExtractor(source), selectBus.selectOptions().valueExtractor(target)));
 }
@@ -32,7 +32,7 @@ export function compareSelectOptions<TValue>(source: SelectOption<TValue>, targe
  * @param selectBus - Instance of select bus
  * @param subscriptions - Subscriptions to used
  */
-export function togglePopupOnClick<TValue>(selectBus: SelectBus<TValue>, subscriptions: Subscription): void
+export function togglePopupOnClick<TValue, TAction>(selectBus: SelectBus<TValue, TAction>, subscriptions: Subscription): void
 {
     subscriptions.add(selectBus.click.subscribe(() => selectBus.popupVisible.update(val => !val)));
 }
@@ -43,7 +43,7 @@ export function togglePopupOnClick<TValue>(selectBus: SelectBus<TValue>, subscri
  * @param selectPlugins - Instance with select plugins
  * @param subscriptions - Subscriptions to used
  */
-export function handleOptionClick<TValue>(selectBus: SelectBus<TValue>, selectPlugins: SelectPluginInstances, subscriptions: Subscription): void
+export function handleOptionClick<TValue, TAction>(selectBus: SelectBus<TValue, TAction>, selectPlugins: SelectPluginInstances, subscriptions: Subscription): void
 {
     subscriptions.add(selectBus.optionClick.subscribe(event =>
     {
@@ -79,7 +79,7 @@ export function handleOptionClick<TValue>(selectBus: SelectBus<TValue>, selectPl
  * @param selectBus  - Instance of select bus
  * @param selectPlugins - Instance with select plugins
  */
-export function handleClickOutside<TValue>(document: Document, selectBus: SelectBus<TValue>, selectPlugins: SelectPluginInstances): NoopAction
+export function handleClickOutside<TValue, TAction>(document: Document, selectBus: SelectBus<TValue, TAction>, selectPlugins: SelectPluginInstances): NoopAction
 {
     const handleClick = (event: MouseEvent) =>
     {

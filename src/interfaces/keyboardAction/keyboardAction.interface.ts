@@ -1,7 +1,9 @@
+import {SelectOptionState} from '../selectOptionState/selectOptionState.interface';
+
 /**
  * Defines keyboard action that is used as data when keyboard event occurs
  */
-export interface KeyboardAction<TType extends string>
+export interface KeyboardAction<TType>
 {
     //######################### properties #########################
 
@@ -29,6 +31,12 @@ export interface MarkActiveKeyboardAction extends KeyboardAction<'MARK_ACTIVE'>
  */
 export interface SelectActiveKeyboardAction extends KeyboardAction<'SELECT_ACTIVE'>
 {
+    //######################### properties #########################
+
+    /**
+     * Option to be selected
+     */
+    option: SelectOptionState;
 }
 
 /**
@@ -43,4 +51,12 @@ export interface HidePopupKeyboardAction extends KeyboardAction<'HIDE_POPUP'>
  */
 export interface ShowPopupKeyboardAction extends KeyboardAction<'SHOW_POPUP'>
 {
+}
+
+/**
+ * Defines keyboard action that should select first that corresponds to entered letters
+ */
+export interface SelectFirstKeyboardAction extends KeyboardAction<'SELECT_FIRST'>
+{
+    search: string;
 }

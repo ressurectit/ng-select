@@ -1,4 +1,4 @@
-import {SelectApi, SelectCssClasses, SelectOption} from '../interfaces';
+import {HidePopupKeyboardAction, MarkActiveKeyboardAction, SelectActiveKeyboardAction, SelectApi, SelectCssClasses, SelectFirstKeyboardAction, SelectOption, ShowPopupKeyboardAction} from '../interfaces';
 
 /**
  * Defintion of action that can be executed on Select
@@ -24,3 +24,13 @@ export type ValueEqualityFunc<TValue = unknown> = (source: TValue, target: TValu
  * Definition of function used for extracting value from select option
  */
 export type ValueExtractorFunc<TValue = unknown> = (option: SelectOption<TValue>) => TValue;
+
+/**
+ * Definition of simple keyboard actions
+ */
+export type SimpleKeyboardActions = MarkActiveKeyboardAction|SelectActiveKeyboardAction|HidePopupKeyboardAction|ShowPopupKeyboardAction|SelectFirstKeyboardAction;
+
+/**
+ * Names of simple keyboard action types
+ */
+export type SimpleKeyboardActionTypes = 'MARK_ACTIVE'|'SELECT_ACTIVE'|'HIDE_POPUP'|'SHOW_POPUP'|'SELECT_FIRST';

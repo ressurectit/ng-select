@@ -11,6 +11,6 @@ export interface InteractionsOptions extends PluginOptions
 /**
  * Interactions plugin interface
  */
-export interface Interactions<TValue = unknown, TOptions extends InteractionsOptions = InteractionsOptions> extends SelectPlugin<TOptions, TValue>
+export interface Interactions<TValue = unknown, TOptions extends InteractionsOptions = InteractionsOptions, TAction = string> extends SelectPlugin<TOptions, TValue, TAction>
 {
 }

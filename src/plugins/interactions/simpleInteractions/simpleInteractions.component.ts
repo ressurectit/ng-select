@@ -1,13 +1,14 @@
 import {ChangeDetectionStrategy, Component, DOCUMENT, effect, ElementRef, Inject, inject, OnDestroy, Optional} from '@angular/core';
 import {NoopAction, RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
-import {Subscription} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 
-import {Interactions, InteractionsOptions} from '../../../interfaces';
+import {Interactions, InteractionsOptions, SelectEvent} from '../../../interfaces';
 import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {INTERACTIONS_OPTIONS} from '../../../misc/tokens';
 import {handleClickOutside, handleOptionClick, togglePopupOnClick} from '../../../misc/utils';
+import {SimpleKeyboardActions, SimpleKeyboardActionTypes} from '../../../misc/types';
 
 const defaultOptions: InteractionsOptions =
 {
@@ -22,7 +23,7 @@ const defaultOptions: InteractionsOptions =
     template: '',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SimpleInteractions<TValue = unknown> implements Interactions<TValue, InteractionsOptions>, OnDestroy
+export class SimpleInteractions<TValue = unknown> implements Interactions<TValue, InteractionsOptions, SimpleKeyboardActionTypes>, OnDestroy
 {
     //######################### protected fields #########################
 
@@ -30,6 +31,11 @@ export class SimpleInteractions<TValue = unknown> implements Interactions<TValue
      * Subscription for popup visible toggle
      */
     protected clickPopupVisibleToggle: Subscription = new Subscription();
+
+    /**
+     * Subscription for keyboard actions
+     */
+    protected keyboardActions: Subscription = new Subscription();
 
     /**
      * Subscription for option click
@@ -67,7 +73,7 @@ export class SimpleInteractions<TValue = unknown> implements Interactions<TValue
     /**
      * @inheritdoc
      */
-    public selectBus: SelectBus<TValue> = inject(SelectBus) as SelectBus<TValue>;
+    public selectBus: SelectBus<TValue, SimpleKeyboardActionTypes> = inject(SelectBus) as SelectBus<TValue, SimpleKeyboardActionTypes>;
 
     //######################### constructor #########################
     constructor(@Inject(INTERACTIONS_OPTIONS) @Optional() options?: RecursivePartial<InteractionsOptions>|null,)
@@ -93,6 +99,46 @@ export class SimpleInteractions<TValue = unknown> implements Interactions<TValue
                 this.clickOutsideUnregister = null;
             }
         });
+
+        this.keyboardActions.add((this.selectBus.keyboardAction as Observable<SelectEvent<SimpleKeyboardActions>>).subscribe(event =>
+        {
+            switch(event.data?.type)
+            {
+                case 'SHOW_POPUP':
+                {
+                    this.selectBus.popupVisible.set(true);
+
+                    break;
+                }
+                case 'HIDE_POPUP':
+                {
+                    this.selectBus.popupVisible.set(false);
+
+                    break;
+                }
+                case 'MARK_ACTIVE':
+                {
+                    this.selectBus.popupVisible.set(true);
+                    const options = this.selectPlugins.OptionsHandler.listOptions();
+                    const activeOption = options?.find(itm => itm.active);
+
+                    activeOption?.active.set(false);
+                    options?.[event.data?.index ?? 0].active.set(true);
+
+                    break;
+                }
+                case 'SELECT_ACTIVE':
+                {
+                    this.selectBus.popupVisible.set(false);
+                    const options = this.selectPlugins.OptionsHandler.listOptions();
+                    const activeOption = options?.find(itm => itm.active);
+
+                    activeOption?.selected.set(true);
+
+                    break;
+                }
+            }
+        }));
     }
 
     //######################### public methods - implementation of SelectPlugin #########################
@@ -119,6 +165,7 @@ export class SimpleInteractions<TValue = unknown> implements Interactions<TValue
     public ngOnDestroy(): void
     {
         this.clickPopupVisibleToggle.unsubscribe();
+        this.keyboardActions.unsubscribe();
         this.optionClick.unsubscribe();
     }
 }

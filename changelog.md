@@ -85,6 +85,8 @@
 - new `SelectActiveKeyboardAction` interface, that defines keyboard action that should select active option
 - new `HidePopupKeyboardAction` interface, that defines keyboard action that should hide popup
 - new `ShowPopupKeyboardAction` interface, that defines keyboard action that should show popup
+- new `SimpleKeyboardActions` definition of simple keyboard actions
+- new `SimpleKeyboardActionTypes` names of simple keyboard action types
 - updated `SelectPluginTypes` interface
    - **new properties**
       - `Interactions` handles interactions of plugins and select

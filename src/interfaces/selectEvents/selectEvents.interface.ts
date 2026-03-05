@@ -7,7 +7,7 @@ import {KeyboardAction} from '../keyboardAction/keyboardAction.interface';
 /**
  * Represents all events implemented by select bus
  */
-export interface SelectEvents<TValue = unknown, TAction extends string = string>
+export interface SelectEvents<TValue = unknown, TAction = string>
 {
     //######################### public properties - events #########################
 

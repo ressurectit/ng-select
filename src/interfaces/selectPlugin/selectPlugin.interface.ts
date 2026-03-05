@@ -6,7 +6,7 @@ import {SelectBus, SelectPluginInstances} from '../../misc/classes';
 /**
  * Select plugin interface
  */
-export interface SelectPlugin<TOptions = unknown, TValue = unknown>
+export interface SelectPlugin<TOptions = unknown, TValue = unknown, TAction = string>
 {
     /**
      * Select plugin instances available for this plugin
@@ -26,7 +26,7 @@ export interface SelectPlugin<TOptions = unknown, TValue = unknown>
     /**
      * Select bus used in Select for comunication between plugins and Select
      */
-    selectBus: SelectBus<TValue>;
+    selectBus: SelectBus<TValue, TAction>;
 
     /**
      * Initialize plugin, to be ready to use, initialize communication with other plugins

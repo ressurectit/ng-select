@@ -7,7 +7,7 @@ import {SelectEvents, SelectBusOptions, SelectEvent, SelectOptionState, Keyboard
  * Class represents centralized bus for internal communication
  */
 @Injectable()
-export class SelectBus<TValue = unknown, TAction extends string = string> implements SelectEvents<TValue, TAction>
+export class SelectBus<TValue = unknown, TAction = string> implements SelectEvents<TValue, TAction>
 {
     //######################### public properties #########################
 
