@@ -26,11 +26,6 @@ export interface PopupOptions<TCssClasses extends PopupCssClasses = PopupCssClas
 {
     //######################### properties #########################
 
-    // /**
-    //  * Function used for transformation options into display text in options list popup
-    //  */
-    // optionDisplayText: DisplayTextFunc<TValue>;
-
     /**
      * Indication whether are popup options visible, or not, force popup to be visible if set to true
      */
@@ -40,6 +35,11 @@ export interface PopupOptions<TCssClasses extends PopupCssClasses = PopupCssClas
      * Texts that are used within any Popup
      */
     texts: PopupTexts;
+
+    /**
+     * Indication whether is live search enabled for popup
+     */
+    liveSearchEnabled: boolean;
 }
 
 /**

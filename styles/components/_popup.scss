@@ -23,6 +23,8 @@
 
             .option
             {
+                display: flex;
+                flex-direction: row;
                 padding: var(--select-popup-option-padding);
                 border-radius: var(--select-popup-option-borderRadius);
 
@@ -45,6 +47,12 @@
                 {
                     margin: var(--select-popup-option-inGroup-margin);
                 }
+            }
+
+            .option-text
+            {
+                flex: 1;
+                min-width: 0;
             }
         }
     }

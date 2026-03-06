@@ -10,12 +10,12 @@ export interface SelectPlugin<TOptions = unknown, TValue = unknown, TAction = st
     /**
      * Select plugin instances available for this plugin
      */
-    selectPlugins: SelectPluginInstances;
+    readonly selectPlugins: SelectPluginInstances;
 
     /**
      * Element that represents plugin
      */
-    pluginElement: ElementRef<HTMLElement>;
+    readonly pluginElement: ElementRef<HTMLElement>;
 
     /**
      * Options for Select plugin
@@ -25,5 +25,5 @@ export interface SelectPlugin<TOptions = unknown, TValue = unknown, TAction = st
     /**
      * Select bus used in Select for comunication between plugins and Select
      */
-    selectBus: SelectBus<TValue, TAction>;
+    readonly selectBus: SelectBus<TValue, TAction>;
 }

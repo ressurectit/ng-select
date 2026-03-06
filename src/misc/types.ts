@@ -36,6 +36,11 @@ export type NormalizeTextForComparison = <TText extends string|undefined|null>(t
 export type TextExtractorFunc<TValue> = (option: SelectOption<TValue>) => string;
 
 /**
+ * Definition of function used for comparison two texts
+ */
+export type TextComparerFunc = (source: string, target: string) => boolean;
+
+/**
  * Definition of simple keyboard actions
  */
 export type SimpleKeyboardActions = MarkActiveKeyboardAction|SelectActiveKeyboardAction|HidePopupKeyboardAction|ShowPopupKeyboardAction|SelectFirstKeyboardAction;

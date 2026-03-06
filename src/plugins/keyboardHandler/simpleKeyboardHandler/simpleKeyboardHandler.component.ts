@@ -21,7 +21,7 @@ const defaultOptions: SimpleKeyboardHandlerOptions =
     selector: 'simple-keyboard-handler',
     template: '',
 })
-export class SimpleKeyboardHandlerComponent<TValue = unknown> implements KeyboardHandler<TValue, SimpleKeyboardHandlerOptions, SimpleKeyboardActionTypes>, OnDestroy
+export class SimpleKeyboardHandler<TValue = unknown> implements KeyboardHandler<TValue, SimpleKeyboardHandlerOptions, SimpleKeyboardActionTypes>, OnDestroy
 {
     //######################### protected fields #########################
 

@@ -1,28 +1,47 @@
-import {Component, ElementRef} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ElementRef, inject, Signal, signal} from '@angular/core';
 
-import {LiveSearch} from '../../../interfaces';
+import {LiveSearch, LiveSearchOptions} from '../../../interfaces';
 import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
+import {CopyOptionsAsSignal} from '../../../decorators';
 
 /**
- *
+ * Component used for no live search
  */
 @Component(
 {
     selector: 'no-live-search',
     template: '',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NoLiveSearchComponent implements LiveSearch
+export class NoLiveSearch<TValue = unknown> implements LiveSearch<TValue, LiveSearchOptions>
 {
+    //######################### public properties - implementation of SelectPlugin #########################
+
     /**
      * @inheritdoc
      */
-    public options: unknown;
+    @CopyOptionsAsSignal()
+    public options: LiveSearchOptions = {cssClasses: {}};
 
-    //######################### constructor #########################
-    constructor(public pluginElement: ElementRef<HTMLElement>,
-                public selectPlugins: SelectPluginInstances,
-                public selectBus: SelectBus<unknown>,)
-    {
+    /**
+     * @inheritdoc
+     */
+    public selectPlugins: SelectPluginInstances = inject(SelectPluginInstances);
 
-    }
+    /**
+     * @inheritdoc
+     */
+    public pluginElement: ElementRef<HTMLElement> = inject(ElementRef);
+
+    /**
+     * @inheritdoc
+     */
+    public selectBus: SelectBus<TValue> = inject(SelectBus) as SelectBus<TValue>;
+
+    //######################### public properties - implementation of LiveSearch #########################
+
+    /**
+     * @inheritdoc
+     */
+    public readonly search: Signal<string> = signal('');
 }

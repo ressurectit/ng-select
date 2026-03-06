@@ -82,7 +82,7 @@ export class SimpleInteractions<TValue = unknown> implements Interactions<TValue
                                                  options);
 
         this.clickPopupVisibleToggle.add(this.selectBus.click.subscribe(() => togglePopup(this.selectBus)));
-        this.optionClick.add(this.selectBus.optionClick.subscribe(event => selectOption(this.selectBus, this.selectPlugins, event.data)));
+        this.optionClick.add(this.selectBus.optionClick.subscribe(event => selectOption(this.selectBus, event.data)));
 
         effect(() =>
         {
@@ -132,7 +132,7 @@ export class SimpleInteractions<TValue = unknown> implements Interactions<TValue
                     const options = this.selectPlugins.OptionsHandler.listOptions();
                     const activeOption = options?.find(itm => itm.active()) as SelectOptionState<TValue>|undefined;
 
-                    selectOption(this.selectBus, this.selectPlugins, activeOption);
+                    selectOption(this.selectBus, activeOption);
 
                     const actOption = options?.find(itm => itm.active());
 
@@ -154,7 +154,7 @@ export class SimpleInteractions<TValue = unknown> implements Interactions<TValue
 
                     if(foundOption)
                     {
-                        selectOption(this.selectBus, this.selectPlugins, foundOption);
+                        selectOption(this.selectBus, foundOption);
 
                         const actOption = options?.find(itm => itm.active());
 

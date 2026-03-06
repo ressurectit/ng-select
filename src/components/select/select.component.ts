@@ -7,7 +7,7 @@ import {InitState, Interactions, KeyboardHandler, LiveSearch, NormalState, Norma
 import {INTERACTIONS_TYPE, KEYBOARD_HANDLER_TYPE, LIVE_SEARCH_TYPE, NORMAL_STATE_TYPE, OPTIONS_HANDLER_TYPE, POPUP_TYPE, POSITIONER_TYPE, READONLY_STATE_TYPE, SELECT_OPTIONS, VALUE_HANDLER_TYPE} from '../../misc/tokens';
 import {SelectPluginType} from '../../misc/enums';
 import {SelectBus, SelectPluginInstances} from '../../misc/classes';
-import {CommonPositioner, StaticValueHandler, SimpleInteractions, NoLiveSearchComponent, NoOptionsHandler, SimpleKeyboardHandlerComponent, SimpleNormalState, SimplePopup} from '../../plugins';
+import {CommonPositioner, StaticValueHandler, SimpleInteractions, NoOptionsHandler, SimpleKeyboardHandler, SimpleNormalState, SimplePopup, FilterLiveSearch} from '../../plugins';
 import {CopyOptionsAsSignal} from '../../decorators';
 import {SelectAction, SelectFunction} from '../../misc/types';
 import {NormalStateTemplate, OptionTemplate} from '../../directives';
@@ -25,11 +25,13 @@ const defaultOptions: Omit<SelectOptions, 'optionsGatherer'|'templateGatherer'> 
     readonly: false,
     containerElement: 'div.select-component',
     placeholder: 'please select value',
+    closeOnSelect: true,
     displaySelectedValue: option => option.text(),
     valueExtractor: (option: SelectOption) => option.value,
     valueComparer: (source, target) => source === target,
     textExtractor: (option: SelectOption) => option.text(),
     normalize: <TText extends string|undefined|null>(value: TText) => isPresent(value) ? normalizeAccent(value) as TText : value,
+    textCompare: (source: string, target: string) => !!source.match(new RegExp(target, 'i')),
     cssClasses:
     {
         visualContainer: 'visual-container',
@@ -43,11 +45,11 @@ const defaultOptions: Omit<SelectOptions, 'optionsGatherer'|'templateGatherer'> 
         },
         keyboardHandler: <PluginDescription<KeyboardHandler>>
         {
-            type: forwardRef(() => SimpleKeyboardHandlerComponent),
+            type: forwardRef(() => SimpleKeyboardHandler),
         },
         liveSearch: <PluginDescription<LiveSearch>>
         {
-            type: forwardRef(() => NoLiveSearchComponent),
+            type: forwardRef(() => FilterLiveSearch),
         },
         normalState: <PluginDescription<NormalState>>
         {

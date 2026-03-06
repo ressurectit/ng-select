@@ -1,4 +1,4 @@
-import {DisplayTextFunc, NormalizeTextForComparison, TextExtractorFunc, ValueEqualityFunc, ValueExtractorFunc} from '../../misc/types';
+import {DisplayTextFunc, NormalizeTextForComparison, TextComparerFunc, TextExtractorFunc, ValueEqualityFunc, ValueExtractorFunc} from '../../misc/types';
 import {OptionsGatherer} from '../optionsGatherer/optionsGatherer.interface';
 import {TemplateGatherer} from '../templateGatherer/templateGatherer.interface';
 
@@ -35,6 +35,11 @@ export interface SelectBusOptions<TValue = unknown>
     placeholder: string;
 
     /**
+     * Indication whether close popup on selecting value
+     */
+    closeOnSelect: boolean;
+
+    /**
      * Function used for transformation of selected option into display text
      */
     displaySelectedValue: DisplayTextFunc<TValue>;
@@ -63,4 +68,9 @@ export interface SelectBusOptions<TValue = unknown>
      * Normalize text for comparison
      */
     normalize: NormalizeTextForComparison;
+
+    /**
+     * Compares two texts of option
+     */
+    textCompare: TextComparerFunc;
 }

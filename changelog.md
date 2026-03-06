@@ -92,10 +92,14 @@
 - new `SimpleKeyboardHandlerOptions` interface, that represents options for simple keyboard handler plugin
    - **properties**
       - `selectFirstDebounceTimeout` debounce timeout for selecting first option when typing
+- new `LiveSearchCssClasses` interface, represents css classes for live search
+- new `TextComparerFunc` definition of function used for comparison two texts
 - updated `SelectPluginTypes` interface
    - **new properties**
       - `Interactions` handles interactions of plugins and select
       - `OptionsHandler` component used for handling available options
+- updated `PopupOptions` interface
+   - new property `liveSearchEnabled` indication whether is live search enabled for popup
 
 ### BREAKING CHANGES
 
@@ -191,6 +195,8 @@
    - new property `valueExtractor` function used to extract value from option, if not provided, select option value will be used as value
    - new property `placeholder` placeholder text shown when there is no value selected
    - new property `displaySelectedValue` function used for transformation of selected option into display text
+   - new property `closeOnSelect` indication whether close popup on selecting value
+   - new property `textCompare` compares two texts of option
    - removed `useNonExistingAsValue` TODO ?????????????????
    - renamed `liveSearchFilter` function to `textExtractor`
    - renamed `normalizer` function to `normalize`
@@ -228,6 +234,12 @@
 - updated `LiveSearchFilter` function
    - renamed to `TextExtractorFunc`
    - updated functionality to only extract text from option
+- updated `FilterLiveSearchComponent` plugin component
+   - renamed to `FilterLiveSearch`
+- updated `NoLiveSearchComponent` plugin component
+   - renamed to `NoLiveSearch`
+- updated `SimpleKeyboardHandlerComponent` plugin component
+   - renamed to `SimpleKeyboardHandler`
 
 ## Version 15.0.0 (2026-02-10)
 

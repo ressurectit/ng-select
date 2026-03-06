@@ -21,9 +21,9 @@ export function compareValueAndOption<TValue, TAction>(value: TValue, option: Se
  * @param target - Target option to be compared with
  * @param selectBus - Instance of select bus use for obtaining value comparerer and value extractor functions
  */
-export function compareSelectOptions<TValue, TAction>(source: SelectOption<TValue>, target: SelectOption<TValue>, selectBus: SelectBus<TValue, TAction>): boolean
+export function compareSelectOptions<TValue, TAction>(source: SelectOption<TValue>|undefined|null, target: SelectOption<TValue>|undefined|null, selectBus: SelectBus<TValue, TAction>): boolean
 {
-    return untracked(() => selectBus.selectOptions().valueComparer(selectBus.selectOptions().valueExtractor(source), selectBus.selectOptions().valueExtractor(target)));
+    return untracked(() => source === target || ((!!source && !!target) ? selectBus.selectOptions().valueComparer(selectBus.selectOptions().valueExtractor(source), selectBus.selectOptions().valueExtractor(target)) : false));
 }
 
 /**
@@ -38,29 +38,52 @@ export function togglePopup<TValue, TAction>(selectBus: SelectBus<TValue, TActio
 /**
  * Handles selection of options
  * @param selectBus  - Instance of select bus
- * @param selectPlugins - Instance with select plugins
  * @param option - Option that was 'clicked'
  */
-export function selectOption<TValue, TAction>(selectBus: SelectBus<TValue, TAction>, selectPlugins: SelectPluginInstances, option: SelectOptionState<TValue>|undefined|null): void
+export function selectOption<TValue, TAction>(selectBus: SelectBus<TValue, TAction>, option: SelectOptionState<TValue>|undefined|null): void
 {
-        //handle multiselect
+    //handle multiselect
     if(selectBus.selectOptions().multiple)
     {
+        option?.selected.update(val => !val);
+        let selectedOptions = selectBus.selectedOptions();
+
+        if(!Array.isArray(selectedOptions))
+        {
+            selectedOptions = [];
+        }
+
+        const selected = selectedOptions.filter(itm => itm.selected());
+
+        if(option?.selected())
+        {
+            selected.push(option);
+        }
+
+        selectBus.selectedOptions.set(selected);
     }
     //handle single select
     else
     {
-        const selected = (selectPlugins.OptionsHandler.availableOptions() ?? []).find(itm => itm.selected());
+        const selectedOption = selectBus.selectedOptions();
+
+        if(Array.isArray(selectedOption))
+        {
+            throw new Error('Unexpected array of values! Remove multiple attribute!');
+        }
 
         //select new option
-        if(selected !== option)
+        if(!compareSelectOptions(selectedOption, option, selectBus))
         {
-            selected?.selected.set(false);
+            selectedOption?.selected.set(false);
             option?.selected.set(true);
 
             selectBus.selectedOptions.set(option);
         }
+    }
 
+    if(selectBus.selectOptions().closeOnSelect)
+    {
         selectBus.popupVisible.set(false);
     }
 }

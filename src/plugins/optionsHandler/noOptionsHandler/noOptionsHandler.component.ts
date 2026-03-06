@@ -52,6 +52,20 @@ export class NoOptionsHandler<TValue = unknown> implements OptionsHandler<TValue
     constructor()
     {
         this.availableOptions = computed(() => this.selectBus.selectOptions().optionsGatherer.availableOptions());
-        this.listOptions = computed(() => this.availableOptions());
+        this.listOptions = computed(() =>
+        {
+            const text = this.selectPlugins.LiveSearch.search();
+            const options = this.selectBus.selectOptions();
+            const textExtractor = options.textExtractor;
+            const normalize = options.normalize;
+            const textCompare = options.textCompare;
+
+            if(!text)
+            {
+                return this.availableOptions();
+            }
+
+            return this.availableOptions()?.filter(itm => textCompare(normalize(textExtractor(itm)), normalize(text)));
+        });
     }
 }
