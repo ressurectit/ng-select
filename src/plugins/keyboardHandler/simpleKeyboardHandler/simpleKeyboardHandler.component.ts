@@ -2,14 +2,15 @@ import {Component, effect, ElementRef, Inject, inject, OnDestroy, Optional} from
 import {BindThis, isPresent, RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
-import {HidePopupKeyboardAction, KeyboardHandler, KeyboardHandlerOptions, MarkActiveKeyboardAction, SelectActiveKeyboardAction, SelectFirstKeyboardAction, SelectPlugin, ShowPopupKeyboardAction} from '../../../interfaces';
+import {HidePopupKeyboardAction, KeyboardHandler, SimpleKeyboardHandlerOptions, MarkActiveKeyboardAction, SelectActiveKeyboardAction, SelectFirstKeyboardAction, SelectPlugin, ShowPopupKeyboardAction} from '../../../interfaces';
 import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {KEYBOARD_HANDLER_OPTIONS} from '../../../misc/tokens';
 import {SimpleKeyboardActionTypes} from '../../../misc/types';
 
-const defaultOptions: KeyboardHandlerOptions =
+const defaultOptions: SimpleKeyboardHandlerOptions =
 {
+    selectFirstDebounceTimeout: 300,
 };
 
 /**
@@ -20,7 +21,7 @@ const defaultOptions: KeyboardHandlerOptions =
     selector: 'simple-keyboard-handler',
     template: '',
 })
-export class SimpleKeyboardHandlerComponent<TValue = unknown> implements KeyboardHandler<TValue, KeyboardHandlerOptions, SimpleKeyboardActionTypes>, OnDestroy
+export class SimpleKeyboardHandlerComponent<TValue = unknown> implements KeyboardHandler<TValue, SimpleKeyboardHandlerOptions, SimpleKeyboardActionTypes>, OnDestroy
 {
     //######################### protected fields #########################
 
@@ -40,7 +41,7 @@ export class SimpleKeyboardHandlerComponent<TValue = unknown> implements Keyboar
      * @inheritdoc
      */
     @CopyOptionsAsSignal()
-    public options: KeyboardHandlerOptions;
+    public options: SimpleKeyboardHandlerOptions;
 
     /**
      * @inheritdoc
@@ -58,9 +59,9 @@ export class SimpleKeyboardHandlerComponent<TValue = unknown> implements Keyboar
     public selectBus: SelectBus<TValue, SimpleKeyboardActionTypes> = inject(SelectBus) as SelectBus<TValue, SimpleKeyboardActionTypes>;
 
     //######################### constructor #########################
-    constructor(@Inject(KEYBOARD_HANDLER_OPTIONS) @Optional() options?: RecursivePartial<KeyboardHandlerOptions>|null,)
+    constructor(@Inject(KEYBOARD_HANDLER_OPTIONS) @Optional() options?: RecursivePartial<SimpleKeyboardHandlerOptions>|null,)
     {
-        this.options = deepCopyWithArrayOverride(defaultOptions as KeyboardHandlerOptions,
+        this.options = deepCopyWithArrayOverride(defaultOptions as SimpleKeyboardHandlerOptions,
                                                  options);
 
         effect(() =>
@@ -68,22 +69,6 @@ export class SimpleKeyboardHandlerComponent<TValue = unknown> implements Keyboar
             this.selectBus.selectElement().nativeElement.removeEventListener('keydown', this.handleKeyboardEvents);
             this.selectBus.selectElement().nativeElement.addEventListener('keydown', this.handleKeyboardEvents);
         });
-    }
-
-    //######################### public methods - implementation of SelectPlugin #########################
-
-    /**
-     * @inheritdoc
-     */
-    public initialize(): void
-    {
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public initOptions(): void
-    {
     }
 
     //######################### public methods - implementation of OnDestroy #########################
@@ -208,7 +193,6 @@ export class SimpleKeyboardHandlerComponent<TValue = unknown> implements Keyboar
                 clearTimeout(this.searchDebounceTimeout);
             }
 
-            //TODO: move this into option
             this.searchDebounceTimeout = setTimeout(() =>
             {
                 this.selectBus.keyboardAction.next(
@@ -219,7 +203,7 @@ export class SimpleKeyboardHandlerComponent<TValue = unknown> implements Keyboar
                 });
 
                 this.search = '';
-            }, 300) as unknown as number;
+            }, this.options.selectFirstDebounceTimeout) as unknown as number;
         }
     }
 }

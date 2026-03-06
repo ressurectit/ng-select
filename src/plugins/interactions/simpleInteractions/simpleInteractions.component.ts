@@ -132,7 +132,6 @@ export class SimpleInteractions<TValue = unknown> implements Interactions<TValue
                     const options = this.selectPlugins.OptionsHandler.listOptions();
                     const activeOption = options?.find(itm => itm.active()) as SelectOptionState<TValue>|undefined;
 
-                    //TODO: handle removed option from list options
                     selectOption(this.selectBus, this.selectPlugins, activeOption);
 
                     const actOption = options?.find(itm => itm.active());
@@ -146,34 +145,29 @@ export class SimpleInteractions<TValue = unknown> implements Interactions<TValue
                 }
                 case 'SELECT_FIRST':
                 {
-                    const options = this.selectPlugins.OptionsHandler.listOptions();
+                    const options = this.selectPlugins.OptionsHandler.listOptions() as SelectOptionState<TValue>[]|null|undefined;
                     const e = event.data;
+                    const textExtractor = this.selectBus.selectOptions().textExtractor;
+                    const normalize = this.selectBus.selectOptions().normalize;
 
-                    const foundOption = options?.find(itm => itm.text().startsWith(e.search)) as SelectOptionState<TValue>|undefined;
+                    const foundOption = options?.find(itm => normalize(textExtractor(itm)).startsWith(e.search)) as SelectOptionState<TValue>|undefined;
 
-                    //TODO: handle removed option from list options
-                    selectOption(this.selectBus, this.selectPlugins, foundOption);
+                    if(foundOption)
+                    {
+                        selectOption(this.selectBus, this.selectPlugins, foundOption);
+
+                        const actOption = options?.find(itm => itm.active());
+
+                        if(!actOption)
+                        {
+                            foundOption.active.set(false);
+                        }
+                    }
 
                     break;
                 }
             }
         }));
-    }
-
-    //######################### public methods - implementation of SelectPlugin #########################
-
-    /**
-     * @inheritdoc
-     */
-    public initialize(): void
-    {
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public initOptions(): void
-    {
     }
 
     //######################### public methods - implementation of OnDestroy #########################

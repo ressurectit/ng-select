@@ -91,22 +91,6 @@ export class CommonPositioner<TValue = unknown> implements Positioner<TValue, Po
         });
     }
 
-    //######################### public methods - implementation of SelectPlugin #########################
-
-    /**
-     * @inheritdoc
-     */
-    public initialize(): void
-    {
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public initOptions(): void
-    {
-    }
-
     //######################### public methods - implementation of OnDestroy #########################
 
     /**

@@ -25,20 +25,4 @@ export class FilterLiveSearchComponent implements LiveSearch
     {
 
     }
-
-    //######################### public methods - implementation of SelectPlugin #########################
-
-    /**
-     * @inheritdoc
-     */
-    public initialize(): void
-    {
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public initOptions(): void
-    {
-    }
 }

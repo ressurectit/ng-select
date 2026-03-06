@@ -9,8 +9,6 @@ import {CopyOptionsAsSignal} from '../../../decorators';
 import {POPUP_OPTIONS} from '../../../misc/tokens';
 import {GroupedListOptions} from '../../../pipes';
 
-//TODO: support groups
-
 const defaultOptions: PopupOptions<SimplePopupCssClasses> =
 {
     visible: false,
@@ -77,22 +75,6 @@ export class SimplePopup<TValue = unknown> implements Popup<TValue, PopupOptions
     {
         this.options = deepCopyWithArrayOverride(defaultOptions as PopupOptions<SimplePopupCssClasses>,
                                                  options);
-    }
-
-    //######################### public methods - implementation of SelectPlugin #########################
-
-    /**
-     * @inheritdoc
-     */
-    public initialize(): void
-    {
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public initOptions(): void
-    {
     }
 
     //######################### protected methods - template bindings #########################

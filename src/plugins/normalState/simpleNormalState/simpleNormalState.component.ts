@@ -75,22 +75,6 @@ export class SimpleNormalState<TValue = unknown> implements NormalState<TValue, 
                                                  options);
     }
 
-    //######################### public methods - implementation of SelectPlugin #########################
-
-    /**
-     * @inheritdoc
-     */
-    public initialize(): void
-    {
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public initOptions(): void
-    {
-    }
-
     //######################### protected methods - template bindings #########################
 
     /**

@@ -28,7 +28,12 @@ export class SelectBus<TValue = unknown, TAction = string> implements SelectEven
     /**
      * Currently selected options of Select
      */
-    public selectedOptions: WritableSignal<SelectOptionState<TValue>|SelectOptionState<TValue>[]|undefined|null> = signal(null);
+    public readonly selectedOptions: WritableSignal<SelectOptionState<TValue>|SelectOptionState<TValue>[]|undefined|null> = signal(null);
+
+    /**
+     * Indicates whether is popup visible or not
+     */
+    public readonly popupVisible: WritableSignal<boolean> = signal(false);
 
     //######################### public properties - events #########################
 
@@ -51,11 +56,4 @@ export class SelectBus<TValue = unknown, TAction = string> implements SelectEven
      * @inheritdoc
      */
     public readonly keyboardAction: Subject<SelectEvent<KeyboardAction<TAction>>> = new Subject<SelectEvent<KeyboardAction<TAction>>>();
-
-    //######################### public properties - state #########################
-
-    /**
-     * Indicates whether is popup visible or not
-     */
-    public readonly popupVisible: WritableSignal<boolean> = signal(false);
 }

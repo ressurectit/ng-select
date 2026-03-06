@@ -1,5 +1,4 @@
 import {ElementRef} from '@angular/core';
-import {PromiseOr} from '@jscrpt/common';
 
 import {SelectBus, SelectPluginInstances} from '../../misc/classes';
 
@@ -27,14 +26,4 @@ export interface SelectPlugin<TOptions = unknown, TValue = unknown, TAction = st
      * Select bus used in Select for comunication between plugins and Select
      */
     selectBus: SelectBus<TValue, TAction>;
-
-    /**
-     * Initialize plugin, to be ready to use, initialize communication with other plugins
-     */
-    initialize(): PromiseOr<void>;
-
-    /**
-     * Initialize plugin options, all operations required to be done with plugin options are handled here
-     */
-    initOptions(): PromiseOr<void>;
 }

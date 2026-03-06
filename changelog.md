@@ -87,6 +87,11 @@
 - new `ShowPopupKeyboardAction` interface, that defines keyboard action that should show popup
 - new `SimpleKeyboardActions` definition of simple keyboard actions
 - new `SimpleKeyboardActionTypes` names of simple keyboard action types
+- new `NormalizeTextForComparison` normalize text for comparison, removes accent sensitive data
+- new `TextExtractorFunc` definition of function that extracts text for comparison/filtering/searching
+- new `SimpleKeyboardHandlerOptions` interface, that represents options for simple keyboard handler plugin
+   - **properties**
+      - `selectFirstDebounceTimeout` debounce timeout for selecting first option when typing
 - updated `SelectPluginTypes` interface
    - **new properties**
       - `Interactions` handles interactions of plugins and select
@@ -133,7 +138,8 @@
    - renamed to `SelectPlugin`
    - `ngSelectPlugins` renamed to `selectPlugins`
    - `pluginBus` renamed to `selectBus`
-   - new property `popupVisible` which indicates whether is popup visible or not
+   - `initialize` removed, not used within signal based Select
+   - `initOptions` removed, not used within signal based Select
 - updated `NG_SELECT_OPTIONS` injection token
    - renamed to `SELECT_OPTIONS`
 - updated `NgSelectComponent` component
@@ -177,6 +183,7 @@
 - updated `PluginBus` class
    - renamed to `SelectBus`
    - new property `selectedOptions` that represents currently selected options of Select
+   - new property `popupVisible` which indicates whether is popup visible or not
 - updated `NgSelectModule` module
    - renamed to `SelectModule`
 - updated `PluginBusOptions` interface
@@ -185,8 +192,8 @@
    - new property `placeholder` placeholder text shown when there is no value selected
    - new property `displaySelectedValue` function used for transformation of selected option into display text
    - removed `useNonExistingAsValue` TODO ?????????????????
-   - removed `liveSearchFilter` TODO ?????????????????
-   - removed `normalizer` TODO ?????????????????
+   - renamed `liveSearchFilter` function to `textExtractor`
+   - renamed `normalizer` function to `normalize`
 - updated `ValueHandler` interface
    - property `selectedOptions` removed, moved to `SelectBus`
    - removed `valueChange` property use `value` signal
@@ -216,6 +223,11 @@
     - renamed `optionItemTextDiv` to `optionText`
 - updated `DefaultPositionerComponent` plugin component
    - renamed to `CommonPositioner`
+- updated `NormalizeFunc` function
+   - renamed to `NormalizeTextForComparison`
+- updated `LiveSearchFilter` function
+   - renamed to `TextExtractorFunc`
+   - updated functionality to only extract text from option
 
 ## Version 15.0.0 (2026-02-10)
 

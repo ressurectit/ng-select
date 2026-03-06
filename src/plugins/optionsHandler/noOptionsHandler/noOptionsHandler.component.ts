@@ -54,20 +54,4 @@ export class NoOptionsHandler<TValue = unknown> implements OptionsHandler<TValue
         this.availableOptions = computed(() => this.selectBus.selectOptions().optionsGatherer.availableOptions());
         this.listOptions = computed(() => this.availableOptions());
     }
-
-    //######################### public methods - implementation of SelectPlugin #########################
-
-    /**
-     * @inheritdoc
-     */
-    public initialize(): void
-    {
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public initOptions(): void
-    {
-    }
 }

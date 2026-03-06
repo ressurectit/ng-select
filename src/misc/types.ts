@@ -26,6 +26,16 @@ export type ValueEqualityFunc<TValue = unknown> = (source: TValue, target: TValu
 export type ValueExtractorFunc<TValue = unknown> = (option: SelectOption<TValue>) => TValue;
 
 /**
+ * Normalize text for comparison, removes accent sensitive data
+ */
+export type NormalizeTextForComparison = <TText extends string|undefined|null>(text: TText) => TText;
+
+/**
+ * Definition of function that extracts text for comparison/filtering/searching
+ */
+export type TextExtractorFunc<TValue> = (option: SelectOption<TValue>) => string;
+
+/**
  * Definition of simple keyboard actions
  */
 export type SimpleKeyboardActions = MarkActiveKeyboardAction|SelectActiveKeyboardAction|HidePopupKeyboardAction|ShowPopupKeyboardAction|SelectFirstKeyboardAction;

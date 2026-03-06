@@ -37,20 +37,4 @@ export class NoPositioner<TValue = unknown> implements Positioner<TValue, Positi
      * @inheritdoc
      */
     public selectBus: SelectBus<TValue> = inject(SelectBus) as SelectBus<TValue>;
-
-    //######################### public methods - implementation of SelectPlugin #########################
-
-    /**
-     * @inheritdoc
-     */
-    public initialize(): void
-    {
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public initOptions(): void
-    {
-    }
 }

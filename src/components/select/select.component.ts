@@ -1,6 +1,6 @@
-import {Component, ChangeDetectionStrategy, Input, viewChild, ViewContainerRef, Signal, WritableSignal, signal, Inject, Optional, Type, resolveForwardRef, FactoryProvider, effect, forwardRef, Attribute, ElementRef, computed, input, booleanAttribute, InputSignalWithTransform, ComponentRef, DOCUMENT, TemplateRef, contentChild, contentChildren, untracked} from '@angular/core';
+import {Component, ChangeDetectionStrategy, Input, viewChild, ViewContainerRef, Signal, WritableSignal, signal, Inject, Optional, Type, resolveForwardRef, FactoryProvider, effect, forwardRef, Attribute, ElementRef, computed, input, booleanAttribute, InputSignalWithTransform, ComponentRef, DOCUMENT, TemplateRef, contentChild, contentChildren} from '@angular/core';
 import {getHostElement} from '@anglr/common';
-import {isPresent, RecursivePartial, renderToBody} from '@jscrpt/common';
+import {isPresent, RecursivePartial, renderToBody, normalizeAccent} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
 import {InitState, Interactions, KeyboardHandler, LiveSearch, NormalState, NormalStateContext, OptionsGatherer, OptionsHandler, PluginDescription, Popup, PopupContext, Positioner, ReadonlyState, SelectApi, SelectCssClasses, SelectEvents, SelectOption, SelectOptions, SelectOptionState, SelectPlugin, TemplateGatherer, ValueHandler} from '../../interfaces';
@@ -28,23 +28,8 @@ const defaultOptions: Omit<SelectOptions, 'optionsGatherer'|'templateGatherer'> 
     displaySelectedValue: option => option.text(),
     valueExtractor: (option: SelectOption) => option.value,
     valueComparer: (source, target) => source === target,
-    // valueComparer: (source, target) =>
-    // {
-    //     return source === target;
-    // },
-    // liveSearchFilter: (query: string, normalizer: NormalizeFunc = value => value) =>
-    // {
-    //     return itm => normalizer(itm.text).indexOf(normalizer(query)) >= 0;
-    // },
-    // normalizer: value =>
-    // {
-    //     if(isString(value))
-    //     {
-    //         return value.toLowerCase();
-    //     }
-
-    //     return value;
-    // },
+    textExtractor: (option: SelectOption) => option.text(),
+    normalize: <TText extends string|undefined|null>(value: TText) => isPresent(value) ? normalizeAccent(value) as TText : value,
     cssClasses:
     {
         visualContainer: 'visual-container',
@@ -473,21 +458,10 @@ export class Select<TValue = unknown> implements SelectApi<TValue, SelectCssClas
         //initialize plugins when all options are initialized
         effect(() =>
         {
+            this.initializedSignal.set(false);
+
             if(this.optionsInit().initialized)
             {
-                untracked(() =>
-                {
-                    this.pluginInstances.OptionsHandler.initialize();
-                    this.pluginInstances.LiveSearch.initialize();
-                    this.pluginInstances.KeyboardHandler.initialize();
-                    this.pluginInstances.ValueHandler.initialize();
-                    this.pluginInstances.normalState()?.initialize();
-                    this.pluginInstances.readonlyState()?.initialize();
-                    this.pluginInstances.Popup.initialize();
-                    this.pluginInstances.Positioner.initialize();
-                    this.pluginInstances.Interactions.initialize();
-                });
-
                 this.initializedSignal.set(true);
             }
         });
@@ -584,18 +558,6 @@ export class Select<TValue = unknown> implements SelectApi<TValue, SelectCssClas
             this.pluginInstances[pluginType].options = pluginDescription.options;
         }
 
-        await this.initOption(pluginType, initOptions);
-    }
-
-    /**
-     * Init options for single plugin
-     * @param pluginType - Type of plugin to be initialized
-     * @param initOptions - Init options signal for this plugin
-     */
-    protected async initOption(pluginType: SelectPluginType,
-                               initOptions: WritableSignal<boolean>,): Promise<void>
-    {
-        await this.pluginInstances[pluginType].initOptions();
         initOptions.set(true);
     }
 

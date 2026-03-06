@@ -1,4 +1,4 @@
-import {DisplayTextFunc, ValueEqualityFunc, ValueExtractorFunc} from '../../misc/types';
+import {DisplayTextFunc, NormalizeTextForComparison, TextExtractorFunc, ValueEqualityFunc, ValueExtractorFunc} from '../../misc/types';
 import {OptionsGatherer} from '../optionsGatherer/optionsGatherer.interface';
 import {TemplateGatherer} from '../templateGatherer/templateGatherer.interface';
 
@@ -54,13 +54,13 @@ export interface SelectBusOptions<TValue = unknown>
      */
     valueComparer: ValueEqualityFunc<TValue>;
 
-    // /**
-    //  * Method that is used for filtering when live search is running on static data
-    //  */
-    // liveSearchFilter?: LiveSearchFilter<TValue>;
+    /**
+     * Method that is used for filtering when live search is running on static data
+     */
+    textExtractor: TextExtractorFunc<TValue>;
 
-    // /**
-    //  * Normalizer used for normalizing values
-    //  */
-    // normalizer?: NormalizeFunc<TValue>;
+    /**
+     * Normalize text for comparison
+     */
+    normalize: NormalizeTextForComparison;
 }
