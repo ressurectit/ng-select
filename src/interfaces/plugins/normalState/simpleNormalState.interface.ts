@@ -21,4 +21,14 @@ export interface SimpleNormalStateCssClasses extends NormalStateCssClasses
      * Applied to HTML element that represents whole component
      */
     componentElement: string;
+
+    /**
+     * Applied to cancel button that allows clearing selected value
+     */
+    cancel: string;
+
+    /**
+     * Applied to cancel button icon
+     */
+    cancelIcon: string;
 }

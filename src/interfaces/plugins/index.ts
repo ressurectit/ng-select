@@ -5,6 +5,7 @@ export * from './liveSearch/liveSearch.interface';
 export * from './normalState/normalState.interface';
 export * from './normalState/simpleNormalState.interface';
 export * from './optionsHandler/optionsHandler.interface';
+export * from './optionsHandler/simpleOptionsHandler.interface';
 export * from './popup/popup.interface';
 export * from './popup/simplePopup.interface';
 export * from './positioner/positioner.interface';

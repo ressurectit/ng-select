@@ -9,6 +9,13 @@
     <span [class]="options.cssClasses.value">
         <ng-container *ngTemplateOutlet="selectBus.selectOptions().templateGatherer.normalStateTemplate() || defaultLook; context: {$implicit: this}"/>
     </span>
-
-    <span [class]="options.cssClasses.carret"></span>
 </button>
+
+@if(options.cancelValue)
+{
+    <button type="button" [class]="options.cssClasses.cancel" (click)="cancel()">
+        <span [class]="options.cssClasses.cancelIcon"></span>
+    </button>
+}
+
+<span [class]="options.cssClasses.carret"></span>

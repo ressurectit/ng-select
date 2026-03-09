@@ -14,12 +14,15 @@ import {DisplayValue} from '../../../pipes';
 
 const defaultOptions: NormalStateOptions<SimpleNormalStateCssClasses> =
 {
+    cancelValue: false,
     cssClasses:
     {
         componentElement: 'normal-state-component',
-        containerElement: 'select-normal-state select-flex-row select-align-items-center',
-        value: 'select-flex-1',
-        carret: 'fas fa-caret-down',
+        containerElement: 'select-normal-state select-flex-row select-flex-1',
+        value: 'select-flex-1 select-align-self-center',
+        carret: 'fas fa-caret-down select-align-self-center',
+        cancel: '',
+        cancelIcon: 'fas fa-times',
     },
 };
 
@@ -95,6 +98,18 @@ export class SimpleNormalState<TValue = unknown> implements NormalState<TValue, 
     protected focus(): void
     {
         this.selectBus.focus.next(
+        {
+            source: this as SelectPlugin,
+            sourceElement: this.pluginElement.nativeElement,
+        });
+    }
+
+    /**
+     * Handles cancel value
+     */
+    protected cancel(): void
+    {
+        this.selectBus.optionClick.next(
         {
             source: this as SelectPlugin,
             sourceElement: this.pluginElement.nativeElement,

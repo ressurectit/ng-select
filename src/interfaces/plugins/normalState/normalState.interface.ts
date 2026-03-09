@@ -13,6 +13,12 @@ export interface NormalStateCssClasses
  */
 export interface NormalStateOptions<TCssClasses extends NormalStateCssClasses = NormalStateCssClasses> extends VisualPluginOptions<TCssClasses>
 {
+    //######################### properties #########################
+
+    /**
+     * Indication whether allow cancel value
+     */
+    cancelValue: boolean;
 }
 
 /**

@@ -52,7 +52,10 @@
       - `availableOptions` array of options that are available for processing
       - `listOptions` array of options that are available for listing/displaying
 - new `OptionsHandlerOptions` interface, that represents options for options handler plugin
-- new `NoOptionsHandler` plugin component, that is options handler that does not modify available options in any way. It just returns them as they are provided from options gatherer
+- new `SimpleOptionsHandlerOptions` interface, that represents options for simple options handler plugin
+   - **properties**
+      - `listSelected` indication whether display selected option in list of available options
+- new `SimpleOptionsHandler` plugin component, that is options handler that does apply live search and allows to remove selected option(s) from options list
    - **implements**
       - `OptionsHandler`
 - new `ValueEqualityFunc` function, that represents definition of function used for checking equality of select value
@@ -211,6 +214,7 @@
 - updated `NormalStateOptions` interface
    - removed `texts` property, see `NormalStateTexts` for replacement
    - `optionDisplayText` property moved into `SelectBusOptions` and renamed to `selectedDisplayText`
+   - new property `cancelValue` indication whether allow cancel value
 - updated `SelectValuePipe` pipe
    - renamed to `DisplayValue`
    - changed parameters, now accepts only `value`
@@ -220,6 +224,8 @@
    - property `selectedCarret` renamed to `carret`
    - property `normalStateElement` renamed to `containerElement`
    - new property `componentElement` applied to HTML element that represents whole component
+   - new property `cancel` applied to cancel button that allows clearing selected value
+   - new property `cancelIcon` applied to cancel button icon
 - updated `CssClassesBasicPopup` interface
     - renamed to `SimplePopupCssClasses`
     - new property `componentElement` css class applied to component itself

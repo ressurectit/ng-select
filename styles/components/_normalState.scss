@@ -4,7 +4,8 @@
     {
         .normal-state-component
         {
-            display: contents;
+            display: flex;
+            flex-direction: row;
     
             .select-normal-state
             {
