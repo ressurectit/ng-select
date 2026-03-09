@@ -28,7 +28,7 @@
         "doc": "path-exists docs && npm run doc:generate || echo \"No docs generated!\"",
         "predoc:generate": "cd docs && git pull && cd ..",
         "postdoc:generate": "npm run doc:save",
-        "doc:generate": "npm run doc:generate:select && npm run doc:generate:elements&& npm run doc:generate:extensions && npm run doc:generate:material",
+        "doc:generate": "npm run doc:generate:select && npm run doc:generate:elements&& npm run doc:generate:extensions",
         "doc:save": "cd docs && git add . && git commit -m \"INT: updated API docs ng-select\" && git push && cd ..",
         "doc:generate:select": "rimraf docs/content/api/ng-select && npm run doc:json:select && npm run doc:md:select && npm run doc:api:select",
         "doc:json:select": "api-extractor run --local --verbose -c api-extractor.json",
@@ -41,11 +41,7 @@
         "doc:generate:extensions": "rimraf docs/content/api/ng-select-extensions && npm run doc:json:extensions && npm run doc:md:extensions && npm run doc:api:extensions",
         "doc:json:extensions": "api-extractor run --local --verbose -c extensions/api-extractor.json",
         "doc:md:extensions": "api-documenter markdown -i extensions/temp -o docs/content/api/ng-select-extensions",
-        "doc:api:extensions": "copyfiles -u 2 extensions/temp/select-extensions.api.md docs/content/api/ng-select-extensions && rimraf extensions/temp",
-        "doc:generate:material": "rimraf docs/content/api/ng-select-material && npm run doc:json:material && npm run doc:md:material && npm run doc:api:material",
-        "doc:json:material": "api-extractor run --local --verbose -c material/api-extractor.json",
-        "doc:md:material": "api-documenter markdown -i material/temp -o docs/content/api/ng-select-material",
-        "doc:api:material": "copyfiles -u 2 material/temp/select-material.api.md docs/content/api/ng-select-material && rimraf material/temp"
+        "doc:api:extensions": "copyfiles -u 2 extensions/temp/select-extensions.api.md docs/content/api/ng-select-extensions && rimraf extensions/temp"
     },
     "engines": {
         "node": "^20.19.0 || ^22.12.0 || >=24.0.0"
@@ -76,20 +72,14 @@
         "rxjs": ">=7.5.7",
         "tslib": "^2.8.1"
     },
-    "optionalDependencies": {
-        "@angular/cdk": ">=21.1.5",
-        "@angular/material": ">=21.1.5"
-    },
     "devDependencies": {
         "@anglr/common": "24.2.0",
-        "@angular/cdk": "21.1.5",
         "@angular/common": "21.1.5",
         "@angular/compiler": "21.1.5",
         "@angular/compiler-cli": "21.1.5",
         "@angular/core": "21.1.5",
         "@angular/forms": "21.1.5",
         "@angular/language-service": "21.1.5",
-        "@angular/material": "21.1.5",
         "@css-styles/common": "2.0.1",
         "@jscrpt/common": "7.1.0",
         "@microsoft/api-documenter": "7.29.5",
@@ -138,13 +128,6 @@
             "es2022": "./es2022/extensions/src/index.js",
             "node": "./es2022/extensions/src/index.js",
             "default": "./es2022/extensions/src/index.js"
-        },
-        "./material": {
-            "types": "./material/src/index.d.ts",
-            "esm2022": "./es2022/material/src/index.js",
-            "es2022": "./es2022/material/src/index.js",
-            "node": "./es2022/material/src/index.js",
-            "default": "./es2022/material/src/index.js"
         }
     }
 }

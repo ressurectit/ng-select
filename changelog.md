@@ -113,8 +113,16 @@
 - new dependency `lodash-es` minimal supported version is `4.17.23`
 - strict null checks
 - all generic defaults of type `any` changed to `unknown`
+- removed dependency on `@angular/material`
+- removed `@anglr/select/material` and all its parts, was not used
 - removed `NormalStateTexts` interface
    - `nothingSelected` property renamed to `placeholder` and moved into `SelectBusOptions`
+- removed `SelectHasValuePipe` pipe
+- removed `LiveSearchFilter` interface
+- removed `ExcludingOptionsGatherer` class
+- removed `DynamicOptionsGatherer` class
+- removed `GetOptionsCallback` interface
+- removed `DynamicOptionsGathererOptions` interface
 - updated `TemplateGatherer` interface
    - all properties are changed to `Signal` with possible `undefined` or `null` value
 - updated `OptionsGatherer` interface
@@ -246,6 +254,9 @@
    - renamed to `NoLiveSearch`
 - updated `SimpleKeyboardHandlerComponent` plugin component
    - renamed to `SimpleKeyboardHandler`
+- subpackage `@anglr/select/extensions`
+   - removed `patchOptions` extension function
+   - removed `reinitializeOptions` extension function
 
 ## Version 15.0.0 (2026-02-10)
 

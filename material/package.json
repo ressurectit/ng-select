@@ -1,8 +1,0 @@
-{
-    "name": "@anglr/select-material",
-    "sideEffects": false,
-    "module": "../es2022/material/src/index.js",
-    "es2022": "../es2022/material/src/index.js",
-    "esm2022": "../es2022/material/src/index.js",
-    "typings": "./src/index.d.ts"
-  }
