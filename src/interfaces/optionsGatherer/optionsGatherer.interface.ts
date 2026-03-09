@@ -2,7 +2,6 @@ import {Signal} from '@angular/core';
 
 import {SelectOptionState} from '../selectOptionState/selectOptionState.interface';
 
-
 /**
  * Gatherer used for obtaining options for select
  */

@@ -27,6 +27,7 @@
         "paths": 
         {
             "@anglr/select": ["../src/index.ts"],
+            "@anglr/select/extensions": ["../extensions/src/index.ts"],
         },
         "lib":
         [

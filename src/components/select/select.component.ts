@@ -27,7 +27,7 @@ const defaultOptions: Omit<SelectOptions, 'optionsGatherer'|'templateGatherer'> 
     placeholder: 'please select value',
     closeOnSelect: true,
     displaySelectedValue: option => option.text(),
-    valueExtractor: (option: SelectOption) => option.value,
+    valueExtractor: (option: SelectOption) => option.value(),
     valueComparer: (source, target) => source === target,
     textExtractor: (option: SelectOption) => option.text(),
     normalize: <TText extends string|undefined|null>(value: TText) => isPresent(value) ? normalizeAccent(value) as TText : value,

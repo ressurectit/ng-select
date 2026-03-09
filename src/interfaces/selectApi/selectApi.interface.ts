@@ -32,15 +32,15 @@ export interface SelectApi<TValue = unknown, TCssClasses = SelectCssClasses>
      * Gets instance of plugin by its type
      * @param pluginType - Type of plugin
      */
-    getPlugin(pluginType: SelectPluginType.Interactions): Interactions;
-    getPlugin(pluginType: SelectPluginType.KeyboardHandler): KeyboardHandler;
-    getPlugin(pluginType: SelectPluginType.LiveSearch): LiveSearch;
-    getPlugin(pluginType: SelectPluginType.NormalState): NormalState;
-    getPlugin(pluginType: SelectPluginType.OptionsHandler): OptionsHandler;
-    getPlugin(pluginType: SelectPluginType.Popup): Popup;
-    getPlugin(pluginType: SelectPluginType.Positioner): Positioner;
+    getPlugin(pluginType: SelectPluginType.Interactions): Interactions<TValue>;
+    getPlugin(pluginType: SelectPluginType.KeyboardHandler): KeyboardHandler<TValue>;
+    getPlugin(pluginType: SelectPluginType.LiveSearch): LiveSearch<TValue>;
+    getPlugin(pluginType: SelectPluginType.NormalState): NormalState<TValue>;
+    getPlugin(pluginType: SelectPluginType.OptionsHandler): OptionsHandler<TValue>;
+    getPlugin(pluginType: SelectPluginType.Popup): Popup<TValue>;
+    getPlugin(pluginType: SelectPluginType.Positioner): Positioner<TValue>;
     getPlugin(pluginType: SelectPluginType.ReadonlyState): ReadonlyState;
-    getPlugin(pluginType: SelectPluginType.ValueHandler): ValueHandler;
+    getPlugin(pluginType: SelectPluginType.ValueHandler): ValueHandler<TValue>;
     getPlugin<PluginInstance extends SelectPlugin>(pluginType: SelectPluginType): PluginInstance;
 
     /**

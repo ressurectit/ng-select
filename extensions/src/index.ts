@@ -1,1 +1,2 @@
-export const q = 10;
+export * from './extensions/getValue';
+export * from './extensions/setValue';

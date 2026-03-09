@@ -1,18 +1,15 @@
-// import {NgSelectAction} from '../../components/select';
-// import {ValueHandler} from '../../plugins/valueHandler';
-// import {VALUE_HANDLER} from '../../plugins/valueHandler/types';
+import {SelectAction, SelectPluginType} from '@anglr/select';
 
-// /**
-//  * Sets value of NgSelect
-//  * @param value - Value to be set into select
-//  * @internal
-//  */
-// export function ɵSetValue<TValue>(value: TValue|TValue[]): NgSelectAction<TValue>
-// {
-//     return ngSelect =>
-//     {
-//         const valueHandler = ngSelect.getPlugin(VALUE_HANDLER) as ValueHandler<TValue>;
+/**
+ * Sets value of Select
+ * @param value - Value to be set into select
+ */
+export function setValue<TValue>(value: TValue|TValue[]|undefined|null): SelectAction<TValue>
+{
+    return select =>
+    {
+        const valueHandler = select.getPlugin(SelectPluginType.ValueHandler);
 
-//         valueHandler.setValue(value);
-//     };
-// }
+        valueHandler.setValue(value);
+    };
+}
