@@ -6,7 +6,8 @@ import {OptionsHandler, SelectOptionState, ValueHandler, ValueHandlerOptions} fr
 import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {VALUE_HANDLER_OPTIONS} from '../../../misc/tokens';
-import {compareValueAndOption} from '../../../misc/utils';
+import {compareValueAndOption, computedValue} from '../../../misc/utils';
+import {ValueComputedFunc} from '../../../misc/types';
 
 const defaultOptions: ValueHandlerOptions =
 {
@@ -58,23 +59,7 @@ export class StaticValueHandler<TValue = unknown> implements ValueHandler<TValue
     /**
      * @inheritdoc
      */
-    public readonly value: Signal<TValue|TValue[]|undefined|null> = computed(() =>
-    {
-        const selected = this.selectBus.selectedOptions();
-        const valueExtractor = this.selectBus.selectOptions().valueExtractor;
-
-        if(isBlank(selected))
-        {
-            return selected;
-        }
-
-        if(Array.isArray(selected))
-        {
-            return selected.map(option => valueExtractor(option));
-        }
-
-        return valueExtractor(selected);
-    });
+    public readonly value: Signal<TValue|TValue[]|undefined|null> = computed((computedValue as ValueComputedFunc<TValue>).bind(this));
 
     //######################### constructor #########################
     constructor(@Inject(VALUE_HANDLER_OPTIONS) @Optional() options?: RecursivePartial<ValueHandlerOptions>|null,)

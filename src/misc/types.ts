@@ -1,3 +1,5 @@
+import {PromiseOr} from '@jscrpt/common';
+
 import {HidePopupKeyboardAction, MarkActiveKeyboardAction, SelectActiveKeyboardAction, SelectApi, SelectCssClasses, SelectFirstKeyboardAction, SelectOption, ShowPopupKeyboardAction} from '../interfaces';
 
 /**
@@ -49,3 +51,13 @@ export type SimpleKeyboardActions = MarkActiveKeyboardAction|SelectActiveKeyboar
  * Names of simple keyboard action types
  */
 export type SimpleKeyboardActionTypes = 'MARK_ACTIVE'|'SELECT_ACTIVE'|'HIDE_POPUP'|'SHOW_POPUP'|'SELECT_FIRST';
+
+/**
+ * Definition of function for computed value signal
+ */
+export type ValueComputedFunc<TValue> = () => TValue|TValue[]|undefined|null;
+
+/**
+ * Definition of function for obtaining option for provided value
+ */
+export type OptionGetterFunc<TValue> = (value: TValue) => PromiseOr<SelectOption<TValue>|undefined|null>;

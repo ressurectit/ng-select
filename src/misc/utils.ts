@@ -1,7 +1,7 @@
 import {untracked} from '@angular/core';
-import {isDescendant, NoopAction} from '@jscrpt/common';
+import {isBlank, isDescendant, NoopAction} from '@jscrpt/common';
 
-import {SelectOption, SelectOptionState} from '../interfaces';
+import {SelectOption, SelectOptionState, ValueHandler, ValueHandlerOptions} from '../interfaces';
 import {SelectBus, SelectPluginInstances} from './classes';
 
 /**
@@ -113,4 +113,26 @@ export function handleClickOutside<TValue, TAction>(document: Document, selectBu
     document.addEventListener('mouseup', handleClick);
 
     return () => document.removeEventListener('mouseup', handleClick);
+}
+
+/**
+ * Function for computed value signal
+ * @param this - Instance of bound `ValueHandler`
+ */
+export function computedValue<TValue>(this: ValueHandler<TValue, ValueHandlerOptions>): TValue|TValue[]|undefined|null
+{
+    const selected = this.selectBus.selectedOptions();
+    const valueExtractor = this.selectBus.selectOptions().valueExtractor;
+
+    if(isBlank(selected))
+    {
+        return selected;
+    }
+
+    if(Array.isArray(selected))
+    {
+        return selected.map(option => valueExtractor(option));
+    }
+
+    return valueExtractor(selected);
 }

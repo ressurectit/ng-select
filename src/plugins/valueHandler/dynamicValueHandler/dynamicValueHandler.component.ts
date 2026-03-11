@@ -1,15 +1,24 @@
-import {ChangeDetectionStrategy, Component, computed, effect, ElementRef, Inject, inject, Optional, Signal, untracked} from '@angular/core';
-import {isBlank, isPresent, RecursivePartial} from '@jscrpt/common';
+import {ChangeDetectionStrategy, Component, computed, ElementRef, Inject, inject, Optional, signal, Signal, untracked} from '@angular/core';
+import {isBlank, RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
-import {OptionsHandler, SelectOptionState, ValueHandler, ValueHandlerOptions} from '../../../interfaces';
+import {ValueHandler, DynamicValueHandlerOptions, SelectOptionState} from '../../../interfaces';
 import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {VALUE_HANDLER_OPTIONS} from '../../../misc/tokens';
-import {compareValueAndOption} from '../../../misc/utils';
+import {computedValue} from '../../../misc/utils';
+import {ValueComputedFunc} from '../../../misc/types';
 
-const defaultOptions: ValueHandlerOptions =
+const defaultOptions: DynamicValueHandlerOptions =
 {
+    optionGetter: value =>
+    {
+        return {
+            text: signal('please provide your optionGetter'),
+            value: signal(value),
+            group: signal(undefined),
+        };
+    },
 };
 
 /**
@@ -21,22 +30,15 @@ const defaultOptions: ValueHandlerOptions =
     template: '',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DynamicValueHandler<TValue = unknown> implements ValueHandler<TValue, ValueHandlerOptions>
+export class DynamicValueHandler<TValue = unknown> implements ValueHandler<TValue, DynamicValueHandlerOptions<TValue>>
 {
-    //######################### protected fields #########################
-
-    /**
-     * Postponed value that will be set when options are loaded. This is needed for case when value is set before options are loaded, so we cannot set value right away, but we will handle setting value when options are loaded
-     */
-    protected postponedValue: TValue|TValue[]|undefined|null = null;
-
     //######################### public properties - implementation of SelectPlugin #########################
 
     /**
      * @inheritdoc
      */
     @CopyOptionsAsSignal()
-    public options: ValueHandlerOptions;
+    public options: DynamicValueHandlerOptions<TValue>;
 
     /**
      * @inheritdoc
@@ -58,40 +60,13 @@ export class DynamicValueHandler<TValue = unknown> implements ValueHandler<TValu
     /**
      * @inheritdoc
      */
-    public readonly value: Signal<TValue|TValue[]|undefined|null> = computed(() =>
-    {
-        const selected = this.selectBus.selectedOptions();
-        const valueExtractor = this.selectBus.selectOptions().valueExtractor;
-
-        if(isBlank(selected))
-        {
-            return selected;
-        }
-
-        if(Array.isArray(selected))
-        {
-            return selected.map(option => valueExtractor(option));
-        }
-
-        return valueExtractor(selected);
-    });
+    public readonly value: Signal<TValue|TValue[]|undefined|null> = computed((computedValue as ValueComputedFunc<TValue>).bind(this));
 
     //######################### constructor #########################
-    constructor(@Inject(VALUE_HANDLER_OPTIONS) @Optional() options?: RecursivePartial<ValueHandlerOptions>|null,)
+    constructor(@Inject(VALUE_HANDLER_OPTIONS) @Optional() options?: RecursivePartial<DynamicValueHandlerOptions<TValue>>|null,)
     {
-        this.options = deepCopyWithArrayOverride(defaultOptions as ValueHandlerOptions,
+        this.options = deepCopyWithArrayOverride(defaultOptions as DynamicValueHandlerOptions<TValue>,
                                                  options);
-
-        effect(() =>
-        {
-            const availableOptions = (this.selectPlugins.OptionsHandler as OptionsHandler<TValue>).availableOptions();
-
-            if(isPresent(availableOptions) && isPresent(this.postponedValue))
-            {
-                this.setValueInternal(this.postponedValue, availableOptions);
-                this.postponedValue = null;
-            }
-        });
     }
 
     //######################### public methods - implementation of ValueHandler #########################
@@ -101,57 +76,54 @@ export class DynamicValueHandler<TValue = unknown> implements ValueHandler<TValu
      */
     public setValue(value: TValue|TValue[]|undefined|null): void
     {
-        const availableOptions = untracked(() => (this.selectPlugins.OptionsHandler as OptionsHandler<TValue>).availableOptions());
-
-        //Options are not loaded yet, so we cannot set value, but we will handle setting value when options are loaded
-        if(isBlank(availableOptions))
+        untracked(async () =>
         {
-            this.postponedValue = value;
+            if(isBlank(value))
+            {
+                this.selectBus.selectedOptions.set(null);
 
-            return;
-        }
+                return;
+            }
 
-        this.setValueInternal(value, availableOptions);
-    }
-
-    //######################### protected methods #########################
-
-    /**
-     * Handles setting value when options are loaded
-     * @param value - Value to be set
-     * @param availableOptions - Available options that are checked whether they contain value that is being set, so we can set value only if it is available in options
-     */
-    protected setValueInternal(value: TValue|TValue[]|undefined|null, availableOptions: readonly SelectOptionState<TValue>[]): void
-    {
-        //this keeps only values that are available in options
-        untracked(() =>
-        {
             if(this.selectBus.selectOptions().multiple)
             {
                 if(!Array.isArray(value))
                 {
-                    throw new Error('Value must be an array when multiple is set');
+                    throw new Error('You have to provide an array of values if you set multiple!');
                 }
 
                 const selectedOptions: SelectOptionState<TValue>[] = [];
 
                 for(const val of value)
                 {
-                    const option = availableOptions.find(opt => compareValueAndOption(val, opt, this.selectBus));
+                    const selectedOption = await this.options.optionGetter(val);
 
-                    if(option)
+                    if(!selectedOption)
                     {
-                        selectedOptions.push(option);
+                        continue;
                     }
+
+                    const opt = selectedOption as SelectOptionState<TValue>;
+                    opt.active = signal(false);
+                    opt.selected = signal(true);
+
+                    selectedOptions.push(opt);
                 }
 
                 this.selectBus.selectedOptions.set(selectedOptions);
             }
             else
             {
-                const selectedOption = availableOptions.find(opt => compareValueAndOption(value as TValue, opt, this.selectBus));
+                const selectedOption = await this.options.optionGetter(value as TValue);
+                const opt = selectedOption as SelectOptionState<TValue>|undefined|null;
 
-                this.selectBus.selectedOptions.set(selectedOption ?? null);
+                if(opt)
+                {
+                    opt.active = signal(false);
+                    opt.selected = signal(true);
+                }
+
+                this.selectBus.selectedOptions.set(opt ?? null);
             }
         });
     }

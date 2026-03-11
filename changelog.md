@@ -58,6 +58,9 @@
 - new `SimpleOptionsHandler` plugin component, that is options handler that does apply live search and allows to remove selected option(s) from options list
    - **implements**
       - `OptionsHandler`
+- new `NoOptionsHandler` plugin component, that is options handler that does nothing to obtained options, use them as they are
+   - **implements**
+      - `OptionsHandler`
 - new `ValueEqualityFunc` function, that represents definition of function used for checking equality of select value
 - new `ValueExtractorFunc` function, that represents definition of function used for extracting value from select option
 - new `INTERACTIONS_TYPE` injection token for 'Interactions' implementation
@@ -96,7 +99,13 @@
    - **properties**
       - `selectFirstDebounceTimeout` debounce timeout for selecting first option when typing
 - new `LiveSearchCssClasses` interface, represents css classes for live search
-- new `TextComparerFunc` definition of function used for comparison two texts
+- new `TextComparerFunc` type definition of function used for comparison two texts
+- new `ValueComputedFunc` type definition of function for computed value signal
+- new `computedValue` function for computed value signal
+- new `OptionGetterFunc` type definition of function for obtaining option for provided value
+- new `DynamicValueHandlerOptions` interface
+   - **properties**
+      - `optionGetter` function for obtaining option for provided value
 - updated `SelectPluginTypes` interface
    - **new properties**
       - `Interactions` handles interactions of plugins and select

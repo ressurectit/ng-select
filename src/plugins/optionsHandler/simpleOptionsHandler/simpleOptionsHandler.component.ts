@@ -69,13 +69,9 @@ export class SimpleOptionsHandler<TValue = unknown> implements OptionsHandler<TV
         this.listOptions = computed(() =>
         {
             const text = this.selectPlugins.LiveSearch.search();
-            const options = this.selectBus.selectOptions();
             const selectedOptions = this.selectBus.selectedOptions() ?? [];
             const opts = Array.isArray(selectedOptions) ? selectedOptions : [selectedOptions];
             let availableOptions = this.availableOptions();
-            const textExtractor = options.textExtractor;
-            const normalize = options.normalize;
-            const textCompare = options.textCompare;
 
             if(!this.options.listSelected)
             {
@@ -89,6 +85,11 @@ export class SimpleOptionsHandler<TValue = unknown> implements OptionsHandler<TV
             {
                 return availableOptions;
             }
+
+            const options = this.selectBus.selectOptions();
+            const textExtractor = options.textExtractor;
+            const normalize = options.normalize;
+            const textCompare = options.textCompare;
 
             return availableOptions
                 ?.filter(itm => textCompare(normalize(textExtractor(itm)), normalize(text)));

@@ -10,4 +10,5 @@ export * from './popup/popup.interface';
 export * from './popup/simplePopup.interface';
 export * from './positioner/positioner.interface';
 export * from './readonlyState/readonlyState.interface';
+export * from './valueHandler/dynamicValueHandler.interface';
 export * from './valueHandler/valueHandler.interface';
