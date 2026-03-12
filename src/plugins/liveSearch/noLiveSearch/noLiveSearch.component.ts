@@ -26,7 +26,7 @@ export class NoLiveSearch<TValue = unknown> implements LiveSearch<TValue, LiveSe
     /**
      * @inheritdoc
      */
-    public selectPlugins: SelectPluginInstances = inject(SelectPluginInstances);
+    public selectPlugins: SelectPluginInstances<TValue> = inject(SelectPluginInstances);
 
     /**
      * @inheritdoc
@@ -36,7 +36,7 @@ export class NoLiveSearch<TValue = unknown> implements LiveSearch<TValue, LiveSe
     /**
      * @inheritdoc
      */
-    public selectBus: SelectBus<TValue> = inject(SelectBus) as SelectBus<TValue>;
+    public selectBus: SelectBus<TValue> = inject(SelectBus);
 
     //######################### public properties - implementation of LiveSearch #########################
 

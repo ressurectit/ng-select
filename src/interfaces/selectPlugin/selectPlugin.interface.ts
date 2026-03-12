@@ -10,7 +10,7 @@ export interface SelectPlugin<TOptions = unknown, TValue = unknown, TAction = st
     /**
      * Select plugin instances available for this plugin
      */
-    readonly selectPlugins: SelectPluginInstances;
+    readonly selectPlugins: SelectPluginInstances<TValue>;
 
     /**
      * Element that represents plugin

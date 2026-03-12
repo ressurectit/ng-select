@@ -3,7 +3,7 @@ import {OptionsHandlerOptions} from './optionsHandler.interface';
 /**
  * Options for simple options handler plugin
  */
-export interface SimpleOptionsHandlerOptions extends OptionsHandlerOptions
+export interface SimpleOptionsHandlerOptions<TValue = unknown> extends OptionsHandlerOptions<TValue>
 {
     //######################### properties #########################
 

@@ -10,6 +10,11 @@ export interface PopupTexts
      * Displayed when there are no available options to be displayed
      */
     noAvailableOptions: string;
+
+    /**
+     * Displayed when add new option is displayed
+     */
+    addNewOption: string;
 }
 
 /**

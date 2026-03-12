@@ -52,6 +52,8 @@
       - `availableOptions` array of options that are available for processing
       - `listOptions` array of options that are available for listing/displaying
 - new `OptionsHandlerOptions` interface, that represents options for options handler plugin
+   - **properties**
+      - `newOptionGetter` allows adding new option to select when defined
 - new `SimpleOptionsHandlerOptions` interface, that represents options for simple options handler plugin
    - **properties**
       - `listSelected` indication whether display selected option in list of available options
@@ -106,6 +108,12 @@
 - new `DynamicValueHandlerOptions` interface
    - **properties**
       - `optionGetter` function for obtaining option for provided value
+- new `SelectOptionStateSyntetic` interface, that represents option for Select with information about its state and whether it was created
+   - **properties**
+      - `created` indication whether was this option created in Select
+- new `NewOptionGetterFunc` type definition of function for obtaining new option, allows adding new options
+- new `AddNewOption` pipe, that for syntetic option displays text that new option is being added
+- new `OptionsHandlerBase` class, used as base class for options handlers.
 - updated `SelectPluginTypes` interface
    - **new properties**
       - `Interactions` handles interactions of plugins and select
@@ -217,7 +225,7 @@
    - new property `displaySelectedValue` function used for transformation of selected option into display text
    - new property `closeOnSelect` indication whether close popup on selecting value
    - new property `textCompare` compares two texts of option
-   - removed `useNonExistingAsValue` TODO ?????????????????
+   - removed `useNonExistingAsValue` use option handler `newOptionGetter` instead
    - renamed `liveSearchFilter` function to `textExtractor`
    - renamed `normalizer` function to `normalize`
 - updated `ValueHandler` interface

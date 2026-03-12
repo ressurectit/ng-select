@@ -61,3 +61,8 @@ export type ValueComputedFunc<TValue> = () => TValue|TValue[]|undefined|null;
  * Definition of function for obtaining option for provided value
  */
 export type OptionGetterFunc<TValue> = (value: TValue) => PromiseOr<SelectOption<TValue>|undefined|null>;
+
+/**
+ * Definition of function for obtaining new option, allows adding new options
+ */
+export type NewOptionGetterFunc<TValue> = (text: string) => SelectOption<TValue>;

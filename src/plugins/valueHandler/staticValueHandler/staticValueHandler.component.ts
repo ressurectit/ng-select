@@ -42,7 +42,7 @@ export class StaticValueHandler<TValue = unknown> implements ValueHandler<TValue
     /**
      * @inheritdoc
      */
-    public selectPlugins: SelectPluginInstances = inject(SelectPluginInstances);
+    public selectPlugins: SelectPluginInstances<TValue> = inject(SelectPluginInstances);
 
     /**
      * @inheritdoc
@@ -52,7 +52,7 @@ export class StaticValueHandler<TValue = unknown> implements ValueHandler<TValue
     /**
      * @inheritdoc
      */
-    public selectBus: SelectBus<TValue> = inject(SelectBus) as SelectBus<TValue>;
+    public selectBus: SelectBus<TValue> = inject(SelectBus);
 
     //######################### public properties - implementation of ValueHandler #########################
 

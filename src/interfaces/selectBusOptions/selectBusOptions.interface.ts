@@ -44,11 +44,6 @@ export interface SelectBusOptions<TValue = unknown>
      */
     displaySelectedValue: DisplayTextFunc<TValue>;
 
-    // /**
-    //  * Indication whether use non existing value in live search as new value, use with dynamic value handler
-    //  */
-    // useNonExistingAsValue: boolean;
-
     /**
      * Function used to extract value from option, if not provided, select option value will be used as value
      */

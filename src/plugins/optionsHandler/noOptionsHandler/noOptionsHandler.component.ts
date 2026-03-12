@@ -7,9 +7,9 @@ import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {OPTIONS_HANDLER_OPTIONS} from '../../../misc/tokens';
 
-const defaultOptions: OptionsHandlerOptions =
+const defaultOptions: OptionsHandlerOptions<unknown> =
 {
-    listSelected: true,
+    newOptionGetter: undefined,
 };
 
 /**
@@ -21,7 +21,7 @@ const defaultOptions: OptionsHandlerOptions =
     template: '',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NoOptionsHandler<TValue = unknown> implements OptionsHandler<TValue, OptionsHandlerOptions>
+export class NoOptionsHandler<TValue = unknown> implements OptionsHandler<TValue, OptionsHandlerOptions<TValue>>
 {
     //######################### public properties - implementation of SelectPlugin #########################
 
@@ -29,12 +29,12 @@ export class NoOptionsHandler<TValue = unknown> implements OptionsHandler<TValue
      * @inheritdoc
      */
     @CopyOptionsAsSignal()
-    public options: OptionsHandlerOptions;
+    public options: OptionsHandlerOptions<TValue>;
 
     /**
      * @inheritdoc
      */
-    public selectPlugins: SelectPluginInstances = inject(SelectPluginInstances);
+    public selectPlugins: SelectPluginInstances<TValue> = inject(SelectPluginInstances);
 
     /**
      * @inheritdoc
@@ -44,7 +44,7 @@ export class NoOptionsHandler<TValue = unknown> implements OptionsHandler<TValue
     /**
      * @inheritdoc
      */
-    public selectBus: SelectBus<TValue> = inject(SelectBus) as SelectBus<TValue>;
+    public selectBus: SelectBus<TValue> = inject(SelectBus);
 
     //######################### public properties - implementation of OptionsHandler #########################
 
@@ -59,9 +59,9 @@ export class NoOptionsHandler<TValue = unknown> implements OptionsHandler<TValue
     public readonly listOptions: Signal<readonly SelectOptionState<TValue>[]|undefined|null>;
 
     //######################### constructor #########################
-    constructor(@Inject(OPTIONS_HANDLER_OPTIONS) @Optional() options?: RecursivePartial<OptionsHandlerOptions>|null,)
+    constructor(@Inject(OPTIONS_HANDLER_OPTIONS) @Optional() options?: RecursivePartial<OptionsHandlerOptions<TValue>>|null,)
     {
-        this.options = deepCopyWithArrayOverride(defaultOptions as OptionsHandlerOptions,
+        this.options = deepCopyWithArrayOverride(defaultOptions as OptionsHandlerOptions<TValue>,
                                                  options);
 
         this.availableOptions = computed(() => this.selectBus.selectOptions().optionsGatherer.availableOptions());

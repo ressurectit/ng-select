@@ -48,7 +48,7 @@ export class FilterLiveSearch<TValue = unknown> implements LiveSearch<TValue, Li
     /**
      * @inheritdoc
      */
-    public selectPlugins: SelectPluginInstances = inject(SelectPluginInstances);
+    public selectPlugins: SelectPluginInstances<TValue> = inject(SelectPluginInstances);
 
     /**
      * @inheritdoc
@@ -58,7 +58,7 @@ export class FilterLiveSearch<TValue = unknown> implements LiveSearch<TValue, Li
     /**
      * @inheritdoc
      */
-    public selectBus: SelectBus<TValue> = inject(SelectBus) as SelectBus<TValue>;
+    public selectBus: SelectBus<TValue> = inject(SelectBus);
 
     //######################### public properties - implementation of LiveSearch #########################
 

@@ -1,4 +1,4 @@
-<ng-template #defaultOptionLook let-option>{{option | displayValue | localize}}</ng-template>
+<ng-template #defaultOptionLook let-option>{{option | addNewOption | localize}}{{option | displayValue | localize}}</ng-template>
 <ng-template #defaultOptionGroupLook let-text>{{text}}</ng-template>
 
 @if(selectBus.popupVisible() || options.visible)

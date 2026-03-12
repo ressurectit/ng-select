@@ -97,7 +97,7 @@ export function selectOption<TValue, TAction>(selectBus: SelectBus<TValue, TActi
  * @param selectBus  - Instance of select bus
  * @param selectPlugins - Instance with select plugins
  */
-export function handleClickOutside<TValue, TAction>(document: Document, selectBus: SelectBus<TValue, TAction>, selectPlugins: SelectPluginInstances): NoopAction
+export function handleClickOutside<TValue, TAction>(document: Document, selectBus: SelectBus<TValue, TAction>, selectPlugins: SelectPluginInstances<TValue>): NoopAction
 {
     const handleClick = (event: MouseEvent) =>
     {

@@ -8,7 +8,7 @@ import {Popup, PopupOptions, SelectOptionState, SelectPlugin, SimplePopupCssClas
 import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {POPUP_OPTIONS} from '../../../misc/tokens';
-import {DisplayValue, GroupedListOptions} from '../../../pipes';
+import {AddNewOption, DisplayValue, GroupedListOptions} from '../../../pipes';
 
 //TODO: hover into mouseover => use "active"
 
@@ -28,6 +28,7 @@ const defaultOptions: PopupOptions<SimplePopupCssClasses> =
     texts:
     {
         noAvailableOptions: 'no options available',
+        addNewOption: 'add new option',
     },
 };
 
@@ -44,6 +45,7 @@ const defaultOptions: PopupOptions<SimplePopupCssClasses> =
     },
     imports:
     [
+        AddNewOption,
         LocalizePipe,
         DisplayValue,
         NgTemplateOutlet,
@@ -64,7 +66,7 @@ export class SimplePopup<TValue = unknown> implements Popup<TValue, PopupOptions
     /**
      * @inheritdoc
      */
-    public selectPlugins: SelectPluginInstances = inject(SelectPluginInstances);
+    public selectPlugins: SelectPluginInstances<TValue> = inject(SelectPluginInstances);
 
     /**
      * @inheritdoc
@@ -74,7 +76,7 @@ export class SimplePopup<TValue = unknown> implements Popup<TValue, PopupOptions
     /**
      * @inheritdoc
      */
-    public selectBus: SelectBus<TValue> = inject(SelectBus) as SelectBus<TValue>;
+    public selectBus: SelectBus<TValue> = inject(SelectBus);
 
     //######################### protected properties - children #########################
 

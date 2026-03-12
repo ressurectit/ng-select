@@ -63,7 +63,7 @@ export class SimpleInteractions<TValue = unknown> implements Interactions<TValue
     /**
      * @inheritdoc
      */
-    public selectPlugins: SelectPluginInstances = inject(SelectPluginInstances);
+    public selectPlugins: SelectPluginInstances<TValue> = inject(SelectPluginInstances);
 
     /**
      * @inheritdoc

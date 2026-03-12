@@ -46,7 +46,7 @@ export class SimpleKeyboardHandler<TValue = unknown> implements KeyboardHandler<
     /**
      * @inheritdoc
      */
-    public selectPlugins: SelectPluginInstances = inject(SelectPluginInstances);
+    public selectPlugins: SelectPluginInstances<TValue> = inject(SelectPluginInstances);
 
     /**
      * @inheritdoc
