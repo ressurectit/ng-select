@@ -9,7 +9,7 @@
     
     <div class="form-group">
         <div class="control-label">test</div>
-        <ng-select class="form-control" absolute>
+        <ng-select class="form-control" absolute withDirectAccess [value]="8456" (valueChange)="log($event)">
             <ng-option text="ľaľa" [value]="8123" />
             <ng-option text="text4" [value]="8456" />
 

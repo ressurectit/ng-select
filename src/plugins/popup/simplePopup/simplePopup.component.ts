@@ -15,7 +15,7 @@ import {AddNewOption, DisplayValue, GroupedListOptions} from '../../../pipes';
 const defaultOptions: PopupOptions<SimplePopupCssClasses> =
 {
     visible: false,
-    liveSearchEnabled: true,
+    liveSearchEnabled: false,
     cssClasses:
     {
         componentElement: 'popup-component',

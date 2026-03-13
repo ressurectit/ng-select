@@ -271,6 +271,8 @@
    - renamed to `NoLiveSearch`
 - updated `SimpleKeyboardHandlerComponent` plugin component
    - renamed to `SimpleKeyboardHandler`
+- updated `NgSelectControlValueAccessor` directive
+   - renamed to `SelectControlValueAccessor`
 - subpackage `@anglr/select/extensions`
    - removed `patchOptions` extension function
    - removed `reinitializeOptions` extension function

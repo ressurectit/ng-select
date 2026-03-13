@@ -1,7 +1,7 @@
 import {Component, ChangeDetectionStrategy, Signal, viewChild, effect} from '@angular/core';
 import {ComponentRedirectRoute, ComponentRoute} from '@anglr/common/router';
 import {WithScrollableCssClass} from '@anglr/common';
-import {Select, Option, SelectAbsolute} from '@anglr/select';
+import {Select, Option, SelectAbsolute, WithDirectAccess} from '@anglr/select';
 import {getValue} from '@anglr/select/extensions';
 
 import {SelectApi} from '../../../../../src/interfaces';
@@ -18,6 +18,7 @@ import {SelectApi} from '../../../../../src/interfaces';
         Select,
         Option,
         SelectAbsolute,
+        WithDirectAccess,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -37,5 +38,10 @@ export class HomeComponent
                 console.log(this.select().executeAndReturn(getValue()));
             }
         });
+    }
+
+    protected log(val: any): void
+    {
+        console.log(val);
     }
 }

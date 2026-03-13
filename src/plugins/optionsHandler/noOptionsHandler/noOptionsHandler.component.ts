@@ -1,11 +1,11 @@
-import {ChangeDetectionStrategy, Component, computed, ElementRef, Inject, inject, Optional, Signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, Inject, Optional, Signal} from '@angular/core';
 import {RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
 import {OptionsHandler, SelectOptionState, OptionsHandlerOptions} from '../../../interfaces';
-import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {OPTIONS_HANDLER_OPTIONS} from '../../../misc/tokens';
+import {OptionsHandlerBase} from '../optionsHandlerBase';
 
 const defaultOptions: OptionsHandlerOptions<unknown> =
 {
@@ -21,7 +21,7 @@ const defaultOptions: OptionsHandlerOptions<unknown> =
     template: '',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NoOptionsHandler<TValue = unknown> implements OptionsHandler<TValue, OptionsHandlerOptions<TValue>>
+export class NoOptionsHandler<TValue = unknown> extends OptionsHandlerBase<TValue, OptionsHandlerOptions<TValue>> implements OptionsHandler<TValue, OptionsHandlerOptions<TValue>>
 {
     //######################### public properties - implementation of SelectPlugin #########################
 
@@ -30,21 +30,6 @@ export class NoOptionsHandler<TValue = unknown> implements OptionsHandler<TValue
      */
     @CopyOptionsAsSignal()
     public options: OptionsHandlerOptions<TValue>;
-
-    /**
-     * @inheritdoc
-     */
-    public selectPlugins: SelectPluginInstances<TValue> = inject(SelectPluginInstances);
-
-    /**
-     * @inheritdoc
-     */
-    public pluginElement: ElementRef<HTMLElement> = inject(ElementRef);
-
-    /**
-     * @inheritdoc
-     */
-    public selectBus: SelectBus<TValue> = inject(SelectBus);
 
     //######################### public properties - implementation of OptionsHandler #########################
 
@@ -61,10 +46,23 @@ export class NoOptionsHandler<TValue = unknown> implements OptionsHandler<TValue
     //######################### constructor #########################
     constructor(@Inject(OPTIONS_HANDLER_OPTIONS) @Optional() options?: RecursivePartial<OptionsHandlerOptions<TValue>>|null,)
     {
+        super();
+
         this.options = deepCopyWithArrayOverride(defaultOptions as OptionsHandlerOptions<TValue>,
                                                  options);
 
         this.availableOptions = computed(() => this.selectBus.selectOptions().optionsGatherer.availableOptions());
-        this.listOptions = computed(() => this.availableOptions());
+        this.listOptions = computed(() =>
+        {
+            const firstOption = this.firstOption();
+            const availableOptions = this.availableOptions() as SelectOptionState<TValue>[] | null | undefined;
+
+            if(firstOption && availableOptions)
+            {
+                availableOptions.unshift(firstOption);
+            }
+
+            return availableOptions;
+        });
     }
 }

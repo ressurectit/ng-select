@@ -41,7 +41,7 @@ export interface SelectApi<TValue = unknown, TCssClasses = SelectCssClasses>
     getPlugin(pluginType: SelectPluginType.Positioner): Positioner<TValue>;
     getPlugin(pluginType: SelectPluginType.ReadonlyState): ReadonlyState;
     getPlugin(pluginType: SelectPluginType.ValueHandler): ValueHandler<TValue>;
-    getPlugin<PluginInstance extends SelectPlugin>(pluginType: SelectPluginType): PluginInstance;
+    getPlugin<PluginInstance extends SelectPlugin<TValue>>(pluginType: SelectPluginType): PluginInstance;
 
     /**
      * Executes actions on Select

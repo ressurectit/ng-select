@@ -1,244 +1,135 @@
-// import {forwardRef, ExistingProvider, Directive, OnDestroy} from '@angular/core';
-// import {NG_VALUE_ACCESSOR, ControlValueAccessor} from '@angular/forms';
-// import {Subscription} from 'rxjs';
+import {forwardRef, ExistingProvider, Directive, OnDestroy, WritableSignal, signal, effect} from '@angular/core';
+import {NG_VALUE_ACCESSOR, ControlValueAccessor} from '@angular/forms';
+import {Action1, NoopAction} from '@jscrpt/common';
+import {Subscription} from 'rxjs';
 
-// /**
-//  * Provider for control value accessor
-//  * @internal
-//  */
-// const NG_SELECT_VALUE_ACCESSOR: ExistingProvider =
-// {
-//     provide: NG_VALUE_ACCESSOR,
-//     useExisting: forwardRef(() => NgSelectControlValueAccessor),
-//     multi: true,
-// };
+import {Select} from '../../components';
+import {SelectPluginType} from '../../misc/enums';
 
-// /**
-//  * Control value accessor for NgSelectComponent
-//  */
-// @Directive(
-// {
-//     selector: 'ng-select[formControlName],ng-select[formControl],ng-select[ngModel]',
-//     providers: [NG_SELECT_VALUE_ACCESSOR],
-// })
-// export class NgSelectControlValueAccessor<TValue = unknown> implements ControlValueAccessor, OnDestroy
-// {
-//     //######################### private fields #########################
+/**
+ * Provider for control value accessor
+ */
+const SELECT_VALUE_ACCESSOR: ExistingProvider =
+{
+    provide: NG_VALUE_ACCESSOR,
+    useExisting: forwardRef(() => SelectControlValueAccessor),
+    multi: true,
+};
 
-//     /**
-//      * Subscription for initialized status of NgSelect, used for writeValue
-//      */
-//     private _initializedSubscription: Subscription;
+/**
+ * Control value accessor for NgSelectComponent
+ */
+@Directive(
+{
+    selector: 'ng-select[formControlName],ng-select[formControl],ng-select[ngModel]',
+    providers: [SELECT_VALUE_ACCESSOR],
+})
+export class SelectControlValueAccessor<TValue = unknown> implements ControlValueAccessor, OnDestroy
+{
+    //######################### protected fields #########################
 
-//     /**
-//      * Subscription for initialized status of NgSelect, used for registerOnChange
-//      */
-//     private _changeInitializedSubscription: Subscription;
+    /**
+     * Subscriptions created during initialization
+     */
+    protected initSubscriptions: Subscription = new Subscription();
 
-//     /**
-//      * Subscription for initialized status of NgSelect, used for registerOnTouched
-//      */
-//     private _touchInitializedSubscription: Subscription;
+    /**
+     * Last set value to this control
+     */
+    protected value: WritableSignal<TValue|TValue[]|undefined|null> = signal(undefined);
 
-//     /**
-//      * Subscription for initialized status of NgSelect, used for setDisabledState
-//      */
-//     private _disabledInitializedSubscription: Subscription;
+    /**
+     * Indication whether disable Select
+     */
+    protected disabled: WritableSignal<boolean> = signal(false);
 
-//     /**
-//      * Subscription that looks for changes of select
-//      */
-//     private _changeSubscription: Subscription = null;
+    /**
+     * On change callback for setting value back to control
+     */
+    protected onChange: Action1<TValue|Array<TValue>|undefined|null>|undefined|null;
 
-//     /**
-//      * Subscription that looks for changes of select
-//      */
-//     private _focusSubscription: Subscription = null;
+    /**
+     * On touched callback for setting touched back to control
+     */
+    protected onTouched: NoopAction|undefined|null;
 
-//     /**
-//      * Last set value to this control
-//      */
-//     private _value: TValue|TValue[];
+    //######################### constructor #########################
+    constructor(select: Select<TValue>)
+    {
+        effect(() =>
+        {
+            if(!select.initialized())
+            {
+                return;
+            }
 
-//     //######################### constructor #########################
-//     constructor(private _select: NgSelectComponent<TValue>)
-//     {
-//     }
+            select.getPlugin(SelectPluginType.ValueHandler).setValue(this.value());
+        });
 
-//     //######################### public methods - implementation of ControlValueAccessor #########################
+        effect(() =>
+        {
+            if(!select.initialized())
+            {
+                return;
+            }
 
-//     /**
-//      * Sets value to select
-//      */
-//     public writeValue(value: TValue|Array<TValue>): void
-//     {
-//         this._value = value;
+            select.selectOptions.readonly = this.disabled();
+        });
 
-//         if(this._select.isInitialized)
-//         {
-//             this._select.execute(ɵSetValue(value));
+        effect(() =>
+        {
+            if(!select.initialized())
+            {
+                return;
+            }
 
-//             return;
-//         }
+            this.onChange?.(select.getPlugin(SelectPluginType.ValueHandler).value());
+        });
 
-//         if(this._initializedSubscription)
-//         {
-//             this._initializedSubscription.unsubscribe();
-//             this._initializedSubscription = null;
-//         }
+        this.initSubscriptions.add(select.events.focus.subscribe(() => this.onTouched?.()));
+    }
 
-//         this._initializedSubscription = this._select.initialized.subscribe(initialized =>
-//         {
-//             if(initialized)
-//             {
-//                 this._initializedSubscription.unsubscribe();
-//                 this._initializedSubscription = null;
+    //######################### public methods - implementation of ControlValueAccessor #########################
 
-//                 this._select.execute(ɵSetValue(value));
-//             }
-//         });
-//     }
+    /**
+     * @inheritdoc
+     */
+    public writeValue(value: TValue|TValue[]|undefined|null): void
+    {
+        this.value.set(value);
+    }
 
-//     /**
-//      * Registers callback that is called when value of select changes
-//      */
-//     public registerOnChange(fn: (data: TValue|Array<TValue>) => void): void
-//     {
-//         const fnWrapper = (value: TValue|Array<TValue>) =>
-//         {
-//             //multivalue is new array in case of change
-//             if(Array.isArray(value) && Array.isArray(this._value))
-//             {
-//                 if(value !== this._value)
-//                 {
-//                     this._value = value;
-//                     fn(value);
-//                 }
-//             }
-//             else if(!Array.isArray(value) && !Array.isArray(this._value))
-//             {
-//                 if(!this._select.selectOptions?.valueComparer(this._value, value))
-//                 {
-//                     this._value = value;
-//                     fn(value);
-//                 }
-//             }
-//         };
+    /**
+     * @inheritdoc
+     */
+    public registerOnChange(fn: (data: TValue|Array<TValue>|undefined|null) => void): void
+    {
+        this.onChange = fn;
+    }
 
-//         this._changeInitializedSubscription = this._select.initialized.subscribe(initialized =>
-//         {
-//             if(initialized)
-//             {
-//                 if(this._changeSubscription)
-//                 {
-//                     this._changeSubscription.unsubscribe();
-//                     this._changeSubscription = null;
-//                 }
+    /**
+     * @inheritdoc
+     */
+    public registerOnTouched(fn: () => void): void
+    {
+        this.onTouched = fn;
+    }
 
-//                 this._changeSubscription = this._select.executeAndReturn(ɵValueChange(fnWrapper));
+    /**
+     * @inheritdoc
+     */
+    public setDisabledState(isDisabled: boolean): void
+    {
+        this.disabled.set(isDisabled);
+    }
 
-//                 if(this._select.selectOptions.forceValueCheckOnInit)
-//                 {
-//                     const value = this._select.executeAndReturn(ɵGetValue());
+    //######################### public methods - implementation of OnDestroy #########################
 
-//                     fnWrapper(value);
-//                 }
-//             }
-//         });
-//     }
-
-//     /**
-//      * Registers callback that is called when select is closed
-//      */
-//     public registerOnTouched(fn: () => void): void
-//     {
-//         this._touchInitializedSubscription = this._select.initialized.subscribe(initialized =>
-//         {
-//             if(initialized)
-//             {
-//                 if(this._focusSubscription)
-//                 {
-//                     this._focusSubscription.unsubscribe();
-//                     this._focusSubscription = null;
-//                 }
-
-//                 this._focusSubscription = this._select.executeAndReturn(ɵOnFocus(fn));
-//             }
-//         });
-//     }
-
-//     /**
-//      * Sets NgSelect as disabled/readonly
-//      * @param isDisabled - Indication whether is control disabled or not
-//      */
-//     public setDisabledState(isDisabled: boolean): void
-//     {
-//         if(this._select.isInitialized)
-//         {
-//             this._select.execute(ɵSetReadonly(isDisabled));
-
-//             return;
-//         }
-
-//         if(this._disabledInitializedSubscription)
-//         {
-//             this._disabledInitializedSubscription.unsubscribe();
-//             this._disabledInitializedSubscription = null;
-//         }
-
-//         this._disabledInitializedSubscription = this._select.initialized.subscribe(initialized =>
-//         {
-//             if(initialized)
-//             {
-//                 this._disabledInitializedSubscription.unsubscribe();
-//                 this._disabledInitializedSubscription = null;
-
-//                 this._select.execute(ɵSetReadonly(isDisabled));
-//             }
-//         });
-//     }
-
-//     //######################### public methods - implementation of OnDestroy #########################
-
-//     /**
-//      * Called when component is destroyed
-//      */
-//     public ngOnDestroy()
-//     {
-//         if(this._changeSubscription)
-//         {
-//             this._changeSubscription.unsubscribe();
-//             this._changeSubscription = null;
-//         }
-
-//         if(this._initializedSubscription)
-//         {
-//             this._initializedSubscription.unsubscribe();
-//             this._initializedSubscription = null;
-//         }
-
-//         if(this._changeInitializedSubscription)
-//         {
-//             this._changeInitializedSubscription.unsubscribe();
-//             this._changeInitializedSubscription = null;
-//         }
-
-//         if(this._touchInitializedSubscription)
-//         {
-//             this._touchInitializedSubscription.unsubscribe();
-//             this._touchInitializedSubscription = null;
-//         }
-
-//         if(this._focusSubscription)
-//         {
-//             this._focusSubscription.unsubscribe();
-//             this._focusSubscription = null;
-//         }
-
-//         if(this._disabledInitializedSubscription)
-//         {
-//             this._disabledInitializedSubscription.unsubscribe();
-//             this._disabledInitializedSubscription = null;
-//         }
-//     }
-// }
+    /**
+     * @inheritdoc
+     */
+    public ngOnDestroy()
+    {
+        this.initSubscriptions.unsubscribe();
+    }
+}

@@ -1,12 +1,12 @@
-import {ChangeDetectionStrategy, Component, computed, ElementRef, Inject, inject, Optional, Signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, Inject, Optional, Signal} from '@angular/core';
 import {RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
 import {OptionsHandler, SelectOptionState, SimpleOptionsHandlerOptions} from '../../../interfaces';
-import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {OPTIONS_HANDLER_OPTIONS} from '../../../misc/tokens';
 import {compareSelectOptions} from '../../../misc/utils';
+import {OptionsHandlerBase} from '../optionsHandlerBase';
 
 const defaultOptions: SimpleOptionsHandlerOptions<unknown> =
 {
@@ -23,7 +23,7 @@ const defaultOptions: SimpleOptionsHandlerOptions<unknown> =
     template: '',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SimpleOptionsHandler<TValue = unknown> implements OptionsHandler<TValue, SimpleOptionsHandlerOptions<TValue>>
+export class SimpleOptionsHandler<TValue = unknown> extends OptionsHandlerBase<TValue, SimpleOptionsHandlerOptions<TValue>> implements OptionsHandler<TValue, SimpleOptionsHandlerOptions<TValue>>
 {
     //######################### public properties - implementation of SelectPlugin #########################
 
@@ -32,21 +32,6 @@ export class SimpleOptionsHandler<TValue = unknown> implements OptionsHandler<TV
      */
     @CopyOptionsAsSignal()
     public options: SimpleOptionsHandlerOptions<TValue>;
-
-    /**
-     * @inheritdoc
-     */
-    public selectPlugins: SelectPluginInstances<TValue> = inject(SelectPluginInstances);
-
-    /**
-     * @inheritdoc
-     */
-    public pluginElement: ElementRef<HTMLElement> = inject(ElementRef);
-
-    /**
-     * @inheritdoc
-     */
-    public selectBus: SelectBus<TValue> = inject(SelectBus);
 
     //######################### public properties - implementation of OptionsHandler #########################
 
@@ -63,6 +48,8 @@ export class SimpleOptionsHandler<TValue = unknown> implements OptionsHandler<TV
     //######################### constructor #########################
     constructor(@Inject(OPTIONS_HANDLER_OPTIONS) @Optional() options?: RecursivePartial<SimpleOptionsHandlerOptions<TValue>>|null,)
     {
+        super();
+
         this.options = deepCopyWithArrayOverride(defaultOptions as SimpleOptionsHandlerOptions<TValue>,
                                                  options);
 
@@ -72,7 +59,8 @@ export class SimpleOptionsHandler<TValue = unknown> implements OptionsHandler<TV
             const text = this.selectPlugins.LiveSearch.search();
             const selectedOptions = this.selectBus.selectedOptions() ?? [];
             const opts = Array.isArray(selectedOptions) ? selectedOptions : [selectedOptions];
-            let availableOptions = this.availableOptions();
+            const firstOption = this.firstOption();
+            let availableOptions = this.availableOptions() as SelectOptionState<TValue>[] | null | undefined;
 
             if(!this.options.listSelected)
             {
@@ -84,6 +72,11 @@ export class SimpleOptionsHandler<TValue = unknown> implements OptionsHandler<TV
 
             if(!text)
             {
+                if(firstOption && availableOptions)
+                {
+                    availableOptions.unshift(firstOption);
+                }
+
                 return availableOptions;
             }
 
@@ -92,8 +85,15 @@ export class SimpleOptionsHandler<TValue = unknown> implements OptionsHandler<TV
             const normalize = options.normalize;
             const textCompare = options.textCompare;
 
-            return availableOptions
+            availableOptions = availableOptions
                 ?.filter(itm => textCompare(normalize(textExtractor(itm)), normalize(text)));
+
+            if(firstOption && availableOptions)
+            {
+                availableOptions.unshift(firstOption);
+            }
+
+            return availableOptions;
         });
     }
 }

@@ -43,7 +43,30 @@ export abstract class OptionsHandlerBase<TValue = unknown, TOptions extends Opti
     {
         effect(() =>
         {
+            const newOptionsGetter = this.options.newOptionGetter;
 
+            if(!newOptionsGetter)
+            {
+                this.firstOption.set(null);
+
+                return;
+            }
+
+            const search = this.selectPlugins.LiveSearch.search();
+
+            if(!search)
+            {
+                this.firstOption.set(null);
+
+                return;
+            }
+
+            const newOption = newOptionsGetter(search) as SelectOptionStateSyntetic<TValue>;
+            newOption.created = true;
+            newOption.selected = signal(false);
+            newOption.active = signal(false);
+
+            this.firstOption.set(newOption);
         });
     }
 }

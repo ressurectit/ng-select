@@ -10,5 +10,5 @@ export interface SelectOptionStateSyntetic<TValue = unknown> extends SelectOptio
     /**
      * Indication whether was this option created in Select
      */
-    readonly created?: boolean;
+    created?: boolean;
 }

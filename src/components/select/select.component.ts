@@ -474,7 +474,16 @@ export class Select<TValue = unknown> implements SelectApi<TValue, SelectCssClas
     /**
      * @inheritdoc
      */
-    public getPlugin<PluginInstance extends SelectPlugin>(pluginType: SelectPluginType): PluginInstance
+    public getPlugin(pluginType: SelectPluginType.Interactions): Interactions<TValue>;
+    public getPlugin(pluginType: SelectPluginType.KeyboardHandler): KeyboardHandler<TValue>;
+    public getPlugin(pluginType: SelectPluginType.LiveSearch): LiveSearch<TValue>;
+    public getPlugin(pluginType: SelectPluginType.NormalState): NormalState<TValue>;
+    public getPlugin(pluginType: SelectPluginType.OptionsHandler): OptionsHandler<TValue>;
+    public getPlugin(pluginType: SelectPluginType.Popup): Popup<TValue>;
+    public getPlugin(pluginType: SelectPluginType.Positioner): Positioner<TValue>;
+    public getPlugin(pluginType: SelectPluginType.ReadonlyState): ReadonlyState;
+    public getPlugin(pluginType: SelectPluginType.ValueHandler): ValueHandler<TValue>;
+    public getPlugin<PluginInstance extends SelectPlugin<TValue>>(pluginType: SelectPluginType): PluginInstance
     {
         return this.pluginInstances[pluginType] as PluginInstance;
     }
