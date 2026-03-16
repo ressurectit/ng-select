@@ -1,10 +1,10 @@
-import {ChangeDetectionStrategy, Component, ElementRef, Inject, inject, Optional} from '@angular/core';
+import {ChangeDetectionStrategy, Component, effect, ElementRef, Inject, inject, Optional, Signal, viewChild} from '@angular/core';
 import {NgTemplateOutlet} from '@angular/common';
-import {LocalizePipe, TooltipDirective} from '@anglr/common';
+import {LocalizePipe} from '@anglr/common';
 import {RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
-import {NormalState, NormalStateOptions, SelectPlugin, SimpleNormalStateCssClasses} from '../../../interfaces';
+import {NormalState, NormalStateOptions, SelectPlugin, EditNormalStateCssClasses} from '../../../interfaces';
 import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {NORMAL_STATE_OPTIONS} from '../../../misc/tokens';
@@ -12,7 +12,7 @@ import {DisplayValue} from '../../../pipes';
 
 //TODO: improvement, carret direction
 
-const defaultOptions: NormalStateOptions<SimpleNormalStateCssClasses> =
+const defaultOptions: NormalStateOptions<EditNormalStateCssClasses> =
 {
     cancelValue: false,
     cssClasses:
@@ -31,8 +31,8 @@ const defaultOptions: NormalStateOptions<SimpleNormalStateCssClasses> =
  */
 @Component(
 {
-    selector: 'simple-normal-state',
-    templateUrl: 'simpleNormalState.component.html',
+    selector: 'edit-normal-state',
+    templateUrl: 'editNormalState.component.html',
     host:
     {
         '[class]': 'options.cssClasses.componentElement',
@@ -41,12 +41,11 @@ const defaultOptions: NormalStateOptions<SimpleNormalStateCssClasses> =
     [
         DisplayValue,
         LocalizePipe,
-        TooltipDirective,
         NgTemplateOutlet,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SimpleNormalState<TValue = unknown> implements NormalState<TValue, NormalStateOptions<SimpleNormalStateCssClasses>>
+export class EditNormalState<TValue = unknown> implements NormalState<TValue, NormalStateOptions<EditNormalStateCssClasses>>
 {
     //######################### public properties - implementation of SelectPlugin #########################
 
@@ -54,7 +53,7 @@ export class SimpleNormalState<TValue = unknown> implements NormalState<TValue, 
      * @inheritdoc
      */
     @CopyOptionsAsSignal()
-    public options: NormalStateOptions<SimpleNormalStateCssClasses>;
+    public options: NormalStateOptions<EditNormalStateCssClasses>;
 
     /**
      * @inheritdoc
@@ -71,11 +70,20 @@ export class SimpleNormalState<TValue = unknown> implements NormalState<TValue, 
      */
     public selectBus: SelectBus<TValue> = inject(SelectBus);
 
+    //######################### protected properties - children #########################
+
+    /**
+     * Instance of element that is used as placeholder for live search
+     */
+    protected liveSearchPlaceholder: Signal<ElementRef<HTMLElement>> = viewChild.required('liveSearchPlaceholder', {read: ElementRef});
+
     //######################### constructor #########################
-    constructor(@Inject(NORMAL_STATE_OPTIONS) @Optional() options?: RecursivePartial<NormalStateOptions<SimpleNormalStateCssClasses>>|null,)
+    constructor(@Inject(NORMAL_STATE_OPTIONS) @Optional() options?: RecursivePartial<NormalStateOptions<EditNormalStateCssClasses>>|null,)
     {
-        this.options = deepCopyWithArrayOverride(defaultOptions as NormalStateOptions<SimpleNormalStateCssClasses>,
+        this.options = deepCopyWithArrayOverride(defaultOptions as NormalStateOptions<EditNormalStateCssClasses>,
                                                  options);
+
+        effect(() => this.liveSearchPlaceholder().nativeElement.after(this.selectPlugins.LiveSearch.pluginElement.nativeElement));
     }
 
     //######################### protected methods - template bindings #########################

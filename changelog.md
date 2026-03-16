@@ -247,7 +247,7 @@
    - renamed to `SimpleNormalStateCssClasses`
    - property `selectedValue` renamed to `value`
    - property `selectedCarret` renamed to `carret`
-   - property `normalStateElement` renamed to `containerElement`
+   - property `normalStateElement` renamed to `element`
    - new property `componentElement` applied to HTML element that represents whole component
    - new property `cancel` applied to cancel button that allows clearing selected value
    - new property `cancelIcon` applied to cancel button icon

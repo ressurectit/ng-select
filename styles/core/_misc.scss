@@ -2,6 +2,11 @@
 
 @mixin misc
 {
+    .select-relative
+    {
+        @extend %relative;
+    }
+
     .select-flex-row
     {
         @extend %flex-row;

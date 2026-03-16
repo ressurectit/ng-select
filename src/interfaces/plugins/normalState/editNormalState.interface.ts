@@ -1,9 +1,9 @@
 import {NormalStateCssClasses} from './normalState.interface';
 
 /**
- * Css classes for simple normal state plugin
+ * Css classes for edit normal state plugin.
  */
-export interface SimpleNormalStateCssClasses extends NormalStateCssClasses
+export interface EditNormalStateCssClasses extends NormalStateCssClasses
 {
     /**
      * Applied to currently selected value, which is visible to user (default template)

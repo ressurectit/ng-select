@@ -11,6 +11,10 @@ import {CopyOptionsAsSignal} from '../../../decorators';
 {
     selector: 'no-live-search',
     template: '',
+    host:
+    {
+        '[class]': 'options.cssClasses.componentElement',
+    },
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NoLiveSearch<TValue = unknown> implements LiveSearch<TValue, LiveSearchOptions>
@@ -21,7 +25,7 @@ export class NoLiveSearch<TValue = unknown> implements LiveSearch<TValue, LiveSe
      * @inheritdoc
      */
     @CopyOptionsAsSignal()
-    public options: LiveSearchOptions = {cssClasses: {}};
+    public options: LiveSearchOptions = {cssClasses: {componentElement: 'live-search-component'}};
 
     /**
      * @inheritdoc

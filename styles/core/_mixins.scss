@@ -1,6 +1,7 @@
 @use '@css-styles/common' as mixins;
 
 @use 'misc';
+@use '../components/liveSearch' as liveSearch;
 @use '../components/normalState' as normalState;
 @use '../components/popup' as popup;
 @use '../components/select' as select;
@@ -16,6 +17,7 @@
 @mixin buildThemeCss
 {
     @include misc.misc;
+    @include liveSearch.css;
     @include normalState.css;
     @include popup.css;
     @include select.css;

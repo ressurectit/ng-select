@@ -8,7 +8,10 @@ import {VisualPluginOptions} from '../../visualPluginOptions/visualPluginOptions
  */
 export interface LiveSearchCssClasses
 {
-
+    /**
+     * Applied to HTML element that represents whole component
+     */
+    componentElement: string;
 }
 
 /**
