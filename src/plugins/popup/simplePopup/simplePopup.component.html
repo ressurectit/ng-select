@@ -8,7 +8,7 @@
     <div [class]="options.cssClasses.popupContainer">
         <ng-container #liveSearchPlaceholder/>
 
-        @for(optionsGroups of listOptions; track optionsGroups)
+        @for(optionsGroups of listOptions; track $index)
         {
             @let group = optionsGroups[1];
             @let opts = optionsGroups[0];

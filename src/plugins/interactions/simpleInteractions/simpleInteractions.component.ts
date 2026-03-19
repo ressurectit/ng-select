@@ -115,6 +115,20 @@ export class SimpleInteractions<TValue = unknown> implements Interactions<TValue
             }
         });
 
+        effect(() =>
+        {
+            const optionsHandler = this.selectPlugins.optionsHandler();
+            const listOptions = optionsHandler?.listOptions();
+            const availableOptions = optionsHandler?.availableOptions();
+            const activeOption = listOptions?.find(itm => itm.active());
+
+            if(!activeOption)
+            {
+                availableOptions?.forEach(itm => itm.active.set(false));
+                listOptions?.[0].active.set(true);
+            }
+        });
+
         this.showPopup.add(this.selectBus.showPopup.subscribe(() => this.selectBus.popupVisible.set(true)));
         this.hidePopup.add(this.selectBus.hidePopup.subscribe(() => this.selectBus.popupVisible.set(false)));
         this.markActive.add(this.selectBus.markOption.subscribe(event =>

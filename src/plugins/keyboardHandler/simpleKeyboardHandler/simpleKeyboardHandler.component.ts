@@ -12,6 +12,7 @@ import {SimpleKeyboardActionTypes} from '../../../misc/types';
 const defaultOptions: SimpleKeyboardHandlerOptions =
 {
     selectFirstDebounceTimeout: 300,
+    alphanumericSearch: false,
 };
 
 /**
@@ -205,7 +206,7 @@ export class SimpleKeyboardHandler<TValue = unknown> implements KeyboardHandler<
             event.preventDefault();
         }
 
-        if(event.key.match(/^[a-z0-9]$/i))
+        if(this.options.alphanumericSearch && event.key.match(/^[a-z0-9]$/i))
         {
             this.logger.verbose('Select: Keyboard handler: handling alphanumeric key');
 

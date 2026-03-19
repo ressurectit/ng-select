@@ -188,6 +188,13 @@ export class EditLiveSearch<TValue = unknown> implements LiveSearch<TValue, Live
      */
     protected input(event: Event): void
     {
+        this.selectBus.showPopup.next(
+        {
+            source: this as SelectPlugin,
+            sourceElement: this.pluginElement.nativeElement,
+            data: null,
+        });
+
         if(isPresent(this.timeout))
         {
             clearTimeout(this.timeout);

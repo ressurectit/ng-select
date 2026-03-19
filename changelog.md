@@ -95,6 +95,7 @@
 - new `SimpleKeyboardHandlerOptions` interface, that represents options for simple keyboard handler plugin
    - **properties**
       - `selectFirstDebounceTimeout` debounce timeout for selecting first option when typing
+      - `alphanumericSearch` indication whether is alphanumeric search enabled, meaning that when user types alphanumeric keys (outside of live search), select will try to find option starting with searched text and select it
 - new `LiveSearchCssClasses` interface, represents css classes for live search
 - new `TextComparerFunc` type definition of function used for comparison two texts
 - new `ValueComputedFunc` type definition of function for computed value signal

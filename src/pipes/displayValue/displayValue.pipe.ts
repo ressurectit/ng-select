@@ -22,12 +22,13 @@ export class DisplayValue<TValue = unknown> implements PipeTransform
     /**
      * Transforms selected option into string
      * @param option - Selected options to be transformed into text
+     * @param placeholderOverride - Placeholder override to be used instead of default placeholder
      */
-    public transform(option: SelectOption<TValue>|Array<SelectOption<TValue>>|undefined|null): string
+    public transform(option: SelectOption<TValue>|Array<SelectOption<TValue>>|undefined|null, placeholderOverride: string|undefined|null = undefined): string
     {
         if(isBlank(option) || (Array.isArray(option) && !option.length))
         {
-            return this.selectBus.selectOptions().placeholder;
+            return placeholderOverride ?? this.selectBus.selectOptions().placeholder;
         }
 
         if(Array.isArray(option))

@@ -11,4 +11,9 @@ export interface SimpleKeyboardHandlerOptions extends KeyboardHandlerOptions
      * Debounce timeout for selecting first option when typing
      */
     selectFirstDebounceTimeout: number;
+
+    /**
+     * Indication whether is alphanumeric search enabled, meaning that when user types alphanumeric keys (outside of live search), select will try to find option starting with searched text and select it
+     */
+    alphanumericSearch: boolean;
 }
