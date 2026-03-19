@@ -1,5 +1,5 @@
 import {Component, ChangeDetectionStrategy, Input, viewChild, ViewContainerRef, Signal, WritableSignal, signal, Inject, Optional, Type, resolveForwardRef, FactoryProvider, effect, forwardRef, Attribute, ElementRef, computed, input, booleanAttribute, InputSignalWithTransform, ComponentRef, DOCUMENT, TemplateRef, contentChild, contentChildren} from '@angular/core';
-import {getHostElement} from '@anglr/common';
+import {getHostElement, LOGGER, Logger} from '@anglr/common';
 import {isPresent, RecursivePartial, renderToBody, normalizeAccent} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
@@ -295,6 +295,7 @@ export class Select<TValue = unknown> implements SelectApi<TValue, SelectCssClas
     //######################### constructors #########################
     constructor(protected pluginInstances: SelectPluginInstances,
                 protected bus: SelectBus<TValue>,
+                @Inject(LOGGER) protected logger: Logger,
                 element: ElementRef<HTMLElement>,
                 @Inject(DOCUMENT) document: HTMLDocument,
                 @Attribute('multiple') multiple?: string|null,
@@ -382,17 +383,23 @@ export class Select<TValue = unknown> implements SelectApi<TValue, SelectCssClas
             },
             opts);
 
+        this.logger.verbose('Select: ctor options initialized {{@(4)options}}', {options: this.selectOptions});
+
         bus.selectElement = signal(element).asReadonly();
         bus.selectOptions = computed(() => this.selectOptions);
 
         //dynamic update of readonly state in options
         effect(() =>
         {
+            const readonly = this.readonly() || this.disabled();
+
             this.selectOptions =
             <RecursivePartial<SelectOptions<TValue>>>
             {
-                readonly: this.readonly() || this.disabled(),
+                readonly: readonly,
             } as SelectOptions<TValue, SelectCssClasses>;
+
+            this.logger.verbose('Select: readonly updated {{readonly}}', {readonly});
         });
 
         //create and initialize options for static plugins
@@ -528,6 +535,8 @@ export class Select<TValue = unknown> implements SelectApi<TValue, SelectCssClas
                                                                pluginViewContainer: ViewContainerRef,
                                                                initOptions: WritableSignal<boolean>,): Promise<void>
     {
+        this.logger.verbose('Select: creating plugin "{{type}}", with type "{{typ}}"', {type: pluginType, typ: pluginDescription?.type});
+
         if(!pluginDescription?.type)
         {
             this.destroyPlugin(pluginType, pluginViewContainer, initOptions);
@@ -541,6 +550,8 @@ export class Select<TValue = unknown> implements SelectApi<TValue, SelectCssClas
         //new type provided
         if(type != this.pluginTypes[pluginType])
         {
+            this.logger.verbose('Select: creating plugin instance for "{{type}}"', {type: pluginType});
+
             initOptions.set(false);
             this.pluginTypes[pluginType] = type;
             pluginViewContainer.clear();
@@ -565,10 +576,13 @@ export class Select<TValue = unknown> implements SelectApi<TValue, SelectCssClas
         //options are available, set them
         if(pluginDescription.options)
         {
+            this.logger.verbose('Select: setting options for "{{type}}" plugin, options: {{@(4)options}}', {type: pluginType, options: pluginDescription.options});
+
             initOptions.set(false);
             this.pluginInstances[pluginType].options = pluginDescription.options;
         }
 
+        this.logger.verbose('Select: options initialized for "{{type}}" plugin', {type: pluginType});
         initOptions.set(true);
     }
 
@@ -586,6 +600,8 @@ export class Select<TValue = unknown> implements SelectApi<TValue, SelectCssClas
         {
             this.popupComponentRef = null;
         }
+
+        this.logger.verbose('Select: destroying plugin "{{type}}"', {type: pluginType});
 
         pluginViewContainer.clear();
         initOptions.set(false);

@@ -1,4 +1,5 @@
 import {Component, effect, ElementRef, Inject, inject, OnDestroy, Optional} from '@angular/core';
+import {LOGGER, Logger} from '@anglr/common';
 import {BindThis, isPresent, RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
@@ -35,6 +36,11 @@ export class SimpleKeyboardHandler<TValue = unknown> implements KeyboardHandler<
      */
     protected searchDebounceTimeout: number|undefined|null;
 
+    /**
+     * Instance of logger for logging purposes
+     */
+    protected logger: Logger = inject(LOGGER);
+
     //######################### public properties - implementation of SelectPlugin #########################
 
     /**
@@ -66,6 +72,8 @@ export class SimpleKeyboardHandler<TValue = unknown> implements KeyboardHandler<
 
         effect(() =>
         {
+            this.logger.verbose('Select: Keyboard handler: registering keyboard "keydown" event listener');
+
             this.selectBus.selectElement().nativeElement.removeEventListener('keydown', this.handleKeyboardEvents);
             this.selectBus.selectElement().nativeElement.addEventListener('keydown', this.handleKeyboardEvents);
         });
@@ -78,6 +86,7 @@ export class SimpleKeyboardHandler<TValue = unknown> implements KeyboardHandler<
      */
     public ngOnDestroy(): void
     {
+        this.logger.verbose('Select: Keyboard handler: destroying, removing keyboard "keydown" event listener, clearing search debounce timeout');
         this.selectBus.selectElement().nativeElement.removeEventListener('keydown', this.handleKeyboardEvents);
 
         if(isPresent(this.searchDebounceTimeout))
@@ -100,6 +109,7 @@ export class SimpleKeyboardHandler<TValue = unknown> implements KeyboardHandler<
         if(event.key == 'ArrowDown' || event.key == 'ArrowUp')
         {
             const activeOption = options?.find(itm => itm.active());
+            this.logger.verbose('Select: Keyboard handler: handling ArrowDown, ArrowUp');
 
             if(activeOption && options)
             {
@@ -123,6 +133,8 @@ export class SimpleKeyboardHandler<TValue = unknown> implements KeyboardHandler<
 
                 index = index % options.length;
 
+                this.logger.verbose('Select: Keyboard handler: selecting option with index {{index}}', {index});
+
                 this.selectBus.markOption.next(
                 {
                     source: this as SelectPlugin,
@@ -133,6 +145,8 @@ export class SimpleKeyboardHandler<TValue = unknown> implements KeyboardHandler<
             //none active before
             else if(options?.length)
             {
+                this.logger.verbose('Select: Keyboard handler: selecting option with index {{index}}', {index: 0});
+
                 this.selectBus.markOption.next(
                 {
                     source: this as SelectPlugin,
@@ -148,9 +162,12 @@ export class SimpleKeyboardHandler<TValue = unknown> implements KeyboardHandler<
         if(event.key == 'Enter' && this.selectBus.popupVisible())
         {
             const activeOption = options?.find(itm => itm.active());
+            this.logger.verbose('Select: Keyboard handler: handling Enter');
 
             if(activeOption)
             {
+                this.logger.verbose('Select: Keyboard handler: selecting active option');
+
                 this.selectBus.keyboardAction.next(
                 {
                     source: this as SelectPlugin,
@@ -164,6 +181,8 @@ export class SimpleKeyboardHandler<TValue = unknown> implements KeyboardHandler<
 
         if(event.key == 'Tab' || event.key == 'Escape')
         {
+            this.logger.verbose('Select: Keyboard handler: handling Tab, Escape');
+
             this.selectBus.hidePopup.next(
             {
                 source: this as SelectPlugin,
@@ -174,6 +193,8 @@ export class SimpleKeyboardHandler<TValue = unknown> implements KeyboardHandler<
 
         if(event.key == ' ')
         {
+            this.logger.verbose('Select: Keyboard handler: handling Space');
+
             this.selectBus.showPopup.next(
             {
                 source: this as SelectPlugin,
@@ -186,6 +207,8 @@ export class SimpleKeyboardHandler<TValue = unknown> implements KeyboardHandler<
 
         if(event.key.match(/^[a-z0-9]$/i))
         {
+            this.logger.verbose('Select: Keyboard handler: handling alphanumeric key');
+
             this.search += event.key;
 
             if(isPresent(this.searchDebounceTimeout))
@@ -195,6 +218,8 @@ export class SimpleKeyboardHandler<TValue = unknown> implements KeyboardHandler<
 
             this.searchDebounceTimeout = setTimeout(() =>
             {
+                this.logger.verbose('Select: Keyboard handler: seinding SELECT_FIRST keyboard action with search "{{search}}"', {search: this.search});
+
                 this.selectBus.keyboardAction.next(
                 {
                     source: this as SelectPlugin,

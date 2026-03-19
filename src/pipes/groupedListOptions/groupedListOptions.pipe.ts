@@ -6,13 +6,13 @@ import {SelectOptionGroup, SelectOptionState} from '../../interfaces';
  * Gets list of options grouped
  */
 @Pipe({name: 'groupedListOptions'})
-export class GroupedListOptions<TValue = unknown> implements PipeTransform
+export class GroupedListOptions implements PipeTransform
 {
     /**
      * Gets list of options grouped
      * @param value - Obtains tuple with options and their corresponding groups
      */
-    public transform(value: readonly SelectOptionState<TValue>[]|null|undefined): [readonly SelectOptionState<TValue>[], SelectOptionGroup|null][]
+    public transform<TValue>(value: readonly SelectOptionState<TValue>[]|null|undefined): [readonly SelectOptionState<TValue>[], SelectOptionGroup|null][]
     {
         if(!value?.length)
         {

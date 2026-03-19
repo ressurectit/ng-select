@@ -3,7 +3,7 @@ import {Directive, effect, model, ModelSignal} from '@angular/core';
 import {Select} from '../../components';
 import {SelectPluginType} from '../../misc/enums';
 
-//TODO: finish
+//TODO: finish, fix cycle
 
 /**
  * Directive that allows direct access to select properties using inputs, outputs

@@ -113,13 +113,27 @@ export class SimplePopup<TValue = unknown> implements Popup<TValue, PopupOptions
      * Handles option click
      * @param option - Option that was clicked
      */
-    protected optionClick(option: SelectOptionState): void
+    protected optionClick(option: SelectOptionState<TValue>): void
     {
         this.selectBus.optionActivate.next(
         {
             source: this as SelectPlugin,
             sourceElement: this.pluginElement.nativeElement,
-            data: option as SelectOptionState<TValue>,
+            data: option,
+        });
+    }
+
+    /**
+     * Marks option as active
+     * @param option - Option to be marked as active
+     */
+    protected markActive(option: SelectOptionState<TValue>): void
+    {
+        this.selectBus.markOption.next(
+        {
+            source: this as SelectPlugin,
+            sourceElement: this.pluginElement.nativeElement,
+            data: option,
         });
     }
 }

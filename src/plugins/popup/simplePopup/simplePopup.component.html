@@ -26,6 +26,7 @@
                      [class.selected]="option.selected()"
                      [class.active]="option.active()"
                      [class.in-group]="group"
+                     (mouseover)="markActive(option)"
                      (click)="optionClick(option)">
                     <div [class]="options.cssClasses.optionText">
                         <ng-container *ngTemplateOutlet="selectBus.selectOptions().templateGatherer.optionTemplate() || defaultOptionLook; context: {$implicit: option, popup: this}"/>

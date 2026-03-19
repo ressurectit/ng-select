@@ -1,4 +1,5 @@
 import {ChangeDetectionStrategy, Component, computed, effect, ElementRef, Inject, inject, Optional, Signal, untracked} from '@angular/core';
+import {LOGGER, Logger} from '@anglr/common';
 import {isBlank, isPresent, RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
@@ -54,6 +55,11 @@ export class StaticValueHandler<TValue = unknown> implements ValueHandler<TValue
      */
     public selectBus: SelectBus<TValue> = inject(SelectBus);
 
+    /**
+     * Instance of logger for logging purposes
+     */
+    protected logger: Logger = inject(LOGGER);
+
     //######################### public properties - implementation of ValueHandler #########################
 
     /**
@@ -73,6 +79,8 @@ export class StaticValueHandler<TValue = unknown> implements ValueHandler<TValue
 
             if(isPresent(availableOptions) && isPresent(this.postponedValue))
             {
+                this.logger.verbose('Select: Value handler: setting postponed value "{{@(4)value}}"', {value: this.postponedValue});
+
                 this.setValueInternal(this.postponedValue, availableOptions);
                 this.postponedValue = null;
             }
@@ -86,11 +94,13 @@ export class StaticValueHandler<TValue = unknown> implements ValueHandler<TValue
      */
     public setValue(value: TValue|TValue[]|undefined|null): void
     {
+        this.logger.verbose('Select: Value handler: setting value "{{@(4)value}}"', {value});
         const availableOptions = untracked(() => (this.selectPlugins.OptionsHandler as OptionsHandler<TValue>).availableOptions());
 
         //Options are not loaded yet, so we cannot set value, but we will handle setting value when options are loaded
         if(isBlank(availableOptions))
         {
+            this.logger.verbose('Select: Value handler: options not loaded yet, postponing value "{{@(4)value}}"', {value});
             this.postponedValue = value;
 
             return;
@@ -113,6 +123,15 @@ export class StaticValueHandler<TValue = unknown> implements ValueHandler<TValue
         {
             if(this.selectBus.selectOptions().multiple)
             {
+                if(isBlank(value))
+                {
+                    this.logger.verbose('Select: Value handler: value is blank, clearing selected options');
+
+                    this.selectBus.selectedOptions.set([]);
+
+                    return;
+                }
+
                 if(!Array.isArray(value))
                 {
                     throw new Error('Value must be an array when multiple is set');
@@ -130,11 +149,13 @@ export class StaticValueHandler<TValue = unknown> implements ValueHandler<TValue
                     }
                 }
 
+                this.logger.verbose('Select: Value handler: selecting single option value"{{@(4)value}}"', {value: selectedOptions});
                 this.selectBus.selectedOptions.set(selectedOptions);
             }
             else
             {
                 const selectedOption = availableOptions.find(opt => compareValueAndOption(value as TValue, opt, this.selectBus));
+                this.logger.verbose('Select: Value handler: selecting single option value"{{@(4)value}}"', {value: selectedOption?.value()});
 
                 this.selectBus.selectedOptions.set(selectedOption ?? null);
             }
