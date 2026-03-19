@@ -10,6 +10,7 @@ import {LIVE_SEARCH_OPTIONS} from '../../../misc/tokens';
 
 const defaultOptions: LiveSearchOptions<LiveSearchCssClasses> =
 {
+    searchDebounceTimeout: 280,
     cssClasses:
     {
         componentElement: 'live-search-component',
@@ -40,7 +41,7 @@ export class FilterLiveSearch<TValue = unknown> implements LiveSearch<TValue, Li
     /**
      * Instance of form value
      */
-    protected value = form(signal(''), path => debounce(path, 280));
+    protected value = form(signal(''), path => debounce(path, this.options.searchDebounceTimeout));
 
     //######################### public properties - implementation of SelectPlugin #########################
 

@@ -37,11 +37,6 @@
                     background-color: var(--select-popup-option-active-background);
                 }
 
-                &:hover
-                {
-                    background-color: var(--select-popup-option-hover-background);
-                }
-
                 &.in-group
                 {
                     margin: var(--select-popup-option-inGroup-margin);

@@ -20,15 +20,11 @@
                 (
                     selected:
                     (
-                        background: hsl(from var(--select-popup-container-background) h s 90%),
+                        background: hsl(from var(--select-popup-container-background) h s 82%),
                     ),
                     active:
                     (
-                        background: hsl(from var(--select-popup-container-background) h s 86%),
-                    ),
-                    hover:
-                    (
-                        background: hsl(from var(--select-popup-container-background) h s 82%),
+                        background: hsl(from var(--select-popup-container-background) h s 90%),
                     ),
                     inGroup:
                     (

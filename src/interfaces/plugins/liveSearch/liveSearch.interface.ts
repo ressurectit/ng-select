@@ -19,6 +19,12 @@ export interface LiveSearchCssClasses
  */
 export interface LiveSearchOptions<TCssClasses extends LiveSearchCssClasses = LiveSearchCssClasses> extends VisualPluginOptions<TCssClasses>
 {
+    //######################### properties #########################
+
+    /**
+     * Time in milliseconds after which search value will be emitted after user stops typing
+     */
+    searchDebounceTimeout: number;
 }
 
 /**

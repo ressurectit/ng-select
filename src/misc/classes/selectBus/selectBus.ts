@@ -7,7 +7,7 @@ import {SelectEvents, SelectBusOptions, SelectEvent, SelectOptionState, Keyboard
  * Class represents centralized bus for internal communication
  */
 @Injectable()
-export class SelectBus<TValue = unknown, TAction = string> implements SelectEvents<TValue, TAction>
+export class SelectBus<TValue = unknown, TAction = string> implements SelectEvents
 {
     //######################### public properties #########################
 
@@ -35,12 +35,32 @@ export class SelectBus<TValue = unknown, TAction = string> implements SelectEven
      */
     public readonly popupVisible: WritableSignal<boolean> = signal(false);
 
-    //######################### public properties - events #########################
+    /**
+     * Occurs when option is being to be activated
+     */
+    public readonly optionActivate: Subject<SelectEvent<SelectOptionState<TValue>>> = new Subject<SelectEvent<SelectOptionState<TValue>>>();
 
     /**
-     * @inheritdoc
+     * Occurs when certain keys on keyboard are pressed
      */
-    public readonly optionClick: Subject<SelectEvent<SelectOptionState<TValue>>> = new Subject<SelectEvent<SelectOptionState<TValue>>>();
+    public readonly keyboardAction: Subject<SelectEvent<KeyboardAction<TAction>>> = new Subject<SelectEvent<KeyboardAction<TAction>>>();
+
+    /**
+     * Occurs when popup should be shown
+     */
+    public readonly showPopup: Subject<SelectEvent> = new Subject<SelectEvent>();
+
+    /**
+     * Occurs when popup should be hidden
+     */
+    public readonly hidePopup: Subject<SelectEvent> = new Subject<SelectEvent>();
+
+    /**
+     * Occurs when option needs to be marked as active (hovered or keyboard focused)
+     */
+    public readonly markOption: Subject<SelectEvent<SelectOptionState<TValue>>> = new Subject<SelectEvent<SelectOptionState<TValue>>>();
+
+    //######################### public properties - events #########################
 
     /**
      * @inheritdoc
@@ -51,9 +71,4 @@ export class SelectBus<TValue = unknown, TAction = string> implements SelectEven
      * @inheritdoc
      */
     public readonly click: Subject<SelectEvent> = new Subject<SelectEvent>();
-
-    /**
-     * @inheritdoc
-     */
-    public readonly keyboardAction: Subject<SelectEvent<KeyboardAction<TAction>>> = new Subject<SelectEvent<KeyboardAction<TAction>>>();
 }

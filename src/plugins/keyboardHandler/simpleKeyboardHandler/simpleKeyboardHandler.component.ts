@@ -2,7 +2,7 @@ import {Component, effect, ElementRef, Inject, inject, OnDestroy, Optional} from
 import {BindThis, isPresent, RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
-import {HidePopupKeyboardAction, KeyboardHandler, SimpleKeyboardHandlerOptions, MarkActiveKeyboardAction, SelectActiveKeyboardAction, SelectFirstKeyboardAction, SelectPlugin, ShowPopupKeyboardAction} from '../../../interfaces';
+import {KeyboardHandler, SimpleKeyboardHandlerOptions, SelectFirstKeyboardAction, SelectPlugin, SelectActiveKeyboardAction} from '../../../interfaces';
 import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {KEYBOARD_HANDLER_OPTIONS} from '../../../misc/tokens';
@@ -123,21 +123,21 @@ export class SimpleKeyboardHandler<TValue = unknown> implements KeyboardHandler<
 
                 index = index % options.length;
 
-                this.selectBus.keyboardAction.next(
+                this.selectBus.markOption.next(
                 {
                     source: this as SelectPlugin,
                     sourceElement: this.selectBus.selectElement().nativeElement,
-                    data: <MarkActiveKeyboardAction>{type: 'MARK_ACTIVE', index},
+                    data: options[index],
                 });
             }
             //none active before
             else if(options?.length)
             {
-                this.selectBus.keyboardAction.next(
+                this.selectBus.markOption.next(
                 {
                     source: this as SelectPlugin,
                     sourceElement: this.selectBus.selectElement().nativeElement,
-                    data: <MarkActiveKeyboardAction>{type: 'MARK_ACTIVE', index: 0},
+                    data: options[0],
                 });
             }
 
@@ -147,7 +147,7 @@ export class SimpleKeyboardHandler<TValue = unknown> implements KeyboardHandler<
         //prevent enter if popup is opened
         if(event.key == 'Enter' && this.selectBus.popupVisible())
         {
-            const activeOption = options?.find(itm => itm.active);
+            const activeOption = options?.find(itm => itm.active());
 
             if(activeOption)
             {
@@ -155,7 +155,7 @@ export class SimpleKeyboardHandler<TValue = unknown> implements KeyboardHandler<
                 {
                     source: this as SelectPlugin,
                     sourceElement: this.selectBus.selectElement().nativeElement,
-                    data: <SelectActiveKeyboardAction>{type: 'SELECT_ACTIVE', option: activeOption},
+                    data: <SelectActiveKeyboardAction>{type: 'SELECT_ACTIVE'},
                 });
             }
 
@@ -164,21 +164,21 @@ export class SimpleKeyboardHandler<TValue = unknown> implements KeyboardHandler<
 
         if(event.key == 'Tab' || event.key == 'Escape')
         {
-            this.selectBus.keyboardAction.next(
+            this.selectBus.hidePopup.next(
             {
                 source: this as SelectPlugin,
                 sourceElement: this.selectBus.selectElement().nativeElement,
-                data: <HidePopupKeyboardAction>{type: 'HIDE_POPUP'},
+                data: null,
             });
         }
 
         if(event.key == ' ')
         {
-            this.selectBus.keyboardAction.next(
+            this.selectBus.showPopup.next(
             {
                 source: this as SelectPlugin,
                 sourceElement: this.selectBus.selectElement().nativeElement,
-                data: <ShowPopupKeyboardAction>{type: 'SHOW_POPUP'},
+                data: null,
             });
 
             event.preventDefault();

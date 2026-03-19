@@ -25,7 +25,7 @@ export class NoLiveSearch<TValue = unknown> implements LiveSearch<TValue, LiveSe
      * @inheritdoc
      */
     @CopyOptionsAsSignal()
-    public options: LiveSearchOptions = {cssClasses: {componentElement: 'live-search-component'}};
+    public options: LiveSearchOptions = {cssClasses: {componentElement: 'live-search-component'}, searchDebounceTimeout: 0};
 
     /**
      * @inheritdoc

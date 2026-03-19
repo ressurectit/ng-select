@@ -4,7 +4,7 @@ import {SelectPlugin} from '../selectPlugin/selectPlugin.interface';
 /**
  * Event that is used for 'void' events, storing information about source of event and source element
  */
-export interface SelectEvent<TData = void>
+export interface SelectEvent<TData = unknown>
 {
     /**
      * Html element that caused the event
@@ -19,5 +19,5 @@ export interface SelectEvent<TData = void>
     /**
      * Data passed with event that occured
      */
-    data?: TData;
+    data: TData|undefined|null;
 }

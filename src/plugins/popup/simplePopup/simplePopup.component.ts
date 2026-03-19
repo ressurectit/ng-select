@@ -115,7 +115,7 @@ export class SimplePopup<TValue = unknown> implements Popup<TValue, PopupOptions
      */
     protected optionClick(option: SelectOptionState): void
     {
-        this.selectBus.optionClick.next(
+        this.selectBus.optionActivate.next(
         {
             source: this as SelectPlugin,
             sourceElement: this.pluginElement.nativeElement,

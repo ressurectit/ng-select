@@ -97,6 +97,7 @@ export class EditNormalState<TValue = unknown> implements NormalState<TValue, No
         {
             source: this as SelectPlugin,
             sourceElement: this.pluginElement.nativeElement,
+            data: null,
         });
     }
 
@@ -109,6 +110,7 @@ export class EditNormalState<TValue = unknown> implements NormalState<TValue, No
         {
             source: this as SelectPlugin,
             sourceElement: this.pluginElement.nativeElement,
+            data: null,
         });
     }
 
@@ -117,10 +119,11 @@ export class EditNormalState<TValue = unknown> implements NormalState<TValue, No
      */
     protected cancel(): void
     {
-        this.selectBus.optionClick.next(
+        this.selectBus.optionActivate.next(
         {
             source: this as SelectPlugin,
             sourceElement: this.pluginElement.nativeElement,
+            data: null,
         });
     }
 }

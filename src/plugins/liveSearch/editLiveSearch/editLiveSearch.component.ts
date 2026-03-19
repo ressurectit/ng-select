@@ -1,15 +1,17 @@
-import {afterRenderEffect, ChangeDetectionStrategy, Component, computed, ElementRef, Inject, inject, Optional, signal, Signal} from '@angular/core';
-import {debounce, disabled, form, FormField} from '@angular/forms/signals';
-import {RecursivePartial} from '@jscrpt/common';
+import {afterRenderEffect, ChangeDetectionStrategy, Component, computed, ElementRef, Inject, inject, OnDestroy, Optional, signal, Signal, WritableSignal} from '@angular/core';
+import {LocalizePipe, TooltipDirective} from '@anglr/common';
+import {isPresent, RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
-import {LiveSearch, LiveSearchCssClasses, LiveSearchOptions, SelectPlugin} from '../../../interfaces';
+import {LiveSearch, LiveSearchCssClasses, LiveSearchOptions, SelectOptionState, SelectPlugin} from '../../../interfaces';
 import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {LIVE_SEARCH_OPTIONS} from '../../../misc/tokens';
+import {DisplayValue} from '../../../pipes';
 
 const defaultOptions: LiveSearchOptions<LiveSearchCssClasses> =
 {
+    searchDebounceTimeout: 280,
     cssClasses:
     {
         componentElement: 'live-search-component',
@@ -29,22 +31,32 @@ const defaultOptions: LiveSearchOptions<LiveSearchCssClasses> =
     },
     imports:
     [
-        FormField,
+        DisplayValue,
+        LocalizePipe,
+        TooltipDirective,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditLiveSearch<TValue = unknown> implements LiveSearch<TValue, LiveSearchOptions<LiveSearchCssClasses>>
+export class EditLiveSearch<TValue = unknown> implements LiveSearch<TValue, LiveSearchOptions<LiveSearchCssClasses>>, OnDestroy
 {
+    //######################### protected fields #########################
+
+    /**
+     * Timeout used for debouncing search input
+     */
+    protected timeout: number|undefined|null;
+
     //######################### protected properties - template bindings #########################
 
     /**
-     * Instance of form value
+     * Value of search input
      */
-    protected value = form(signal(''), path =>
-    {
-        debounce(path, 280);
-        disabled(path, () => this.selectBus.selectOptions().readonly);
-    });
+    protected value: Signal<SelectOptionState<TValue>|SelectOptionState<TValue>[]|null|undefined>;
+
+    /**
+     * Value of search input holding value that was set by user
+     */
+    protected valueOutput: WritableSignal<string> = signal('');
 
     //######################### public properties - implementation of SelectPlugin #########################
 
@@ -82,10 +94,7 @@ export class EditLiveSearch<TValue = unknown> implements LiveSearch<TValue, Live
         this.options = deepCopyWithArrayOverride(defaultOptions as LiveSearchOptions<LiveSearchCssClasses>,
                                                  options);
 
-        this.search = computed(() =>
-        {
-            return this.value().value();
-        });
+        this.search = computed(() => this.valueOutput());
 
         const ref = afterRenderEffect(() =>
         {
@@ -96,6 +105,48 @@ export class EditLiveSearch<TValue = unknown> implements LiveSearch<TValue, Live
 
             ref.destroy();
         });
+
+        this.value = computed(() =>
+        {
+            const options = this.selectBus.selectOptions();
+            const selected = this.selectBus.selectedOptions();
+
+            if(options.multiple)
+            {
+                return null;
+            }
+            else
+            {
+                if(options.templateGatherer.normalStateTemplate())
+                {
+                    return null;
+                }
+                else
+                {
+                    if(isPresent(selected) && !Array.isArray(selected))
+                    {
+                        return selected;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+        });
+    }
+
+    //######################### public methods - implementation of OnDestroy #########################
+
+    /**
+     * @inheritdoc
+     */
+    public ngOnDestroy(): void
+    {
+        if(isPresent(this.timeout))
+        {
+            clearTimeout(this.timeout);
+        }
     }
 
     //######################### protected methods - template bindings #########################
@@ -114,6 +165,7 @@ export class EditLiveSearch<TValue = unknown> implements LiveSearch<TValue, Live
         {
             source: this as SelectPlugin,
             sourceElement: this.pluginElement.nativeElement,
+            data: null,
         });
     }
 
@@ -126,6 +178,24 @@ export class EditLiveSearch<TValue = unknown> implements LiveSearch<TValue, Live
         {
             source: this as SelectPlugin,
             sourceElement: this.pluginElement.nativeElement,
+            data: null,
         });
+    }
+
+    /**
+     * Handles input event on search input
+     * @param event - Event that occured
+     */
+    protected input(event: Event): void
+    {
+        if(isPresent(this.timeout))
+        {
+            clearTimeout(this.timeout);
+        }
+
+        this.timeout = setTimeout(() =>
+        {
+            this.valueOutput.set((event.target as HTMLInputElement).value);
+        }, this.options.searchDebounceTimeout) as unknown as number;
     }
 }

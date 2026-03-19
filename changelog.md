@@ -87,12 +87,7 @@
 - new `KeyboardAction` interface, that defines keyboard action that is used as data when keyboard event occurs
    - **properties**
       - `type` type of keyboard action
-- new `MarkActiveKeyboardAction` interface, that defines keyboard action that should mark option as active
-   - **properties**
-      - `index` index of option to be marked as active
 - new `SelectActiveKeyboardAction` interface, that defines keyboard action that should select active option
-- new `HidePopupKeyboardAction` interface, that defines keyboard action that should hide popup
-- new `ShowPopupKeyboardAction` interface, that defines keyboard action that should show popup
 - new `SimpleKeyboardActions` definition of simple keyboard actions
 - new `SimpleKeyboardActionTypes` names of simple keyboard action types
 - new `NormalizeTextForComparison` normalize text for comparison, removes accent sensitive data
@@ -205,17 +200,21 @@
 - updated `PluginBusEvents` interface
    - renamed to `SelectEvents`
    - new property `click` occurs when there is click on select itself (normal state)
-   - new property `keyboardAction` occurs when certain keys on keyboard are pressed
-   - property `optionSelect` was renamed to `optionClick`
-   - property `optionCancel` was removed in favor of `optionClick`
+   - property `optionSelect` was removed
+   - property `optionCancel` was removed in favor of `optionActivate`
    - property `togglePopup` was removed
    - property `showHidePopup` was removed
    - property `liveSearchFocus` was removed
    - property `updateDisplayedValue` was removed
 - updated `PluginBus` class
    - renamed to `SelectBus`
+   - property `optionSelect` was renamed to `optionActivate`
    - new property `selectedOptions` that represents currently selected options of Select
    - new property `popupVisible` which indicates whether is popup visible or not
+   - new property `keyboardAction` occurs when certain keys on keyboard are pressed
+   - new property `showPopup` occurs when popup should be shown
+   - new property `hidePopup` occurs when popup should be hidden
+   - new property `markOption` occurs when option needs to be marked as active (hovered or keyboard focused)
 - updated `NgSelectModule` module
    - renamed to `SelectModule`
 - updated `PluginBusOptions` interface
