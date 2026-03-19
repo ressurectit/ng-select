@@ -110,6 +110,7 @@
 - new `NewOptionGetterFunc` type definition of function for obtaining new option, allows adding new options
 - new `AddNewOption` pipe, that for syntetic option displays text that new option is being added
 - new `OptionsHandlerBase` class, used as base class for options handlers.
+- new `HasValue` pipe, that gets information whether is there any value selected
 - updated `SelectPluginTypes` interface
    - **new properties**
       - `Interactions` handles interactions of plugins and select

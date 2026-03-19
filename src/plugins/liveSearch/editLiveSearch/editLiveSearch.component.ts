@@ -1,13 +1,13 @@
-import {afterRenderEffect, ChangeDetectionStrategy, Component, computed, ElementRef, Inject, inject, OnDestroy, Optional, signal, Signal, WritableSignal} from '@angular/core';
-import {LocalizePipe, TooltipDirective} from '@anglr/common';
+import {afterRenderEffect, ChangeDetectionStrategy, Component, computed, effect, ElementRef, Inject, inject, OnDestroy, Optional, signal, Signal, viewChild, WritableSignal} from '@angular/core';
+import {LocalizePipe, LOGGER, Logger, TooltipDirective} from '@anglr/common';
 import {isPresent, RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
-import {LiveSearch, LiveSearchCssClasses, LiveSearchOptions, SelectOptionState, SelectPlugin} from '../../../interfaces';
+import {LiveSearch, LiveSearchCssClasses, LiveSearchOptions, SelectPlugin} from '../../../interfaces';
 import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {LIVE_SEARCH_OPTIONS} from '../../../misc/tokens';
-import {DisplayValue} from '../../../pipes';
+import {DisplayValue, HasValue} from '../../../pipes';
 
 const defaultOptions: LiveSearchOptions<LiveSearchCssClasses> =
 {
@@ -31,6 +31,7 @@ const defaultOptions: LiveSearchOptions<LiveSearchCssClasses> =
     },
     imports:
     [
+        HasValue,
         DisplayValue,
         LocalizePipe,
         TooltipDirective,
@@ -46,12 +47,10 @@ export class EditLiveSearch<TValue = unknown> implements LiveSearch<TValue, Live
      */
     protected timeout: number|undefined|null;
 
-    //######################### protected properties - template bindings #########################
-
     /**
-     * Value of search input
+     * Instance of logger for logging purposes
      */
-    protected value: Signal<SelectOptionState<TValue>|SelectOptionState<TValue>[]|null|undefined>;
+    protected logger: Logger = inject(LOGGER);
 
     /**
      * Value of search input holding value that was set by user
@@ -81,6 +80,13 @@ export class EditLiveSearch<TValue = unknown> implements LiveSearch<TValue, Live
      */
     public selectBus: SelectBus<TValue> = inject(SelectBus);
 
+    //######################### protected properties - children #########################
+
+    /**
+     * HTML input element used for search input
+     */
+    protected htmlInput: Signal<ElementRef<HTMLInputElement>> = viewChild.required('htmlInput');
+
     //######################### public properties - implementation of LiveSearch #########################
 
     /**
@@ -100,39 +106,19 @@ export class EditLiveSearch<TValue = unknown> implements LiveSearch<TValue, Live
         {
             if(this.pluginElement.nativeElement.parentElement?.nodeName == 'NG-SELECT')
             {
+                this.logger.verbose('Select: Live Search: removing plugin from DOM');
                 this.pluginElement.nativeElement.remove();
             }
 
             ref.destroy();
         });
 
-        this.value = computed(() =>
+        effect(() =>
         {
-            const options = this.selectBus.selectOptions();
-            const selected = this.selectBus.selectedOptions();
+            this.selectBus.selectedOptions();
+            this.logger.verbose('Select: Live Search: selected value changed, resetting search input');
 
-            if(options.multiple)
-            {
-                return null;
-            }
-            else
-            {
-                if(options.templateGatherer.normalStateTemplate())
-                {
-                    return null;
-                }
-                else
-                {
-                    if(isPresent(selected) && !Array.isArray(selected))
-                    {
-                        return selected;
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
-            }
+            this.htmlInput().nativeElement.value = '';
         });
     }
 
@@ -202,6 +188,7 @@ export class EditLiveSearch<TValue = unknown> implements LiveSearch<TValue, Live
 
         this.timeout = setTimeout(() =>
         {
+            this.logger.verbose('Select: Live Search: emitting search value {{value}}', {value: (event.target as HTMLInputElement).value});
             this.valueOutput.set((event.target as HTMLInputElement).value);
         }, this.options.searchDebounceTimeout) as unknown as number;
     }

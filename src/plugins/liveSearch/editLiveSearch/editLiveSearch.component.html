@@ -1,13 +1,13 @@
-<input type="text"
+<input #htmlInput
+       type="text"
        autocorrect="off"
        autocapitalize="none"
        autocomplete="off"
        [attr.aria-label]="selectBus.selectedOptions() | displayValue | localize"
-       [value]="value() | displayValue: '' | localize"
        [class.absolute-input]="true"
        [tooltip]="selectBus.selectedOptions() | displayValue | localize"
        [disabled]="selectBus.selectOptions().readonly"
-       [placeholder]="selectBus.selectOptions().placeholder | localize"
+       [placeholder]="(!(selectBus.selectedOptions() | hasValue) ? selectBus.selectOptions().placeholder : '') | localize"
        (click)="click()"
        (focus)="focus()"
        (input)="input($event)">

@@ -125,7 +125,7 @@ export class SimpleInteractions<TValue = unknown> implements Interactions<TValue
             if(!activeOption)
             {
                 availableOptions?.forEach(itm => itm.active.set(false));
-                listOptions?.[0].active.set(true);
+                listOptions?.[0]?.active.set(true);
             }
         });
 
