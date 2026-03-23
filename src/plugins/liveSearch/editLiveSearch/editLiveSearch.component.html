@@ -4,10 +4,12 @@
        autocapitalize="none"
        autocomplete="off"
        [attr.aria-label]="selectBus.selectedOptions() | displayValue | localize"
-       [class.absolute-input]="true"
+       [class]="options.cssClasses.searchElement"
+       [class.absolute-input]="!selectBus.selectOptions().multiple"
        [tooltip]="selectBus.selectedOptions() | displayValue | localize"
        [disabled]="selectBus.selectOptions().readonly"
        [placeholder]="(!(selectBus.selectedOptions() | hasValue) ? selectBus.selectOptions().placeholder : '') | localize"
        (click)="click()"
        (focus)="focus()"
+       (blur)="blur()"
        (input)="input($event)">

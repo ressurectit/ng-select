@@ -1,20 +1,23 @@
-<ng-template #defaultLook>{{selectBus.selectedOptions() | displayValue | localize}}</ng-template>
+<ng-template #defaultLook>{{selectBus.selectedOptions() | displayValue: '' | localize}}</ng-template>
 
 <div class="select-flex-1 select-relative">
-    <div [class]="options.cssClasses.value">
-        <ng-container *ngTemplateOutlet="selectBus.selectOptions().templateGatherer.normalStateTemplate() || defaultLook; context: {$implicit: this}"/>
-    </div>
+    @if(selectPlugins.liveSearch()?.emptyInput())
+    {
+        <div [class]="options.cssClasses.value">
+            <ng-container *ngTemplateOutlet="selectBus.selectOptions().templateGatherer.normalStateTemplate() || defaultLook; context: {$implicit: this}"/>
+        </div>
+    }
 
     <ng-container #liveSearchPlaceholder/>
 </div>
 
 @if(options.cancelValue)
 {
-    <button type="button" [class]="options.cssClasses.cancel" (click)="cancel()">
+    <button type="button" [class]="options.cssClasses.cancel" (focus)="focus()" (blur)="blur()" (click)="cancel()">
         <span [class]="options.cssClasses.cancelIcon"></span>
     </button>
 }
 
-<button type="button" (click)="click()" (focus)="focus()" tabindex="-1">
+<button type="button" (click)="click()" (focus)="focus()" (blur)="blur()" tabindex="-1">
     <span [class]="options.cssClasses.carret"></span>
 </button>

@@ -1,4 +1,4 @@
-import {Injectable, ElementRef, signal, WritableSignal, Signal} from '@angular/core';
+import {Injectable, ElementRef, signal, WritableSignal, Signal, computed} from '@angular/core';
 import {Subject} from 'rxjs';
 
 import {SelectEvents, SelectBusOptions, SelectEvent, SelectOptionState, KeyboardAction} from '../../../interfaces';
@@ -60,6 +60,26 @@ export class SelectBus<TValue = unknown, TAction = string> implements SelectEven
      */
     public readonly markOption: Subject<SelectEvent<SelectOptionState<TValue>>> = new Subject<SelectEvent<SelectOptionState<TValue>>>();
 
+    /**
+     * Indication whether Select has focus
+     */
+    public readonly hasFocus: WritableSignal<boolean> = signal(false);
+
+    /**
+     * Computed indication whether Select has focus
+     */
+    public readonly hasFocusComputed: Signal<boolean> = computed(() => this.hasFocus());
+
+    /**
+     * Occurs when select internals receives focus
+     */
+    public readonly internalsFocus: Subject<SelectEvent> = new Subject<SelectEvent>();
+
+    /**
+     * Occurs when select internals loses focus
+     */
+    public readonly internalsBlur: Subject<SelectEvent> = new Subject<SelectEvent>();
+
     //######################### public properties - events #########################
 
     /**
@@ -71,4 +91,9 @@ export class SelectBus<TValue = unknown, TAction = string> implements SelectEven
      * @inheritdoc
      */
     public readonly click: Subject<SelectEvent> = new Subject<SelectEvent>();
+
+    /**
+     * @inheritdoc
+     */
+    public readonly blur: Subject<SelectEvent> = new Subject<SelectEvent>();
 }

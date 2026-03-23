@@ -48,4 +48,9 @@ export class NoLiveSearch<TValue = unknown> implements LiveSearch<TValue, LiveSe
      * @inheritdoc
      */
     public readonly search: Signal<string> = signal('');
+
+    /**
+     * @inheritdoc
+     */
+    public readonly emptyInput: Signal<boolean> = signal(true);
 }

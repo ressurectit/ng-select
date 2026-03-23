@@ -3,18 +3,19 @@ import {LocalizePipe, LOGGER, Logger, TooltipDirective} from '@anglr/common';
 import {isPresent, RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
-import {LiveSearch, LiveSearchCssClasses, LiveSearchOptions, SelectPlugin} from '../../../interfaces';
+import {LiveSearch, EditLiveSearchCssClasses, LiveSearchOptions, SelectPlugin} from '../../../interfaces';
 import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {LIVE_SEARCH_OPTIONS} from '../../../misc/tokens';
 import {DisplayValue, HasValue} from '../../../pipes';
 
-const defaultOptions: LiveSearchOptions<LiveSearchCssClasses> =
+const defaultOptions: LiveSearchOptions<EditLiveSearchCssClasses> =
 {
     searchDebounceTimeout: 280,
     cssClasses:
     {
         componentElement: 'live-search-component',
+        searchElement: 'live-search-input',
     },
 };
 
@@ -38,9 +39,14 @@ const defaultOptions: LiveSearchOptions<LiveSearchCssClasses> =
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditLiveSearch<TValue = unknown> implements LiveSearch<TValue, LiveSearchOptions<LiveSearchCssClasses>>, OnDestroy
+export class EditLiveSearch<TValue = unknown> implements LiveSearch<TValue, LiveSearchOptions<EditLiveSearchCssClasses>>, OnDestroy
 {
     //######################### protected fields #########################
+
+    /**
+     * Indication whether input search value is empty
+     */
+    protected emptyInputSignal: WritableSignal<boolean> = signal(true);
 
     /**
      * Timeout used for debouncing search input
@@ -63,7 +69,7 @@ export class EditLiveSearch<TValue = unknown> implements LiveSearch<TValue, Live
      * @inheritdoc
      */
     @CopyOptionsAsSignal()
-    public options: LiveSearchOptions<LiveSearchCssClasses>;
+    public options: LiveSearchOptions<EditLiveSearchCssClasses>;
 
     /**
      * @inheritdoc
@@ -94,10 +100,18 @@ export class EditLiveSearch<TValue = unknown> implements LiveSearch<TValue, Live
      */
     public readonly search: Signal<string>;
 
-    //######################### constructor #########################
-    constructor(@Inject(LIVE_SEARCH_OPTIONS) @Optional() options?: RecursivePartial<LiveSearchOptions<LiveSearchCssClasses>>|null,)
+    /**
+     * @inheritdoc
+     */
+    public get emptyInput(): Signal<boolean>
     {
-        this.options = deepCopyWithArrayOverride(defaultOptions as LiveSearchOptions<LiveSearchCssClasses>,
+        return this.emptyInputSignal.asReadonly();
+    }
+
+    //######################### constructor #########################
+    constructor(@Inject(LIVE_SEARCH_OPTIONS) @Optional() options?: RecursivePartial<LiveSearchOptions<EditLiveSearchCssClasses>>|null,)
+    {
+        this.options = deepCopyWithArrayOverride(defaultOptions as LiveSearchOptions<EditLiveSearchCssClasses>,
                                                  options);
 
         this.search = computed(() => this.valueOutput());
@@ -118,7 +132,15 @@ export class EditLiveSearch<TValue = unknown> implements LiveSearch<TValue, Live
             this.selectBus.selectedOptions();
             this.logger.verbose('Select: Live Search: selected value changed, resetting search input');
 
-            this.htmlInput().nativeElement.value = '';
+            this.clearSearchInput();
+        });
+
+        effect(() =>
+        {
+            if(!this.selectBus.hasFocusComputed())
+            {
+                this.clearSearchInput();
+            }
         });
     }
 
@@ -160,7 +182,20 @@ export class EditLiveSearch<TValue = unknown> implements LiveSearch<TValue, Live
      */
     protected focus(): void
     {
-        this.selectBus.focus.next(
+        this.selectBus.internalsFocus.next(
+        {
+            source: this as SelectPlugin,
+            sourceElement: this.pluginElement.nativeElement,
+            data: null,
+        });
+    }
+
+    /**
+     * Handles blur event
+     */
+    protected blur(): void
+    {
+        this.selectBus.internalsBlur.next(
         {
             source: this as SelectPlugin,
             sourceElement: this.pluginElement.nativeElement,
@@ -186,10 +221,23 @@ export class EditLiveSearch<TValue = unknown> implements LiveSearch<TValue, Live
             clearTimeout(this.timeout);
         }
 
+        this.emptyInputSignal.set((event.target as HTMLInputElement).value.length == 0);
+
         this.timeout = setTimeout(() =>
         {
             this.logger.verbose('Select: Live Search: emitting search value {{value}}', {value: (event.target as HTMLInputElement).value});
             this.valueOutput.set((event.target as HTMLInputElement).value);
         }, this.options.searchDebounceTimeout) as unknown as number;
+    }
+
+    //######################### protected methods #########################
+
+    /**
+     * Clears search input value and sets empty input signal to true
+     */
+    protected clearSearchInput(): void
+    {
+        this.htmlInput().nativeElement.value = '';
+        this.emptyInputSignal.set(true);
     }
 }

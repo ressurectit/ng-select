@@ -98,7 +98,20 @@ export class SimpleNormalState<TValue = unknown> implements NormalState<TValue, 
      */
     protected focus(): void
     {
-        this.selectBus.focus.next(
+        this.selectBus.internalsFocus.next(
+        {
+            source: this as SelectPlugin,
+            sourceElement: this.pluginElement.nativeElement,
+            data: null,
+        });
+    }
+
+    /**
+     * Handles blur event
+     */
+    protected blur(): void
+    {
+        this.selectBus.internalsBlur.next(
         {
             source: this as SelectPlugin,
             sourceElement: this.pluginElement.nativeElement,

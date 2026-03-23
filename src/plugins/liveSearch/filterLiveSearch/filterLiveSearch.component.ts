@@ -1,4 +1,4 @@
-import {afterRenderEffect, ChangeDetectionStrategy, Component, computed, ElementRef, Inject, inject, Optional, signal, Signal} from '@angular/core';
+import {afterRenderEffect, ChangeDetectionStrategy, Component, computed, ElementRef, Inject, inject, Optional, signal, Signal, WritableSignal} from '@angular/core';
 import {debounce, form, FormField} from '@angular/forms/signals';
 import {RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
@@ -36,6 +36,13 @@ const defaultOptions: LiveSearchOptions<LiveSearchCssClasses> =
 })
 export class FilterLiveSearch<TValue = unknown> implements LiveSearch<TValue, LiveSearchOptions<LiveSearchCssClasses>>
 {
+    //######################### protected fields #########################
+
+    /**
+     * Indication whether input search value is empty
+     */
+    protected emptyInputSignal: WritableSignal<boolean> = signal(true);
+
     //######################### protected properties - template bindings #########################
 
     /**
@@ -73,6 +80,14 @@ export class FilterLiveSearch<TValue = unknown> implements LiveSearch<TValue, Li
      */
     public readonly search: Signal<string>;
 
+    /**
+     * @inheritdoc
+     */
+    public get emptyInput(): Signal<boolean>
+    {
+        return this.emptyInputSignal.asReadonly();
+    }
+
     //######################### constructor #########################
     constructor(@Inject(LIVE_SEARCH_OPTIONS) @Optional() options?: RecursivePartial<LiveSearchOptions<LiveSearchCssClasses>>|null,)
     {
@@ -93,5 +108,16 @@ export class FilterLiveSearch<TValue = unknown> implements LiveSearch<TValue, Li
 
             ref.destroy();
         });
+    }
+
+    //######################### protected methods - template bindings #########################
+
+    /**
+     * Handles input event on search input
+     * @param event - Event that occured
+     */
+    protected input(event: Event): void
+    {
+        this.emptyInputSignal.set((event.target as HTMLInputElement).value.length == 0);
     }
 }

@@ -3,7 +3,7 @@ import {NoopAction, RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 import {Subscription} from 'rxjs';
 
-import {Interactions, InteractionsOptions, SelectFirstKeyboardAction, SelectOptionState} from '../../../interfaces';
+import {Interactions, InteractionsOptions, SelectFirstKeyboardAction, SelectOptionState, SelectPlugin} from '../../../interfaces';
 import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {INTERACTIONS_OPTIONS} from '../../../misc/tokens';
@@ -28,34 +28,9 @@ export class SimpleInteractions<TValue = unknown> implements Interactions<TValue
     //######################### protected fields #########################
 
     /**
-     * Subscription for popup visible toggle
+     * Subscription for all events in select bus
      */
-    protected clickPopupVisibleToggle: Subscription = new Subscription();
-
-    /**
-     * Subscription for keyboard actions
-     */
-    protected keyboardActions: Subscription = new Subscription();
-
-    /**
-     * Subscription for option activation
-     */
-    protected optionActivate: Subscription = new Subscription();
-
-    /**
-     * Subscription for show popup
-     */
-    protected showPopup: Subscription = new Subscription();
-
-    /**
-     * Subscription for hide popup
-     */
-    protected hidePopup: Subscription = new Subscription();
-
-    /**
-     * Subscription for mark active
-     */
-    protected markActive: Subscription = new Subscription();
+    protected initSubscriptions: Subscription = new Subscription();
 
     /**
      * Instance of HTML document
@@ -96,8 +71,34 @@ export class SimpleInteractions<TValue = unknown> implements Interactions<TValue
         this.options = deepCopyWithArrayOverride(defaultOptions as InteractionsOptions,
                                                  options);
 
-        this.clickPopupVisibleToggle.add(this.selectBus.click.subscribe(() => togglePopup(this.selectBus)));
-        this.optionActivate.add(this.selectBus.optionActivate.subscribe(event => selectOption(this.selectBus, event.data)));
+        this.initSubscriptions.add(this.selectBus.click.subscribe(() => togglePopup(this.selectBus)));
+        this.initSubscriptions.add(this.selectBus.optionActivate.subscribe(event => selectOption(this.selectBus, event.data)));
+        this.initSubscriptions.add(this.selectBus.internalsFocus.subscribe(() => this.selectBus.hasFocus.set(true)));
+        this.initSubscriptions.add(this.selectBus.internalsBlur.subscribe(() => this.selectBus.hasFocus.set(false)));
+
+        effect(() =>
+        {
+            const hasFocus = this.selectBus.hasFocusComputed();
+
+            if(!hasFocus)
+            {
+                this.selectBus.blur.next(
+                {
+                    source: this as SelectPlugin,
+                    sourceElement: this.pluginElement.nativeElement,
+                    data: null,
+                });
+            }
+            else
+            {
+                this.selectBus.focus.next(
+                {
+                    source: this as SelectPlugin,
+                    sourceElement: this.pluginElement.nativeElement,
+                    data: null,
+                });
+            }
+        });
 
         effect(() =>
         {
@@ -129,9 +130,9 @@ export class SimpleInteractions<TValue = unknown> implements Interactions<TValue
             }
         });
 
-        this.showPopup.add(this.selectBus.showPopup.subscribe(() => this.selectBus.popupVisible.set(true)));
-        this.hidePopup.add(this.selectBus.hidePopup.subscribe(() => this.selectBus.popupVisible.set(false)));
-        this.markActive.add(this.selectBus.markOption.subscribe(event =>
+        this.initSubscriptions.add(this.selectBus.showPopup.subscribe(() => this.selectBus.popupVisible.set(true)));
+        this.initSubscriptions.add(this.selectBus.hidePopup.subscribe(() => this.selectBus.popupVisible.set(false)));
+        this.initSubscriptions.add(this.selectBus.markOption.subscribe(event =>
         {
             this.selectBus.popupVisible.set(true);
             const options = this.selectPlugins.OptionsHandler.listOptions();
@@ -141,7 +142,7 @@ export class SimpleInteractions<TValue = unknown> implements Interactions<TValue
             event.data?.active.set(true);
         }));
 
-        this.keyboardActions.add((this.selectBus.keyboardAction).subscribe(event =>
+        this.initSubscriptions.add((this.selectBus.keyboardAction).subscribe(event =>
         {
             switch(event.data?.type)
             {
@@ -196,11 +197,6 @@ export class SimpleInteractions<TValue = unknown> implements Interactions<TValue
     public ngOnDestroy(): void
     {
         this.clickOutsideUnregister?.();
-        this.clickPopupVisibleToggle.unsubscribe();
-        this.keyboardActions.unsubscribe();
-        this.optionActivate.unsubscribe();
-        this.showPopup.unsubscribe();
-        this.hidePopup.unsubscribe();
-        this.markActive.unsubscribe();
+        this.initSubscriptions.unsubscribe();
     }
 }

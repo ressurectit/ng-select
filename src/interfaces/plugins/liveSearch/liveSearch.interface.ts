@@ -38,4 +38,9 @@ export interface LiveSearch<TValue = unknown, TOptions extends LiveSearchOptions
      * Text of search value
      */
     readonly search: Signal<string>;
+
+    /**
+     * Indication whether input search value is empty
+     */
+    readonly emptyInput: Signal<boolean>;
 }

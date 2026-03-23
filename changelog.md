@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 16.0.0 (2026-03-04)
+## Version 16.0.0 (2026-03-24)
 
 ### Features
 
@@ -202,6 +202,7 @@
 - updated `PluginBusEvents` interface
    - renamed to `SelectEvents`
    - new property `click` occurs when there is click on select itself (normal state)
+   - new property `blur` occurs when any part of select loses focus
    - property `optionSelect` was removed
    - property `optionCancel` was removed in favor of `optionActivate`
    - property `togglePopup` was removed
@@ -217,6 +218,8 @@
    - new property `showPopup` occurs when popup should be shown
    - new property `hidePopup` occurs when popup should be hidden
    - new property `markOption` occurs when option needs to be marked as active (hovered or keyboard focused)
+   - new property `hasFocus` indication whether Select has focus
+   - new property `hasFocusComputed` computed indication whether Select has focus
 - updated `NgSelectModule` module
    - renamed to `SelectModule`
 - updated `PluginBusOptions` interface

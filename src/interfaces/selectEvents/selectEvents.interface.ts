@@ -18,4 +18,9 @@ export interface SelectEvents
      * Occurs when there is click on select itself (anywhere in select)
      */
     readonly click: Observable<SelectEvent>;
+
+    /**
+     * Occurs when any part of select loses focus
+     */
+    readonly blur: Observable<SelectEvent>;
 }
