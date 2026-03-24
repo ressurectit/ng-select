@@ -8,6 +8,7 @@ import {PopupContext} from '../../interfaces';
 @Directive(
 {
     selector: '[optionTemplate]',
+    exportAs: 'optionTemplate',
 })
 export class OptionTemplate
 {
@@ -16,14 +17,14 @@ export class OptionTemplate
     /**
      * Instance of template for options in popup
      */
-    public template: TemplateRef<PopupContext> = inject(TemplateRef);
+    public template: TemplateRef<PopupContext<any>> = inject(TemplateRef);
 
     //######################### ng language server #########################
 
     /**
      * Allows typechecking for template
      */
-    static ngTemplateContextGuard(_dir: OptionTemplate, _ctx: unknown): _ctx is PopupContext
+    static ngTemplateContextGuard(_dir: OptionTemplate, _ctx: unknown): _ctx is PopupContext<any>
     {
         return true;
     }

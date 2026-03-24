@@ -8,6 +8,7 @@ import {NormalStateContext} from '../../interfaces';
 @Directive(
 {
     selector: '[normalStateTemplate]',
+    exportAs: 'normalStateTemplate,',
 })
 export class NormalStateTemplate
 {
@@ -16,14 +17,14 @@ export class NormalStateTemplate
     /**
      * Instance of template for normal state
      */
-    public template: TemplateRef<NormalStateContext> = inject(TemplateRef);
+    public template: TemplateRef<NormalStateContext<any>> = inject(TemplateRef);
 
     //######################### ng language server #########################
 
     /**
      * Allows typechecking for template
      */
-    static ngTemplateContextGuard(_dir: NormalStateTemplate, _ctx: unknown): _ctx is NormalStateContext
+    static ngTemplateContextGuard(_dir: NormalStateTemplate, _ctx: unknown): _ctx is NormalStateContext<any>
     {
         return true;
     }

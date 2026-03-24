@@ -111,6 +111,13 @@
 - new `AddNewOption` pipe, that for syntetic option displays text that new option is being added
 - new `OptionsHandlerBase` class, used as base class for options handlers.
 - new `HasValue` pipe, that gets information whether is there any value selected
+- new `NormalStateTagContext` interface, that represents context for template that is used within normal state plugin for rendering tag
+   - **properties**
+      - `$implicit` instance of rendered option
+      - `normalState` instance of plugin itself
+- new `NormalStateTagTemplate` directive, that is used for obtaining template for normal state tag
+   - **properties**
+      - `template` instance of template for normal state tag
 - updated `SelectPluginTypes` interface
    - **new properties**
       - `Interactions` handles interactions of plugins and select

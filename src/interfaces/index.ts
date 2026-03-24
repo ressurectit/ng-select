@@ -1,6 +1,7 @@
 export * from './initState/initState.interface';
 export * from './keyboardAction/keyboardAction.interface';
 export * from './normalStateContext/normalStateContext.interface';
+export * from './normalStateTagContext/normalStateTagContext.interface';
 export * from './optionsGatherer/optionsGatherer.interface';
 export * from './pluginDescription/pluginDescription.interface';
 export * from './pluginOptions/pluginOptions.interface';

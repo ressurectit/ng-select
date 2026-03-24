@@ -3,14 +3,14 @@ import {getHostElement, LOGGER, Logger} from '@anglr/common';
 import {isPresent, RecursivePartial, renderToBody, normalizeAccent} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
-import {InitState, Interactions, KeyboardHandler, LiveSearch, NormalState, NormalStateContext, OptionsGatherer, OptionsHandler, PluginDescription, Popup, PopupContext, Positioner, ReadonlyState, SelectApi, SelectCssClasses, SelectEvents, SelectOption, SelectOptions, SelectOptionState, SelectPlugin, TemplateGatherer, ValueHandler} from '../../interfaces';
+import {InitState, Interactions, KeyboardHandler, LiveSearch, NormalState, NormalStateContext, NormalStateTagContext, OptionsGatherer, OptionsHandler, PluginDescription, Popup, PopupContext, Positioner, ReadonlyState, SelectApi, SelectCssClasses, SelectEvents, SelectOption, SelectOptions, SelectOptionState, SelectPlugin, TemplateGatherer, ValueHandler} from '../../interfaces';
 import {INTERACTIONS_TYPE, KEYBOARD_HANDLER_TYPE, LIVE_SEARCH_TYPE, NORMAL_STATE_TYPE, OPTIONS_HANDLER_TYPE, POPUP_TYPE, POSITIONER_TYPE, READONLY_STATE_TYPE, SELECT_OPTIONS, VALUE_HANDLER_TYPE} from '../../misc/tokens';
 import {SelectPluginType} from '../../misc/enums';
 import {SelectBus, SelectPluginInstances} from '../../misc/classes';
 import {CommonPositioner, StaticValueHandler, SimpleInteractions, SimpleOptionsHandler, SimpleKeyboardHandler, SimpleNormalState, SimplePopup, EditLiveSearch, EditNormalState} from '../../plugins';
 import {CopyOptionsAsSignal} from '../../decorators';
 import {SelectAction, SelectFunction} from '../../misc/types';
-import {NormalStateTemplate, OptionTemplate} from '../../directives';
+import {NormalStateTagTemplate, NormalStateTemplate, OptionTemplate} from '../../directives';
 import {Option} from '../option/option.component';
 
 //TODO: optimize options change detection, currently it is based on reference change, but it could be optimized by checking only changed properties, or by using signals for options properties
@@ -101,7 +101,7 @@ const defaultOptions: Omit<SelectOptions, 'optionsGatherer'|'templateGatherer'> 
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Select<TValue = unknown> implements SelectApi<TValue, SelectCssClasses>, OptionsGatherer<TValue>, TemplateGatherer
+export class Select<TValue = unknown> implements SelectApi<TValue, SelectCssClasses>, OptionsGatherer<TValue>, TemplateGatherer<TValue>
 {
     //######################### protected fields #########################
 
@@ -278,12 +278,17 @@ export class Select<TValue = unknown> implements SelectApi<TValue, SelectCssClas
     /**
      * @inheritdoc
      */
-    public readonly normalStateTemplate: Signal<TemplateRef<NormalStateContext>|undefined|null> = contentChild(NormalStateTemplate, {read: TemplateRef});
+    public readonly normalStateTemplate: Signal<TemplateRef<NormalStateContext<TValue>>|undefined|null> = contentChild(NormalStateTemplate, {read: TemplateRef});
 
     /**
      * @inheritdoc
      */
-    public readonly optionTemplate: Signal<TemplateRef<PopupContext>|undefined|null> = contentChild(OptionTemplate, {read: TemplateRef});
+    public readonly optionTemplate: Signal<TemplateRef<PopupContext<TValue>>|undefined|null> = contentChild(OptionTemplate, {read: TemplateRef});
+
+    /**
+     * @inheritdoc
+     */
+    public readonly normalStateTagTemplate: Signal<TemplateRef<NormalStateTagContext<TValue>>|undefined|null> = contentChild(NormalStateTagTemplate, {read: TemplateRef});
 
     //######################### public properties - implementation of OptionsGatherer #########################
 

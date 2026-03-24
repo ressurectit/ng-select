@@ -25,6 +25,11 @@
                 cursor: pointer;
             }
 
+            .select-normal-state-gap
+            {
+                gap: var(--size-xs);
+            }
+
             button
             {
                 background-color: transparent;

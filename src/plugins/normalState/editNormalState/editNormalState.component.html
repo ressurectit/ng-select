@@ -1,19 +1,27 @@
-<ng-template #defaultSingleLook>{{selectBus.selectedOptions() | displayValue: '' | localize}}</ng-template>
-<ng-template #defaultMultipleLook>{{selectBus.selectedOptions() | displayValue: '' | localize}}</ng-template>
+<ng-template #defaultSingleLook="normalStateTemplate" normalStateTemplate>{{selectBus.selectedOptions() | displayValue: '' | localize}}</ng-template>
+<ng-template #defaultMultipleLook="normalStateTagTemplate" normalStateTagTemplate let-option let-normalState="normalState">
+    <span>{{option | displayValue | localize}}</span>
+    <button type="button" (click)="optionClick(option)">
+        <span>x</span>
+    </button>
+</ng-template>
 
 <div class="select-relative select-flex-1 select-flex-row">
     @if(selectPlugins.liveSearch()?.emptyInput())
     {
-        <div [class]="options.cssClasses.value" [class.select-flex-1]="!selectBus.selectOptions().multiple">
+        <div [class]="options.cssClasses.value"
+             [class.select-flex-1]="!selectBus.selectOptions().multiple"
+             [class.select-normal-state-gap]="selectBus.selectOptions().multiple"
+             [class.select-flex-row]="selectBus.selectOptions().multiple">
             @if(!selectBus.selectOptions().multiple)
             {
-                <ng-container *ngTemplateOutlet="selectBus.selectOptions().templateGatherer.normalStateTemplate() || defaultSingleLook; context: {$implicit: this}"/>
+                <ng-container *ngTemplateOutlet="selectBus.selectOptions().templateGatherer.normalStateTemplate() || defaultSingleLook.template; context: {$implicit: this}"/>
             }
             @else
             {
                 @for(option of selectedOptionsMultiple(); track option)
                 {
-                    <ng-container *ngTemplateOutlet="selectBus.selectOptions().templateGatherer.normalStateTemplate() || defaultMultipleLook; context: {$implicit: this, $option: option}"/>
+                    <ng-container *ngTemplateOutlet="selectBus.selectOptions().templateGatherer.normalStateTagTemplate() || defaultMultipleLook.template; context: {$implicit: option, normalState: this}"/>
                 }
             }
         </div>

@@ -17,7 +17,7 @@ export interface SelectBusOptions<TValue = unknown>
     /**
      * Instance of template gatherer used for obtaining custom templates
      */
-    templateGatherer: TemplateGatherer;
+    templateGatherer: TemplateGatherer<TValue>;
 
     /**
      * Indication whether is Select readonly or not

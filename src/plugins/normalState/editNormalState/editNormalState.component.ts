@@ -9,6 +9,7 @@ import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {NORMAL_STATE_OPTIONS} from '../../../misc/tokens';
 import {DisplayValue} from '../../../pipes';
+import {NormalStateTagTemplate, NormalStateTemplate} from '../../../directives';
 
 //TODO: improvement, carret direction
 
@@ -42,6 +43,8 @@ const defaultOptions: EditNormalStateOptions<EditNormalStateCssClasses> =
         DisplayValue,
         LocalizePipe,
         NgTemplateOutlet,
+        NormalStateTemplate,
+        NormalStateTagTemplate,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -156,6 +159,20 @@ export class EditNormalState<TValue = unknown> implements NormalState<TValue, Ed
             source: this as SelectPlugin,
             sourceElement: this.pluginElement.nativeElement,
             data: null,
+        });
+    }
+
+    /**
+     * Handles option click
+     * @param option - Option that was clicked
+     */
+    protected optionClick(option: SelectOptionState<TValue>): void
+    {
+        this.selectBus.optionActivate.next(
+        {
+            source: this as SelectPlugin,
+            sourceElement: this.pluginElement.nativeElement,
+            data: option,
         });
     }
 }

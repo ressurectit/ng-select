@@ -45,22 +45,29 @@ export function selectOption<TValue, TAction>(selectBus: SelectBus<TValue, TActi
     //handle multiselect
     if(selectBus.selectOptions().multiple)
     {
-        option?.selected.update(val => !val);
-        let selectedOptions = selectBus.selectedOptions();
-
-        if(!Array.isArray(selectedOptions))
+        if(!option)
         {
-            selectedOptions = [];
+            selectBus.selectedOptions.set([]);
         }
-
-        const selected = selectedOptions.filter(itm => itm.selected());
-
-        if(option?.selected())
+        else
         {
-            selected.push(option);
-        }
+            option.selected.update(val => !val);
+            let selectedOptions = selectBus.selectedOptions();
 
-        selectBus.selectedOptions.set(selected);
+            if(!Array.isArray(selectedOptions))
+            {
+                selectedOptions = [];
+            }
+
+            const selected = selectedOptions.filter(itm => itm.selected());
+
+            if(option?.selected())
+            {
+                selected.push(option);
+            }
+
+            selectBus.selectedOptions.set(selected);
+        }
     }
     //handle single select
     else
