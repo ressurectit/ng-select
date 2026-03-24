@@ -110,6 +110,15 @@ export class SimplePopup<TValue = unknown> implements Popup<TValue, PopupOptions
     //######################### protected methods - template bindings #########################
 
     /**
+     * Prevents blur on option click
+     * @param event - Event that occured
+     */
+    protected preventBlur(event: MouseEvent): void
+    {
+        event.preventDefault();
+    }
+
+    /**
      * Handles option click
      * @param option - Option that was clicked
      */

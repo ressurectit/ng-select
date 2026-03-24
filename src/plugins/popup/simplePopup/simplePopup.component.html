@@ -5,7 +5,7 @@
 {
     @let listOptions = selectPlugins.OptionsHandler.listOptions() | groupedListOptions;
     
-    <div [class]="options.cssClasses.popupContainer">
+    <div [class]="options.cssClasses.popupContainer" role="listbox">
         <ng-container #liveSearchPlaceholder/>
 
         @for(optionsGroups of listOptions; track $index)
@@ -26,7 +26,9 @@
                      [class.selected]="option.selected()"
                      [class.active]="option.active()"
                      [class.in-group]="group"
+                     role="option"
                      (mouseover)="markActive(option)"
+                     (mousedown)="preventBlur($event)"
                      (click)="optionClick(option)">
                     <div [class]="options.cssClasses.optionText">
                         <ng-container *ngTemplateOutlet="selectBus.selectOptions().templateGatherer.optionTemplate() || defaultOptionLook; context: {$implicit: option, popup: this}"/>

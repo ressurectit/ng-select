@@ -1,4 +1,4 @@
-import {NormalStateCssClasses} from './normalState.interface';
+import {NormalStateCssClasses, NormalStateOptions} from './normalState.interface';
 
 /**
  * Css classes for edit normal state plugin.
@@ -16,11 +16,6 @@ export interface EditNormalStateCssClasses extends NormalStateCssClasses
     carret: string;
 
     /**
-     * Applied to HTML element that represents normal state main element visible to user
-     */
-    element: string;
-
-    /**
      * Applied to HTML element that represents whole component
      */
     componentElement: string;
@@ -34,4 +29,17 @@ export interface EditNormalStateCssClasses extends NormalStateCssClasses
      * Applied to cancel button icon
      */
     cancelIcon: string;
+}
+
+/**
+ * Options for edit normal state plugin
+ */
+export interface EditNormalStateOptions<TCssClasses extends EditNormalStateCssClasses = EditNormalStateCssClasses> extends NormalStateOptions<TCssClasses>
+{
+    //######################### properties #########################
+
+    /**
+     * Indication whether show carret icon
+     */
+    carret: boolean;
 }

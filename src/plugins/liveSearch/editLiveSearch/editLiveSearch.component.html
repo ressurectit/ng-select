@@ -5,6 +5,7 @@
        autocomplete="off"
        [attr.aria-label]="selectBus.selectedOptions() | displayValue | localize"
        [class]="options.cssClasses.searchElement"
+       [class.select-flex-1]="selectBus.selectOptions().multiple"
        [class.absolute-input]="!selectBus.selectOptions().multiple"
        [tooltip]="selectBus.selectedOptions() | displayValue | localize"
        [disabled]="selectBus.selectOptions().readonly"

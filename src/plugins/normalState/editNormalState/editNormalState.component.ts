@@ -1,10 +1,10 @@
-import {ChangeDetectionStrategy, Component, effect, ElementRef, Inject, inject, Optional, Signal, viewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, effect, ElementRef, Inject, inject, Optional, Signal, viewChild} from '@angular/core';
 import {NgTemplateOutlet} from '@angular/common';
 import {LocalizePipe} from '@anglr/common';
 import {RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
-import {NormalState, NormalStateOptions, SelectPlugin, EditNormalStateCssClasses} from '../../../interfaces';
+import {NormalState, EditNormalStateOptions, SelectPlugin, EditNormalStateCssClasses, SelectOptionState} from '../../../interfaces';
 import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {NORMAL_STATE_OPTIONS} from '../../../misc/tokens';
@@ -12,14 +12,14 @@ import {DisplayValue} from '../../../pipes';
 
 //TODO: improvement, carret direction
 
-const defaultOptions: NormalStateOptions<EditNormalStateCssClasses> =
+const defaultOptions: EditNormalStateOptions<EditNormalStateCssClasses> =
 {
     cancelValue: false,
+    carret: true,
     cssClasses:
     {
         componentElement: 'normal-state-component',
-        element: 'select-normal-state select-flex-row select-flex-1',
-        value: 'select-flex-1 select-align-self-center',
+        value: 'select-align-self-center',
         carret: 'fas fa-caret-down select-align-self-center',
         cancel: '',
         cancelIcon: 'fas fa-times',
@@ -45,7 +45,7 @@ const defaultOptions: NormalStateOptions<EditNormalStateCssClasses> =
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditNormalState<TValue = unknown> implements NormalState<TValue, NormalStateOptions<EditNormalStateCssClasses>>
+export class EditNormalState<TValue = unknown> implements NormalState<TValue, EditNormalStateOptions<EditNormalStateCssClasses>>
 {
     //######################### public properties - implementation of SelectPlugin #########################
 
@@ -53,7 +53,7 @@ export class EditNormalState<TValue = unknown> implements NormalState<TValue, No
      * @inheritdoc
      */
     @CopyOptionsAsSignal()
-    public options: NormalStateOptions<EditNormalStateCssClasses>;
+    public options: EditNormalStateOptions<EditNormalStateCssClasses>;
 
     /**
      * @inheritdoc
@@ -70,6 +70,13 @@ export class EditNormalState<TValue = unknown> implements NormalState<TValue, No
      */
     public selectBus: SelectBus<TValue> = inject(SelectBus);
 
+    //######################### protected properties - template bindings #########################
+
+    /**
+     * Instance of selected options for multiple select
+     */
+    protected selectedOptionsMultiple: Signal<SelectOptionState<TValue>[]>;
+
     //######################### protected properties - children #########################
 
     /**
@@ -78,12 +85,24 @@ export class EditNormalState<TValue = unknown> implements NormalState<TValue, No
     protected liveSearchPlaceholder: Signal<ElementRef<HTMLElement>> = viewChild.required('liveSearchPlaceholder', {read: ElementRef});
 
     //######################### constructor #########################
-    constructor(@Inject(NORMAL_STATE_OPTIONS) @Optional() options?: RecursivePartial<NormalStateOptions<EditNormalStateCssClasses>>|null,)
+    constructor(@Inject(NORMAL_STATE_OPTIONS) @Optional() options?: RecursivePartial<EditNormalStateOptions<EditNormalStateCssClasses>>|null,)
     {
-        this.options = deepCopyWithArrayOverride(defaultOptions as NormalStateOptions<EditNormalStateCssClasses>,
+        this.options = deepCopyWithArrayOverride(defaultOptions as EditNormalStateOptions<EditNormalStateCssClasses>,
                                                  options);
 
         effect(() => this.liveSearchPlaceholder().nativeElement.after(this.selectPlugins.LiveSearch.pluginElement.nativeElement));
+
+        this.selectedOptionsMultiple = computed(() =>
+        {
+            const selectedOptions = this.selectBus.selectedOptions();
+
+            if(!this.selectBus.selectOptions().multiple || !Array.isArray(selectedOptions))
+            {
+                return [];
+            }
+
+            return selectedOptions;
+        });
     }
 
     //######################### protected methods - template bindings #########################

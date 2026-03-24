@@ -1,6 +1,6 @@
-import {afterRenderEffect, ChangeDetectionStrategy, Component, computed, effect, ElementRef, Inject, inject, OnDestroy, Optional, signal, Signal, viewChild, WritableSignal} from '@angular/core';
+import {afterRenderEffect, ChangeDetectionStrategy, Component, computed, DOCUMENT, effect, ElementRef, Inject, inject, OnDestroy, Optional, signal, Signal, viewChild, WritableSignal} from '@angular/core';
 import {LocalizePipe, LOGGER, Logger, TooltipDirective} from '@anglr/common';
-import {isPresent, RecursivePartial} from '@jscrpt/common';
+import {isDescendant, isPresent, RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
 import {LiveSearch, EditLiveSearchCssClasses, LiveSearchOptions, SelectPlugin} from '../../../interfaces';
@@ -62,6 +62,11 @@ export class EditLiveSearch<TValue = unknown> implements LiveSearch<TValue, Live
      * Value of search input holding value that was set by user
      */
     protected valueOutput: WritableSignal<string> = signal('');
+
+    /**
+     * Reference to document object for DOM operations
+     */
+    protected document: Document = inject(DOCUMENT);
 
     //######################### public properties - implementation of SelectPlugin #########################
 
@@ -133,12 +138,15 @@ export class EditLiveSearch<TValue = unknown> implements LiveSearch<TValue, Live
             this.logger.verbose('Select: Live Search: selected value changed, resetting search input');
 
             this.clearSearchInput();
+            this.valueOutput.set('');
         });
 
         effect(() =>
         {
-            if(!this.selectBus.hasFocusComputed())
+            //prevents clearing when changing tab or window
+            if(!this.selectBus.hasFocusComputed() && (!this.document.activeElement || !isDescendant(this.selectBus.selectElement().nativeElement, this.document.activeElement as HTMLElement)))
             {
+                this.logger.verbose('Select: Live Search: select lost focus, resetting search input');
                 this.clearSearchInput();
             }
         });
