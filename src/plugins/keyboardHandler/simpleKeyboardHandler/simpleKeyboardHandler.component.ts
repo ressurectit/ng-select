@@ -3,7 +3,7 @@ import {LOGGER, Logger} from '@anglr/common';
 import {BindThis, isPresent, RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
-import {KeyboardHandler, SimpleKeyboardHandlerOptions, SelectFirstKeyboardAction, SelectPlugin, SelectActiveKeyboardAction} from '../../../interfaces';
+import {KeyboardHandler, SimpleKeyboardHandlerOptions, SelectFirstKeyboardAction, SelectPlugin, SelectActiveKeyboardAction, RemoveLastSelectedValueKeyboardAction} from '../../../interfaces';
 import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {KEYBOARD_HANDLER_OPTIONS} from '../../../misc/tokens';
@@ -12,7 +12,8 @@ import {SimpleKeyboardActionTypes} from '../../../misc/types';
 const defaultOptions: SimpleKeyboardHandlerOptions =
 {
     selectFirstDebounceTimeout: 300,
-    alphanumericSearch: false,
+    alphanumericSearch: true,
+    liveSearchEvents: false,
 };
 
 /**
@@ -78,6 +79,17 @@ export class SimpleKeyboardHandler<TValue = unknown> implements KeyboardHandler<
             this.selectBus.selectElement().nativeElement.removeEventListener('keydown', this.handleKeyboardEvents);
             this.selectBus.selectElement().nativeElement.addEventListener('keydown', this.handleKeyboardEvents);
         });
+
+        effect(() =>
+        {
+            const liveSearch = this.selectPlugins.liveSearch();
+
+            if(this.options.liveSearchEvents && liveSearch)
+            {
+                liveSearch.pluginElement.nativeElement.removeEventListener('keydown', this.handleLiveSearchKeyboardEvents);
+                liveSearch.pluginElement.nativeElement.addEventListener('keydown', this.handleLiveSearchKeyboardEvents);
+            }
+        });
     }
 
     //######################### public methods - implementation of OnDestroy #########################
@@ -97,6 +109,24 @@ export class SimpleKeyboardHandler<TValue = unknown> implements KeyboardHandler<
     }
 
     //######################### protected methods #########################
+
+    /**
+     * Handles live search keyboard events
+     * @param event - Keyboard event that occured
+     */
+    @BindThis
+    protected handleLiveSearchKeyboardEvents(event: KeyboardEvent): void
+    {
+        if(event.key == 'Backspace')
+        {
+            this.selectBus.keyboardAction.next(
+            {
+                source: this as SelectPlugin,
+                sourceElement: this.selectBus.selectElement().nativeElement,
+                data: <RemoveLastSelectedValueKeyboardAction>{type: 'REMOVE_LAST_SELECTED_VALUE'},
+            });
+        }
+    }
 
     /**
      * Handles keyboard events

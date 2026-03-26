@@ -1,6 +1,6 @@
 import {PromiseOr} from '@jscrpt/common';
 
-import {SelectActiveKeyboardAction, SelectApi, SelectCssClasses, SelectFirstKeyboardAction, SelectOption} from '../interfaces';
+import {RemoveLastSelectedValueKeyboardAction, SelectActiveKeyboardAction, SelectApi, SelectCssClasses, SelectFirstKeyboardAction, SelectOption} from '../interfaces';
 
 /**
  * Defintion of action that can be executed on Select
@@ -45,12 +45,12 @@ export type TextComparerFunc = (source: string, target: string) => boolean;
 /**
  * Definition of simple keyboard actions
  */
-export type SimpleKeyboardActions = SelectActiveKeyboardAction|SelectFirstKeyboardAction;
+export type SimpleKeyboardActions = SelectActiveKeyboardAction|SelectFirstKeyboardAction|RemoveLastSelectedValueKeyboardAction;
 
 /**
  * Names of simple keyboard action types
  */
-export type SimpleKeyboardActionTypes = 'SELECT_ACTIVE'|'SELECT_FIRST';
+export type SimpleKeyboardActionTypes = 'SELECT_ACTIVE'|'SELECT_FIRST'|'REMOVE_LAST_SELECTED_VALUE';
 
 /**
  * Definition of function for computed value signal

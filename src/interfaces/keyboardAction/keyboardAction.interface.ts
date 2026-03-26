@@ -30,3 +30,10 @@ export interface SelectFirstKeyboardAction extends KeyboardAction<'SELECT_FIRST'
      */
     search: string;
 }
+
+/**
+ * Defines keyboard action that should remove last selected value or only value if select is single
+ */
+export interface RemoveLastSelectedValueKeyboardAction extends KeyboardAction<'REMOVE_LAST_SELECTED_VALUE'>
+{
+}

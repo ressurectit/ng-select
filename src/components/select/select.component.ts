@@ -7,7 +7,7 @@ import {InitState, Interactions, KeyboardHandler, LiveSearch, NormalState, Norma
 import {INTERACTIONS_TYPE, KEYBOARD_HANDLER_TYPE, LIVE_SEARCH_TYPE, NORMAL_STATE_TYPE, OPTIONS_HANDLER_TYPE, POPUP_TYPE, POSITIONER_TYPE, READONLY_STATE_TYPE, SELECT_OPTIONS, VALUE_HANDLER_TYPE} from '../../misc/tokens';
 import {SelectPluginType} from '../../misc/enums';
 import {SelectBus, SelectPluginInstances} from '../../misc/classes';
-import {CommonPositioner, StaticValueHandler, SimpleInteractions, SimpleOptionsHandler, SimpleKeyboardHandler, SimpleNormalState, SimplePopup, EditLiveSearch, EditNormalState} from '../../plugins';
+import {CommonPositioner, StaticValueHandler, SimpleInteractions, SimpleOptionsHandler, SimpleKeyboardHandler, SimpleNormalState, SimplePopup, NoLiveSearch} from '../../plugins';
 import {CopyOptionsAsSignal} from '../../decorators';
 import {SelectAction, SelectFunction} from '../../misc/types';
 import {NormalStateTagTemplate, NormalStateTemplate, OptionTemplate} from '../../directives';
@@ -49,11 +49,11 @@ const defaultOptions: Omit<SelectOptions, 'optionsGatherer'|'templateGatherer'> 
         },
         liveSearch: <PluginDescription<LiveSearch>>
         {
-            type: forwardRef(() => EditLiveSearch),
+            type: forwardRef(() => NoLiveSearch),
         },
         normalState: <PluginDescription<NormalState>>
         {
-            type: forwardRef(() => EditNormalState),
+            type: forwardRef(() => SimpleNormalState),
         },
         optionsHandler: <PluginDescription<OptionsHandler>>
         {

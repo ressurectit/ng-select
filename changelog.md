@@ -87,7 +87,11 @@
 - new `KeyboardAction` interface, that defines keyboard action that is used as data when keyboard event occurs
    - **properties**
       - `type` type of keyboard action
-- new `SelectActiveKeyboardAction` interface, that defines keyboard action that should select active option
+- new `SelectActiveKeyboardAction` interface, that defines keyboard action that should select first that corresponds to entered letters
+   - **properties**
+      - `search` text that should be used for finding option to select
+- new `SelectFirstKeyboardAction` interface, that defines keyboard action that should remove last selected value or only value if select is single
+- new `RemoveLastSelectedValueKeyboardAction` interface, that defines keyboard action that should select active option
 - new `SimpleKeyboardActions` definition of simple keyboard actions
 - new `SimpleKeyboardActionTypes` names of simple keyboard action types
 - new `NormalizeTextForComparison` normalize text for comparison, removes accent sensitive data
@@ -96,6 +100,7 @@
    - **properties**
       - `selectFirstDebounceTimeout` debounce timeout for selecting first option when typing
       - `alphanumericSearch` indication whether is alphanumeric search enabled, meaning that when user types alphanumeric keys (outside of live search), select will try to find option starting with searched text and select it
+      - `liveSearchEvents` indication whether live search events should be processed
 - new `LiveSearchCssClasses` interface, represents css classes for live search
 - new `TextComparerFunc` type definition of function used for comparison two texts
 - new `ValueComputedFunc` type definition of function for computed value signal

@@ -12,13 +12,13 @@
     </span>
 </button>
 
-@if(options.cancelValue)
+@if(options.cancelValue && (selectBus.selectedOptions() | hasValue))
 {
     <button type="button" [class]="options.cssClasses.cancel" (click)="cancel()" (blur)="blur()" (focus)="focus()">
         <span [class]="options.cssClasses.cancelIcon"></span>
     </button>
 }
 
-<button type="button" (click)="click()" (focus)="focus()" (blur)="blur()" tabindex="-1">
-    <span [class]="options.cssClasses.carret"></span>
+<button type="button" [class]="options.cssClasses.carret" (click)="click()" (focus)="focus()" (blur)="blur()" tabindex="-1">
+    <span [class]="options.cssClasses.carretIcon"></span>
 </button>

@@ -1,9 +1,11 @@
 <ng-template #defaultSingleLook="normalStateTemplate" normalStateTemplate>{{selectBus.selectedOptions() | displayValue: '' | localize}}</ng-template>
 <ng-template #defaultMultipleLook="normalStateTagTemplate" normalStateTagTemplate let-option let-normalState="normalState">
-    <span>{{option | displayValue | localize}}</span>
-    <button type="button" (click)="optionClick(option)">
-        <span>x</span>
-    </button>
+    <div [class]="options.cssClasses.tag">
+        <span>{{option | displayValue | localize}}</span>
+        <button type="button" (click)="optionClick(option)">
+            <span>x</span>
+        </button>
+    </div>
 </ng-template>
 
 <div class="select-relative select-flex-1 select-flex-row">

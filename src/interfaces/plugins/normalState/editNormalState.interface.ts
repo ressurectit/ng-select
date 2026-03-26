@@ -16,6 +16,11 @@ export interface EditNormalStateCssClasses extends NormalStateCssClasses
     carret: string;
 
     /**
+     * Applied to tag that represents selected value
+     */
+    tag: string;
+
+    /**
      * Applied to HTML element that represents whole component
      */
     componentElement: string;

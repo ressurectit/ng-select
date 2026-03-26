@@ -185,6 +185,30 @@ export class SimpleInteractions<TValue = unknown> implements Interactions<TValue
 
                     break;
                 }
+                case 'REMOVE_LAST_SELECTED_VALUE':
+                {
+                    if(this.selectBus.selectOptions().multiple)
+                    {
+                        const selectedOptions = this.selectBus.selectedOptions();
+
+                        if(!Array.isArray(selectedOptions))
+                        {
+                            this.selectBus.selectedOptions.set([]);
+                        }
+                        else
+                        {
+                            const [removedOption] = selectedOptions.splice(selectedOptions.length - 1, 1);
+                            this.selectBus.selectedOptions.set([...selectedOptions]);
+                            removedOption.selected.set(false);
+                        }
+                    }
+                    else
+                    {
+                        this.selectBus.selectedOptions.set(null);
+                    }
+
+                    break;
+                }
             }
         }));
     }

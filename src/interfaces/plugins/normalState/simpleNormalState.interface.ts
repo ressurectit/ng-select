@@ -11,9 +11,14 @@ export interface SimpleNormalStateCssClasses extends NormalStateCssClasses
     value: string;
 
     /**
-     * Applied to "carret", indicating that it is select and there is more options available
+     * Applied to "carret" element
      */
     carret: string;
+
+    /**
+     * Applied to "carret" icon element
+     */
+    carretIcon: string;
 
     /**
      * Applied to HTML element that represents normal state main element visible to user

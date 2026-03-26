@@ -8,7 +8,7 @@ import {NormalState, NormalStateOptions, SelectPlugin, SimpleNormalStateCssClass
 import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {NORMAL_STATE_OPTIONS} from '../../../misc/tokens';
-import {DisplayValue} from '../../../pipes';
+import {DisplayValue, HasValue} from '../../../pipes';
 
 //TODO: improvement, carret direction
 
@@ -18,11 +18,12 @@ const defaultOptions: NormalStateOptions<SimpleNormalStateCssClasses> =
     cssClasses:
     {
         componentElement: 'normal-state-component',
-        element: 'select-normal-state select-flex-row select-flex-1',
-        value: 'select-flex-1 select-align-self-center',
-        carret: 'fas fa-caret-down select-align-self-center',
-        cancel: '',
-        cancelIcon: 'fas fa-times',
+        element: 'normal-state-element',
+        value: 'select-align-self-center',
+        carret: 'normal-state-carret',
+        carretIcon: 'fas fa-caret-down select-align-self-center',
+        cancel: 'normal-state-cancel',
+        cancelIcon: 'fas fa-times select-align-self-center',
     },
 };
 
@@ -39,6 +40,7 @@ const defaultOptions: NormalStateOptions<SimpleNormalStateCssClasses> =
     },
     imports:
     [
+        HasValue,
         DisplayValue,
         LocalizePipe,
         TooltipDirective,

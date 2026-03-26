@@ -21,6 +21,7 @@ const defaultOptions: EditNormalStateOptions<EditNormalStateCssClasses> =
     {
         componentElement: 'normal-state-component',
         value: 'select-align-self-center',
+        tag: 'select-tag',
         carret: 'fas fa-caret-down select-align-self-center',
         cancel: '',
         cancelIcon: 'fas fa-times',
