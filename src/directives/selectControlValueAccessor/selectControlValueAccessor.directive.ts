@@ -3,8 +3,8 @@ import {NG_VALUE_ACCESSOR, ControlValueAccessor} from '@angular/forms';
 import {Action1, NoopAction} from '@jscrpt/common';
 import {Subscription} from 'rxjs';
 
-import {Select} from '../../components';
 import {SelectPluginType} from '../../misc/enums';
+import {Select} from '../../components/select/select.component';
 
 /**
  * Provider for control value accessor
@@ -17,7 +17,7 @@ const SELECT_VALUE_ACCESSOR: ExistingProvider =
 };
 
 /**
- * Control value accessor for NgSelectComponent
+ * Control value accessor for Select
  */
 @Directive(
 {

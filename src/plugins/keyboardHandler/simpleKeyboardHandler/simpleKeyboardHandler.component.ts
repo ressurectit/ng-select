@@ -117,7 +117,7 @@ export class SimpleKeyboardHandler<TValue = unknown> implements KeyboardHandler<
     @BindThis
     protected handleLiveSearchKeyboardEvents(event: KeyboardEvent): void
     {
-        if(event.key == 'Backspace')
+        if(event.key == 'Backspace' && this.selectPlugins.liveSearch()?.emptyInput())
         {
             this.selectBus.keyboardAction.next(
             {

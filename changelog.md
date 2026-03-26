@@ -123,6 +123,9 @@
 - new `NormalStateTagTemplate` directive, that is used for obtaining template for normal state tag
    - **properties**
       - `template` instance of template for normal state tag
+- new `SelectFormControl` directive, that is form value control for Select
+   - **implements**
+      - `FormValueControl`
 - updated `SelectPluginTypes` interface
    - **new properties**
       - `Interactions` handles interactions of plugins and select

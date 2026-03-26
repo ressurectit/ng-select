@@ -8,15 +8,15 @@ import {NormalState, EditNormalStateOptions, SelectPlugin, EditNormalStateCssCla
 import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {NORMAL_STATE_OPTIONS} from '../../../misc/tokens';
-import {DisplayValue} from '../../../pipes';
+import {DisplayValue, HasValue} from '../../../pipes';
 import {NormalStateTagTemplate, NormalStateTemplate} from '../../../directives';
 
 //TODO: improvement, carret direction
 
 const defaultOptions: EditNormalStateOptions<EditNormalStateCssClasses> =
 {
-    cancelValue: false,
-    carret: true,
+    cancelValue: true,
+    carret: false,
     cssClasses:
     {
         componentElement: 'normal-state-component',
@@ -41,6 +41,7 @@ const defaultOptions: EditNormalStateOptions<EditNormalStateCssClasses> =
     },
     imports:
     [
+        HasValue,
         DisplayValue,
         LocalizePipe,
         NgTemplateOutlet,

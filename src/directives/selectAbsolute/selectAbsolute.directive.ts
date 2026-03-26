@@ -1,7 +1,7 @@
 import {Directive} from '@angular/core';
 
-import {Select} from '../../components';
 import {SelectOptions} from '../../interfaces';
+import {Select} from '../../components/select/select.component';
 
 /**
  * Directive used for setting absolute option for ng-select

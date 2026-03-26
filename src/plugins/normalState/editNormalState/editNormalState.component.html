@@ -8,8 +8,8 @@
     </div>
 </ng-template>
 
-<div class="select-relative select-flex-1 select-flex-row">
-    @if(selectPlugins.liveSearch()?.emptyInput())
+<div class="select-relative select-flex-1 select-flex-row select-normal-state-gap">
+    @if((selectBus.selectedOptions() | hasValue) && (selectPlugins.liveSearch()?.emptyInput() || selectBus.selectOptions().multiple))
     {
         <div [class]="options.cssClasses.value"
              [class.select-flex-1]="!selectBus.selectOptions().multiple"
@@ -32,7 +32,7 @@
     <ng-container #liveSearchPlaceholder/>
 </div>
 
-@if(options.cancelValue)
+@if(options.cancelValue && (selectBus.selectedOptions() | hasValue))
 {
     <button type="button" [class]="options.cssClasses.cancel" (focus)="focus()" (blur)="blur()" (click)="cancel()">
         <span [class]="options.cssClasses.cancelIcon"></span>

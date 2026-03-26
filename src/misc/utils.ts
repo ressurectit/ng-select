@@ -47,6 +47,16 @@ export function selectOption<TValue, TAction>(selectBus: SelectBus<TValue, TActi
     {
         if(!option)
         {
+            const selectedOptions = selectBus.selectedOptions();
+
+            if(Array.isArray(selectedOptions))
+            {
+                for(const selected of selectedOptions)
+                {
+                    selected.selected.set(false);
+                }
+            }
+
             selectBus.selectedOptions.set([]);
         }
         else

@@ -138,7 +138,6 @@ export class EditLiveSearch<TValue = unknown> implements LiveSearch<TValue, Live
             this.logger.verbose('Select: Live Search: selected value changed, resetting search input');
 
             this.clearSearchInput();
-            this.valueOutput.set('');
         });
 
         effect(() =>
@@ -247,5 +246,6 @@ export class EditLiveSearch<TValue = unknown> implements LiveSearch<TValue, Live
     {
         this.htmlInput().nativeElement.value = '';
         this.emptyInputSignal.set(true);
+        this.valueOutput.set('');
     }
 }

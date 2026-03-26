@@ -1,7 +1,7 @@
 import {Directive, effect, model, ModelSignal} from '@angular/core';
 
-import {Select} from '../../components';
 import {SelectPluginType} from '../../misc/enums';
+import {Select} from '../../components/select/select.component';
 
 //TODO: finish, fix cycle
 
