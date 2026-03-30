@@ -1,6 +1,7 @@
 import {Pipe, PipeTransform} from '@angular/core';
 
 import {SelectOptionState} from '../../interfaces';
+import {hasValue} from '../../misc/utils';
 
 /**
  * Gets information whether is there any value selected
@@ -14,11 +15,6 @@ export class HasValue implements PipeTransform
      */
     public transform<TValue>(value: SelectOptionState<TValue>|SelectOptionState<TValue>[]|undefined|null): boolean
     {
-        if(Array.isArray(value))
-        {
-            return value.length > 0;
-        }
-
-        return !!value;
+        return hasValue(value);
     }
 }

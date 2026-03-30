@@ -204,6 +204,13 @@ export class SimpleInteractions<TValue = unknown> implements Interactions<TValue
                     }
                     else
                     {
+                        const selected = this.selectBus.selectedOptions();
+
+                        if(!Array.isArray(selected))
+                        {
+                            selected?.selected.set(false);
+                        }
+
                         this.selectBus.selectedOptions.set(null);
                     }
 

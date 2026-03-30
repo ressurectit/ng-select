@@ -153,3 +153,17 @@ export function computedValue<TValue>(this: ValueHandler<TValue, ValueHandlerOpt
 
     return valueExtractor(selected);
 }
+
+/**
+ * Tests whether value is set
+ * @param value - Value to be tested
+ */
+export function hasValue<TValue>(value: SelectOptionState<TValue>|SelectOptionState<TValue>[]|undefined|null): boolean
+{
+    if(Array.isArray(value))
+    {
+        return value.length > 0;
+    }
+
+    return !!value;
+}

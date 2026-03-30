@@ -126,6 +126,8 @@
 - new `SelectFormControl` directive, that is form value control for Select
    - **implements**
       - `FormValueControl`
+- new `SelectMultipleKeepPopup` directive, that that keeps popup open when multiple is set for Select
+- new `hasValue` function, that tests whether value is set
 - updated `SelectPluginTypes` interface
    - **new properties**
       - `Interactions` handles interactions of plugins and select

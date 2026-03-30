@@ -39,6 +39,19 @@
                 }
             }
 
+            .normal-state-value
+            {
+                align-items: center;
+
+                &:empty
+                {
+                    &::after
+                    {
+                        content: "\00a0";
+                    }
+                }
+            }
+
             .select-tag
             {
                 display: flex;

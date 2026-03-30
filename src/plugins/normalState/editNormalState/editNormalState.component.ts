@@ -10,6 +10,7 @@ import {CopyOptionsAsSignal} from '../../../decorators';
 import {NORMAL_STATE_OPTIONS} from '../../../misc/tokens';
 import {DisplayValue, HasValue} from '../../../pipes';
 import {NormalStateTagTemplate, NormalStateTemplate} from '../../../directives';
+import {hasValue} from '../../../misc/utils';
 
 //TODO: improvement, carret direction
 
@@ -20,7 +21,7 @@ const defaultOptions: EditNormalStateOptions<EditNormalStateCssClasses> =
     cssClasses:
     {
         componentElement: 'normal-state-component',
-        value: 'select-align-self-center',
+        value: 'normal-state-value',
         tag: 'select-tag',
         carret: 'fas fa-caret-down select-align-self-center',
         cancel: '',
@@ -82,6 +83,11 @@ export class EditNormalState<TValue = unknown> implements NormalState<TValue, Ed
      */
     protected selectedOptionsMultiple: Signal<SelectOptionState<TValue>[]>;
 
+    /**
+     * Indication whether show value
+     */
+    protected showValue: Signal<boolean>;
+
     //######################### protected properties - children #########################
 
     /**
@@ -108,6 +114,10 @@ export class EditNormalState<TValue = unknown> implements NormalState<TValue, Ed
 
             return selectedOptions;
         });
+
+        this.showValue = computed(() => ((hasValue(this.selectBus.selectedOptions()) || !this.selectBus.selectOptions().multiple) &&
+                                         (this.selectPlugins.liveSearch()?.emptyInput() || this.selectBus.selectOptions().multiple)) ||
+                                        (!this.selectBus.selectOptions().multiple && !hasValue(this.selectBus.selectedOptions()) && !this.selectPlugins.liveSearch()?.emptyInput()));
     }
 
     //######################### protected methods - template bindings #########################

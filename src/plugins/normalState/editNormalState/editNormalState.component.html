@@ -9,7 +9,7 @@
 </ng-template>
 
 <div class="select-relative select-flex-1 select-flex-row select-normal-state-gap">
-    @if((selectBus.selectedOptions() | hasValue) && (selectPlugins.liveSearch()?.emptyInput() || selectBus.selectOptions().multiple))
+    @if(showValue())
     {
         <div [class]="options.cssClasses.value"
              [class.select-flex-1]="!selectBus.selectOptions().multiple"
