@@ -2,13 +2,30 @@
 
 @use '@css-styles/common' as mixins;
 
-
-@function defineTheme($fontSize: 14px, $colors)
+@function defineTheme($fontSize: 14px, $theme: ())
 {
     $defaultTheme:
     (
         select:
         (
+            normalState:
+            (
+                borderWidth: var(--size-2px-fixed),
+                padding: var(--size-1px) var(--size-2px),
+                borderRadius: var(--size-4px-fixed),
+                gap: var(--size-xs),
+                focus:
+                (
+                    outlineWidth: var(--size-1px-fixed),
+                ),
+                tag:
+                (
+                    gap: var(--size-xs),
+                    padding: var(--size-none) var(--size-xs),
+                    borderRadius: var(--size-4px),
+                    fontSize: .9em,
+                ),
+            ),
             popup:
             (
                 container:
@@ -43,7 +60,7 @@
         ),
     );
 
-    $theme: map.deep-merge($defaultTheme, $colors);
+    $theme: map.deep-merge($defaultTheme, $theme);
 
     @return $theme;
 }

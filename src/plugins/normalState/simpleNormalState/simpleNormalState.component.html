@@ -1,6 +1,7 @@
 <ng-template #defaultLook>{{selectBus.selectedOptions() | displayValue | localize}}</ng-template>
 
 <button type="button"
+        role="combobox"
         [class]="options.cssClasses.element"
         [disabled]="!!selectBus.selectOptions().readonly"
         [tooltip]="selectBus.selectedOptions() | displayValue | localize"

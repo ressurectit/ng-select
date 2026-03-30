@@ -128,6 +128,7 @@
       - `FormValueControl`
 - new `SelectMultipleKeepPopup` directive, that that keeps popup open when multiple is set for Select
 - new `hasValue` function, that tests whether value is set
+- new `OptionCssClasses` pipe, that obtains css classes for popup option
 - updated `SelectPluginTypes` interface
    - **new properties**
       - `Interactions` handles interactions of plugins and select
@@ -276,6 +277,9 @@
     - renamed to `SimplePopupCssClasses`
     - new property `componentElement` css class applied to component itself
     - new property `optionGroup` css class applied to each option group
+    - new property `selected` css class applied to selected option
+    - new property `active` css class applied to active option
+    - new property `inGroup` css class applied to option that is displayed inside of group
     - renamed `popupDiv` to `popupContainer`
     - renamed `optionItemDiv` to `option`
     - renamed `optionItemTextDiv` to `optionText`

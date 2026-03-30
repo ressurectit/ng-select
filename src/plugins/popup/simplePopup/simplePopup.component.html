@@ -22,10 +22,7 @@
 
             @for(option of opts; track option)
             {
-                <div [class]="options.cssClasses.option"
-                     [class.selected]="option.selected()"
-                     [class.active]="option.active()"
-                     [class.in-group]="group"
+                <div [class]="option | optionCssClasses: options.cssClasses: group"
                      role="option"
                      (mouseover)="markActive(option)"
                      (mousedown)="preventBlur($event)"

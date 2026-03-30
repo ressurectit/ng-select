@@ -16,6 +16,8 @@ const defaultOptions: LiveSearchOptions<EditLiveSearchCssClasses> =
     {
         componentElement: 'live-search-component',
         searchElement: 'live-search-input',
+        multiple: 'select-flex-1',
+        single: 'absolute-input',
     },
 };
 
@@ -98,6 +100,13 @@ export class EditLiveSearch<TValue = unknown> implements LiveSearch<TValue, Live
      */
     protected htmlInput: Signal<ElementRef<HTMLInputElement>> = viewChild.required('htmlInput');
 
+    //######################### protected properties - template bindings #########################
+
+    /**
+     * Css classes applied to search input element
+     */
+    protected cssClasses: Signal<string[]>;
+
     //######################### public properties - implementation of LiveSearch #########################
 
     /**
@@ -149,6 +158,9 @@ export class EditLiveSearch<TValue = unknown> implements LiveSearch<TValue, Live
                 this.clearSearchInput();
             }
         });
+
+        this.cssClasses = computed(() => [this.options.cssClasses.searchElement,
+                                          ...(this.selectBus.selectOptions().multiple ? [...this.options.cssClasses.multiple.split(' ')] : [...this.options.cssClasses.single.split(' ')])]);
     }
 
     //######################### public methods - implementation of OnDestroy #########################

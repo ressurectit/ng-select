@@ -1,7 +1,7 @@
 import {Component, ChangeDetectionStrategy, Signal, viewChild, effect} from '@angular/core';
 import {ComponentRedirectRoute, ComponentRoute} from '@anglr/common/router';
 import {WithScrollableCssClass} from '@anglr/common';
-import {Select, Option, SelectAbsolute, SelectEdit} from '@anglr/select';
+import {Select, Option, SelectAbsolute, SelectEdit, SelectMultipleKeepPopup} from '@anglr/select';
 import {getValue} from '@anglr/select/extensions';
 
 import {SelectApi} from '../../../../../src/interfaces';
@@ -19,6 +19,7 @@ import {SelectApi} from '../../../../../src/interfaces';
         Option,
         SelectEdit,
         SelectAbsolute,
+        SelectMultipleKeepPopup,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

@@ -8,7 +8,7 @@ import {Popup, PopupOptions, SelectOptionState, SelectPlugin, SimplePopupCssClas
 import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {POPUP_OPTIONS} from '../../../misc/tokens';
-import {AddNewOption, DisplayValue, GroupedListOptions} from '../../../pipes';
+import {AddNewOption, DisplayValue, GroupedListOptions, OptionCssClasses} from '../../../pipes';
 
 //TODO: hover into mouseover => use "active"
 
@@ -24,6 +24,9 @@ const defaultOptions: PopupOptions<SimplePopupCssClasses> =
         optionText: 'option-text',
         optionChecked: 'fas fa-check',
         popupContainer: 'popup-container',
+        active: 'active',
+        selected: 'selected',
+        inGroup: 'in-group',
     },
     texts:
     {
@@ -49,6 +52,7 @@ const defaultOptions: PopupOptions<SimplePopupCssClasses> =
         LocalizePipe,
         DisplayValue,
         NgTemplateOutlet,
+        OptionCssClasses,
         GroupedListOptions,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,

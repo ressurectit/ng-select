@@ -34,4 +34,19 @@ export interface SimplePopupCssClasses extends PopupCssClasses
      * Css class applied directly to css popup container
      */
     popupContainer: string;
+
+    /**
+     * Css class applied to selected option
+     */
+    selected: string;
+
+    /**
+     * Css class applied to active option
+     */
+    active: string;
+
+    /**
+     * Css class applied to option that is displayed inside of group
+     */
+    inGroup: string;
 }

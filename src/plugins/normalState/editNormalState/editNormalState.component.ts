@@ -24,8 +24,11 @@ const defaultOptions: EditNormalStateOptions<EditNormalStateCssClasses> =
         value: 'normal-state-value',
         tag: 'select-tag',
         carret: 'fas fa-caret-down select-align-self-center',
-        cancel: '',
-        cancelIcon: 'fas fa-times',
+        cancel: 'normal-state-cancel',
+        cancelIcon: 'fas fa-times select-align-self-center',
+        valueWrapper: 'select-relative select-flex-1 select-flex-row select-normal-state-gap',
+        valueMultiple: 'select-normal-state-gap select-flex-row',
+        valueSingle: 'select-flex-1',
     },
 };
 
@@ -88,6 +91,11 @@ export class EditNormalState<TValue = unknown> implements NormalState<TValue, Ed
      */
     protected showValue: Signal<boolean>;
 
+    /**
+     * Css classes applied to value element
+     */
+    protected cssClasses: Signal<string[]>;
+
     //######################### protected properties - children #########################
 
     /**
@@ -118,6 +126,9 @@ export class EditNormalState<TValue = unknown> implements NormalState<TValue, Ed
         this.showValue = computed(() => ((hasValue(this.selectBus.selectedOptions()) || !this.selectBus.selectOptions().multiple) &&
                                          (this.selectPlugins.liveSearch()?.emptyInput() || this.selectBus.selectOptions().multiple)) ||
                                         (!this.selectBus.selectOptions().multiple && !hasValue(this.selectBus.selectedOptions()) && !this.selectPlugins.liveSearch()?.emptyInput()));
+
+        this.cssClasses = computed(() => [this.options.cssClasses.value,
+                                          ...(this.selectBus.selectOptions().multiple ? [...this.options.cssClasses.valueMultiple.split(' ')] : [...this.options.cssClasses.valueSingle.split(' ')])]);
     }
 
     //######################### protected methods - template bindings #########################

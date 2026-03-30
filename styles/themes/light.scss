@@ -2,12 +2,30 @@
 @use '../core/defaultTheme' as defaultTheme;
 @use '../core/mixins';
 
-@function defineTheme($fontSize: 14px, $colors: (), $customization: ())
+$_blue: #0066ff;
+
+@function defineTheme($fontSize: 14px, $theme: (), $customization: ())
 {
     $_lightDefaultTheme:
     (
         select:
         (
+            normalState:
+            (
+                borderColor: #bbb,
+                background: #4a4a4a,
+                foreground: #f0f0f0,
+                focus:
+                (
+                    borderColor: $_blue,
+                    outlineColor: $_blue,
+                ),
+                tag:
+                (
+                    background: #666,
+                    foreground: #f0f0f0,
+                ),
+            ),
             popup:
             (
                 container:
@@ -18,10 +36,10 @@
         ),
     );
 
-    $colors: map.deep-merge($_lightDefaultTheme, $colors);
-    $colors: map.deep-merge($colors, $customization);
+    $theme: map.deep-merge($_lightDefaultTheme, $theme);
+    $theme: map.deep-merge($theme, $customization);
 
-    @return defaultTheme.defineTheme($fontSize, $colors);
+    @return defaultTheme.defineTheme($fontSize, $theme);
 }
 
 @mixin buildTheme()

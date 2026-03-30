@@ -34,6 +34,21 @@ export interface EditNormalStateCssClasses extends NormalStateCssClasses
      * Applied to cancel button icon
      */
     cancelIcon: string;
+
+    /**
+     * Applied to HTML element that wraps selected value
+     */
+    valueWrapper: string;
+
+    /**
+     * Applied to HTML element that represents value and holds multiple selected values
+     */
+    valueMultiple: string;
+
+    /**
+     * Applied to HTML element that represents value and holds single selected value
+     */
+    valueSingle: string;
 }
 
 /**

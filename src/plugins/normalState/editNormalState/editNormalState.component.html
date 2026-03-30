@@ -8,13 +8,10 @@
     </div>
 </ng-template>
 
-<div class="select-relative select-flex-1 select-flex-row select-normal-state-gap">
+<div [class]="options.cssClasses.valueWrapper">
     @if(showValue())
     {
-        <div [class]="options.cssClasses.value"
-             [class.select-flex-1]="!selectBus.selectOptions().multiple"
-             [class.select-normal-state-gap]="selectBus.selectOptions().multiple"
-             [class.select-flex-row]="selectBus.selectOptions().multiple">
+        <div [class]="cssClasses()">
             @if(!selectBus.selectOptions().multiple)
             {
                 <ng-container *ngTemplateOutlet="selectBus.selectOptions().templateGatherer.normalStateTemplate() || defaultSingleLook.template; context: {$implicit: this}"/>

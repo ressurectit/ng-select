@@ -6,24 +6,25 @@
         {
             display: flex;
             flex-direction: row;
-            border-width: 2px;
+            border-width: var(--select-normalState-borderWidth);
             border-style: solid;
-            border-color: #666;
-            background-color: #eee;
-            padding: 1px 2px;
-            border-radius: var(--size-4px-fixed);
+            border-color: var(--select-normalState-borderColor);
+            background: var(--select-normalState-background);
+            color: var(--select-normalState-foreground);
+            padding: var(--select-normalState-padding);
+            border-radius: var(--select-normalState-borderRadius);
 
             &:focus-within
             {
-                border-color: #00F;
-                outline-color: #00F;
-                outline-width: 1px;
+                border-color: var(--select-normalState-focus-borderColor);
+                outline-color: var(--select-normalState-focus-outlineColor);
+                outline-width: var(--select-normalState-focus-outlineWidth);
                 outline-style: solid;
             }
     
             .select-normal-state-gap
             {
-                gap: var(--size-xs);
+                gap: var(--select-normalState-gap);
             }
 
             .normal-state-element
@@ -58,11 +59,12 @@
                 flex-direction: row;
                 align-items: center;
                 align-self: center;
-                gap: var(--size-xs);
-                padding: 0px var(--size-xs);
-                border-radius: var(--size-4px-fixed);
-                font-size: .9em;
-                background-color: #ccc;
+                gap: var(--select-normalState-tag-gap);
+                padding: var(--select-normalState-tag-padding);
+                border-radius: var(--select-normalState-tag-borderRadius);
+                font-size: var(--select-normalState-tag-fontSize);
+                background-color: var(--select-normalState-tag-background);
+                color: var(--select-normalState-tag-foreground);
             }
 
             button
@@ -76,7 +78,7 @@
             {
                 &:hover
                 {
-                    color: hsl(from #000 h s 50%);
+                    color: hsl(from var(--select-normalState-foreground) h s 50%);
                 }
             }
         }
