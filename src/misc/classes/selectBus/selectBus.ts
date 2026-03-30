@@ -1,4 +1,5 @@
 import {Injectable, ElementRef, signal, WritableSignal, Signal, computed} from '@angular/core';
+import {generateId} from '@jscrpt/common';
 import {Subject} from 'rxjs';
 
 import {SelectEvents, SelectBusOptions, SelectEvent, SelectOptionState, KeyboardAction} from '../../../interfaces';
@@ -10,6 +11,11 @@ import {SelectEvents, SelectBusOptions, SelectEvent, SelectOptionState, Keyboard
 export class SelectBus<TValue = unknown, TAction = string> implements SelectEvents
 {
     //######################### public properties #########################
+
+    /**
+     * Unique id of select
+     */
+    public readonly id: string = `$id${generateId(10)}`;
 
     /**
      * Options passed to select

@@ -1,10 +1,13 @@
 <input #htmlInput
        type="text"
+       aria-autocomplete="list"
        autocorrect="off"
        autocapitalize="none"
        autocomplete="off"
        role="combobox"
+       [attr.aria-expanded]="selectBus.popupVisible()"
        [attr.aria-label]="selectBus.selectedOptions() | displayValue | localize"
+       [attr.aria-controls]="selectBus.id"
        [class]="cssClasses()"
        [tooltip]="selectBus.selectedOptions() | displayValue | localize"
        [disabled]="selectBus.selectOptions().readonly"

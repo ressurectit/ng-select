@@ -44,6 +44,7 @@ const defaultOptions: PopupOptions<SimplePopupCssClasses> =
     templateUrl: 'simplePopup.component.html',
     host:
     {
+        '[id]': 'selectBus.id',
         '[class]': 'options.cssClasses.componentElement',
     },
     imports:

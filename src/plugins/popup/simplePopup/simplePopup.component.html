@@ -4,8 +4,9 @@
 @if(selectBus.popupVisible() || options.visible)
 {
     @let listOptions = selectPlugins.OptionsHandler.listOptions() | groupedListOptions;
+    @let index = 0;
     
-    <div [class]="options.cssClasses.popupContainer" role="listbox">
+    <div [class]="options.cssClasses.popupContainer" role="listbox" aria-label="Options List">
         <ng-container #liveSearchPlaceholder/>
 
         @for(optionsGroups of listOptions; track $index)
@@ -22,8 +23,9 @@
 
             @for(option of opts; track option)
             {
-                <div [class]="option | optionCssClasses: options.cssClasses: group"
-                     role="option"
+                <div role="option"
+                     [id]="`${selectBus.id}-${index}`"
+                     [class]="option | optionCssClasses: options.cssClasses: group"
                      (mouseover)="markActive(option)"
                      (mousedown)="preventBlur($event)"
                      (click)="optionClick(option)">
