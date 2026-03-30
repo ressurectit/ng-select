@@ -12,9 +12,9 @@ $_blue: #0066ff;
         (
             normalState:
             (
-                borderColor: #bbb,
-                background: #4a4a4a,
-                foreground: #f0f0f0,
+                borderColor: #666,
+                background: #eee,
+                foreground: #000,
                 focus:
                 (
                     borderColor: $_blue,
@@ -22,8 +22,8 @@ $_blue: #0066ff;
                 ),
                 tag:
                 (
-                    background: #666,
-                    foreground: #f0f0f0,
+                    background: #ccc,
+                    foreground: #000,
                 ),
             ),
             popup:
