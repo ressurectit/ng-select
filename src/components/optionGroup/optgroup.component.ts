@@ -20,6 +20,11 @@ export class OptionGroup implements SelectOptionGroup
     /**
      * @inheritdoc
      */
+    public index: number = 0;
+
+    /**
+     * @inheritdoc
+     */
     public template: Signal<TemplateRef<{$implicit: string}>|undefined|null> = contentChild(OptionGroupTemplate, {read: TemplateRef});
 
     /**

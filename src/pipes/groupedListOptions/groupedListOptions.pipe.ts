@@ -12,18 +12,26 @@ export class GroupedListOptions implements PipeTransform
      * Gets list of options grouped
      * @param value - Obtains tuple with options and their corresponding groups
      */
-    public transform<TValue>(value: readonly SelectOptionState<TValue>[]|null|undefined): [readonly SelectOptionState<TValue>[], SelectOptionGroup|null][]
+    public transform<TValue>(value: readonly SelectOptionState<TValue>[]|null|undefined): [[readonly SelectOptionState<TValue>[], SelectOptionGroup|null][], number]
     {
         if(!value?.length)
         {
-            return [];
+            return [[], 0];
         }
 
         const result: [SelectOptionState<TValue>[], SelectOptionGroup|null][] = [];
+        let index = 0;
 
         for(const option of value)
         {
             const group = option.group();
+
+            if(group)
+            {
+                group.index = index++;
+            }
+
+            option.index = index++;
 
             //first one
             if(!result.length)
@@ -45,6 +53,6 @@ export class GroupedListOptions implements PipeTransform
             }
         }
 
-        return result;
+        return [result, index];
     }
 }

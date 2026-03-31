@@ -2,7 +2,7 @@
 <ng-template #defaultMultipleLook="normalStateTagTemplate" normalStateTagTemplate let-option let-normalState="normalState">
     <div [class]="options.cssClasses.tag">
         <span>{{option | displayValue | localize}}</span>
-        <button type="button" (click)="optionClick(option)">
+        <button type="button" (click)="optionClick(option)" tabindex="-1" aria-hidden="true">
             <span>x</span>
         </button>
     </div>

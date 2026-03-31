@@ -40,6 +40,7 @@ export class CodeOptionsGatherer<TValue = unknown> implements OptionsGatherer<TV
 
             opt.active = signal(false);
             opt.selected = signal(false);
+            opt.index = 0;
 
             availableOptions.push(opt);
         }

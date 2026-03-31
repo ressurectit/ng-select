@@ -14,7 +14,12 @@ import {OptionGroup} from '../optionGroup/optgroup.component';
 })
 export class Option<TValue = unknown> implements SelectOptionState<TValue>
 {
-    //######################### public properties - implementation of ɵSelectOption #########################
+    //######################### public properties - implementation of SelectOptionState #########################
+
+    /**
+     * @inheritdoc
+     */
+    public index: number = 0;
 
     /**
      * @inheritdoc

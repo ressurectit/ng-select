@@ -106,6 +106,7 @@ export class DynamicValueHandler<TValue = unknown> implements ValueHandler<TValu
                     const opt = selectedOption as SelectOptionState<TValue>;
                     opt.active = signal(false);
                     opt.selected = signal(true);
+                    opt.index = 0;
 
                     selectedOptions.push(opt);
                 }
@@ -121,6 +122,7 @@ export class DynamicValueHandler<TValue = unknown> implements ValueHandler<TValu
                 {
                     opt.active = signal(false);
                     opt.selected = signal(true);
+                    opt.index = 0;
                 }
 
                 this.selectBus.selectedOptions.set(opt ?? null);

@@ -107,6 +107,11 @@ export class EditLiveSearch<TValue = unknown> implements LiveSearch<TValue, Live
      */
     protected cssClasses: Signal<string[]>;
 
+    /**
+     * Active descendant for aria-activedescendant attribute
+     */
+    protected activeDescendant: Signal<string>;
+
     //######################### public properties - implementation of LiveSearch #########################
 
     /**
@@ -161,6 +166,8 @@ export class EditLiveSearch<TValue = unknown> implements LiveSearch<TValue, Live
 
         this.cssClasses = computed(() => [this.options.cssClasses.searchElement,
                                           ...(this.selectBus.selectOptions().multiple ? [...this.options.cssClasses.multiple.split(' ')] : [...this.options.cssClasses.single.split(' ')])]);
+
+        this.activeDescendant = computed(() => `${this.selectBus.id}-${this.selectPlugins.optionsHandler()?.listOptions()?.find(option => option.active())?.index}`);
     }
 
     //######################### public methods - implementation of OnDestroy #########################

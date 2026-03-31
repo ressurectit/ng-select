@@ -65,6 +65,7 @@ export abstract class OptionsHandlerBase<TValue = unknown, TOptions extends Opti
             newOption.created = true;
             newOption.selected = signal(false);
             newOption.active = signal(false);
+            newOption.index = 0;
 
             this.firstOption.set(newOption);
         });

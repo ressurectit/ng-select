@@ -8,6 +8,11 @@ import {SelectOption} from '../selectOption/selectOption.interface';
 export interface SelectOptionState<TValue = unknown> extends SelectOption<TValue>
 {
     /**
+     * Index of the option in the list of options
+     */
+    index: number;
+
+    /**
      * Indication whether is item active
      */
     active: WritableSignal<boolean>;
