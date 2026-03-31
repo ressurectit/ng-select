@@ -4,6 +4,10 @@
         role="combobox"
         [class]="options.cssClasses.element"
         [disabled]="!!selectBus.selectOptions().readonly"
+        [attr.aria-expanded]="selectBus.popupVisible()"
+        [attr.aria-controls]="selectBus.popupVisible() ? selectBus.id : null"
+        [attr.aria-activedescendant]="selectBus.popupVisible() ? activeDescendant() : null"
+        [attr.aria-label]="selectBus.selectedOptions() | displayValue | localize"
         [tooltip]="selectBus.selectedOptions() | displayValue | localize"
         (click)="click()"
         (blur)="blur()"
@@ -20,6 +24,6 @@
     </button>
 }
 
-<button type="button" [class]="options.cssClasses.carret" (click)="click()" (focus)="focus()" (blur)="blur()" tabindex="-1">
+<button type="button" [class]="options.cssClasses.carret" (click)="click()" (focus)="focus()" (blur)="blur()" tabindex="-1" aria-hidden="true">
     <span [class]="options.cssClasses.carretIcon"></span>
 </button>

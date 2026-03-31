@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, ElementRef, Inject, inject, Optional} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, ElementRef, Inject, inject, Optional, Signal} from '@angular/core';
 import {NgTemplateOutlet} from '@angular/common';
 import {LocalizePipe, TooltipDirective} from '@anglr/common';
 import {RecursivePartial} from '@jscrpt/common';
@@ -73,11 +73,20 @@ export class SimpleNormalState<TValue = unknown> implements NormalState<TValue, 
      */
     public selectBus: SelectBus<TValue> = inject(SelectBus);
 
+    //######################### protected properties - template bindings #########################
+
+    /**
+     * Active descendant for aria-activedescendant attribute
+     */
+    protected activeDescendant: Signal<string>;
+
     //######################### constructor #########################
     constructor(@Inject(NORMAL_STATE_OPTIONS) @Optional() options?: RecursivePartial<NormalStateOptions<SimpleNormalStateCssClasses>>|null,)
     {
         this.options = deepCopyWithArrayOverride(defaultOptions as NormalStateOptions<SimpleNormalStateCssClasses>,
                                                  options);
+
+        this.activeDescendant = computed(() => `${this.selectBus.id}-${this.selectPlugins.optionsHandler()?.listOptions()?.find(option => option.active())?.index}`);
     }
 
     //######################### protected methods - template bindings #########################

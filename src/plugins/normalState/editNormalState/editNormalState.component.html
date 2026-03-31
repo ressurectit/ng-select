@@ -38,7 +38,7 @@
 
 @if(options.carret)
 {
-    <button type="button" (click)="click()" (focus)="focus()" (blur)="blur()" tabindex="-1">
+    <button type="button" (click)="click()" (focus)="focus()" (blur)="blur()" tabindex="-1" aria-hidden="true">
         <span [class]="options.cssClasses.carret"></span>
     </button>
 }
