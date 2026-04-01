@@ -2,6 +2,7 @@ export * from './interactions/interactions.interface';
 export * from './keyboardHandler/keyboardHandler.interface';
 export * from './keyboardHandler/simpleKeyboardHandler.interface';
 export * from './liveSearch/editLiveSearch.interface';
+export * from './liveSearch/filterLiveSearch.interface';
 export * from './liveSearch/liveSearch.interface';
 export * from './normalState/editNormalState.interface';
 export * from './normalState/normalState.interface';

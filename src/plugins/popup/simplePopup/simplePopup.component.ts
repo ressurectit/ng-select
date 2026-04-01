@@ -32,6 +32,7 @@ const defaultOptions: PopupOptions<SimplePopupCssClasses> =
     {
         noAvailableOptions: 'no options available',
         addNewOption: 'add new option',
+        optionsList: 'options list',
     },
 };
 

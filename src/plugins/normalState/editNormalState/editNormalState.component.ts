@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, computed, effect, ElementRef, Inject, inject, Optional, Signal, viewChild} from '@angular/core';
 import {NgTemplateOutlet} from '@angular/common';
-import {LocalizePipe} from '@anglr/common';
+import {LocalizePipe, TooltipDirective} from '@anglr/common';
 import {RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
@@ -18,6 +18,10 @@ const defaultOptions: EditNormalStateOptions<EditNormalStateCssClasses> =
 {
     cancelValue: true,
     carret: false,
+    texts:
+    {
+        cancelTitle: 'cancel selected values',
+    },
     cssClasses:
     {
         componentElement: 'normal-state-component',
@@ -48,6 +52,7 @@ const defaultOptions: EditNormalStateOptions<EditNormalStateCssClasses> =
         HasValue,
         DisplayValue,
         LocalizePipe,
+        TooltipDirective,
         NgTemplateOutlet,
         NormalStateTemplate,
         NormalStateTagTemplate,

@@ -15,6 +15,11 @@ export interface PopupTexts
      * Displayed when add new option is displayed
      */
     addNewOption: string;
+
+    /**
+     * ARIA label for options list
+     */
+    optionsList: string;
 }
 
 /**

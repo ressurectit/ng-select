@@ -1,16 +1,21 @@
 import {afterRenderEffect, ChangeDetectionStrategy, Component, computed, ElementRef, Inject, inject, Optional, signal, Signal, WritableSignal} from '@angular/core';
 import {debounce, form, FormField} from '@angular/forms/signals';
+import {LocalizePipe} from '@anglr/common';
 import {RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
-import {LiveSearch, LiveSearchCssClasses, LiveSearchOptions} from '../../../interfaces';
+import {LiveSearch, LiveSearchCssClasses, FilterLiveSearchOptions} from '../../../interfaces';
 import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {LIVE_SEARCH_OPTIONS} from '../../../misc/tokens';
 
-const defaultOptions: LiveSearchOptions<LiveSearchCssClasses> =
+const defaultOptions: FilterLiveSearchOptions<LiveSearchCssClasses> =
 {
     searchDebounceTimeout: 280,
+    texts:
+    {
+        searchPlaceholder: 'filter options',
+    },
     cssClasses:
     {
         componentElement: 'live-search-component',
@@ -31,10 +36,11 @@ const defaultOptions: LiveSearchOptions<LiveSearchCssClasses> =
     imports:
     [
         FormField,
+        LocalizePipe,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FilterLiveSearch<TValue = unknown> implements LiveSearch<TValue, LiveSearchOptions<LiveSearchCssClasses>>
+export class FilterLiveSearch<TValue = unknown> implements LiveSearch<TValue, FilterLiveSearchOptions<LiveSearchCssClasses>>
 {
     //######################### protected fields #########################
 
@@ -56,7 +62,7 @@ export class FilterLiveSearch<TValue = unknown> implements LiveSearch<TValue, Li
      * @inheritdoc
      */
     @CopyOptionsAsSignal()
-    public options: LiveSearchOptions<LiveSearchCssClasses>;
+    public options: FilterLiveSearchOptions<LiveSearchCssClasses>;
 
     /**
      * @inheritdoc
@@ -89,9 +95,9 @@ export class FilterLiveSearch<TValue = unknown> implements LiveSearch<TValue, Li
     }
 
     //######################### constructor #########################
-    constructor(@Inject(LIVE_SEARCH_OPTIONS) @Optional() options?: RecursivePartial<LiveSearchOptions<LiveSearchCssClasses>>|null,)
+    constructor(@Inject(LIVE_SEARCH_OPTIONS) @Optional() options?: RecursivePartial<FilterLiveSearchOptions<LiveSearchCssClasses>>|null,)
     {
-        this.options = deepCopyWithArrayOverride(defaultOptions as LiveSearchOptions<LiveSearchCssClasses>,
+        this.options = deepCopyWithArrayOverride(defaultOptions as FilterLiveSearchOptions<LiveSearchCssClasses>,
                                                  options);
 
         this.search = computed(() =>

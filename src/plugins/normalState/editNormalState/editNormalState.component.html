@@ -31,7 +31,13 @@
 
 @if(options.cancelValue && (selectBus.selectedOptions() | hasValue))
 {
-    <button type="button" [class]="options.cssClasses.cancel" (focus)="focus()" (blur)="blur()" (click)="cancel()">
+    <button type="button" 
+            [class]="options.cssClasses.cancel" 
+            [tooltip]="options.texts.cancelTitle | localize" 
+            [attr.aria-label]="options.texts.cancelTitle | localize"
+            (focus)="focus()" 
+            (blur)="blur()" 
+            (click)="cancel()">
         <span [class]="options.cssClasses.cancelIcon"></span>
     </button>
 }

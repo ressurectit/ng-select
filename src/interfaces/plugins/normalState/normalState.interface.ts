@@ -2,6 +2,19 @@ import {SelectPlugin} from '../../selectPlugin/selectPlugin.interface';
 import {VisualPluginOptions} from '../../visualPluginOptions/visualPluginOptions.interface';
 
 /**
+ * Texts that are used within normal state plugin
+ */
+export interface NormalStateTexts
+{
+    //######################### properties #########################
+
+    /**
+     * Title for cancel button
+     */
+    cancelTitle: string;
+}
+
+/**
  * CSS classes for normal state plugin
  */
 export interface NormalStateCssClasses
@@ -19,6 +32,11 @@ export interface NormalStateOptions<TCssClasses extends NormalStateCssClasses = 
      * Indication whether allow cancel value
      */
     cancelValue: boolean;
+
+    /**
+     * Texts used within normal state plugin
+     */
+    texts: NormalStateTexts;
 }
 
 /**

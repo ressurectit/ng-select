@@ -7,7 +7,7 @@
     @let listOptions = result[0];
     @let size = result[1];
     
-    <div [class]="options.cssClasses.popupContainer" role="listbox" aria-label="Options List">
+    <div [class]="options.cssClasses.popupContainer" role="listbox" [attr.aria-label]="options.texts.optionsList | localize">
         <ng-container #liveSearchPlaceholder/>
 
         @for(optionsGroups of listOptions; track $index)
@@ -50,7 +50,7 @@
         }
         @empty 
         {
-            <div>{{options.texts.noAvailableOptions}}</div>
+            <div>{{options.texts.noAvailableOptions | localize}}</div>
         }
     </div>
 }

@@ -129,6 +129,13 @@
 - new `SelectMultipleKeepPopup` directive, that that keeps popup open when multiple is set for Select
 - new `hasValue` function, that tests whether value is set
 - new `OptionCssClasses` pipe, that obtains css classes for popup option
+- new `FilterLiveSearchOptions` interface, that are options for filter live search plugin
+   - extends `LiveSearchOptions`
+   - **properties**
+      - `texts` texts that are used within filter live search
+- new `FilterLiveSearchTexts` interface, that are texts that are used within filter live search
+   - **properties**
+      - `searchPlaceholder` placeholder for search input
 - updated `SelectPluginTypes` interface
    - **new properties**
       - `Interactions` handles interactions of plugins and select

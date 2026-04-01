@@ -15,6 +15,10 @@ import {DisplayValue, HasValue} from '../../../pipes';
 const defaultOptions: NormalStateOptions<SimpleNormalStateCssClasses> =
 {
     cancelValue: false,
+    texts:
+    {
+        cancelTitle: 'cancel selected values',
+    },
     cssClasses:
     {
         componentElement: 'normal-state-component',
