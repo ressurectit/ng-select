@@ -183,6 +183,16 @@ export class EditLiveSearch<TValue = unknown> implements LiveSearch<TValue, Live
         }
     }
 
+    //######################### public methods - implementation of LiveSearch #########################
+
+    /**
+     * @inheritdoc
+     */
+    public focus(): void
+    {
+        this.htmlInput().nativeElement.focus();
+    }
+
     //######################### protected methods - template bindings #########################
 
     /**
@@ -206,7 +216,7 @@ export class EditLiveSearch<TValue = unknown> implements LiveSearch<TValue, Live
     /**
      * Handles focus event
      */
-    protected focus(): void
+    protected handleFocus(): void
     {
         this.selectBus.internalsFocus.next(
         {

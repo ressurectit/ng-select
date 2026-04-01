@@ -75,6 +75,11 @@ export class SimpleInteractions<TValue = unknown> implements Interactions<TValue
         this.initSubscriptions.add(this.selectBus.optionActivate.subscribe(event => selectOption(this.selectBus, event.data)));
         this.initSubscriptions.add(this.selectBus.internalsFocus.subscribe(() => this.selectBus.hasFocus.set(true)));
         this.initSubscriptions.add(this.selectBus.internalsBlur.subscribe(() => this.selectBus.hasFocus.set(false)));
+        this.initSubscriptions.add(this.selectBus.focusSet.subscribe(() =>
+        {
+            this.selectPlugins.normalState()?.focus();
+            this.selectPlugins.liveSearch()?.focus();
+        }));
 
         effect(() =>
         {

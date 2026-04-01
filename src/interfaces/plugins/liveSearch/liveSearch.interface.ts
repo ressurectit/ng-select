@@ -43,4 +43,11 @@ export interface LiveSearch<TValue = unknown, TOptions extends LiveSearchOptions
      * Indication whether input search value is empty
      */
     readonly emptyInput: Signal<boolean>;
+
+    //######################### methods #########################
+
+    /**
+     * Sets focus on plugin element
+     */
+    focus(): void;
 }

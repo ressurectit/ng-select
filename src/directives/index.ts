@@ -7,5 +7,6 @@ export * from './selectControlValueAccessor/selectControlValueAccessor.directive
 export * from './selectEdit/selectEdit.directive';
 export * from './selectFormControl/selectFormControl.directive';
 export * from './selectMultipleKeepPopup/selectMultipleKeepPopup.directive';
+export * from './selectNoCarret/selectNoCarret.directive';
 export * from './selectPlaceholder/selectPlaceholder.directive';
 export * from './withDirectAccess/withDirectAccess.directive';

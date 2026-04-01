@@ -136,6 +136,7 @@
 - new `FilterLiveSearchTexts` interface, that are texts that are used within filter live search
    - **properties**
       - `searchPlaceholder` placeholder for search input
+- new `SelectNoCarret` directive, that is used for hiding carret on Select (normal state)
 - updated `SelectPluginTypes` interface
    - **new properties**
       - `Interactions` handles interactions of plugins and select

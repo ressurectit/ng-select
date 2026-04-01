@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, computed, ElementRef, Inject, inject, Optional, Signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, ElementRef, Inject, inject, Optional, Signal, viewChild} from '@angular/core';
 import {NgTemplateOutlet} from '@angular/common';
 import {LocalizePipe, TooltipDirective} from '@anglr/common';
 import {RecursivePartial} from '@jscrpt/common';
@@ -84,6 +84,13 @@ export class SimpleNormalState<TValue = unknown> implements NormalState<TValue, 
      */
     protected activeDescendant: Signal<string>;
 
+    //######################### protected properties - children #########################
+
+    /**
+     * Reference to button element in template
+     */
+    protected htmlButton: Signal<ElementRef<HTMLButtonElement>> = viewChild.required('htmlButton', {read: ElementRef});
+
     //######################### constructor #########################
     constructor(@Inject(NORMAL_STATE_OPTIONS) @Optional() options?: RecursivePartial<NormalStateOptions<SimpleNormalStateCssClasses>>|null,)
     {
@@ -91,6 +98,16 @@ export class SimpleNormalState<TValue = unknown> implements NormalState<TValue, 
                                                  options);
 
         this.activeDescendant = computed(() => `${this.selectBus.id}-${this.selectPlugins.optionsHandler()?.listOptions()?.find(option => option.active())?.index}`);
+    }
+
+    //######################### public methods - implementation of LiveSearch #########################
+
+    /**
+     * @inheritdoc
+     */
+    public focus(): void
+    {
+        this.htmlButton()?.nativeElement.focus();
     }
 
     //######################### protected methods - template bindings #########################
@@ -111,7 +128,7 @@ export class SimpleNormalState<TValue = unknown> implements NormalState<TValue, 
     /**
      * Handles focus event
      */
-    protected focus(): void
+    protected handleFocus(): void
     {
         this.selectBus.internalsFocus.next(
         {

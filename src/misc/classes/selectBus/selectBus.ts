@@ -86,6 +86,11 @@ export class SelectBus<TValue = unknown, TAction = string> implements SelectEven
      */
     public readonly internalsBlur: Subject<SelectEvent> = new Subject<SelectEvent>();
 
+    /**
+     * Occurs when focus is set on select
+     */
+    public readonly focusSet: Subject<void> = new Subject<void>();
+
     //######################### public properties - events #########################
 
     /**
@@ -102,4 +107,14 @@ export class SelectBus<TValue = unknown, TAction = string> implements SelectEven
      * @inheritdoc
      */
     public readonly blur: Subject<SelectEvent> = new Subject<SelectEvent>();
+
+    //######################### public methods - events #########################
+
+    /**
+     * @inheritdoc
+     */
+    public setFocus(): void
+    {
+        this.focusSet.next();
+    }
 }

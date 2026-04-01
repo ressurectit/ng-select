@@ -44,4 +44,10 @@ export interface NormalStateOptions<TCssClasses extends NormalStateCssClasses = 
  */
 export interface NormalState<TValue = unknown, TOptions extends NormalStateOptions = NormalStateOptions> extends SelectPlugin<TOptions, TValue>
 {
+    //######################### methods #########################
+
+    /**
+     * Sets focus on plugin element
+     */
+    focus(): void;
 }

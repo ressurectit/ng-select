@@ -7,7 +7,7 @@ import {SelectEvent} from '../selectEvent/selectEvent.interface';
  */
 export interface SelectEvents
 {
-    //######################### public properties - events #########################
+    //######################### properties - events #########################
 
     /**
      * Occurs when any part of select gains focus
@@ -23,4 +23,11 @@ export interface SelectEvents
      * Occurs when any part of select loses focus
      */
     readonly blur: Observable<SelectEvent>;
+
+    //######################### methods - events #########################
+
+    /**
+     * Sets focus on Select.
+     */
+    setFocus(): void;
 }

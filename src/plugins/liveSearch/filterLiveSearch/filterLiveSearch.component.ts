@@ -116,6 +116,15 @@ export class FilterLiveSearch<TValue = unknown> implements LiveSearch<TValue, Fi
         });
     }
 
+    //######################### public methods - implementation of LiveSearch #########################
+
+    /**
+     * @inheritdoc
+     */
+    public focus(): void
+    {
+    }
+
     //######################### protected methods - template bindings #########################
 
     /**

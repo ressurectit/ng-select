@@ -15,6 +15,6 @@
        [disabled]="selectBus.selectOptions().readonly"
        [placeholder]="(!(selectBus.selectedOptions() | hasValue) ? selectBus.selectOptions().placeholder : '') | localize"
        (click)="click()"
-       (focus)="focus()"
+       (focus)="handleFocus()"
        (blur)="blur()"
        (input)="input($event)">

@@ -17,7 +17,7 @@ import {hasValue} from '../../../misc/utils';
 const defaultOptions: EditNormalStateOptions<EditNormalStateCssClasses> =
 {
     cancelValue: true,
-    carret: false,
+    carret: true,
     texts:
     {
         cancelTitle: 'cancel selected values',
@@ -136,6 +136,15 @@ export class EditNormalState<TValue = unknown> implements NormalState<TValue, Ed
                                           ...(this.selectBus.selectOptions().multiple ? [...this.options.cssClasses.valueMultiple.split(' ')] : [...this.options.cssClasses.valueSingle.split(' ')])]);
     }
 
+    //######################### public methods - implementation of LiveSearch #########################
+
+    /**
+     * @inheritdoc
+     */
+    public focus(): void
+    {
+    }
+
     //######################### protected methods - template bindings #########################
 
     /**
@@ -154,7 +163,7 @@ export class EditNormalState<TValue = unknown> implements NormalState<TValue, Ed
     /**
      * Handles focus event
      */
-    protected focus(): void
+    protected handleFocus(): void
     {
         this.selectBus.internalsFocus.next(
         {
