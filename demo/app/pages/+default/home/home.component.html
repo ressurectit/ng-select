@@ -9,7 +9,7 @@
     
     <div class="form-group">
         <div class="control-label">test</div>
-        <ng-select class="form-control" absolute edit multiple>
+        <ng-select class="form-control" absolute multiple [formField]="value">
             <ng-option text="ľaľa" [value]="8123" />
             <ng-option text="text4" [value]="8456" />
 
@@ -23,6 +23,7 @@
     </div>
     
     <div>xxxxxx</div>
+    <div>{{value().dirty()}} {{value().value()}} {{value().touched()}}</div>
     <div>xxxxxx</div>
     <div>xxxxxx</div>
     <div>xxxxxx</div>

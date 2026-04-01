@@ -1,9 +1,8 @@
-import {Directive, effect, model, ModelSignal} from '@angular/core';
+import {Directive, effect, model, ModelSignal, untracked} from '@angular/core';
+import {isEqual} from 'lodash-es';
 
 import {SelectPluginType} from '../../misc/enums';
 import {Select} from '../../components/select/select.component';
-
-//TODO: finish, fix cycle
 
 /**
  * Directive that allows direct access to select properties using inputs, outputs
@@ -33,12 +32,13 @@ export class WithDirectAccess<TValue = unknown>
 
             const value = this.value();
 
-            if(value === undefined)
+            untracked(() =>
             {
-                return;
-            }
-
-            select.getPlugin(SelectPluginType.ValueHandler).setValue(value);
+                if(!isEqual(select.getPlugin(SelectPluginType.ValueHandler).value(), value))
+                {
+                    select.getPlugin(SelectPluginType.ValueHandler).setValue(value);
+                }
+            });
         });
 
         effect(() =>
@@ -50,12 +50,13 @@ export class WithDirectAccess<TValue = unknown>
 
             const value = select.getPlugin(SelectPluginType.ValueHandler).value();
 
-            if(value === undefined)
+            untracked(() =>
             {
-                return;
-            }
-
-            this.value.set(value);
+                if(!isEqual(this.value(), value))
+                {
+                    this.value.set(value);
+                }
+            });
         });
     }
 }

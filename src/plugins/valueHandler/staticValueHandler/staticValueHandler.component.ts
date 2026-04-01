@@ -145,17 +145,19 @@ export class StaticValueHandler<TValue = unknown> implements ValueHandler<TValue
 
                     if(option)
                     {
+                        option.selected.set(true);
                         selectedOptions.push(option);
                     }
                 }
 
-                this.logger.verbose('Select: Value handler: selecting single option value"{{@(4)value}}"', {value: selectedOptions});
+                this.logger.verbose('Select: Value handler: selecting multiple options value "{{@(4)value}}"', {value: selectedOptions});
                 this.selectBus.selectedOptions.set(selectedOptions);
             }
             else
             {
                 const selectedOption = availableOptions.find(opt => compareValueAndOption(value as TValue, opt, this.selectBus));
-                this.logger.verbose('Select: Value handler: selecting single option value"{{@(4)value}}"', {value: selectedOption?.value()});
+                selectedOption?.selected.set(true);
+                this.logger.verbose('Select: Value handler: selecting single option value "{{@(4)value}}"', {value: selectedOption?.value()});
 
                 this.selectBus.selectedOptions.set(selectedOption ?? null);
             }

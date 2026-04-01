@@ -1,7 +1,8 @@
-import {Component, ChangeDetectionStrategy, Signal, viewChild, effect} from '@angular/core';
+import {Component, ChangeDetectionStrategy, Signal, viewChild, effect, signal} from '@angular/core';
+import {FormField, form} from '@angular/forms/signals';
 import {ComponentRedirectRoute, ComponentRoute} from '@anglr/common/router';
 import {WithScrollableCssClass} from '@anglr/common';
-import {Select, Option, SelectAbsolute, SelectEdit, SelectMultipleKeepPopup} from '@anglr/select';
+import {Select, Option, SelectAbsolute, SelectFormControl} from '@anglr/select';
 import {getValue} from '@anglr/select/extensions';
 
 import {SelectApi} from '../../../../../src/interfaces';
@@ -17,9 +18,9 @@ import {SelectApi} from '../../../../../src/interfaces';
     [
         Select,
         Option,
-        SelectEdit,
+        FormField,
         SelectAbsolute,
-        SelectMultipleKeepPopup,
+        SelectFormControl,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -29,6 +30,8 @@ import {SelectApi} from '../../../../../src/interfaces';
 export class HomeComponent
 {
     protected select: Signal<SelectApi> = viewChild.required(Select);
+
+    protected value = form(signal([]));
 
     constructor()
     {
