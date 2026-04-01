@@ -1,6 +1,7 @@
-import {forwardRef, ExistingProvider, Directive, OnDestroy, WritableSignal, signal, effect} from '@angular/core';
+import {forwardRef, ExistingProvider, Directive, OnDestroy, WritableSignal, signal, effect, untracked} from '@angular/core';
 import {NG_VALUE_ACCESSOR, ControlValueAccessor} from '@angular/forms';
 import {Action1, NoopAction} from '@jscrpt/common';
+import {isEqual} from 'lodash-es';
 import {Subscription} from 'rxjs';
 
 import {SelectPluginType} from '../../misc/enums';
@@ -83,7 +84,15 @@ export class SelectControlValueAccessor<TValue = unknown> implements ControlValu
                 return;
             }
 
-            this.onChange?.(select.getPlugin(SelectPluginType.ValueHandler).value());
+            const value = select.getPlugin(SelectPluginType.ValueHandler).value();
+
+            untracked(() =>
+            {
+                if(!isEqual(value, this.value()))
+                {
+                    this.onChange?.(value);
+                }
+            });
         });
 
         this.initSubscriptions.add(select.events.focus.subscribe(() => this.onTouched?.()));
