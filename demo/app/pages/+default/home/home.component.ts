@@ -1,9 +1,9 @@
 import {Component, ChangeDetectionStrategy, Signal, viewChild, effect, signal} from '@angular/core';
 import {FormField, form} from '@angular/forms/signals';
 import {ComponentRedirectRoute, ComponentRoute} from '@anglr/common/router';
-import {WithScrollableCssClass} from '@anglr/common';
 import {Select, Option, SelectFormControl} from '@anglr/select';
 import {getValue} from '@anglr/select/extensions';
+import {WithScrollableCssClass} from '@anglr/common';
 
 import {SelectApi} from '../../../../../src/interfaces';
 

@@ -1,0 +1,12 @@
+<div class="page-content">
+    <div>Value: {{value().value() | json}}</div>
+    <div>Dirty: {{value().dirty()}}</div>
+    <div>Touched: {{value().touched()}}</div>
+
+    <ng-select [formField]="value">
+        @for(option of lazyOptions(); track option)
+        {
+            <ng-option [value]="option.kod" [text]="option.popis ?? ''"/>
+        }
+    </ng-select>
+</div>
