@@ -12,6 +12,7 @@ import {SimpleKeyboardActionTypes} from '../../../misc/types';
 
 const defaultOptions: InteractionsOptions =
 {
+    handleClickOutside: true,
 };
 
 /**
@@ -107,6 +108,11 @@ export class SimpleInteractions<TValue = unknown> implements Interactions<TValue
 
         effect(() =>
         {
+            if(!this.options.handleClickOutside)
+            {
+                return;
+            }
+
             const popupVisible = this.selectBus.popupVisible();
 
             this.clickOutsideUnregister?.();

@@ -75,6 +75,8 @@
 - new `SimpleInteractions` plugin component, that provides simple interactions within select among plugins
 - new `Interactions` plugin interface, that represents interactions plugin interface
 - new `InteractionsOptions` interface, that represents options for interactions plugin
+   - **properties**
+      - `handleClickOutside` indication whether click outside should be handled by plugin. If true, click outside will close popup
 - new `OptionGroupTemplate` directive, used for obtaining template for option group in popup
    - **properties**
       - `template` instance of template for options group in popup
@@ -137,6 +139,12 @@
    - **properties**
       - `searchPlaceholder` placeholder for search input
 - new `SelectNoCarret` directive, that is used for hiding carret on Select (normal state)
+- new `PopoverPositioner` plugin component, that is used for positioning popup using native popover features of browser
+   - **implements**
+      - `Positioner`
+- new `PopoverPositionerOptions` interface, that are options for popover positioner plugin
+   - **properties**
+      - `popoverAuto` indication whether popover property should be set to 'auto' or 'manual'
 - updated `SelectPluginTypes` interface
    - **new properties**
       - `Interactions` handles interactions of plugins and select

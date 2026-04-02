@@ -6,6 +6,12 @@ import {SelectPlugin} from '../../selectPlugin/selectPlugin.interface';
  */
 export interface InteractionsOptions extends PluginOptions
 {
+    //######################### properties #########################
+
+    /**
+     * Indication whether click outside should be handled by plugin. If true, click outside will close popup
+     */
+    handleClickOutside: boolean;
 }
 
 /**

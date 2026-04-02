@@ -1,10 +1,30 @@
 @mixin css
 {
+    ng-select,
     .select-component
     {
         .popup-component
         {
             display: block;
+            max-height: 50dvh;
+
+            &[popover]:not(:popover-open):not(dialog[open])
+            {
+                display: none;
+            }
+
+            &.popover-popup
+            {
+                position: absolute;
+                position-anchor: --popup-anchor;
+                inset: auto;
+                top: anchor(bottom);
+                left: anchor(left);
+                min-width: anchor-size(width);
+                border: none;
+                margin: 0;
+                position-try-fallbacks: --popup-top, --popup-left, --popup-top-left;
+            }
 
             .option-group
             {
@@ -47,7 +67,27 @@
             {
                 flex: 1;
                 min-width: 0;
+                white-space: nowrap;
             }
         }
     }
+}
+
+@position-try --popup-top
+{
+    bottom: anchor(top);
+    top: auto;
+}
+
+@position-try --popup-left
+{
+    right: anchor(right);
+    left: auto;
+}
+
+@position-try --popup-top-left
+{
+    inset: auto;
+    bottom: anchor(top);
+    right: anchor(right);
 }

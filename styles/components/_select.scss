@@ -1,11 +1,15 @@
 @mixin css
 {
-    ng-select
+    ng-select,
+    .select-component
     {
+        anchor-scope: --popup-anchor;
+
         .visual-container
         {
             display: flex;
             flex-direction: column;
+            anchor-name: --popup-anchor;
         }
     }
 }

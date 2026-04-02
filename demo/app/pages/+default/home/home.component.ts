@@ -2,7 +2,7 @@ import {Component, ChangeDetectionStrategy, Signal, viewChild, effect, signal} f
 import {FormField, form} from '@angular/forms/signals';
 import {ComponentRedirectRoute, ComponentRoute} from '@anglr/common/router';
 import {WithScrollableCssClass} from '@anglr/common';
-import {Select, Option, SelectAbsolute, SelectFormControl} from '@anglr/select';
+import {Select, Option, SelectFormControl} from '@anglr/select';
 import {getValue} from '@anglr/select/extensions';
 
 import {SelectApi} from '../../../../../src/interfaces';
@@ -19,7 +19,6 @@ import {SelectApi} from '../../../../../src/interfaces';
         Select,
         Option,
         FormField,
-        SelectAbsolute,
         SelectFormControl,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush

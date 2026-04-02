@@ -4,12 +4,12 @@ import {RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 import {Subscription} from 'rxjs';
 
-import {Positioner} from '../../../interfaces';
+import {Positioner, PositionerOptions} from '../../../interfaces';
 import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {POSITIONER_OPTIONS} from '../../../misc/tokens';
 
-const defaultOptions: PositionOptions =
+const defaultOptions: PositionerOptions =
 {
 };
 
@@ -22,7 +22,7 @@ const defaultOptions: PositionOptions =
     template: '',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CommonPositioner<TValue = unknown> implements Positioner<TValue, PositionOptions>, OnDestroy
+export class CommonPositioner<TValue = unknown> implements Positioner<TValue, PositionerOptions>, OnDestroy
 {
     //######################### protected fields #########################
 
@@ -52,7 +52,7 @@ export class CommonPositioner<TValue = unknown> implements Positioner<TValue, Po
      * @inheritdoc
      */
     @CopyOptionsAsSignal()
-    public options: PositionOptions;
+    public options: PositionerOptions;
 
     /**
      * @inheritdoc
@@ -70,9 +70,9 @@ export class CommonPositioner<TValue = unknown> implements Positioner<TValue, Po
     public selectBus: SelectBus<TValue> = inject(SelectBus);
 
     //######################### constructor #########################
-    constructor(@Inject(POSITIONER_OPTIONS) @Optional() options?: RecursivePartial<PositionOptions>|null,)
+    constructor(@Inject(POSITIONER_OPTIONS) @Optional() options?: RecursivePartial<PositionerOptions>|null,)
     {
-        this.options = deepCopyWithArrayOverride(defaultOptions as PositionOptions,
+        this.options = deepCopyWithArrayOverride(defaultOptions as PositionerOptions,
                                                  options);
 
         this.selectWidthObserver = new ResizeObserver(([firstChange]) => this.renderer.setStyle(this.selectPlugins.Popup.pluginElement.nativeElement, 'minWidth', `${firstChange.contentRect.width}px`));
