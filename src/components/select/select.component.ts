@@ -3,7 +3,7 @@ import {getHostElement, LOGGER, Logger} from '@anglr/common';
 import {isPresent, RecursivePartial, renderToBody, normalizeAccent} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
-import {InitState, Interactions, KeyboardHandler, LiveSearch, NormalState, NormalStateContext, NormalStateTagContext, OptionsGatherer, OptionsHandler, PluginDescription, Popup, PopupContext, Positioner, ReadonlyState, SelectApi, SelectCssClasses, SelectEvents, SelectOption, SelectOptions, SelectOptionState, SelectPlugin, TemplateGatherer, ValueHandler} from '../../interfaces';
+import {InitState, Interactions, InteractionsOptions, KeyboardHandler, KeyboardHandlerOptions, LiveSearch, LiveSearchOptions, NormalState, NormalStateContext, NormalStateOptions, NormalStateTagContext, OptionsGatherer, OptionsHandler, OptionsHandlerOptions, PluginDescription, Popup, PopupContext, PopupOptions, Positioner, PositionerOptions, ReadonlyState, ReadonlyStateOptions, SelectApi, SelectCssClasses, SelectEvents, SelectOption, SelectOptions, SelectOptionState, SelectPlugin, TemplateGatherer, ValueHandler, ValueHandlerOptions} from '../../interfaces';
 import {INTERACTIONS_TYPE, KEYBOARD_HANDLER_TYPE, LIVE_SEARCH_TYPE, NORMAL_STATE_TYPE, OPTIONS_HANDLER_TYPE, POPUP_TYPE, POSITIONER_TYPE, READONLY_STATE_TYPE, SELECT_OPTIONS, VALUE_HANDLER_TYPE} from '../../misc/tokens';
 import {SelectPluginType} from '../../misc/enums';
 import {SelectBus, SelectPluginInstances} from '../../misc/classes';
@@ -39,39 +39,39 @@ const defaultOptions: Omit<SelectOptions, 'optionsGatherer'|'templateGatherer'> 
     },
     plugins:
     {
-        interactions: <PluginDescription<Interactions>>
+        interactions: <PluginDescription<Interactions, InteractionsOptions>>
         {
             type: forwardRef(() => SimpleInteractions),
         },
-        keyboardHandler: <PluginDescription<KeyboardHandler>>
+        keyboardHandler: <PluginDescription<KeyboardHandler, KeyboardHandlerOptions>>
         {
             type: forwardRef(() => SimpleKeyboardHandler),
         },
-        liveSearch: <PluginDescription<LiveSearch>>
+        liveSearch: <PluginDescription<LiveSearch, LiveSearchOptions>>
         {
             type: forwardRef(() => NoLiveSearch),
         },
-        normalState: <PluginDescription<NormalState>>
+        normalState: <PluginDescription<NormalState, NormalStateOptions>>
         {
             type: forwardRef(() => SimpleNormalState),
         },
-        optionsHandler: <PluginDescription<OptionsHandler>>
+        optionsHandler: <PluginDescription<OptionsHandler, OptionsHandlerOptions>>
         {
             type: forwardRef(() => SimpleOptionsHandler),
         },
-        popup: <PluginDescription<Popup>>
+        popup: <PluginDescription<Popup, PopupOptions>>
         {
             type: forwardRef(() => SimplePopup),
         },
-        positioner: <PluginDescription<Positioner>>
+        positioner: <PluginDescription<Positioner, PositionerOptions>>
         {
             type: forwardRef(() => CommonPositioner),
         },
-        readonlyState: <PluginDescription<ReadonlyState>>
+        readonlyState: <PluginDescription<ReadonlyState, ReadonlyStateOptions>>
         {
             type: forwardRef(() => SimpleNormalState),
         },
-        valueHandler: <PluginDescription<ValueHandler>>
+        valueHandler: <PluginDescription<ValueHandler, ValueHandlerOptions>>
         {
             type: forwardRef(() => StaticValueHandler),
         },
@@ -236,14 +236,28 @@ export class Select<TValue = unknown> implements SelectApi<TValue, SelectCssClas
      */
     protected popupContainer: Signal<ViewContainerRef> = viewChild.required('popup', {read: ViewContainerRef});
 
-    // //######################### public properties - inputs #########################
+    //######################### public properties #########################
 
     /**
      * @inheritdoc
      */
     @CopyOptionsAsSignal()
-    @Input()
     public selectOptions: SelectOptions<TValue, SelectCssClasses>;
+
+    //######################### public properties - inputs #########################
+
+    /**
+     * Gets or sets Select options
+     */
+    @Input({alias: 'selectOptions'})
+    public get selectOptionsInput(): SelectOptions<TValue, SelectCssClasses>
+    {
+        return this.selectOptions;
+    }
+    public set selectOptionsInput(value: RecursivePartial<SelectOptions<TValue, SelectCssClasses>>)
+    {
+        this.selectOptions = value as SelectOptions<TValue, SelectCssClasses>;
+    }
 
     /**
      * Indication whether should be Select disabled or not

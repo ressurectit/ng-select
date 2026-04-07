@@ -54,7 +54,7 @@ export class FilterLiveSearch<TValue = unknown> implements LiveSearch<TValue, Fi
     /**
      * Instance of form value
      */
-    protected value = form(signal(''), path => debounce(path, this.options.searchDebounceTimeout));
+    protected value;
 
     //######################### public properties - implementation of SelectPlugin #########################
 
@@ -99,6 +99,8 @@ export class FilterLiveSearch<TValue = unknown> implements LiveSearch<TValue, Fi
     {
         this.options = deepCopyWithArrayOverride(defaultOptions as FilterLiveSearchOptions<LiveSearchCssClasses>,
                                                  options);
+
+        this.value = form(signal(''), path => debounce(path, this.options.searchDebounceTimeout));
 
         this.search = computed(() =>
         {

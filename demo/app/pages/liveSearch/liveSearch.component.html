@@ -1,0 +1,13 @@
+<div class="page-content">
+    <div>Value: {{value().value() | json}}</div>
+    <div>Dirty: {{value().dirty()}}</div>
+    <div>Touched: {{value().touched()}}</div>
+
+    <ng-select [formField]="value" [selectOptions]="options">
+        <ng-option value="first" text="First value text"/>
+        <ng-option value="second" text="Second value text"/>
+        <ng-option value="third" text="Third value text"/>
+        <ng-option value="fourth" text="Fourth value text"/>
+        <ng-option value="fifth" text="Fifth value text"/>
+    </ng-select>
+</div>

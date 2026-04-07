@@ -1,5 +1,7 @@
 export * from './components';
+export * from './decorators';
 export * from './directives';
+export * from './interfaces';
 export * from './misc/classes';
 export * from './misc/enums';
 export * from './misc/providers';
@@ -8,3 +10,4 @@ export * from './misc/types';
 export * from './misc/utils';
 export * from './modules';
 export * from './pipes';
+export * from './plugins';
