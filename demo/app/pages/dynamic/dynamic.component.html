@@ -1,0 +1,8 @@
+<div class="page-content">
+    <div>Value: {{value().value() | json}}</div>
+    <div>Dirty: {{value().dirty()}}</div>
+    <div>Touched: {{value().touched()}}</div>
+
+    <ng-select [formField]="value" [selectOptions]="options">
+    </ng-select>
+</div>

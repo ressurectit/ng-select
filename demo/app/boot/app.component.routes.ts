@@ -8,6 +8,7 @@ import {lazyRoute} from '../pages/lazy/lazy.route';
 import {multipleRoute} from '../pages/multiple/multiple.route';
 import {disabledRoute} from '../pages/disabled/disabled.route';
 import {liveSearchRoute} from '../pages/liveSearch/liveSearch.route';
+import {dynamicRoute} from '../pages/dynamic/dynamic.route';
 
 export const routes: Routes =
 [
@@ -23,6 +24,7 @@ export const routes: Routes =
     multipleRoute,
     disabledRoute,
     liveSearchRoute,
+    dynamicRoute,
     accessDeniedRoute,
     notFoundRoute,
 ];
