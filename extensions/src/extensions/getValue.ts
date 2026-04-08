@@ -1,7 +1,7 @@
 import {SelectFunction, SelectPluginType} from '@anglr/select';
 
 /**
- * Gets current value of Select, now its reactive
+ * Gets current value of Select, its reactive
  */
 export function getValue<TValue>(): SelectFunction<TValue|TValue[]|undefined|null, TValue>
 {

@@ -151,6 +151,8 @@
       - `OptionsHandler` component used for handling available options
 - updated `PopupOptions` interface
    - new property `liveSearchEnabled` indication whether is live search enabled for popup
+- subpackage `@anglr/select/extensions`
+   - new `getSearch` extension method, that gets current search value of Select (LiveSearch plugin), its reactive
 
 ### BREAKING CHANGES
 
@@ -317,6 +319,8 @@
 - subpackage `@anglr/select/extensions`
    - removed `patchOptions` extension function
    - removed `reinitializeOptions` extension function
+   - removed `valueChange` extension function
+   - removed `onFocus` extension function
 
 ## Version 15.0.0 (2026-02-10)
 

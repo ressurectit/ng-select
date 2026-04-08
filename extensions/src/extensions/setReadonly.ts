@@ -1,22 +1,19 @@
-// import {NgSelectAction} from '../../components/select';
+import {SelectAction, SelectOptions} from '@anglr/select';
+import {RecursivePartial} from '@jscrpt/common';
 
-// /**
-//  * Sets NgSelect as readonly, non editable
-//  * @param readonly - Indication whether is select readonly or not, if omitted defaults to true
-//  * @internal
-//  */
-// export function ɵSetReadonly<TValue>(readonly: boolean = true): NgSelectAction<TValue>
-// {
-//     return ngSelect =>
-//     {
-//         ngSelect.selectOptions =
-//         {
-//             readonly: readonly
-//         };
+/**
+ * Sets Select as readonly, non editable
+ * @param readonly - Indication whether is select readonly or not, if omitted defaults to true
+ */
+export function setReadonly<TValue>(readonly: boolean = true): SelectAction<TValue>
+{
+    return select =>
+    {
+        const options: RecursivePartial<SelectOptions<TValue>> =
+        {
+            readonly: readonly,
+        };
 
-//         if(ngSelect.isInitialized)
-//         {
-//             ngSelect.initOptions();
-//             ngSelect.initialize();
-//         }
-//     };
+        select.selectOptions = options as SelectOptions<TValue>;
+    };
+}
