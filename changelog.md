@@ -158,7 +158,7 @@
 - minimal supported version of `@angular` is `21.1.5`
 - minimal supported version of `@anglr/common` is `24.2.0`
 - minimal supported version of `@jscrpt/common` is `7.1.0`
-- new dependency `lodash-es` minimal supported version is `4.17.23`
+- new dependency `lodash-es` minimal supported version is `4.18.1`
 - strict null checks
 - all generic defaults of type `any` changed to `unknown`
 - removed dependency on `@angular/material`
