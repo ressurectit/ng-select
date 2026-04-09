@@ -4,7 +4,7 @@ import {SelectAction, SelectPluginType} from '@anglr/select';
  * Sets value of Select
  * @param value - Value to be set into select
  */
-export function setValue<TValue>(value: TValue|TValue[]|undefined|null): SelectAction<TValue>
+export function setValue<TValue, TCssClasses>(value: TValue|TValue[]|undefined|null): SelectAction<TValue, TCssClasses>
 {
     return select =>
     {
