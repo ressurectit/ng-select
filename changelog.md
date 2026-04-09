@@ -39,6 +39,15 @@
 - new `provideLiveSearchType` provider function, that provides type of live search that will be used for select globally
 - new `provideInteractionsType` provider function, that provides type of interactions that will be used for select globally
 - new `provideOptionsHandlerType` provider function, that provides type of options handler that will be used for select globally
+- new `provideKeyboardHandlerOptions` provider function, that provides options for keyboard handler that will be used for select globally
+- new `provideNormalStateOptions` provider function, that provides options for normal state that will be used for select globally
+- new `providePopupOptions` provider function, that provides options for popup that will be used for select globally
+- new `providePositionerOptions` provider function, that provides options for positioner that will be used for select globally
+- new `provideReadonlyStateOptions` provider function, that provides options for readonly state that will be used for select globally
+- new `provideValueHandlerOptions` provider function, that provides options for value handler that will be used for select globally
+- new `provideLiveSearchOptions` provider function, that provides options for live search that will be used for select globally
+- new `provideInteractionsOptions` provider function, that provides options for interactions that will be used for select globally
+- new `provideOptionsHandlerOptions` provider function, that provides options for options handler that will be used for select globally
 - new `OptionTemplate` directive, that is used for obtaining template for option in popup
    - **properties**
       - `template` instance of template for options in popup

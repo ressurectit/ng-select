@@ -1,8 +1,8 @@
 import {Provider, Type, ValueProvider} from '@angular/core';
 import {RecursivePartial} from '@jscrpt/common';
 
-import {Interactions, KeyboardHandler, LiveSearch, NormalState, OptionsHandler, Popup, Positioner, ReadonlyState, SelectOptions, ValueHandler} from '../interfaces';
-import {INTERACTIONS_TYPE, KEYBOARD_HANDLER_TYPE, LIVE_SEARCH_TYPE, NORMAL_STATE_TYPE, OPTIONS_HANDLER_TYPE, POPUP_TYPE, POSITIONER_TYPE, READONLY_STATE_TYPE, SELECT_OPTIONS, VALUE_HANDLER_TYPE} from './tokens';
+import {Interactions, InteractionsOptions, KeyboardHandler, KeyboardHandlerOptions, LiveSearch, LiveSearchOptions, NormalState, NormalStateOptions, OptionsHandler, OptionsHandlerOptions, Popup, PopupOptions, Positioner, PositionerOptions, ReadonlyState, ReadonlyStateOptions, SelectOptions, ValueHandler, ValueHandlerOptions} from '../interfaces';
+import {INTERACTIONS_OPTIONS, INTERACTIONS_TYPE, KEYBOARD_HANDLER_OPTIONS, KEYBOARD_HANDLER_TYPE, LIVE_SEARCH_OPTIONS, LIVE_SEARCH_TYPE, NORMAL_STATE_OPTIONS, NORMAL_STATE_TYPE, OPTIONS_HANDLER_OPTIONS, OPTIONS_HANDLER_TYPE, POPUP_OPTIONS, POPUP_TYPE, POSITIONER_OPTIONS, POSITIONER_TYPE, READONLY_STATE_OPTIONS, READONLY_STATE_TYPE, SELECT_OPTIONS, VALUE_HANDLER_OPTIONS, VALUE_HANDLER_TYPE} from './tokens';
 
 /**
  * Provides options for select globally
@@ -121,5 +121,113 @@ export function provideOptionsHandlerType(type: Type<OptionsHandler>): Provider
     return <ValueProvider>{
         provide: OPTIONS_HANDLER_TYPE,
         useValue: type,
+    };
+}
+
+/**
+ * Provides options for keyboard handler that will be used for select globally
+ * @param options - Options to be used for keyboard handler
+ */
+export function provideKeyboardHandlerOptions<TOptions extends KeyboardHandlerOptions = KeyboardHandlerOptions>(options: RecursivePartial<TOptions>): Provider
+{
+    return <ValueProvider>{
+        provide: KEYBOARD_HANDLER_OPTIONS,
+        useValue: options,
+    };
+}
+
+/**
+ * Provides options for normal state that will be used for select globally
+ * @param options - Options to be used for normal state
+ */
+export function provideNormalStateOptions<TOptions extends NormalStateOptions = NormalStateOptions>(options: RecursivePartial<TOptions>): Provider
+{
+    return <ValueProvider>{
+        provide: NORMAL_STATE_OPTIONS,
+        useValue: options,
+    };
+}
+
+/**
+ * Provides options for popup that will be used for select globally
+ * @param options - Options to be used for popup
+ */
+export function providePopupOptions<TOptions extends PopupOptions = PopupOptions>(options: RecursivePartial<TOptions>): Provider
+{
+    return <ValueProvider>{
+        provide: POPUP_OPTIONS,
+        useValue: options,
+    };
+}
+
+/**
+ * Provides options for positioner that will be used for select globally
+ * @param options - Options to be used for positioner
+ */
+export function providePositionerOptions<TOptions extends PositionerOptions = PositionerOptions>(options: RecursivePartial<TOptions>): Provider
+{
+    return <ValueProvider>{
+        provide: POSITIONER_OPTIONS,
+        useValue: options,
+    };
+}
+
+/**
+ * Provides options for readonly state that will be used for select globally
+ * @param options - Options to be used for readonly state
+ */
+export function provideReadonlyStateOptions<TOptions extends ReadonlyStateOptions = ReadonlyStateOptions>(options: RecursivePartial<TOptions>): Provider
+{
+    return <ValueProvider>{
+        provide: READONLY_STATE_OPTIONS,
+        useValue: options,
+    };
+}
+
+/**
+ * Provides options for value handler that will be used for select globally
+ * @param options - Options to be used for value handler
+ */
+export function provideValueHandlerOptions<TOptions extends ValueHandlerOptions = ValueHandlerOptions>(options: RecursivePartial<TOptions>): Provider
+{
+    return <ValueProvider>{
+        provide: VALUE_HANDLER_OPTIONS,
+        useValue: options,
+    };
+}
+
+/**
+ * Provides options for live search that will be used for select globally
+ * @param options - Options to be used for live search
+ */
+export function provideLiveSearchOptions<TOptions extends LiveSearchOptions = LiveSearchOptions>(options: RecursivePartial<TOptions>): Provider
+{
+    return <ValueProvider>{
+        provide: LIVE_SEARCH_OPTIONS,
+        useValue: options,
+    };
+}
+
+/**
+ * Provides options for interactions that will be used for select globally
+ * @param options - Options to be used for interactions
+ */
+export function provideInteractionsOptions<TOptions extends InteractionsOptions = InteractionsOptions>(options: RecursivePartial<TOptions>): Provider
+{
+    return <ValueProvider>{
+        provide: INTERACTIONS_OPTIONS,
+        useValue: options,
+    };
+}
+
+/**
+ * Provides options for options handler that will be used for select globally
+ * @param options - Options to be used for options handler
+ */
+export function provideOptionsHandlerOptions<TOptions extends OptionsHandlerOptions = OptionsHandlerOptions>(options: RecursivePartial<TOptions>): Provider
+{
+    return <ValueProvider>{
+        provide: OPTIONS_HANDLER_OPTIONS,
+        useValue: options,
     };
 }
