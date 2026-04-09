@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 16.0.0 (2026-03-24)
+## Version 16.0.0 (2026-04-10)
 
 ### Features
 
@@ -145,6 +145,9 @@
 - new `PopoverPositionerOptions` interface, that are options for popover positioner plugin
    - **properties**
       - `popoverAuto` indication whether popover property should be set to 'auto' or 'manual'
+- new `CommonPositionerOptions` interface, that are options for common positioner plugin
+   - **properties**
+      - `zIndex` if set tells positioner to set z-index of positioned element to this value, if not set positioner will not change z-index of element
 - updated `SelectPluginTypes` interface
    - **new properties**
       - `Interactions` handles interactions of plugins and select

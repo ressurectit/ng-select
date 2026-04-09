@@ -1,16 +1,17 @@
 import {ChangeDetectionStrategy, Component, effect, ElementRef, Inject, inject, OnDestroy, Optional, Renderer2} from '@angular/core';
 import {applyPositionResult, Position, POSITION, PositionPlacement} from '@anglr/common';
-import {RecursivePartial} from '@jscrpt/common';
+import {isPresent, RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 import {Subscription} from 'rxjs';
 
-import {Positioner, PositionerOptions} from '../../../interfaces';
+import {Positioner, CommonPositionerOptions} from '../../../interfaces';
 import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {POSITIONER_OPTIONS} from '../../../misc/tokens';
 
-const defaultOptions: PositionerOptions =
+const defaultOptions: CommonPositionerOptions =
 {
+    zIndex: 0,
 };
 
 /**
@@ -22,7 +23,7 @@ const defaultOptions: PositionerOptions =
     template: '',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CommonPositioner<TValue = unknown> implements Positioner<TValue, PositionerOptions>, OnDestroy
+export class CommonPositioner<TValue = unknown> implements Positioner<TValue, CommonPositionerOptions>, OnDestroy
 {
     //######################### protected fields #########################
 
@@ -52,7 +53,7 @@ export class CommonPositioner<TValue = unknown> implements Positioner<TValue, Po
      * @inheritdoc
      */
     @CopyOptionsAsSignal()
-    public options: PositionerOptions;
+    public options: CommonPositionerOptions;
 
     /**
      * @inheritdoc
@@ -70,15 +71,16 @@ export class CommonPositioner<TValue = unknown> implements Positioner<TValue, Po
     public selectBus: SelectBus<TValue> = inject(SelectBus);
 
     //######################### constructor #########################
-    constructor(@Inject(POSITIONER_OPTIONS) @Optional() options?: RecursivePartial<PositionerOptions>|null,)
+    constructor(@Inject(POSITIONER_OPTIONS) @Optional() options?: RecursivePartial<CommonPositionerOptions>|null,)
     {
-        this.options = deepCopyWithArrayOverride(defaultOptions as PositionerOptions,
+        this.options = deepCopyWithArrayOverride(defaultOptions as CommonPositionerOptions,
                                                  options);
 
         this.selectWidthObserver = new ResizeObserver(([firstChange]) => this.renderer.setStyle(this.selectPlugins.Popup.pluginElement.nativeElement, 'minWidth', `${firstChange.contentRect.width}px`));
         this.selectWidthObserver.observe(this.selectBus.selectElement().nativeElement);
 
         effect(() => this.renderer.setStyle(this.selectPlugins.Popup.pluginElement.nativeElement, 'position', 'absolute'));
+        effect(() => isPresent(this.options.zIndex) ? this.renderer.setStyle(this.selectPlugins.Popup.pluginElement.nativeElement, 'z-index', this.options.zIndex) : false);
 
         effect(() =>
         {
