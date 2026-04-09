@@ -8,6 +8,11 @@ export function setValue<TValue, TCssClasses>(value: TValue|TValue[]|undefined|n
 {
     return select =>
     {
+        if(!select.initialized())
+        {
+            return;
+        }
+
         const valueHandler = select.getPlugin(SelectPluginType.ValueHandler);
 
         valueHandler.setValue(value);

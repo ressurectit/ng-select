@@ -7,6 +7,11 @@ export function getValue<TValue, TCssClasses>(): SelectFunction<TValue|TValue[]|
 {
     return select =>
     {
+        if(!select.initialized())
+        {
+            return undefined;
+        }
+
         const valueHandler = select.getPlugin(SelectPluginType.ValueHandler);
 
         return valueHandler.value();

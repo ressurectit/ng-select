@@ -7,6 +7,11 @@ export function getSearch<TValue, TCssClasses>(): SelectFunction<string, TValue,
 {
     return select =>
     {
+        if(!select.initialized())
+        {
+            return '';
+        }
+
         const liveSearch = select.getPlugin(SelectPluginType.LiveSearch);
 
         return liveSearch.search();
