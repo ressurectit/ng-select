@@ -59,7 +59,7 @@ const defaultOptions: PopupOptions<SimplePopupCssClasses> =
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SimplePopup<TValue = unknown> implements Popup<TValue, PopupOptions<SimplePopupCssClasses>>
+export class SimplePopup<TValue = unknown, TPublicValue = TValue> implements Popup<TValue, TPublicValue, PopupOptions<SimplePopupCssClasses>>
 {
     //######################### public properties - implementation of SelectPlugin #########################
 
@@ -72,7 +72,7 @@ export class SimplePopup<TValue = unknown> implements Popup<TValue, PopupOptions
     /**
      * @inheritdoc
      */
-    public selectPlugins: SelectPluginInstances<TValue> = inject(SelectPluginInstances);
+    public selectPlugins: SelectPluginInstances<TValue, TPublicValue> = inject(SelectPluginInstances);
 
     /**
      * @inheritdoc
@@ -82,7 +82,7 @@ export class SimplePopup<TValue = unknown> implements Popup<TValue, PopupOptions
     /**
      * @inheritdoc
      */
-    public selectBus: SelectBus<TValue> = inject(SelectBus);
+    public selectBus: SelectBus<TValue, TPublicValue> = inject(SelectBus);
 
     //######################### protected properties - children #########################
 

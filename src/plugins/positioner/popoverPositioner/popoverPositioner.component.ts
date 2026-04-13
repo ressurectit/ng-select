@@ -21,7 +21,7 @@ const defaultOptions: PopoverPositionerOptions =
     template: '',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PopoverPositioner<TValue = unknown> implements Positioner<TValue, PopoverPositionerOptions>, OnDestroy
+export class PopoverPositioner<TValue = unknown, TPublicValue = TValue> implements Positioner<TValue, TPublicValue, PopoverPositionerOptions>, OnDestroy
 {
     //######################### protected fields #########################
 
@@ -41,7 +41,7 @@ export class PopoverPositioner<TValue = unknown> implements Positioner<TValue, P
     /**
      * @inheritdoc
      */
-    public selectPlugins: SelectPluginInstances<TValue> = inject(SelectPluginInstances);
+    public selectPlugins: SelectPluginInstances<TValue, TPublicValue> = inject(SelectPluginInstances);
 
     /**
      * @inheritdoc
@@ -51,7 +51,7 @@ export class PopoverPositioner<TValue = unknown> implements Positioner<TValue, P
     /**
      * @inheritdoc
      */
-    public selectBus: SelectBus<TValue> = inject(SelectBus);
+    public selectBus: SelectBus<TValue, TPublicValue> = inject(SelectBus);
 
     //######################### constructor #########################
     constructor(@Inject(POSITIONER_OPTIONS) @Optional() options?: RecursivePartial<PopoverPositionerOptions>|null,)

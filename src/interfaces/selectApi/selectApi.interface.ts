@@ -11,7 +11,7 @@ import {SelectCssClasses} from '../selectCssClasses/selectCssClasses.interface';
 /**
  * Public API for Select
  */
-export interface SelectApi<TValue = unknown, TCssClasses = SelectCssClasses>
+export interface SelectApi<TValue = unknown, TPublicValue = TValue, TCssClasses = SelectCssClasses>
 {
     /**
      * Gets information whether is select initialized or not, changes when Select is initialized or reinitialized, if value is false Select was not initialized yet
@@ -21,7 +21,7 @@ export interface SelectApi<TValue = unknown, TCssClasses = SelectCssClasses>
     /**
      * Gets or sets Select options
      */
-    selectOptions: SelectOptions<TValue, TCssClasses>;
+    selectOptions: SelectOptions<TValue, TPublicValue, TCssClasses>;
 
     /**
      * Select public events, signal based
@@ -32,26 +32,26 @@ export interface SelectApi<TValue = unknown, TCssClasses = SelectCssClasses>
      * Gets instance of plugin by its type
      * @param pluginType - Type of plugin
      */
-    getPlugin(pluginType: SelectPluginType.Interactions): Interactions<TValue>;
-    getPlugin(pluginType: SelectPluginType.KeyboardHandler): KeyboardHandler<TValue>;
-    getPlugin(pluginType: SelectPluginType.LiveSearch): LiveSearch<TValue>;
-    getPlugin(pluginType: SelectPluginType.NormalState): NormalState<TValue>;
-    getPlugin(pluginType: SelectPluginType.OptionsHandler): OptionsHandler<TValue>;
-    getPlugin(pluginType: SelectPluginType.Popup): Popup<TValue>;
-    getPlugin(pluginType: SelectPluginType.Positioner): Positioner<TValue>;
-    getPlugin(pluginType: SelectPluginType.ReadonlyState): ReadonlyState;
-    getPlugin(pluginType: SelectPluginType.ValueHandler): ValueHandler<TValue>;
-    getPlugin<PluginInstance extends SelectPlugin<TValue>>(pluginType: SelectPluginType): PluginInstance;
+    getPlugin(pluginType: SelectPluginType.Interactions): Interactions<TValue, TPublicValue>;
+    getPlugin(pluginType: SelectPluginType.KeyboardHandler): KeyboardHandler<TValue, TPublicValue>;
+    getPlugin(pluginType: SelectPluginType.LiveSearch): LiveSearch<TValue, TPublicValue>;
+    getPlugin(pluginType: SelectPluginType.NormalState): NormalState<TValue, TPublicValue>;
+    getPlugin(pluginType: SelectPluginType.OptionsHandler): OptionsHandler<TValue, TPublicValue>;
+    getPlugin(pluginType: SelectPluginType.Popup): Popup<TValue, TPublicValue>;
+    getPlugin(pluginType: SelectPluginType.Positioner): Positioner<TValue, TPublicValue>;
+    getPlugin(pluginType: SelectPluginType.ReadonlyState): ReadonlyState<TValue, TPublicValue>;
+    getPlugin(pluginType: SelectPluginType.ValueHandler): ValueHandler<TValue, TPublicValue>;
+    getPlugin<PluginInstance extends SelectPlugin<unknown, TValue, TPublicValue>>(pluginType: SelectPluginType): PluginInstance;
 
     /**
      * Executes actions on Select
      * @param actions - Array of actions that are executed over Select
      */
-    execute(...actions: SelectAction<TValue, TCssClasses>[]): void;
+    execute(...actions: SelectAction<TValue, TPublicValue, TCssClasses>[]): void;
 
     /**
      * Executes function on Select and returns result
      * @param func - Function that is executed and its result is returned
      */
-    executeAndReturn<TResult>(func: SelectFunction<TResult, TValue, TCssClasses>): TResult;
+    executeAndReturn<TResult>(func: SelectFunction<TResult, TValue, TPublicValue, TCssClasses>): TResult;
 }

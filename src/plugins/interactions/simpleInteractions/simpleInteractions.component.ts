@@ -24,7 +24,7 @@ const defaultOptions: InteractionsOptions =
     template: '',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SimpleInteractions<TValue = unknown> implements Interactions<TValue, InteractionsOptions, SimpleKeyboardActionTypes>, OnDestroy
+export class SimpleInteractions<TValue = unknown, TPublicValue = TValue> implements Interactions<TValue, TPublicValue, InteractionsOptions, SimpleKeyboardActionTypes>, OnDestroy
 {
     //######################### protected fields #########################
 
@@ -54,7 +54,7 @@ export class SimpleInteractions<TValue = unknown> implements Interactions<TValue
     /**
      * @inheritdoc
      */
-    public selectPlugins: SelectPluginInstances<TValue> = inject(SelectPluginInstances);
+    public selectPlugins: SelectPluginInstances<TValue, TPublicValue> = inject(SelectPluginInstances);
 
     /**
      * @inheritdoc
@@ -64,7 +64,7 @@ export class SimpleInteractions<TValue = unknown> implements Interactions<TValue
     /**
      * @inheritdoc
      */
-    public selectBus: SelectBus<TValue, SimpleKeyboardActionTypes> = inject(SelectBus) as SelectBus<TValue, SimpleKeyboardActionTypes>;
+    public selectBus: SelectBus<TValue, TPublicValue, SimpleKeyboardActionTypes> = inject(SelectBus) as SelectBus<TValue, TPublicValue, SimpleKeyboardActionTypes>;
 
     //######################### constructor #########################
     constructor(@Inject(INTERACTIONS_OPTIONS) @Optional() options?: RecursivePartial<InteractionsOptions>|null,)

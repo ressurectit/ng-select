@@ -40,7 +40,7 @@ const defaultOptions: FilterLiveSearchOptions<LiveSearchCssClasses> =
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FilterLiveSearch<TValue = unknown> implements LiveSearch<TValue, FilterLiveSearchOptions<LiveSearchCssClasses>>
+export class FilterLiveSearch<TValue = unknown, TPublicValue = TValue> implements LiveSearch<TValue, TPublicValue, FilterLiveSearchOptions<LiveSearchCssClasses>>
 {
     //######################### protected fields #########################
 
@@ -67,7 +67,7 @@ export class FilterLiveSearch<TValue = unknown> implements LiveSearch<TValue, Fi
     /**
      * @inheritdoc
      */
-    public selectPlugins: SelectPluginInstances<TValue> = inject(SelectPluginInstances);
+    public selectPlugins: SelectPluginInstances<TValue, TPublicValue> = inject(SelectPluginInstances);
 
     /**
      * @inheritdoc
@@ -77,7 +77,7 @@ export class FilterLiveSearch<TValue = unknown> implements LiveSearch<TValue, Fi
     /**
      * @inheritdoc
      */
-    public selectBus: SelectBus<TValue> = inject(SelectBus);
+    public selectBus: SelectBus<TValue, TPublicValue> = inject(SelectBus);
 
     //######################### public properties - implementation of LiveSearch #########################
 

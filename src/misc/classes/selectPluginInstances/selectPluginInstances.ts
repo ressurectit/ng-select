@@ -6,59 +6,59 @@ import {SelectPluginType} from '../../enums';
 /**
  * Implementation of GridPluginInstances
  */
-export class SelectPluginInstances<TValue = unknown> implements Record<SelectPluginType, SelectPlugin<unknown, TValue>>
+export class SelectPluginInstances<TValue = unknown, TPublicValue = TValue> implements Record<SelectPluginType, SelectPlugin<unknown, TValue, TPublicValue>>
 {
     //######################### public properties #########################
 
     /**
      * Instance of plugin that handles interactions of plugins and select
      */
-    public interactions: WritableSignal<Interactions<TValue>|undefined|null> = signal(null);
+    public interactions: WritableSignal<Interactions<TValue, TPublicValue>|undefined|null> = signal(null);
 
     /**
      * Instance of plugin that handles keyboard input from user
      */
-    public keyboardHandler: WritableSignal<KeyboardHandler<TValue>|undefined|null> = signal(null);
+    public keyboardHandler: WritableSignal<KeyboardHandler<TValue, TPublicValue>|undefined|null> = signal(null);
 
     /**
      * Instance of plugin that is used for live search of options
      */
-    public liveSearch: WritableSignal<LiveSearch<TValue>|undefined|null> = signal(null);
+    public liveSearch: WritableSignal<LiveSearch<TValue, TPublicValue>|undefined|null> = signal(null);
 
     /**
      * Instance of plugin that is used for displaying normal state of selected value
      */
-    public normalState: WritableSignal<NormalState<TValue>|undefined|null> = signal(null);
+    public normalState: WritableSignal<NormalState<TValue, TPublicValue>|undefined|null> = signal(null);
 
     /**
      * Instance of plugin that is used for handling available options
      */
-    public optionsHandler: WritableSignal<OptionsHandler<TValue>|undefined|null> = signal(null);
+    public optionsHandler: WritableSignal<OptionsHandler<TValue, TPublicValue>|undefined|null> = signal(null);
 
     /**
      * Instance of plugin that handles displaying popup
      */
-    public popup: WritableSignal<Popup<TValue>|undefined|null> = signal(null);
+    public popup: WritableSignal<Popup<TValue, TPublicValue>|undefined|null> = signal(null);
 
     /**
      * Instance of plugin that handles positioning of popup
      */
-    public positioner: WritableSignal<Positioner<TValue>|undefined|null> = signal(null);
+    public positioner: WritableSignal<Positioner<TValue, TPublicValue>|undefined|null> = signal(null);
 
     /**
      * Instance of plugin that is used for displaying readonly state of selected value
      */
-    public readonlyState: WritableSignal<ReadonlyState<TValue>|undefined|null> = signal(null);
+    public readonlyState: WritableSignal<ReadonlyState<TValue, TPublicValue>|undefined|null> = signal(null);
 
     /**
      * Instance of plugin that is used for storing and handling value of select
      */
-    public valueHandler: WritableSignal<ValueHandler<TValue>|undefined|null> = signal(null);
+    public valueHandler: WritableSignal<ValueHandler<TValue, TPublicValue>|undefined|null> = signal(null);
 
     /**
      * Instance of plugin that handles interactions of plugins and select
      */
-    public get Interactions(): Interactions<TValue>
+    public get Interactions(): Interactions<TValue, TPublicValue>
     {
         const interactions = this.interactions();
 
@@ -69,15 +69,15 @@ export class SelectPluginInstances<TValue = unknown> implements Record<SelectPlu
 
         return interactions;
     }
-    public set Interactions(value: SelectPlugin<unknown, TValue>)
+    public set Interactions(value: SelectPlugin<unknown, TValue, TPublicValue>)
     {
-        this.interactions.set(value as Interactions<TValue>);
+        this.interactions.set(value as Interactions<TValue, TPublicValue>);
     }
 
     /**
      * Instance of plugin that handles keyboard input from user
      */
-    public get KeyboardHandler(): KeyboardHandler<TValue>
+    public get KeyboardHandler(): KeyboardHandler<TValue, TPublicValue>
     {
         const keyboardHandler = this.keyboardHandler();
 
@@ -88,15 +88,15 @@ export class SelectPluginInstances<TValue = unknown> implements Record<SelectPlu
 
         return keyboardHandler;
     }
-    public set KeyboardHandler(value: SelectPlugin<unknown, TValue>)
+    public set KeyboardHandler(value: SelectPlugin<unknown, TValue, TPublicValue>)
     {
-        this.keyboardHandler.set(value as KeyboardHandler<TValue>);
+        this.keyboardHandler.set(value as KeyboardHandler<TValue, TPublicValue>);
     }
 
     /**
      * Instance of plugin that is used for live search of options
      */
-    public get LiveSearch(): LiveSearch<TValue>
+    public get LiveSearch(): LiveSearch<TValue, TPublicValue>
     {
         const liveSearch = this.liveSearch();
 
@@ -107,15 +107,15 @@ export class SelectPluginInstances<TValue = unknown> implements Record<SelectPlu
 
         return liveSearch;
     }
-    public set LiveSearch(value: SelectPlugin<unknown, TValue>)
+    public set LiveSearch(value: SelectPlugin<unknown, TValue, TPublicValue>)
     {
-        this.liveSearch.set(value as LiveSearch<TValue>);
+        this.liveSearch.set(value as LiveSearch<TValue, TPublicValue>);
     }
 
     /**
      * Instance of plugin that is used for displaying normal state of selected value
      */
-    public get NormalState(): NormalState<TValue>
+    public get NormalState(): NormalState<TValue, TPublicValue>
     {
         const normalState = this.normalState();
 
@@ -126,15 +126,15 @@ export class SelectPluginInstances<TValue = unknown> implements Record<SelectPlu
 
         return normalState;
     }
-    public set NormalState(value: SelectPlugin<unknown, TValue>)
+    public set NormalState(value: SelectPlugin<unknown, TValue, TPublicValue>)
     {
-        this.normalState.set(value as NormalState<TValue>);
+        this.normalState.set(value as NormalState<TValue, TPublicValue>);
     }
 
     /**
      * Instance of plugin that is used for handling available options
      */
-    public get OptionsHandler(): OptionsHandler<TValue>
+    public get OptionsHandler(): OptionsHandler<TValue, TPublicValue>
     {
         const optionsHandler = this.optionsHandler();
 
@@ -145,15 +145,15 @@ export class SelectPluginInstances<TValue = unknown> implements Record<SelectPlu
 
         return optionsHandler;
     }
-    public set OptionsHandler(value: SelectPlugin<unknown, TValue>)
+    public set OptionsHandler(value: SelectPlugin<unknown, TValue, TPublicValue>)
     {
-        this.optionsHandler.set(value as OptionsHandler<TValue>);
+        this.optionsHandler.set(value as OptionsHandler<TValue, TPublicValue>);
     }
 
     /**
      * Instance of plugin that handles displaying popup
      */
-    public get Popup(): Popup<TValue>
+    public get Popup(): Popup<TValue, TPublicValue>
     {
         const popup = this.popup();
 
@@ -164,15 +164,15 @@ export class SelectPluginInstances<TValue = unknown> implements Record<SelectPlu
 
         return popup;
     }
-    public set Popup(value: SelectPlugin<unknown, TValue>)
+    public set Popup(value: SelectPlugin<unknown, TValue, TPublicValue>)
     {
-        this.popup.set(value as Popup<TValue>);
+        this.popup.set(value as Popup<TValue, TPublicValue>);
     }
 
     /**
      * Instance of plugin that handles positioning of popup
      */
-    public get Positioner(): Positioner<TValue>
+    public get Positioner(): Positioner<TValue, TPublicValue>
     {
         const positioner = this.positioner();
 
@@ -183,15 +183,15 @@ export class SelectPluginInstances<TValue = unknown> implements Record<SelectPlu
 
         return positioner;
     }
-    public set Positioner(value: SelectPlugin<unknown, TValue>)
+    public set Positioner(value: SelectPlugin<unknown, TValue, TPublicValue>)
     {
-        this.positioner.set(value as Positioner<TValue>);
+        this.positioner.set(value as Positioner<TValue, TPublicValue>);
     }
 
     /**
      * Instance of plugin that is used for displaying readonly state of selected value
      */
-    public get ReadonlyState(): ReadonlyState<TValue>
+    public get ReadonlyState(): ReadonlyState<TValue, TPublicValue>
     {
         const readonlyState = this.readonlyState();
 
@@ -202,15 +202,15 @@ export class SelectPluginInstances<TValue = unknown> implements Record<SelectPlu
 
         return readonlyState;
     }
-    public set ReadonlyState(value: SelectPlugin<unknown, TValue>)
+    public set ReadonlyState(value: SelectPlugin<unknown, TValue, TPublicValue>)
     {
-        this.readonlyState.set(value as ReadonlyState<TValue>);
+        this.readonlyState.set(value as ReadonlyState<TValue, TPublicValue>);
     }
 
     /**
      * Instance of plugin that is used for storing and handling value of select
      */
-    public get ValueHandler(): ValueHandler<TValue>
+    public get ValueHandler(): ValueHandler<TValue, TPublicValue>
     {
         const valueHandler = this.valueHandler();
 
@@ -221,8 +221,8 @@ export class SelectPluginInstances<TValue = unknown> implements Record<SelectPlu
 
         return valueHandler;
     }
-    public set ValueHandler(value: SelectPlugin<unknown, TValue>)
+    public set ValueHandler(value: SelectPlugin<unknown, TValue, TPublicValue>)
     {
-        this.valueHandler.set(value as ValueHandler<TValue>);
+        this.valueHandler.set(value as ValueHandler<TValue, TPublicValue>);
     }
 }

@@ -17,6 +17,6 @@ export interface ReadonlyStateOptions<TCssClasses extends ReadonlyStateCssClasse
 /**
  * Readonly state plugin interface
  */
-export interface ReadonlyState<TValue = unknown> extends NormalState<TValue>
+export interface ReadonlyState<TValue = unknown, TPublicValue = TValue> extends NormalState<TValue, TPublicValue>
 {
 }

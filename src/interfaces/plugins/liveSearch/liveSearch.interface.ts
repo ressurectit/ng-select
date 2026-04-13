@@ -30,7 +30,7 @@ export interface LiveSearchOptions<TCssClasses extends LiveSearchCssClasses = Li
 /**
  * Live search plugin interface
  */
-export interface LiveSearch<TValue = unknown, TOptions extends LiveSearchOptions = LiveSearchOptions> extends SelectPlugin<TOptions, TValue>
+export interface LiveSearch<TValue = unknown, TPublicValue = TValue, TOptions extends LiveSearchOptions = LiveSearchOptions> extends SelectPlugin<TOptions, TValue, TPublicValue>
 {
     //######################### properties #########################
 

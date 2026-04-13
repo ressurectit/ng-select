@@ -21,7 +21,7 @@ export interface OptionsHandlerOptions<TValue = unknown> extends PluginOptions
 /**
  * Options handler plugin interface
  */
-export interface OptionsHandler<TValue = unknown, TOptions extends OptionsHandlerOptions<TValue> = OptionsHandlerOptions<TValue>> extends SelectPlugin<TOptions, TValue>
+export interface OptionsHandler<TValue = unknown, TPublicValue = TValue, TOptions extends OptionsHandlerOptions<TValue> = OptionsHandlerOptions<TValue>> extends SelectPlugin<TOptions, TValue, TPublicValue>
 {
     //######################### properties #########################
 

@@ -25,7 +25,7 @@ const SELECT_VALUE_ACCESSOR: ExistingProvider =
     selector: 'ng-select[formControlName],ng-select[formControl],ng-select[ngModel]',
     providers: [SELECT_VALUE_ACCESSOR],
 })
-export class SelectControlValueAccessor<TValue = unknown> implements ControlValueAccessor, OnDestroy
+export class SelectControlValueAccessor<TValue = unknown, TPublicValue = TValue> implements ControlValueAccessor, OnDestroy
 {
     //######################### protected fields #########################
 
@@ -37,7 +37,7 @@ export class SelectControlValueAccessor<TValue = unknown> implements ControlValu
     /**
      * Last set value to this control
      */
-    protected value: WritableSignal<TValue|TValue[]|undefined|null> = signal(undefined);
+    protected value: WritableSignal<TPublicValue|TPublicValue[]|undefined|null> = signal(undefined);
 
     /**
      * Indication whether disable Select
@@ -47,7 +47,7 @@ export class SelectControlValueAccessor<TValue = unknown> implements ControlValu
     /**
      * On change callback for setting value back to control
      */
-    protected onChange: Action1<TValue|Array<TValue>|undefined|null>|undefined|null;
+    protected onChange: Action1<TPublicValue|TPublicValue[]|undefined|null>|undefined|null;
 
     /**
      * On touched callback for setting touched back to control
@@ -55,7 +55,7 @@ export class SelectControlValueAccessor<TValue = unknown> implements ControlValu
     protected onTouched: NoopAction|undefined|null;
 
     //######################### constructor #########################
-    constructor(select: Select<TValue>)
+    constructor(select: Select<TValue, TPublicValue>)
     {
         effect(() =>
         {
@@ -103,7 +103,7 @@ export class SelectControlValueAccessor<TValue = unknown> implements ControlValu
     /**
      * @inheritdoc
      */
-    public writeValue(value: TValue|TValue[]|undefined|null): void
+    public writeValue(value: TPublicValue|TPublicValue[]|undefined|null): void
     {
         this.value.set(value);
     }
@@ -111,7 +111,7 @@ export class SelectControlValueAccessor<TValue = unknown> implements ControlValu
     /**
      * @inheritdoc
      */
-    public registerOnChange(fn: (data: TValue|Array<TValue>|undefined|null) => void): void
+    public registerOnChange(fn: (data: TPublicValue|TPublicValue[]|undefined|null) => void): void
     {
         this.onChange = fn;
     }

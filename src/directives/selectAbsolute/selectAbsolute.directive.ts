@@ -10,14 +10,14 @@ import {Select} from '../../components/select/select.component';
 {
     selector: 'ng-select[absolute]',
 })
-export class SelectAbsolute<TValue = unknown>
+export class SelectAbsolute<TValue = unknown, TPublicValue = TValue>
 {
     //######################### constructor #########################
-    constructor(select: Select<TValue>)
+    constructor(select: Select<TValue, TPublicValue>)
     {
         select.selectOptions =
         {
             absolute: true,
-        } as SelectOptions<TValue>;
+        } as SelectOptions<TValue, TPublicValue>;
     }
 }

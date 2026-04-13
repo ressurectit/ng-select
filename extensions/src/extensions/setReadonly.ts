@@ -5,15 +5,15 @@ import {RecursivePartial} from '@jscrpt/common';
  * Sets Select as readonly, non editable
  * @param readonly - Indication whether is select readonly or not, if omitted defaults to true
  */
-export function setReadonly<TValue, TCssClasses>(readonly: boolean = true): SelectAction<TValue, TCssClasses>
+export function setReadonly<TValue, TPublicValue, TCssClasses>(readonly: boolean = true): SelectAction<TValue, TPublicValue, TCssClasses>
 {
     return select =>
     {
-        const options: RecursivePartial<SelectOptions<TValue, TCssClasses>> =
+        const options: RecursivePartial<SelectOptions<TValue, TPublicValue, TCssClasses>> =
         {
             readonly: readonly,
         };
 
-        select.selectOptions = options as SelectOptions<TValue, TCssClasses>;
+        select.selectOptions = options as SelectOptions<TValue, TPublicValue, TCssClasses>;
     };
 }

@@ -14,7 +14,7 @@ import {SelectPluginType} from '../../misc/enums';
 {
     selector: 'ng-select[formField]',
 })
-export class SelectFormControl<TValue = unknown> implements FormValueControl<TValue|TValue[]|undefined|null>, OnDestroy
+export class SelectFormControl<TValue = unknown, TPublicValue = TValue> implements FormValueControl<TPublicValue|TPublicValue[]|undefined|null>, OnDestroy
 {
     //######################### protected fields #########################
 
@@ -33,7 +33,7 @@ export class SelectFormControl<TValue = unknown> implements FormValueControl<TVa
     /**
      * @inheritdoc
      */
-    public readonly value: ModelSignal<TValue|TValue[]|null|undefined> = model<TValue|TValue[]|null|undefined>(undefined);
+    public readonly value: ModelSignal<TPublicValue|TPublicValue[]|null|undefined> = model<TPublicValue|TPublicValue[]|null|undefined>(undefined);
 
     /**
      * @inheritdoc
@@ -56,7 +56,7 @@ export class SelectFormControl<TValue = unknown> implements FormValueControl<TVa
     public readonly touched: ModelSignal<boolean> = model(false);
 
     //######################### constructor #########################
-    constructor(protected select: Select<TValue>)
+    constructor(protected select: Select<TValue, TPublicValue>)
     {
         this.initSubscriptions.add(this.select.events.focus.subscribe(() => this.touched.set(true)));
 

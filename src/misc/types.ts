@@ -5,12 +5,12 @@ import {RemoveLastSelectedValueKeyboardAction, SelectActiveKeyboardAction, Selec
 /**
  * Defintion of action that can be executed on Select
  */
-export type SelectAction<TValue = unknown, TCssClasses = SelectCssClasses> = (ngSelect: SelectApi<TValue, TCssClasses>) => void;
+export type SelectAction<TValue = unknown, TPublicValue = TValue, TCssClasses = SelectCssClasses> = (select: SelectApi<TValue, TPublicValue, TCssClasses>) => void;
 
 /**
  * Definition of function that can be executed on Select and returns some data
  */
-export type SelectFunction<TResult = unknown, TValue = unknown, TCssClasses = SelectCssClasses> = (ngSelect: SelectApi<TValue, TCssClasses>) => TResult;
+export type SelectFunction<TResult = unknown, TValue = unknown, TPublicValue = TValue, TCssClasses = SelectCssClasses> = (select: SelectApi<TValue, TPublicValue, TCssClasses>) => TResult;
 
 /**
  * Definition of function used for transformation of select option into display text
@@ -25,7 +25,7 @@ export type ValueEqualityFunc<TValue = unknown> = (source: TValue, target: TValu
 /**
  * Definition of function used for extracting value from select option
  */
-export type ValueExtractorFunc<TValue = unknown> = (option: SelectOption<TValue>) => TValue;
+export type ValueExtractorFunc<TValue = unknown, TPublicValue = TValue> = (option: SelectOption<TValue>) => TPublicValue;
 
 /**
  * Normalize text for comparison, removes accent sensitive data
@@ -60,7 +60,7 @@ export type ValueComputedFunc<TValue> = () => TValue|TValue[]|undefined|null;
 /**
  * Definition of function for obtaining option for provided value
  */
-export type OptionGetterFunc<TValue> = (value: TValue) => PromiseOr<SelectOption<TValue>|undefined|null>;
+export type OptionGetterFunc<TValue, TPublicValue> = (value: TPublicValue) => PromiseOr<SelectOption<TValue>|undefined|null>;
 
 /**
  * Definition of function for obtaining new option, allows adding new options

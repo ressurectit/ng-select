@@ -55,6 +55,6 @@ export interface PopupOptions<TCssClasses extends PopupCssClasses = PopupCssClas
 /**
  * Popup plugin interface
  */
-export interface Popup<TValue = unknown, TOptions extends PopupOptions = PopupOptions> extends SelectPlugin<TOptions, TValue>
+export interface Popup<TValue = unknown, TPublicValue = TValue, TOptions extends PopupOptions = PopupOptions> extends SelectPlugin<TOptions, TValue, TPublicValue>
 {
 }

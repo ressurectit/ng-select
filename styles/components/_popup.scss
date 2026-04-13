@@ -7,7 +7,7 @@
         {
             display: block;
             max-height: 50dvh;
-            overflow: hidden;
+            overflow: auto;
 
             &[popover]:not(:popover-open):not(dialog[open])
             {

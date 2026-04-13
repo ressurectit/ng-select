@@ -17,14 +17,14 @@ export class NormalStateTemplate
     /**
      * Instance of template for normal state
      */
-    public template: TemplateRef<NormalStateContext<any>> = inject(TemplateRef);
+    public template: TemplateRef<NormalStateContext> = inject(TemplateRef);
 
     //######################### ng language server #########################
 
     /**
      * Allows typechecking for template
      */
-    static ngTemplateContextGuard(_dir: NormalStateTemplate, _ctx: unknown): _ctx is NormalStateContext<any>
+    static ngTemplateContextGuard(_dir: NormalStateTemplate, _ctx: unknown): _ctx is NormalStateContext<any, any>
     {
         return true;
     }

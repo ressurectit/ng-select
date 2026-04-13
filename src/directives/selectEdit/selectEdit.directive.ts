@@ -18,10 +18,10 @@ import {SelectOptions, SimpleKeyboardHandlerOptions} from '../../interfaces';
         provideLiveSearchType(EditLiveSearch),
     ],
 })
-export class SelectEdit<TValue = unknown>
+export class SelectEdit<TValue = unknown, TPublicValue = TValue>
 {
     //######################### constructor #########################
-    constructor(select: Select<TValue>)
+    constructor(select: Select<TValue, TPublicValue>)
     {
         select.selectOptions =
         {
@@ -36,6 +36,6 @@ export class SelectEdit<TValue = unknown>
                     },
                 },
             },
-        } as SelectOptions<TValue>;
+        } as SelectOptions<TValue, TPublicValue>;
     }
 }

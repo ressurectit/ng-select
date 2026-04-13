@@ -7,7 +7,7 @@ import {SelectBus, SelectPluginInstances} from '../../misc/classes';
  * Base class for options handlers.
  */
 @Directive()
-export abstract class OptionsHandlerBase<TValue = unknown, TOptions extends OptionsHandlerOptions<TValue> = OptionsHandlerOptions<TValue>>
+export abstract class OptionsHandlerBase<TValue = unknown, TPublicValue = TValue, TOptions extends OptionsHandlerOptions<TValue> = OptionsHandlerOptions<TValue>>
 {
     //######################### protected fields #########################
 
@@ -26,7 +26,7 @@ export abstract class OptionsHandlerBase<TValue = unknown, TOptions extends Opti
     /**
      * @inheritdoc
      */
-    public selectPlugins: SelectPluginInstances<TValue> = inject(SelectPluginInstances);
+    public selectPlugins: SelectPluginInstances<TValue, TPublicValue> = inject(SelectPluginInstances);
 
     /**
      * @inheritdoc
@@ -36,7 +36,7 @@ export abstract class OptionsHandlerBase<TValue = unknown, TOptions extends Opti
     /**
      * @inheritdoc
      */
-    public selectBus: SelectBus<TValue> = inject(SelectBus);
+    public selectBus: SelectBus<TValue, TPublicValue> = inject(SelectBus);
 
     //######################### constructor #########################
     constructor()

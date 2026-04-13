@@ -30,7 +30,7 @@ const defaultOptions: DynamicValueHandlerOptions =
     template: '',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DynamicValueHandler<TValue = unknown> implements ValueHandler<TValue, DynamicValueHandlerOptions<TValue>>
+export class DynamicValueHandler<TValue = unknown, TPublicValue = TValue> implements ValueHandler<TValue, TPublicValue, DynamicValueHandlerOptions<TValue, TPublicValue>>
 {
     //######################### public properties - implementation of SelectPlugin #########################
 
@@ -38,12 +38,12 @@ export class DynamicValueHandler<TValue = unknown> implements ValueHandler<TValu
      * @inheritdoc
      */
     @CopyOptionsAsSignal()
-    public options: DynamicValueHandlerOptions<TValue>;
+    public options: DynamicValueHandlerOptions<TValue, TPublicValue>;
 
     /**
      * @inheritdoc
      */
-    public selectPlugins: SelectPluginInstances<TValue> = inject(SelectPluginInstances);
+    public selectPlugins: SelectPluginInstances<TValue, TPublicValue> = inject(SelectPluginInstances);
 
     /**
      * @inheritdoc
@@ -53,19 +53,19 @@ export class DynamicValueHandler<TValue = unknown> implements ValueHandler<TValu
     /**
      * @inheritdoc
      */
-    public selectBus: SelectBus<TValue> = inject(SelectBus);
+    public selectBus: SelectBus<TValue, TPublicValue> = inject(SelectBus);
 
     //######################### public properties - implementation of ValueHandler #########################
 
     /**
      * @inheritdoc
      */
-    public readonly value: Signal<TValue|TValue[]|undefined|null> = computed((computedValue as ValueComputedFunc<TValue>).bind(this));
+    public readonly value: Signal<TPublicValue|TPublicValue[]|undefined|null> = computed((computedValue as ValueComputedFunc<TPublicValue>).bind(this));
 
     //######################### constructor #########################
-    constructor(@Inject(VALUE_HANDLER_OPTIONS) @Optional() options?: RecursivePartial<DynamicValueHandlerOptions<TValue>>|null,)
+    constructor(@Inject(VALUE_HANDLER_OPTIONS) @Optional() options?: RecursivePartial<DynamicValueHandlerOptions<TValue, TPublicValue>>|null,)
     {
-        this.options = deepCopyWithArrayOverride(defaultOptions as DynamicValueHandlerOptions<TValue>,
+        this.options = deepCopyWithArrayOverride(defaultOptions as DynamicValueHandlerOptions<TValue, TPublicValue>,
                                                  options);
     }
 
@@ -74,7 +74,7 @@ export class DynamicValueHandler<TValue = unknown> implements ValueHandler<TValu
     /**
      * @inheritdoc
      */
-    public setValue(value: TValue|TValue[]|undefined|null): void
+    public setValue(value: TPublicValue|TPublicValue[]|undefined|null): void
     {
         untracked(async () =>
         {
@@ -115,7 +115,7 @@ export class DynamicValueHandler<TValue = unknown> implements ValueHandler<TValu
             }
             else
             {
-                const selectedOption = await this.options.optionGetter(value as TValue);
+                const selectedOption = await this.options.optionGetter(value as TPublicValue);
                 const opt = selectedOption as SelectOptionState<TValue>|undefined|null;
 
                 if(opt)

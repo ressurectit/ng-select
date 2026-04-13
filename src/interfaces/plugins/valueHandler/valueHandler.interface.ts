@@ -13,14 +13,14 @@ export interface ValueHandlerOptions extends PluginOptions
 /**
  * Value handler plugin interface
  */
-export interface ValueHandler<TValue = unknown, TOptions extends ValueHandlerOptions = ValueHandlerOptions> extends SelectPlugin<TOptions, TValue>
+export interface ValueHandler<TValue = unknown, TPublicValue = TValue, TOptions extends ValueHandlerOptions = ValueHandlerOptions> extends SelectPlugin<TOptions, TValue, TPublicValue>
 {
     //######################### properties #########################
 
     /**
      * Current selected value of Select
      */
-    readonly value: Signal<TValue|TValue[]|undefined|null>;
+    readonly value: Signal<TPublicValue|TPublicValue[]|undefined|null>;
 
     //######################### methods #########################
 
@@ -28,5 +28,5 @@ export interface ValueHandler<TValue = unknown, TOptions extends ValueHandlerOpt
      * Sets value for Select
      * @param value - Value to be set
      */
-    setValue(value: TValue|TValue[]|undefined|null): void;
+    setValue(value: TPublicValue|TPublicValue[]|undefined|null): void;
 }

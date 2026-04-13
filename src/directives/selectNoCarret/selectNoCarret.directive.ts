@@ -11,10 +11,10 @@ import {Select} from '../../components/select/select.component';
 {
     selector: 'ng-select[noCarret]',
 })
-export class SelectNoCarret<TValue = unknown>
+export class SelectNoCarret<TValue = unknown, TPublicValue = TValue>
 {
     //######################### constructor #########################
-    constructor(select: Select<TValue>)
+    constructor(select: Select<TValue, TPublicValue>)
     {
         select.selectOptions =
         {
@@ -28,6 +28,6 @@ export class SelectNoCarret<TValue = unknown>
                     },
                 },
             },
-        } as SelectOptions<TValue>;
+        } as SelectOptions<TValue, TPublicValue>;
     }
 }

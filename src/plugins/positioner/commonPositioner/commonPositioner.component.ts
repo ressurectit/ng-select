@@ -23,7 +23,7 @@ const defaultOptions: CommonPositionerOptions =
     template: '',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CommonPositioner<TValue = unknown> implements Positioner<TValue, CommonPositionerOptions>, OnDestroy
+export class CommonPositioner<TValue = unknown, TPublicValue = TValue> implements Positioner<TValue, TPublicValue, CommonPositionerOptions>, OnDestroy
 {
     //######################### protected fields #########################
 
@@ -58,7 +58,7 @@ export class CommonPositioner<TValue = unknown> implements Positioner<TValue, Co
     /**
      * @inheritdoc
      */
-    public selectPlugins: SelectPluginInstances<TValue> = inject(SelectPluginInstances);
+    public selectPlugins: SelectPluginInstances<TValue, TPublicValue> = inject(SelectPluginInstances);
 
     /**
      * @inheritdoc
@@ -68,7 +68,7 @@ export class CommonPositioner<TValue = unknown> implements Positioner<TValue, Co
     /**
      * @inheritdoc
      */
-    public selectBus: SelectBus<TValue> = inject(SelectBus);
+    public selectBus: SelectBus<TValue, TPublicValue> = inject(SelectBus);
 
     //######################### constructor #########################
     constructor(@Inject(POSITIONER_OPTIONS) @Optional() options?: RecursivePartial<CommonPositionerOptions>|null,)

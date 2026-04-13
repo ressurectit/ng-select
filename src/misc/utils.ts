@@ -10,7 +10,7 @@ import {SelectBus, SelectPluginInstances} from './classes';
  * @param option - Option to be compared with
  * @param selectBus - Instance of select bus use for obtaining value comparerer and value extractor functions
  */
-export function compareValueAndOption<TValue, TAction>(value: TValue, option: SelectOption<TValue>, selectBus: SelectBus<TValue, TAction>): boolean
+export function compareValueAndOption<TValue, TPublicValue, TAction>(value: TPublicValue, option: SelectOption<TValue>, selectBus: SelectBus<TValue, TPublicValue, TAction>): boolean
 {
     return untracked(() => selectBus.selectOptions().valueComparer(value, selectBus.selectOptions().valueExtractor(option)));
 }
@@ -21,7 +21,7 @@ export function compareValueAndOption<TValue, TAction>(value: TValue, option: Se
  * @param target - Target option to be compared with
  * @param selectBus - Instance of select bus use for obtaining value comparerer and value extractor functions
  */
-export function compareSelectOptions<TValue, TAction>(source: SelectOption<TValue>|undefined|null, target: SelectOption<TValue>|undefined|null, selectBus: SelectBus<TValue, TAction>): boolean
+export function compareSelectOptions<TValue, TPublicValue, TAction>(source: SelectOption<TValue>|undefined|null, target: SelectOption<TValue>|undefined|null, selectBus: SelectBus<TValue, TPublicValue, TAction>): boolean
 {
     return untracked(() => source === target || ((!!source && !!target) ? selectBus.selectOptions().valueComparer(selectBus.selectOptions().valueExtractor(source), selectBus.selectOptions().valueExtractor(target)) : false));
 }
@@ -30,7 +30,7 @@ export function compareSelectOptions<TValue, TAction>(source: SelectOption<TValu
  * Toggles popup visiblity
  * @param selectBus - Instance of select bus
  */
-export function togglePopup<TValue, TAction>(selectBus: SelectBus<TValue, TAction>): void
+export function togglePopup<TValue, TPublicValue, TAction>(selectBus: SelectBus<TValue, TPublicValue, TAction>): void
 {
     selectBus.popupVisible.update(val => !val);
 }
@@ -40,7 +40,7 @@ export function togglePopup<TValue, TAction>(selectBus: SelectBus<TValue, TActio
  * @param selectBus  - Instance of select bus
  * @param option - Option that was 'clicked'
  */
-export function selectOption<TValue, TAction>(selectBus: SelectBus<TValue, TAction>, option: SelectOptionState<TValue>|undefined|null): void
+export function selectOption<TValue, TPublicValue, TAction>(selectBus: SelectBus<TValue, TPublicValue, TAction>, option: SelectOptionState<TValue>|undefined|null): void
 {
     //handle multiselect
     if(selectBus.selectOptions().multiple)
@@ -114,7 +114,7 @@ export function selectOption<TValue, TAction>(selectBus: SelectBus<TValue, TActi
  * @param selectBus  - Instance of select bus
  * @param selectPlugins - Instance with select plugins
  */
-export function handleClickOutside<TValue, TAction>(document: Document, selectBus: SelectBus<TValue, TAction>, selectPlugins: SelectPluginInstances<TValue>): NoopAction
+export function handleClickOutside<TValue, TPublicValue, TAction>(document: Document, selectBus: SelectBus<TValue, TPublicValue, TAction>, selectPlugins: SelectPluginInstances<TValue, TPublicValue>): NoopAction
 {
     const handleClick = (event: MouseEvent) =>
     {
@@ -136,7 +136,7 @@ export function handleClickOutside<TValue, TAction>(document: Document, selectBu
  * Function for computed value signal
  * @param this - Instance of bound `ValueHandler`
  */
-export function computedValue<TValue>(this: ValueHandler<TValue, ValueHandlerOptions>): TValue|TValue[]|undefined|null
+export function computedValue<TValue, TPublicValue>(this: ValueHandler<TValue, TPublicValue, ValueHandlerOptions>): TPublicValue|TPublicValue[]|undefined|null
 {
     const selected = this.selectBus.selectedOptions();
     const valueExtractor = this.selectBus.selectOptions().valueExtractor;

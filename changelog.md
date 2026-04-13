@@ -185,6 +185,10 @@
 - removed `DynamicOptionsGatherer` class
 - removed `GetOptionsCallback` interface
 - removed `DynamicOptionsGathererOptions` interface
+- removed `NgSelectEditModule` module
+   - use `SelectEdit` directive instead
+- updated `NgSelectModule`
+   - renamed to `SelectModule`
 - updated `TemplateGatherer` interface
    - all properties are changed to `Signal` with possible `undefined` or `null` value
 - updated `OptionsGatherer` interface

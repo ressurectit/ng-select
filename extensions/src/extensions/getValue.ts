@@ -3,7 +3,7 @@ import {SelectFunction, SelectPluginType} from '@anglr/select';
 /**
  * Gets current value of Select, its reactive
  */
-export function getValue<TValue, TCssClasses>(): SelectFunction<TValue|TValue[]|undefined|null, TValue, TCssClasses>
+export function getValue<TValue, TPublicValue, TCssClasses>(): SelectFunction<TPublicValue|TPublicValue[]|undefined|null, TValue, TPublicValue, TCssClasses>
 {
     return select =>
     {

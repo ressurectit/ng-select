@@ -4,7 +4,7 @@ import {SelectOptionState} from '../selectOptionState/selectOptionState.interfac
 /**
  * Context for template that is used within popup plugin for rendering option
  */
-export interface PopupContext<TValue = unknown>
+export interface PopupContext<TValue = unknown, TPublicValue = TValue>
 {
     /**
      * Instance of plugin itself
@@ -14,5 +14,5 @@ export interface PopupContext<TValue = unknown>
     /**
      * Instance of plugin itself
      */
-    popup: Popup<TValue>;
+    popup: Popup<TValue, TPublicValue>;
 }

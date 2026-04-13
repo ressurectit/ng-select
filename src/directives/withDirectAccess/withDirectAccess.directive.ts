@@ -11,17 +11,17 @@ import {Select} from '../../components/select/select.component';
 {
     selector: 'ng-select[withDirectAccess]',
 })
-export class WithDirectAccess<TValue = unknown>
+export class WithDirectAccess<TValue = unknown, TPublicValue = TValue>
 {
     //######################### public properties - inputs/outputs #########################
 
     /**
      * Value of the Select to be set
      */
-    public value: ModelSignal<TValue|TValue[]|undefined|null> = model<TValue|TValue[]|undefined|null>(undefined);
+    public value: ModelSignal<TPublicValue|TPublicValue[]|undefined|null> = model<TPublicValue|TPublicValue[]|undefined|null>(undefined);
 
     //######################### constructor #########################
-    constructor(select: Select<TValue>,)
+    constructor(select: Select<TValue, TPublicValue>,)
     {
         effect(() =>
         {

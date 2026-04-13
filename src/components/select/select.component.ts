@@ -101,19 +101,19 @@ const defaultOptions: Omit<SelectOptions, 'optionsGatherer'|'templateGatherer'> 
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Select<TValue = unknown> implements SelectApi<TValue, SelectCssClasses>, OptionsGatherer<TValue>, TemplateGatherer<TValue>
+export class Select<TValue = unknown, TPublicValue = TValue> implements SelectApi<TValue, TPublicValue, SelectCssClasses>, OptionsGatherer<TValue>, TemplateGatherer<TValue, TPublicValue>
 {
     //######################### protected fields #########################
 
     /**
      * Instance of popup component used for positioning over page body when absolute option is true
      */
-    protected popupComponentRef: ComponentRef<Popup>|undefined|null;
+    protected popupComponentRef: ComponentRef<Popup<TValue, TPublicValue>>|undefined|null;
 
     /**
      * Object storing current used plugin type
      */
-    protected pluginTypes: Record<SelectPluginType, Type<SelectPlugin>|undefined|null> =
+    protected pluginTypes: Record<SelectPluginType, Type<SelectPlugin<unknown, TValue, TPublicValue>>|undefined|null> =
     {
         Interactions: null,
         KeyboardHandler: null,
@@ -242,7 +242,7 @@ export class Select<TValue = unknown> implements SelectApi<TValue, SelectCssClas
      * @inheritdoc
      */
     @CopyOptionsAsSignal()
-    public selectOptions: SelectOptions<TValue, SelectCssClasses>;
+    public selectOptions: SelectOptions<TValue, TPublicValue, SelectCssClasses>;
 
     //######################### public properties - inputs #########################
 
@@ -250,24 +250,24 @@ export class Select<TValue = unknown> implements SelectApi<TValue, SelectCssClas
      * Gets or sets Select options
      */
     @Input({alias: 'selectOptions'})
-    public get selectOptionsInput(): SelectOptions<TValue, SelectCssClasses>
+    public get selectOptionsInput(): SelectOptions<TValue, TPublicValue, SelectCssClasses>
     {
         return this.selectOptions;
     }
-    public set selectOptionsInput(value: RecursivePartial<SelectOptions<TValue, SelectCssClasses>>)
+    public set selectOptionsInput(value: RecursivePartial<SelectOptions<TValue, TPublicValue, SelectCssClasses>>)
     {
-        this.selectOptions = value as SelectOptions<TValue, SelectCssClasses>;
+        this.selectOptions = value as SelectOptions<TValue, TPublicValue, SelectCssClasses>;
     }
 
     /**
      * Indication whether should be Select disabled or not
      */
-    public disabled: InputSignalWithTransform<boolean, string | boolean> = input<boolean, boolean|string>(false, {transform: booleanAttribute});
+    public disabled: InputSignalWithTransform<boolean, string|boolean> = input<boolean, boolean|string>(false, {transform: booleanAttribute});
 
     /**
      * Indication whether should be Select readonly or not
      */
-    public readonly: InputSignalWithTransform<boolean, string | boolean> = input<boolean, boolean|string>(false, {transform: booleanAttribute});
+    public readonly: InputSignalWithTransform<boolean, string|boolean> = input<boolean, boolean|string>(false, {transform: booleanAttribute});
 
     //######################### public properties - implementation of SelectApi #########################
 
@@ -292,17 +292,17 @@ export class Select<TValue = unknown> implements SelectApi<TValue, SelectCssClas
     /**
      * @inheritdoc
      */
-    public readonly normalStateTemplate: Signal<TemplateRef<NormalStateContext<TValue>>|undefined|null> = contentChild(NormalStateTemplate, {read: TemplateRef});
+    public readonly normalStateTemplate: Signal<TemplateRef<NormalStateContext<TValue, TPublicValue>>|undefined|null> = contentChild(NormalStateTemplate, {read: TemplateRef});
 
     /**
      * @inheritdoc
      */
-    public readonly optionTemplate: Signal<TemplateRef<PopupContext<TValue>>|undefined|null> = contentChild(OptionTemplate, {read: TemplateRef});
+    public readonly optionTemplate: Signal<TemplateRef<PopupContext<TValue, TPublicValue>>|undefined|null> = contentChild(OptionTemplate, {read: TemplateRef});
 
     /**
      * @inheritdoc
      */
-    public readonly normalStateTagTemplate: Signal<TemplateRef<NormalStateTagContext<TValue>>|undefined|null> = contentChild(NormalStateTagTemplate, {read: TemplateRef});
+    public readonly normalStateTagTemplate: Signal<TemplateRef<NormalStateTagContext<TValue, TPublicValue>>|undefined|null> = contentChild(NormalStateTagTemplate, {read: TemplateRef});
 
     //######################### public properties - implementation of OptionsGatherer #########################
 
@@ -312,26 +312,26 @@ export class Select<TValue = unknown> implements SelectApi<TValue, SelectCssClas
     public readonly availableOptions: Signal<readonly SelectOptionState<TValue>[]|undefined|null> = contentChildren<SelectOptionState<TValue>>(Option, {descendants: true});
 
     //######################### constructors #########################
-    constructor(protected pluginInstances: SelectPluginInstances,
-                protected bus: SelectBus<TValue>,
+    constructor(protected pluginInstances: SelectPluginInstances<TValue, TPublicValue>,
+                protected bus: SelectBus<TValue, TPublicValue>,
                 @Inject(LOGGER) protected logger: Logger,
                 element: ElementRef<HTMLElement>,
                 @Inject(DOCUMENT) document: HTMLDocument,
                 @Attribute('multiple') multiple?: string|null,
-                @Inject(NORMAL_STATE_TYPE) @Optional() normalStateType?: Type<NormalState>|null,
-                @Inject(KEYBOARD_HANDLER_TYPE) @Optional() keyboardHandlerType?: Type<KeyboardHandler>|null,
-                @Inject(POPUP_TYPE) @Optional() popupType?: Type<Popup>|null,
-                @Inject(POSITIONER_TYPE) @Optional() positionerType?: Type<Positioner>|null,
-                @Inject(READONLY_STATE_TYPE) @Optional() readonlyStateType?: Type<ReadonlyState>|null,
-                @Inject(VALUE_HANDLER_TYPE) @Optional() valueHandlerType?: Type<ValueHandler>|null,
-                @Inject(LIVE_SEARCH_TYPE) @Optional() liveSearchType?: Type<LiveSearch>|null,
-                @Inject(INTERACTIONS_TYPE) @Optional() interactionsType?: Type<Interactions>|null,
-                @Inject(OPTIONS_HANDLER_TYPE) @Optional() optionsHandlerType?: Type<OptionsHandler>|null,
-                @Inject(SELECT_OPTIONS) @Optional() options?: RecursivePartial<SelectOptions<TValue, SelectCssClasses>>|null,)
+                @Inject(NORMAL_STATE_TYPE) @Optional() normalStateType?: Type<NormalState<TValue, TPublicValue>>|null,
+                @Inject(KEYBOARD_HANDLER_TYPE) @Optional() keyboardHandlerType?: Type<KeyboardHandler<TValue, TPublicValue>>|null,
+                @Inject(POPUP_TYPE) @Optional() popupType?: Type<Popup<TValue, TPublicValue>>|null,
+                @Inject(POSITIONER_TYPE) @Optional() positionerType?: Type<Positioner<TValue, TPublicValue>>|null,
+                @Inject(READONLY_STATE_TYPE) @Optional() readonlyStateType?: Type<ReadonlyState<TValue, TPublicValue>>|null,
+                @Inject(VALUE_HANDLER_TYPE) @Optional() valueHandlerType?: Type<ValueHandler<TValue, TPublicValue>>|null,
+                @Inject(LIVE_SEARCH_TYPE) @Optional() liveSearchType?: Type<LiveSearch<TValue, TPublicValue>>|null,
+                @Inject(INTERACTIONS_TYPE) @Optional() interactionsType?: Type<Interactions<TValue, TPublicValue>>|null,
+                @Inject(OPTIONS_HANDLER_TYPE) @Optional() optionsHandlerType?: Type<OptionsHandler<TValue, TPublicValue>>|null,
+                @Inject(SELECT_OPTIONS) @Optional() options?: RecursivePartial<SelectOptions<TValue, TPublicValue, SelectCssClasses>>|null,)
     {
         //is present (value is not important)
         const multipleDefault = isPresent(multiple);
-        const opts: RecursivePartial<SelectOptions<TValue, SelectCssClasses>> = deepCopyWithArrayOverride({}, options);
+        const opts: RecursivePartial<SelectOptions<TValue, TPublicValue, SelectCssClasses>> = deepCopyWithArrayOverride({}, options);
 
         opts.plugins ??= {};
 
@@ -390,13 +390,13 @@ export class Select<TValue = unknown> implements SelectApi<TValue, SelectCssClas
         }
 
         this.selectOptions = deepCopyWithArrayOverride(
-            <RecursivePartial<SelectOptions<TValue, SelectCssClasses>>>
+            <RecursivePartial<SelectOptions<TValue, TPublicValue, SelectCssClasses>>>
             {
                 optionsGatherer: this,
                 templateGatherer: this,
             },
-            defaultOptions as SelectOptions<TValue, SelectCssClasses>,
-            <RecursivePartial<SelectOptions<TValue>>>
+            defaultOptions as SelectOptions<TValue, TPublicValue, SelectCssClasses>,
+            <RecursivePartial<SelectOptions<TValue, TPublicValue, SelectCssClasses>>>
             {
                 multiple: multipleDefault,
             },
@@ -413,10 +413,10 @@ export class Select<TValue = unknown> implements SelectApi<TValue, SelectCssClas
             const readonly = this.readonly() || this.disabled();
 
             this.selectOptions =
-            <RecursivePartial<SelectOptions<TValue>>>
+            <RecursivePartial<SelectOptions<TValue, TPublicValue, SelectCssClasses>>>
             {
                 readonly: readonly,
-            } as SelectOptions<TValue, SelectCssClasses>;
+            } as SelectOptions<TValue, TPublicValue, SelectCssClasses>;
 
             this.logger.verbose('Select: readonly updated {{readonly}}', {readonly});
         });
@@ -500,16 +500,16 @@ export class Select<TValue = unknown> implements SelectApi<TValue, SelectCssClas
     /**
      * @inheritdoc
      */
-    public getPlugin(pluginType: SelectPluginType.Interactions): Interactions<TValue>;
-    public getPlugin(pluginType: SelectPluginType.KeyboardHandler): KeyboardHandler<TValue>;
-    public getPlugin(pluginType: SelectPluginType.LiveSearch): LiveSearch<TValue>;
-    public getPlugin(pluginType: SelectPluginType.NormalState): NormalState<TValue>;
-    public getPlugin(pluginType: SelectPluginType.OptionsHandler): OptionsHandler<TValue>;
-    public getPlugin(pluginType: SelectPluginType.Popup): Popup<TValue>;
-    public getPlugin(pluginType: SelectPluginType.Positioner): Positioner<TValue>;
-    public getPlugin(pluginType: SelectPluginType.ReadonlyState): ReadonlyState;
-    public getPlugin(pluginType: SelectPluginType.ValueHandler): ValueHandler<TValue>;
-    public getPlugin<PluginInstance extends SelectPlugin<TValue>>(pluginType: SelectPluginType): PluginInstance
+    public getPlugin(pluginType: SelectPluginType.Interactions): Interactions<TValue, TPublicValue>;
+    public getPlugin(pluginType: SelectPluginType.KeyboardHandler): KeyboardHandler<TValue, TPublicValue>;
+    public getPlugin(pluginType: SelectPluginType.LiveSearch): LiveSearch<TValue, TPublicValue>;
+    public getPlugin(pluginType: SelectPluginType.NormalState): NormalState<TValue, TPublicValue>;
+    public getPlugin(pluginType: SelectPluginType.OptionsHandler): OptionsHandler<TValue, TPublicValue>;
+    public getPlugin(pluginType: SelectPluginType.Popup): Popup<TValue, TPublicValue>;
+    public getPlugin(pluginType: SelectPluginType.Positioner): Positioner<TValue, TPublicValue>;
+    public getPlugin(pluginType: SelectPluginType.ReadonlyState): ReadonlyState<TValue, TPublicValue>;
+    public getPlugin(pluginType: SelectPluginType.ValueHandler): ValueHandler<TValue, TPublicValue>;
+    public getPlugin<PluginInstance extends SelectPlugin<unknown, TValue, TPublicValue>>(pluginType: SelectPluginType): PluginInstance
     {
         return this.pluginInstances[pluginType] as PluginInstance;
     }
@@ -517,7 +517,7 @@ export class Select<TValue = unknown> implements SelectApi<TValue, SelectCssClas
     /**
      * @inheritdoc
      */
-    public execute(...actions: SelectAction<TValue, SelectCssClasses>[])
+    public execute(...actions: SelectAction<TValue, TPublicValue, SelectCssClasses>[])
     {
         if(!actions)
         {
@@ -530,7 +530,7 @@ export class Select<TValue = unknown> implements SelectApi<TValue, SelectCssClas
     /**
      * @inheritdoc
      */
-    public executeAndReturn<TResult>(func: SelectFunction<TResult, TValue, SelectCssClasses>): TResult
+    public executeAndReturn<TResult>(func: SelectFunction<TResult, TValue, TPublicValue, SelectCssClasses>): TResult
     {
         if(!func)
         {
@@ -549,10 +549,10 @@ export class Select<TValue = unknown> implements SelectApi<TValue, SelectCssClas
      * @param pluginViewContainer - Container where should be plugin created
      * @param initOptions - Signal that hold information about init options state for this plugin
      */
-    protected async createPlugin<TPlugin extends SelectPlugin>(pluginDescription: PluginDescription<TPlugin>|undefined|null,
-                                                               pluginType: SelectPluginType,
-                                                               pluginViewContainer: ViewContainerRef,
-                                                               initOptions: WritableSignal<boolean>,): Promise<void>
+    protected async createPlugin<TPlugin extends SelectPlugin<unknown, TValue, TPublicValue>>(pluginDescription: PluginDescription<TPlugin>|undefined|null,
+                                                                                              pluginType: SelectPluginType,
+                                                                                              pluginViewContainer: ViewContainerRef,
+                                                                                              initOptions: WritableSignal<boolean>,): Promise<void>
     {
         this.logger.verbose('Select: creating plugin "{{type}}", with type "{{typ}}"', {type: pluginType, typ: pluginDescription?.type});
 
@@ -564,7 +564,6 @@ export class Select<TValue = unknown> implements SelectApi<TValue, SelectCssClas
         }
 
         const type = resolveForwardRef(pluginDescription.type);
-        let newInstance = false;
 
         //new type provided
         if(type != this.pluginTypes[pluginType])
@@ -578,18 +577,11 @@ export class Select<TValue = unknown> implements SelectApi<TValue, SelectCssClas
             const component = pluginViewContainer.createComponent(type);
             component.changeDetectorRef.detectChanges();
             this.pluginInstances[pluginType] = component.instance;
-            newInstance = true;
 
             if(pluginType == SelectPluginType.Popup)
             {
                 this.popupComponentRef = component as ComponentRef<Popup>;
             }
-        }
-
-        //only call when new instance of plugin was created
-        if(newInstance)
-        {
-            pluginDescription.instanceCallback?.(this.pluginInstances[pluginType] as TPlugin);
         }
 
         //options are available, set them

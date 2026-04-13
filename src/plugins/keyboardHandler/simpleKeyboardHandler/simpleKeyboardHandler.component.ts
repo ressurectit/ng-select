@@ -24,7 +24,7 @@ const defaultOptions: SimpleKeyboardHandlerOptions =
     selector: 'simple-keyboard-handler',
     template: '',
 })
-export class SimpleKeyboardHandler<TValue = unknown> implements KeyboardHandler<TValue, SimpleKeyboardHandlerOptions, SimpleKeyboardActionTypes>, OnDestroy
+export class SimpleKeyboardHandler<TValue = unknown, TPublicValue = TValue> implements KeyboardHandler<TValue, TPublicValue, SimpleKeyboardHandlerOptions, SimpleKeyboardActionTypes>, OnDestroy
 {
     //######################### protected fields #########################
 
@@ -54,7 +54,7 @@ export class SimpleKeyboardHandler<TValue = unknown> implements KeyboardHandler<
     /**
      * @inheritdoc
      */
-    public selectPlugins: SelectPluginInstances<TValue> = inject(SelectPluginInstances);
+    public selectPlugins: SelectPluginInstances<TValue, TPublicValue> = inject(SelectPluginInstances);
 
     /**
      * @inheritdoc
@@ -64,7 +64,7 @@ export class SimpleKeyboardHandler<TValue = unknown> implements KeyboardHandler<
     /**
      * @inheritdoc
      */
-    public selectBus: SelectBus<TValue, SimpleKeyboardActionTypes> = inject(SelectBus) as SelectBus<TValue, SimpleKeyboardActionTypes>;
+    public selectBus: SelectBus<TValue, TPublicValue, SimpleKeyboardActionTypes> = inject(SelectBus) as SelectBus<TValue, TPublicValue, SimpleKeyboardActionTypes>;
 
     //######################### constructor #########################
     constructor(@Inject(KEYBOARD_HANDLER_OPTIONS) @Optional() options?: RecursivePartial<SimpleKeyboardHandlerOptions>|null,)

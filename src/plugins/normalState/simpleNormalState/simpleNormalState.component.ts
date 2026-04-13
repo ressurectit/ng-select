@@ -52,7 +52,7 @@ const defaultOptions: NormalStateOptions<SimpleNormalStateCssClasses> =
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SimpleNormalState<TValue = unknown> implements NormalState<TValue, NormalStateOptions<SimpleNormalStateCssClasses>>
+export class SimpleNormalState<TValue = unknown, TPublicValue = TValue> implements NormalState<TValue, TPublicValue, NormalStateOptions<SimpleNormalStateCssClasses>>
 {
     //######################### public properties - implementation of SelectPlugin #########################
 
@@ -65,7 +65,7 @@ export class SimpleNormalState<TValue = unknown> implements NormalState<TValue, 
     /**
      * @inheritdoc
      */
-    public selectPlugins: SelectPluginInstances<TValue> = inject(SelectPluginInstances);
+    public selectPlugins: SelectPluginInstances<TValue, TPublicValue> = inject(SelectPluginInstances);
 
     /**
      * @inheritdoc
@@ -75,7 +75,7 @@ export class SimpleNormalState<TValue = unknown> implements NormalState<TValue, 
     /**
      * @inheritdoc
      */
-    public selectBus: SelectBus<TValue> = inject(SelectBus);
+    public selectBus: SelectBus<TValue, TPublicValue> = inject(SelectBus);
 
     //######################### protected properties - template bindings #########################
 

@@ -42,7 +42,7 @@ export interface NormalStateOptions<TCssClasses extends NormalStateCssClasses = 
 /**
  * Normal state plugin interface
  */
-export interface NormalState<TValue = unknown, TOptions extends NormalStateOptions = NormalStateOptions> extends SelectPlugin<TOptions, TValue>
+export interface NormalState<TValue = unknown, TPublicValue = TValue, TOptions extends NormalStateOptions = NormalStateOptions> extends SelectPlugin<TOptions, TValue, TPublicValue>
 {
     //######################### methods #########################
 

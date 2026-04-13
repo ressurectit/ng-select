@@ -17,7 +17,7 @@ import {CopyOptionsAsSignal} from '../../../decorators';
     },
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NoLiveSearch<TValue = unknown> implements LiveSearch<TValue, LiveSearchOptions>
+export class NoLiveSearch<TValue = unknown, TPublicValue = TValue> implements LiveSearch<TValue, TPublicValue, LiveSearchOptions>
 {
     //######################### public properties - implementation of SelectPlugin #########################
 
@@ -30,7 +30,7 @@ export class NoLiveSearch<TValue = unknown> implements LiveSearch<TValue, LiveSe
     /**
      * @inheritdoc
      */
-    public selectPlugins: SelectPluginInstances<TValue> = inject(SelectPluginInstances);
+    public selectPlugins: SelectPluginInstances<TValue, TPublicValue> = inject(SelectPluginInstances);
 
     /**
      * @inheritdoc
@@ -40,7 +40,7 @@ export class NoLiveSearch<TValue = unknown> implements LiveSearch<TValue, LiveSe
     /**
      * @inheritdoc
      */
-    public selectBus: SelectBus<TValue> = inject(SelectBus);
+    public selectBus: SelectBus<TValue, TPublicValue> = inject(SelectBus);
 
     //######################### public properties - implementation of LiveSearch #########################
 

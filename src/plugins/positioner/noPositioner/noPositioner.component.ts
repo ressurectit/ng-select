@@ -13,7 +13,7 @@ import {CopyOptionsAsSignal} from '../../../decorators';
     template: '',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NoPositioner<TValue = unknown> implements Positioner<TValue, PositionOptions>
+export class NoPositioner<TValue = unknown, TPublicValue = TValue> implements Positioner<TValue, TPublicValue, PositionOptions>
 {
     //######################### public properties - implementation of SelectPlugin #########################
 
@@ -26,7 +26,7 @@ export class NoPositioner<TValue = unknown> implements Positioner<TValue, Positi
     /**
      * @inheritdoc
      */
-    public selectPlugins: SelectPluginInstances<TValue> = inject(SelectPluginInstances);
+    public selectPlugins: SelectPluginInstances<TValue, TPublicValue> = inject(SelectPluginInstances);
 
     /**
      * @inheritdoc
@@ -36,5 +36,5 @@ export class NoPositioner<TValue = unknown> implements Positioner<TValue, Positi
     /**
      * @inheritdoc
      */
-    public selectBus: SelectBus<TValue> = inject(SelectBus);
+    public selectBus: SelectBus<TValue, TPublicValue> = inject(SelectBus);
 }

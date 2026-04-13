@@ -14,14 +14,14 @@ export class OptionGroupTemplate
     /**
      * Instance of template for options in popup
      */
-    public template: TemplateRef<string> = inject(TemplateRef);
+    public template: TemplateRef<{$implicit: string}> = inject(TemplateRef);
 
     //######################### ng language server #########################
 
     /**
      * Allows typechecking for template
      */
-    static ngTemplateContextGuard(_dir: OptionGroupTemplate, _ctx: unknown): _ctx is string
+    static ngTemplateContextGuard(_dir: OptionGroupTemplate, _ctx: unknown): _ctx is {$implicit: string}
     {
         return true;
     }

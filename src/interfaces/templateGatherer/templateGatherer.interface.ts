@@ -7,20 +7,20 @@ import {NormalStateTagContext} from '../normalStateTagContext/normalStateTagCont
 /**
  * Gatherer used for obtaining templates for Select
  */
-export interface TemplateGatherer<TValue = unknown>
+export interface TemplateGatherer<TValue = unknown, TPublicValue = TValue>
 {
     /**
      * Template used within normal state, for rendering normal state if defined
      */
-    readonly normalStateTemplate: Signal<TemplateRef<NormalStateContext<TValue>>|undefined|null>;
+    readonly normalStateTemplate: Signal<TemplateRef<NormalStateContext<TValue, TPublicValue>>|undefined|null>;
 
     /**
      * Template used within Popup, for rendering option if defined
      */
-    readonly optionTemplate: Signal<TemplateRef<PopupContext<TValue>>|undefined|null>;
+    readonly optionTemplate: Signal<TemplateRef<PopupContext<TValue, TPublicValue>>|undefined|null>;
 
     /**
      * Template used within normal state, for rendering tags
      */
-    readonly normalStateTagTemplate: Signal<TemplateRef<NormalStateTagContext<TValue>>|undefined|null>;
+    readonly normalStateTagTemplate: Signal<TemplateRef<NormalStateTagContext<TValue, TPublicValue>>|undefined|null>;
 }

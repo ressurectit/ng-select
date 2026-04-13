@@ -5,7 +5,7 @@ import {TemplateGatherer} from '../templateGatherer/templateGatherer.interface';
 /**
  * Options used for select bus
  */
-export interface SelectBusOptions<TValue = unknown>
+export interface SelectBusOptions<TValue = unknown, TPublicValue = TValue>
 {
     //######################### properties #########################
 
@@ -47,12 +47,12 @@ export interface SelectBusOptions<TValue = unknown>
     /**
      * Function used to extract value from option, if not provided, select option value will be used as value
      */
-    valueExtractor: ValueExtractorFunc<TValue>;
+    valueExtractor: ValueExtractorFunc<TValue, TPublicValue>;
 
     /**
      * Function used for comparing values of select options
      */
-    valueComparer: ValueEqualityFunc<TValue>;
+    valueComparer: ValueEqualityFunc<TPublicValue>;
 
     /**
      * Method that is used for filtering when live search is running on static data

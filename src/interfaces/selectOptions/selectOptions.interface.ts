@@ -5,7 +5,7 @@ import {SelectPluginTypes} from '../selectPluginTypes/selectPluginTypes.interfac
 /**
  * Describes select options used for Select
  */
-export interface SelectOptions<TValue = unknown, TCssClasses = SelectCssClasses> extends SelectBusOptions<TValue>
+export interface SelectOptions<TValue = unknown, TPublicValue = TValue, TCssClasses = SelectCssClasses> extends SelectBusOptions<TValue, TPublicValue>
 {
     /**
      * Css classes applied to select component
@@ -15,7 +15,7 @@ export interface SelectOptions<TValue = unknown, TCssClasses = SelectCssClasses>
     /**
      * Object defining overrides for default plugins, default plugins can be also specified using DI
      */
-    plugins: SelectPluginTypes;
+    plugins: SelectPluginTypes<TValue, TPublicValue>;
 
     /**
      * Indication whether is 'Popup' plugin displayd inside of Select (false) or directly in Body (true)

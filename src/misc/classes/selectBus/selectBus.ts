@@ -8,7 +8,7 @@ import {SelectEvents, SelectBusOptions, SelectEvent, SelectOptionState, Keyboard
  * Class represents centralized bus for internal communication
  */
 @Injectable()
-export class SelectBus<TValue = unknown, TAction = string> implements SelectEvents
+export class SelectBus<TValue = unknown, TPublicValue = TValue, TAction = string> implements SelectEvents
 {
     //######################### public properties #########################
 
@@ -22,7 +22,7 @@ export class SelectBus<TValue = unknown, TAction = string> implements SelectEven
      *
      * Initialized in constructor of select
      */
-    public selectOptions!: Signal<SelectBusOptions<TValue>>;
+    public selectOptions!: Signal<SelectBusOptions<TValue, TPublicValue>>;
 
     /**
      * HTML element that represents select itself

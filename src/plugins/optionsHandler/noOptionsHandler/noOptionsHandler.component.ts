@@ -21,7 +21,7 @@ const defaultOptions: OptionsHandlerOptions<unknown> =
     template: '',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NoOptionsHandler<TValue = unknown> extends OptionsHandlerBase<TValue, OptionsHandlerOptions<TValue>> implements OptionsHandler<TValue, OptionsHandlerOptions<TValue>>
+export class NoOptionsHandler<TValue = unknown, TPublicValue = TValue> extends OptionsHandlerBase<TValue, TPublicValue, OptionsHandlerOptions<TValue>> implements OptionsHandler<TValue, TPublicValue, OptionsHandlerOptions<TValue>>
 {
     //######################### public properties - implementation of SelectPlugin #########################
 

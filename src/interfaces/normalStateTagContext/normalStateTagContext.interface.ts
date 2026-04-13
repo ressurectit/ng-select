@@ -4,7 +4,7 @@ import {SelectOptionState} from '../selectOptionState/selectOptionState.interfac
 /**
  * Context for template that is used within normal state plugin for rendering tag
  */
-export interface NormalStateTagContext<TValue = unknown>
+export interface NormalStateTagContext<TValue = unknown, TPublicValue = TValue>
 {
     /**
      * Instance of rendered option
@@ -14,5 +14,5 @@ export interface NormalStateTagContext<TValue = unknown>
     /**
      * Instance of plugin itself
      */
-    normalState: NormalState<TValue>;
+    normalState: NormalState<TValue, TPublicValue>;
 }

@@ -9,10 +9,10 @@ import {Select} from '../../components/select/select.component';
 {
     selector: 'ng-select[multiple]',
 })
-export class SelectMultipleKeepPopup<TValue = unknown>
+export class SelectMultipleKeepPopup<TValue = unknown, TPublicValue = TValue>
 {
     //######################### constructor #########################
-    constructor(select: Select<TValue>,)
+    constructor(select: Select<TValue, TPublicValue>)
     {
         select.selectOptions.closeOnSelect = false;
     }

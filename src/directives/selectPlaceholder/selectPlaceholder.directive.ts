@@ -10,7 +10,7 @@ import {Select} from '../../components/select/select.component';
 {
     selector: 'ng-select[placeholder]',
 })
-export class SelectPlaceholder<TValue = unknown>
+export class SelectPlaceholder<TValue = unknown, TPublicValue = TValue>
 {
     //######################### public properties - inputs #########################
 
@@ -20,14 +20,14 @@ export class SelectPlaceholder<TValue = unknown>
     public placeholder: InputSignal<string> = input.required();
 
     //######################### constructor #########################
-    constructor(select: Select<TValue>)
+    constructor(select: Select<TValue, TPublicValue>)
     {
         effect(() =>
         {
             select.selectOptions =
             {
                 placeholder: this.placeholder(),
-            } as SelectOptions<TValue>;
+            } as SelectOptions<TValue, TPublicValue>;
         });
     }
 }

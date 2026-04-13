@@ -14,7 +14,7 @@
         <div [class]="cssClasses()">
             @if(!selectBus.selectOptions().multiple)
             {
-                <ng-container *ngTemplateOutlet="selectBus.selectOptions().templateGatherer.normalStateTemplate() || defaultSingleLook.template; context: {$implicit: this}"/>
+                <ng-container *ngTemplateOutlet="selectBus.selectOptions().templateGatherer.normalStateTemplate() || defaultSingleLook.template; context: {$implicit: $any(this)}"/>
             }
             @else
             {

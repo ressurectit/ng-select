@@ -3,7 +3,7 @@ import {LOGGER, Logger} from '@anglr/common';
 import {isBlank, isPresent, RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
-import {OptionsHandler, SelectOptionState, ValueHandler, ValueHandlerOptions} from '../../../interfaces';
+import {SelectOptionState, ValueHandler, ValueHandlerOptions} from '../../../interfaces';
 import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {VALUE_HANDLER_OPTIONS} from '../../../misc/tokens';
@@ -23,14 +23,14 @@ const defaultOptions: ValueHandlerOptions =
     template: '',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StaticValueHandler<TValue = unknown> implements ValueHandler<TValue, ValueHandlerOptions>
+export class StaticValueHandler<TValue = unknown, TPublicValue = TValue> implements ValueHandler<TValue, TPublicValue, ValueHandlerOptions>
 {
     //######################### protected fields #########################
 
     /**
      * Postponed value that will be set when options are loaded. This is needed for case when value is set before options are loaded, so we cannot set value right away, but we will handle setting value when options are loaded
      */
-    protected postponedValue: TValue|TValue[]|undefined|null = null;
+    protected postponedValue: TPublicValue|TPublicValue[]|undefined|null = null;
 
     //######################### public properties - implementation of SelectPlugin #########################
 
@@ -43,7 +43,7 @@ export class StaticValueHandler<TValue = unknown> implements ValueHandler<TValue
     /**
      * @inheritdoc
      */
-    public selectPlugins: SelectPluginInstances<TValue> = inject(SelectPluginInstances);
+    public selectPlugins: SelectPluginInstances<TValue, TPublicValue> = inject(SelectPluginInstances);
 
     /**
      * @inheritdoc
@@ -53,7 +53,7 @@ export class StaticValueHandler<TValue = unknown> implements ValueHandler<TValue
     /**
      * @inheritdoc
      */
-    public selectBus: SelectBus<TValue> = inject(SelectBus);
+    public selectBus: SelectBus<TValue, TPublicValue> = inject(SelectBus);
 
     /**
      * Instance of logger for logging purposes
@@ -65,7 +65,7 @@ export class StaticValueHandler<TValue = unknown> implements ValueHandler<TValue
     /**
      * @inheritdoc
      */
-    public readonly value: Signal<TValue|TValue[]|undefined|null> = computed((computedValue as ValueComputedFunc<TValue>).bind(this));
+    public readonly value: Signal<TPublicValue|TPublicValue[]|undefined|null> = computed((computedValue as ValueComputedFunc<TPublicValue>).bind(this));
 
     //######################### constructor #########################
     constructor(@Inject(VALUE_HANDLER_OPTIONS) @Optional() options?: RecursivePartial<ValueHandlerOptions>|null,)
@@ -75,7 +75,7 @@ export class StaticValueHandler<TValue = unknown> implements ValueHandler<TValue
 
         effect(() =>
         {
-            const availableOptions = (this.selectPlugins.OptionsHandler as OptionsHandler<TValue>).availableOptions();
+            const availableOptions = this.selectPlugins.OptionsHandler.availableOptions();
 
             if(isPresent(availableOptions) && isPresent(this.postponedValue))
             {
@@ -92,10 +92,10 @@ export class StaticValueHandler<TValue = unknown> implements ValueHandler<TValue
     /**
      * @inheritdoc
      */
-    public setValue(value: TValue|TValue[]|undefined|null): void
+    public setValue(value: TPublicValue|TPublicValue[]|undefined|null): void
     {
         this.logger.verbose('Select: Value handler: setting value "{{@(4)value}}"', {value});
-        const availableOptions = untracked(() => (this.selectPlugins.OptionsHandler as OptionsHandler<TValue>).availableOptions());
+        const availableOptions = untracked(() => this.selectPlugins.OptionsHandler.availableOptions());
 
         //Options are not loaded yet, so we cannot set value, but we will handle setting value when options are loaded
         if(isBlank(availableOptions))
@@ -116,7 +116,7 @@ export class StaticValueHandler<TValue = unknown> implements ValueHandler<TValue
      * @param value - Value to be set
      * @param availableOptions - Available options that are checked whether they contain value that is being set, so we can set value only if it is available in options
      */
-    protected setValueInternal(value: TValue|TValue[]|undefined|null, availableOptions: readonly SelectOptionState<TValue>[]): void
+    protected setValueInternal(value: TPublicValue|TPublicValue[]|undefined|null, availableOptions: readonly SelectOptionState<TValue>[]): void
     {
         //this keeps only values that are available in options
         untracked(() =>
@@ -155,7 +155,7 @@ export class StaticValueHandler<TValue = unknown> implements ValueHandler<TValue
             }
             else
             {
-                const selectedOption = availableOptions.find(opt => compareValueAndOption(value as TValue, opt, this.selectBus));
+                const selectedOption = availableOptions.find(opt => compareValueAndOption(value as TPublicValue, opt, this.selectBus));
                 selectedOption?.selected.set(true);
                 this.logger.verbose('Select: Value handler: selecting single option value "{{@(4)value}}"', {value: selectedOption?.value()});
 
