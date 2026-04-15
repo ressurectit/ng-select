@@ -21,6 +21,11 @@
             background-color: transparent;
             border: none;
             outline: none;
+
+            *::placeholder
+            {
+                color: var(--select-liveSearch-placeholder);
+            }
         }
     }
 }

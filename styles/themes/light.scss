@@ -3,6 +3,7 @@
 @use '../core/mixins';
 
 $_blue: #0066ff;
+$_black: #000;
 
 @function defineTheme($fontSize: 14px, $theme: (), $customization: ())
 {
@@ -14,7 +15,7 @@ $_blue: #0066ff;
             (
                 borderColor: #666,
                 background: #eee,
-                foreground: #000,
+                foreground: $_black,
                 focus:
                 (
                     borderColor: $_blue,
@@ -23,7 +24,7 @@ $_blue: #0066ff;
                 tag:
                 (
                     background: #ccc,
-                    foreground: #000,
+                    foreground: $_black,
                 ),
             ),
             popup:
@@ -31,8 +32,12 @@ $_blue: #0066ff;
                 container:
                 (
                     background: #F0F0F0,
-                    foreground: #000,
+                    foreground: $_black,
                 ),
+            ),
+            liveSearch:
+            (
+                placeholder: $_black,
             ),
         ),
     );
