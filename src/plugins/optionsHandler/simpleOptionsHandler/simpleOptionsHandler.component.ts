@@ -12,6 +12,7 @@ const defaultOptions: SimpleOptionsHandlerOptions<unknown> =
 {
     listSelected: true,
     newOptionGetter: undefined,
+    newOptionOnlyWhenNoOptions: false,
 };
 
 /**
@@ -72,7 +73,7 @@ export class SimpleOptionsHandler<TValue = unknown, TPublicValue = TValue> exten
 
             if(!text)
             {
-                if(firstOption && availableOptions)
+                if(firstOption && availableOptions && (!this.options.newOptionOnlyWhenNoOptions || !availableOptions.length))
                 {
                     availableOptions.unshift(firstOption);
                 }
@@ -88,7 +89,7 @@ export class SimpleOptionsHandler<TValue = unknown, TPublicValue = TValue> exten
             availableOptions = availableOptions
                 ?.filter(itm => textCompare(normalize(textExtractor(itm)), normalize(text)));
 
-            if(firstOption && availableOptions)
+            if(firstOption && availableOptions && (!this.options.newOptionOnlyWhenNoOptions || !availableOptions.length))
             {
                 availableOptions.unshift(firstOption);
             }

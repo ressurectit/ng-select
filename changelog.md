@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 16.0.0 (2026-04-10)
+## Version 16.0.0 (2026-04-15)
 
 ### Features
 
@@ -63,6 +63,7 @@
 - new `OptionsHandlerOptions` interface, that represents options for options handler plugin
    - **properties**
       - `newOptionGetter` allows adding new option to select when defined
+      - `newOptionOnlyWhenNoOptions` indication that add new option only when there are no options available
 - new `SimpleOptionsHandlerOptions` interface, that represents options for simple options handler plugin
    - **properties**
       - `listSelected` indication whether display selected option in list of available options

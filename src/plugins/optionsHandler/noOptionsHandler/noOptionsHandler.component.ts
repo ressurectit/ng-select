@@ -10,6 +10,7 @@ import {OptionsHandlerBase} from '../optionsHandlerBase';
 const defaultOptions: OptionsHandlerOptions<unknown> =
 {
     newOptionGetter: undefined,
+    newOptionOnlyWhenNoOptions: false,
 };
 
 /**
@@ -57,7 +58,7 @@ export class NoOptionsHandler<TValue = unknown, TPublicValue = TValue> extends O
             const firstOption = this.firstOption();
             const availableOptions = this.availableOptions() as SelectOptionState<TValue>[] | null | undefined;
 
-            if(firstOption && availableOptions)
+            if(firstOption && availableOptions && (!this.options.newOptionOnlyWhenNoOptions || !availableOptions.length))
             {
                 availableOptions.unshift(firstOption);
             }

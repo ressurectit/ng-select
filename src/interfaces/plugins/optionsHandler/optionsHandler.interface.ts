@@ -16,6 +16,11 @@ export interface OptionsHandlerOptions<TValue = unknown> extends PluginOptions
      * Allows adding new option to select when defined
      */
     newOptionGetter: NewOptionGetterFunc<TValue>|undefined|null;
+
+    /**
+     * Indication that add new option only when there are no options available
+     */
+    newOptionOnlyWhenNoOptions: boolean;
 }
 
 /**
