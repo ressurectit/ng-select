@@ -21,6 +21,7 @@
 @if(options.cancelValue && (selectBus.selectedOptions() | hasValue))
 {
     <button type="button" 
+            [disabled]="!!selectBus.selectOptions().readonly"
             [class]="options.cssClasses.cancel" 
             [tooltip]="options.texts.cancelTitle | localize" 
             [attr.aria-label]="options.texts.cancelTitle | localize"
@@ -31,6 +32,6 @@
     </button>
 }
 
-<button type="button" [class]="options.cssClasses.carret" (click)="click(); selectBus.setFocus()" (focus)="handleFocus()" (blur)="blur()" tabindex="-1" aria-hidden="true">
+<button type="button" [class]="options.cssClasses.carret" [disabled]="!!selectBus.selectOptions().readonly" (click)="click(); selectBus.setFocus()" (focus)="handleFocus()" (blur)="blur()" tabindex="-1" aria-hidden="true">
     <span [class]="options.cssClasses.carretIcon"></span>
 </button>

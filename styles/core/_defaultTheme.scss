@@ -11,11 +11,16 @@
             normalState:
             (
                 borderColor: unset,
+                borderStyle: solid,
+                borderWidth: var(--size-2px-fixed),
                 background: unset,
                 foreground: unset,
-                borderWidth: var(--size-2px-fixed),
+                boxShadow: unset,
                 padding: var(--size-1px) var(--size-2px),
                 borderRadius: var(--size-4px-fixed),
+                fontFamily: inherit,
+                fontSize: inherit,
+                letterSpacing: normal,
                 gap: var(--size-xs),
                 focus:
                 (
@@ -32,6 +37,12 @@
                     borderRadius: var(--size-4px),
                     fontSize: .9em,
                 ),
+                disabled:
+                (
+                    background: unset,
+                    foreground: unset,
+                    borderColor: unset,
+                ),
             ),
             popup:
             (
@@ -41,16 +52,22 @@
                     foreground: unset,
                     padding: mixins.getSize($fontSize, 4),
                     borderRadius: mixins.getSize($fontSize, 4),
+                    borderColor: unset,
+                    borderWidth: var(--size-1px-fixed),
+                    borderStyle: solid,
+                    boxShadow: unset,
                 ),
                 option:
                 (
                     selected:
                     (
                         background: hsl(from var(--select-popup-container-background) h s 82%),
+                        backgroundImage: none,
                     ),
                     active:
                     (
                         background: hsl(from var(--select-popup-container-background) h s 90%),
+                        backgroundImage: none,
                     ),
                     inGroup:
                     (
@@ -68,7 +85,12 @@
             ),
             liveSearch:
             (
-                placeholder: unset,
+                placeholder:
+                (
+                    foreground: unset,
+                    opacity: 1,
+                    letterSpacing: normal,
+                ),
             ),
         ),
     );

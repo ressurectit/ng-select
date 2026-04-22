@@ -26,6 +26,12 @@ $_black: #000;
                     background: #ccc,
                     foreground: $_black,
                 ),
+                disabled:
+                (
+                    background: hsl(from var(--select-normalState-background) h s 95%),
+                    foreground: hsl(from var(--select-normalState-foreground) h s 50%),
+                    borderColor: hsl(from var(--select-normalState-borderColor) h s 75%),
+                ),
             ),
             popup:
             (
@@ -33,11 +39,16 @@ $_black: #000;
                 (
                     background: #F0F0F0,
                     foreground: $_black,
+                    borderColor: #acacac,
+                    boxShadow: 0 6px 12px rgba(0,0,0,.175),
                 ),
             ),
             liveSearch:
             (
-                placeholder: $_black,
+                placeholder:
+                (
+                    foreground: $_black,
+                ),
             ),
         ),
     );

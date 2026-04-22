@@ -26,6 +26,12 @@ $_white: #f0f0f0;
                     background: #666,
                     foreground: $_white,
                 ),
+                disabled:
+                (
+                    background: unset,
+                    foreground: unset,
+                    borderColor: unset,
+                ),
             ),
             popup:
             (
@@ -33,11 +39,15 @@ $_white: #f0f0f0;
                 (
                     background: #3A3A3A,
                     foreground: $_white,
+                    borderColor: #4e4e4e,
                 ),
             ),
             liveSearch:
             (
-                placeholder: $_white,
+                placeholder:
+                (
+                    foreground: $_white,
+                ),
             ),
         ),
     );

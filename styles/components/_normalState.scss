@@ -7,13 +7,31 @@
         {
             display: flex;
             flex-direction: row;
+            cursor: pointer;
             border-width: var(--select-normalState-borderWidth);
-            border-style: solid;
+            border-style: var(--select-normalState-borderStyle);
             border-color: var(--select-normalState-borderColor);
+            border-radius: var(--select-normalState-borderRadius);
+            box-shadow: var(--select-normalState-boxShadow);
             background: var(--select-normalState-background);
             color: var(--select-normalState-foreground);
             padding: var(--select-normalState-padding);
-            border-radius: var(--select-normalState-borderRadius);
+            font-family: var(--select-normalState-fontFamily);
+            font-size: var(--select-normalState-fontSize);
+            letter-spacing: var(--select-normalState-letterSpacing);
+
+            &.disabled
+            {
+                background-color: var(--select-normalState-disabled-background);
+                color: var(--select-normalState-disabled-foreground);
+                border-color: var(--select-normalState-disabled-borderColor);
+                cursor: not-allowed;
+
+                button
+                {
+                    cursor: not-allowed;
+                }
+            }
 
             &:focus-within
             {
@@ -26,6 +44,13 @@
             .select-normal-state-gap
             {
                 gap: var(--select-normalState-gap);
+            }
+
+            .normal-state-value,
+            .normal-state-element
+            {
+                overflow: hidden;
+                white-space: nowrap;
             }
 
             .normal-state-element
@@ -60,6 +85,7 @@
                 flex-direction: row;
                 align-items: center;
                 align-self: center;
+                white-space: nowrap;
                 gap: var(--select-normalState-tag-gap);
                 padding: var(--select-normalState-tag-padding);
                 border-radius: var(--select-normalState-tag-borderRadius);
@@ -71,9 +97,12 @@
             button
             {
                 background-color: transparent;
-                border: none;
+                padding: 0;
                 cursor: pointer;
+                border: none;
                 color: inherit;
+                font-size: inherit;
+                font-family: inherit;
             }
 
             .normal-state-cancel

@@ -6,8 +6,6 @@
         .popup-component
         {
             display: block;
-            max-height: 50dvh;
-            overflow: auto;
 
             &[popover]:not(:popover-open):not(dialog[open])
             {
@@ -40,6 +38,13 @@
                 background-color: var(--select-popup-container-background);
                 color: var(--select-popup-container-foreground);
                 border-radius: var(--select-popup-container-borderRadius);
+                border-color: var(--select-popup-container-borderColor);
+                border-width: var(--select-popup-container-borderWidth);
+                border-style: var(--select-popup-container-borderStyle);
+                max-height: 48dvh;
+                overflow: auto;
+                box-shadow: var(--select-popup-container-boxShadow);
+                scrollbar-width: thin;
             }
 
             .option
@@ -52,11 +57,13 @@
                 &.selected
                 {
                     background-color: var(--select-popup-option-selected-background);
+                    background-image: var(--select-popup-option-selected-backgroundImage);
                 }
 
                 &.active
                 {
                     background-color: var(--select-popup-option-active-background);
+                    background-image: var(--select-popup-option-active-backgroundImage);
                 }
 
                 &.in-group

@@ -46,6 +46,7 @@ const defaultOptions: EditNormalStateOptions<EditNormalStateCssClasses> =
     host:
     {
         '[class]': 'options.cssClasses.componentElement',
+        '[class.disabled]': '!!selectBus.selectOptions().readonly',
     },
     imports:
     [

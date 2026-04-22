@@ -1,5 +1,16 @@
 # Changelog
 
+## Version 16.0.1 (2026-04-22)
+
+### Bug Fixes
+
+- fixed missing styles for styling *normal state* and corresponding css variables
+- fixed missing styles for styling *popup* and corresponding css variables
+- fixed `SimpleNormalState` plugin component
+   - fixed disabled state visually and functionally
+- fixed `EditNormalState` plugin component
+   - fixed disabled state visually and functionally
+
 ## Version 16.0.0 (2026-04-15)
 
 ### Features

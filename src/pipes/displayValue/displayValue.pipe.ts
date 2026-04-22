@@ -1,11 +1,12 @@
 import {inject, Pipe, PipeTransform} from '@angular/core';
+import {LOGGER, Logger} from '@anglr/common';
 import {isBlank} from '@jscrpt/common';
 
 import {SelectOption} from '../../interfaces';
 import {SelectBus} from '../../misc/classes';
 
 /**
- * Pipe to transform select selected option into
+ * Pipe to transform select selected option into string
  */
 @Pipe({name: 'displayValue'})
 export class DisplayValue<TValue = unknown> implements PipeTransform
@@ -17,6 +18,11 @@ export class DisplayValue<TValue = unknown> implements PipeTransform
      */
     protected selectBus: SelectBus<TValue> = inject(SelectBus) as SelectBus<TValue>;
 
+    /**
+     * Logger used for logging in this pipe
+     */
+    protected logger: Logger = inject(LOGGER);
+
     //######################### public methods - implementation of PipeTransform #########################
 
     /**
@@ -26,6 +32,8 @@ export class DisplayValue<TValue = unknown> implements PipeTransform
      */
     public transform(option: SelectOption<TValue>|Array<SelectOption<TValue>>|undefined|null, placeholderOverride: string|undefined|null = undefined): string
     {
+        this.logger.verbose('Select: DisplayValue: transforming selected options {{@(4)options}}', {options: option});
+
         if(isBlank(option) || (Array.isArray(option) && !option.length))
         {
             return placeholderOverride ?? this.selectBus.selectOptions().placeholder;

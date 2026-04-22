@@ -24,7 +24,9 @@
 
             *::placeholder
             {
-                color: var(--select-liveSearch-placeholder);
+                color: var(--select-liveSearch-placeholder-foreground);
+                opacity: var(--select-liveSearch-placeholder-opacity);
+                letter-spacing: var(--select-liveSearch-placeholder-letterSpacing);
             }
         }
     }
