@@ -6,6 +6,10 @@
 
 - fixed `StaticValueHandler` plugin component
    - fixed postponing value twice during options gathering
+   - fixed reseting `selected` flag on `SelectOptionState`
+- fixed `DynamicValueHandler` plugin component
+   - allows `null` value to be obtained
+   - fixed reseting `selected` flag on `SelectOptionState`
 - fixed missing styles for styling *normal state* and corresponding css variables
 - fixed missing styles for styling *popup* and corresponding css variables
 - fixed `SimpleNormalState` plugin component

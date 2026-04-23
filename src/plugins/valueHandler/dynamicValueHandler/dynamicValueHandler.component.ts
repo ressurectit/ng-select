@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, computed, ElementRef, Inject, inject, Optional, signal, Signal, untracked} from '@angular/core';
-import {isBlank, RecursivePartial} from '@jscrpt/common';
+import {isPresent, RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
 import {ValueHandler, DynamicValueHandlerOptions, SelectOptionState} from '../../../interfaces';
@@ -78,11 +78,18 @@ export class DynamicValueHandler<TValue = unknown, TPublicValue = TValue> implem
     {
         untracked(async () =>
         {
-            if(isBlank(value))
-            {
-                this.selectBus.selectedOptions.set(null);
+            const selected = this.selectBus.selectedOptions();
 
-                return;
+            if(Array.isArray(selected))
+            {
+                for(const option of selected)
+                {
+                    option.selected.set(false);
+                }
+            }
+            else if(isPresent(selected))
+            {
+                selected.selected.set(false);
             }
 
             if(this.selectBus.selectOptions().multiple)

@@ -122,6 +122,20 @@ export class StaticValueHandler<TValue = unknown, TPublicValue = TValue> impleme
         //this keeps only values that are available in options
         untracked(() =>
         {
+            const selected = this.selectBus.selectedOptions();
+
+            if(Array.isArray(selected))
+            {
+                for(const option of selected)
+                {
+                    option.selected.set(false);
+                }
+            }
+            else if(isPresent(selected))
+            {
+                selected.selected.set(false);
+            }
+
             if(this.selectBus.selectOptions().multiple)
             {
                 if(isBlank(value))
