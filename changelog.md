@@ -4,6 +4,8 @@
 
 ### Bug Fixes
 
+- fixed `StaticValueHandler` plugin component
+   - fixed postponing value twice during options gathering
 - fixed missing styles for styling *normal state* and corresponding css variables
 - fixed missing styles for styling *popup* and corresponding css variables
 - fixed `SimpleNormalState` plugin component

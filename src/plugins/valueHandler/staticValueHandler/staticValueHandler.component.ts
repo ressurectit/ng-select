@@ -106,6 +106,7 @@ export class StaticValueHandler<TValue = unknown, TPublicValue = TValue> impleme
             return;
         }
 
+        this.postponedValue = null;
         this.setValueInternal(value, availableOptions);
     }
 
