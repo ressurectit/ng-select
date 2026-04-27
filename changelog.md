@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 16.0.2 (2026-04-27)
+
+### Bug Fixes
+
+- fixed `DisplayValue` pipe
+   - now is not `pure`
+   - now correctly updates value if placeholder has changed, optimized version
+
 ## Version 16.0.1 (2026-04-22)
 
 ### Bug Fixes
