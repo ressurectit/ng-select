@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 16.0.3 (2026-05-04)
+
+### Bug Fixes
+
+- fixed `StaticValueHandler` plugin component
+   - returns postponed value if trying to obtain value before options are set
+
 ## Version 16.0.2 (2026-04-27)
 
 ### Bug Fixes

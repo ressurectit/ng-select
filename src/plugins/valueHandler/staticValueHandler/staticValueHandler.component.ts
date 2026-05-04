@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, computed, effect, ElementRef, Inject, inject, Optional, Signal, untracked} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, effect, ElementRef, Inject, inject, Optional, signal, Signal, untracked, WritableSignal} from '@angular/core';
 import {LOGGER, Logger} from '@anglr/common';
 import {isBlank, isPresent, RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
@@ -30,7 +30,7 @@ export class StaticValueHandler<TValue = unknown, TPublicValue = TValue> impleme
     /**
      * Postponed value that will be set when options are loaded. This is needed for case when value is set before options are loaded, so we cannot set value right away, but we will handle setting value when options are loaded
      */
-    protected postponedValue: TPublicValue|TPublicValue[]|undefined|null = null;
+    protected postponedValue: WritableSignal<TPublicValue|TPublicValue[]|undefined|null> = signal(null);
 
     //######################### public properties - implementation of SelectPlugin #########################
 
@@ -65,7 +65,7 @@ export class StaticValueHandler<TValue = unknown, TPublicValue = TValue> impleme
     /**
      * @inheritdoc
      */
-    public readonly value: Signal<TPublicValue|TPublicValue[]|undefined|null> = computed((computedValue as ValueComputedFunc<TPublicValue>).bind(this));
+    public readonly value: Signal<TPublicValue|TPublicValue[]|undefined|null> = computed(() => this.postponedValue() ?? (computedValue as ValueComputedFunc<TPublicValue>).bind(this)());
 
     //######################### constructor #########################
     constructor(@Inject(VALUE_HANDLER_OPTIONS) @Optional() options?: RecursivePartial<ValueHandlerOptions>|null,)
@@ -76,13 +76,14 @@ export class StaticValueHandler<TValue = unknown, TPublicValue = TValue> impleme
         effect(() =>
         {
             const availableOptions = this.selectPlugins.OptionsHandler.availableOptions();
+            const postponedValue = untracked(() => this.postponedValue());
 
-            if(isPresent(availableOptions) && isPresent(this.postponedValue))
+            if(isPresent(availableOptions) && isPresent(postponedValue))
             {
-                this.logger.verbose('Select: Value handler: setting postponed value "{{@(4)value}}"', {value: this.postponedValue});
+                this.logger.verbose('Select: Value handler: setting postponed value "{{@(4)value}}"', {value: postponedValue});
 
-                this.setValueInternal(this.postponedValue, availableOptions);
-                this.postponedValue = null;
+                this.setValueInternal(postponedValue, availableOptions);
+                this.postponedValue.set(null);
             }
         });
     }
@@ -101,12 +102,12 @@ export class StaticValueHandler<TValue = unknown, TPublicValue = TValue> impleme
         if(isBlank(availableOptions))
         {
             this.logger.verbose('Select: Value handler: options not loaded yet, postponing value "{{@(4)value}}"', {value});
-            this.postponedValue = value;
+            this.postponedValue.set(value);
 
             return;
         }
 
-        this.postponedValue = null;
+        this.postponedValue.set(null);
         this.setValueInternal(value, availableOptions);
     }
 
