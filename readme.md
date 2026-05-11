@@ -70,12 +70,12 @@ npm install @anglr/select
 Import the standalone components directly (no module required):
 
 ```typescript
-import {Component, signal} from '@angular/core';
+import {Component, ChangeDetectionStrategy, signal} from '@angular/core';
 import {form, FormField} from '@angular/forms/signals';
 import {Select, Option, SelectFormControl} from '@anglr/select';
 
-@Component({
-    imports: [Select, Option, FormField, SelectFormControl],
+@Component(
+{
     template: `
         <ng-select [formField]="myField">
             <ng-option value="a" text="Option A"/>
@@ -83,21 +83,19 @@ import {Select, Option, SelectFormControl} from '@anglr/select';
             <ng-option value="c" text="Option C"/>
         </ng-select>
     `,
+    imports:
+    [
+        Select,
+        Option,
+        FormField,
+        SelectFormControl,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MyComponent {
-    protected myField = form(signal<string | null>(null));
+export class MyComponent
+{
+    protected myField = form(signal<string|null>(null));
 }
-```
-
-Or use the `SelectModule` NgModule:
-
-```typescript
-import {SelectModule} from '@anglr/select';
-
-@NgModule({
-    imports: [SelectModule],
-})
-export class AppModule {}
 ```
 
 ---
@@ -171,20 +169,30 @@ Groups `<ng-option>` children under a labelled header.
 Use the `SelectControlValueAccessor` directive. It activates automatically on `ng-select[formControl]`, `ng-select[formControlName]`, or `ng-select[ngModel]`.
 
 ```typescript
+import {Component, ChangeDetectionStrategy} from '@angular/core';
 import {FormControl, ReactiveFormsModule} from '@angular/forms';
 import {Select, Option, SelectControlValueAccessor} from '@anglr/select';
 
-@Component({
-    imports: [Select, Option, ReactiveFormsModule, SelectControlValueAccessor],
+@Component(
+{
     template: `
         <ng-select [formControl]="ctrl">
             <ng-option value="a" text="A"/>
             <ng-option value="b" text="B"/>
         </ng-select>
     `,
+    imports:
+    [
+        Select,
+        Option,
+        ReactiveFormsModule,
+        SelectControlValueAccessor,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MyComponent {
-    ctrl = new FormControl<string | null>(null);
+export class MyComponent
+{
+    protected ctrl: FormControl<string|null> = new FormControl<string|null>(null);
 }
 ```
 
@@ -193,12 +201,12 @@ export class MyComponent {
 Use the `SelectFormControl` directive with Angular's signal-based `form()` / `FormField`:
 
 ```typescript
-import {signal} from '@angular/core';
+import {Component, ChangeDetectionStrategy, signal} from '@angular/core';
 import {form, FormField} from '@angular/forms/signals';
 import {Select, Option, SelectFormControl} from '@anglr/select';
 
-@Component({
-    imports: [Select, Option, FormField, SelectFormControl],
+@Component(
+{
     template: `
         <ng-select [formField]="myField">
             <ng-option value="x" text="X"/>
@@ -206,9 +214,18 @@ import {Select, Option, SelectFormControl} from '@anglr/select';
         </ng-select>
         <div>Value: {{ myField().value() | json }}</div>
     `,
+    imports:
+    [
+        Select,
+        Option,
+        FormField,
+        SelectFormControl,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MyComponent {
-    protected myField = form(signal<string | null>(null));
+export class MyComponent
+{
+    protected myField = form(signal<string|null>(null));
 }
 ```
 
@@ -217,19 +234,26 @@ export class MyComponent {
 Use the `withDirectAccess` directive for simple two-way model binding without a form layer:
 
 ```typescript
-import {signal} from '@angular/core';
+import {Component, ChangeDetectionStrategy, signal} from '@angular/core';
 import {Select, Option} from '@anglr/select';
 
-@Component({
-    imports: [Select, Option],
+@Component(
+{
     template: `
         <ng-select [(value)]="selectedValue" withDirectAccess>
             <ng-option value="a" text="A"/>
         </ng-select>
     `,
+    imports:
+    [
+        Select,
+        Option,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MyComponent {
-    selectedValue = signal<string | null>(null);
+export class MyComponent
+{
+    protected selectedValue = signal<string|null>(null);
 }
 ```
 
@@ -313,13 +337,18 @@ Pass a `[selectOptions]` object to override plugin types and/or their options. P
 import {FilterLiveSearch, SelectOptions} from '@anglr/select';
 import {RecursivePartial} from '@jscrpt/common';
 
-const options: RecursivePartial<SelectOptions> = {
-    plugins: {
-        liveSearch: {
+const options: RecursivePartial<SelectOptions> =
+{
+    plugins:
+    {
+        liveSearch:
+        {
             type: FilterLiveSearch,
         },
-        popup: {
-            options: {
+        popup:
+        {
+            options:
+            {
                 liveSearchEnabled: true,
             },
         },
@@ -338,8 +367,12 @@ You can also swap plugin types via dependency injection providers:
 ```typescript
 import {provideNormalStateType, EditNormalState} from '@anglr/select';
 
-@Component({
-    providers: [provideNormalStateType(EditNormalState)],
+@Component(
+{
+    providers:
+    [
+        provideNormalStateType(EditNormalState),
+    ],
 })
 ```
 
@@ -353,14 +386,11 @@ A custom readonly state that renders selected values differently.
 
 ```typescript
 import {Component, ChangeDetectionStrategy, ElementRef} from '@angular/core';
-import {
-    ReadonlyState, ReadonlyStateOptions,
-    SelectBus, SelectPluginInstances,
-} from '@anglr/select';
+import {ReadonlyState, ReadonlyStateOptions, SelectBus, SelectPluginInstances} from '@anglr/select';
 
-@Component({
+@Component(
+{
     selector: 'custom-readonly-state',
-    changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
         <div class="custom-readonly">
             @if (selectBus.selectedOptions(); as selected) {
@@ -376,19 +406,19 @@ import {
             }
         </div>
     `,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CustomReadonlyStateComponent
-    implements ReadonlyState<unknown, unknown>
+export class CustomReadonlyStateComponent implements ReadonlyState<unknown, unknown>
 {
-    // injected by the select component
-    readonly selectPlugins!: SelectPluginInstances<unknown, unknown>;
-    readonly pluginElement!: ElementRef<HTMLElement>;
-    options!: ReadonlyStateOptions;
-    readonly selectBus!: SelectBus<unknown, unknown>;
+    public readonly selectPlugins!: SelectPluginInstances<unknown, unknown>;
+    public readonly pluginElement!: ElementRef<HTMLElement>;
+    public options!: ReadonlyStateOptions;
+    public readonly selectBus!: SelectBus<unknown, unknown>;
 
     protected isArray = Array.isArray;
 
-    focus(): void {
+    public focus(): void
+    {
         // no-op for readonly
     }
 }
@@ -397,9 +427,12 @@ export class CustomReadonlyStateComponent
 **Register the custom plugin:**
 
 ```typescript
-this.selectOptions = {
-    plugins: {
-        readonlyState: {
+this.selectOptions =
+{
+    plugins:
+    {
+        readonlyState:
+        {
             type: CustomReadonlyStateComponent,
         },
     },
@@ -420,11 +453,13 @@ You can extend `OptionsHandlerBase` to add custom filtering logic:
 import {Component} from '@angular/core';
 import {OptionsHandlerBase} from '@anglr/select';
 
-@Component({
+@Component(
+{
     selector: 'custom-options-handler',
     template: '',
 })
-export class CustomOptionsHandlerComponent extends OptionsHandlerBase<string> {
+export class CustomOptionsHandlerComponent extends OptionsHandlerBase<string>
+{
     // Override filtering, sorting, or add-new-option logic
 }
 ```
@@ -456,7 +491,8 @@ const value = this.select().executeAndReturn(getValue());
 this.select().execute(setValue('option-a'));
 
 // Get current search text (in an effect for reactivity)
-effect(() => {
+effect(() =>
+{
     const search = this.select().executeAndReturn(getSearch());
     // fetch remote data based on search...
 });
@@ -653,23 +689,28 @@ Minimal select with reactive forms:
 
 ```typescript
 // basic.component.ts
-import {Component, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
-import {FormControl, ReactiveFormsModule} from '@angular/forms';
+import {Component, ChangeDetectionStrategy} from '@angular/core';
 import {JsonPipe} from '@angular/common';
+import {FormControl, ReactiveFormsModule} from '@angular/forms';
 import {Option, Select, SelectControlValueAccessor} from '@anglr/select';
 
-@Component({
+@Component(
+{
     selector: 'basic-sample',
     templateUrl: 'basic.component.html',
-    imports: [Select, Option, JsonPipe, ReactiveFormsModule, SelectControlValueAccessor],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports:
+    [
+        Select,
+        Option,
+        JsonPipe,
+        ReactiveFormsModule,
+        SelectControlValueAccessor,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BasicSampleComponent {
-    protected selectControl = new FormControl<string | null>(null);
-
-    constructor(changeDetector: ChangeDetectorRef) {
-        this.selectControl.valueChanges.subscribe(() => changeDetector.markForCheck());
-    }
+export class BasicSampleComponent
+{
+    protected selectControl: FormControl<string|null> = new FormControl<string|null>(null);
 }
 ```
 
@@ -697,14 +738,24 @@ import {JsonPipe} from '@angular/common';
 import {form, FormField} from '@angular/forms/signals';
 import {Option, Select, SelectFormControl, SelectMultipleKeepPopup} from '@anglr/select';
 
-@Component({
+@Component(
+{
     selector: 'multiple-sample',
     templateUrl: 'multiple.component.html',
-    imports: [Select, Option, JsonPipe, FormField, SelectFormControl, SelectMultipleKeepPopup],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports:
+    [
+        Select,
+        Option,
+        JsonPipe,
+        FormField,
+        SelectFormControl,
+        SelectMultipleKeepPopup,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MultipleSampleComponent {
-    protected selectField = form(signal<string | null>(null));
+export class MultipleSampleComponent
+{
+    protected selectField = form(signal<string|null>(null));
 }
 ```
 
@@ -732,15 +783,26 @@ import {JsonPipe} from '@angular/common';
 import {form, FormField} from '@angular/forms/signals';
 import {Option, Select, SelectEdit, SelectFormControl, SelectMultipleKeepPopup} from '@anglr/select';
 
-@Component({
+@Component(
+{
     selector: 'edit-sample',
     templateUrl: 'edit.component.html',
-    imports: [Select, Option, JsonPipe, FormField, SelectEdit, SelectFormControl, SelectMultipleKeepPopup],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports:
+    [
+        Select,
+        Option,
+        JsonPipe,
+        FormField,
+        SelectEdit,
+        SelectFormControl,
+        SelectMultipleKeepPopup,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EditSampleComponent {
-    protected selectField = form(signal<string | null>(null));
-    protected selectMultipleField = form(signal<string[] | null>([]));
+export class EditSampleComponent
+{
+    protected selectField = form(signal<string|null>(null));
+    protected selectMultipleField = form(signal<string[]|null>([]));
 }
 ```
 
@@ -773,23 +835,37 @@ import {form, FormField} from '@angular/forms/signals';
 import {Option, Select, SelectOptions, FilterLiveSearch, SelectFormControl} from '@anglr/select';
 import {RecursivePartial} from '@jscrpt/common';
 
-@Component({
+@Component(
+{
     selector: 'live-search-sample',
     templateUrl: 'liveSearch.component.html',
-    imports: [Select, Option, JsonPipe, FormField, SelectFormControl],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports:
+    [
+        Select,
+        Option,
+        JsonPipe,
+        FormField,
+        SelectFormControl,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LiveSearchSampleComponent {
-    protected selectField = form(signal<string | null>(null));
+export class LiveSearchSampleComponent
+{
+    protected selectField = form(signal<string|null>(null));
 
-    protected selectOptions: RecursivePartial<SelectOptions> = {
-        plugins: {
-            popup: {
-                options: {
+    protected selectOptions: RecursivePartial<SelectOptions> =
+    {
+        plugins:
+        {
+            popup:
+            {
+                options:
+                {
                     liveSearchEnabled: true,
                 },
             },
-            liveSearch: {
+            liveSearch:
+            {
                 type: FilterLiveSearch,
             },
         },
@@ -819,19 +895,28 @@ Use `[normalStateTemplate]` and `[optionTemplate]` to completely customize rende
 import {Component, ChangeDetectionStrategy, signal} from '@angular/core';
 import {JsonPipe} from '@angular/common';
 import {form, FormField} from '@angular/forms/signals';
-import {
-    DisplayValue, NormalStateTemplate, Option, OptionTemplate,
-    Select, SelectFormControl,
-} from '@anglr/select';
+import {DisplayValue, NormalStateTemplate, Option, OptionTemplate, Select, SelectFormControl} from '@anglr/select';
 
-@Component({
+@Component(
+{
     selector: 'custom-template-sample',
     templateUrl: 'customTemplate.component.html',
-    imports: [Select, Option, JsonPipe, FormField, DisplayValue, OptionTemplate, SelectFormControl, NormalStateTemplate],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports:
+    [
+        Select,
+        Option,
+        JsonPipe,
+        FormField,
+        DisplayValue,
+        OptionTemplate,
+        SelectFormControl,
+        NormalStateTemplate,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CustomTemplateSampleComponent {
-    protected selectField = form(signal<string | null>(null));
+export class CustomTemplateSampleComponent
+{
+    protected selectField = form(signal<string|null>(null));
 }
 ```
 
@@ -869,24 +954,36 @@ import {JsonPipe} from '@angular/common';
 import {form, FormField} from '@angular/forms/signals';
 import {Option, Select, SelectFormControl} from '@anglr/select';
 
-interface KodPopisValue {
+interface KodPopisValue
+{
     kod: string;
     popis: string;
 }
 
-@Component({
+@Component(
+{
     selector: 'basic-lazy-sample',
     templateUrl: 'basicLazy.component.html',
-    imports: [Select, Option, JsonPipe, FormField, SelectFormControl],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports:
+    [
+        Select,
+        Option,
+        JsonPipe,
+        FormField,
+        SelectFormControl,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BasicLazySampleComponent {
-    protected selectField = form(signal<string | null>(null));
+export class BasicLazySampleComponent
+{
+    protected selectField = form(signal<string|null>(null));
     protected lazyOptions: WritableSignal<KodPopisValue[]> = signal([]);
 
-    constructor() {
+    constructor()
+    {
         // Simulate async loading
-        setTimeout(() => {
+        setTimeout(() =>
+        {
             this.lazyOptions.set([
                 {kod: 'first', popis: 'First value text'},
                 {kod: 'second', popis: 'Second value text'},
@@ -917,28 +1014,39 @@ Use `CodeOptionsGatherer` + `DynamicValueHandler` + `FilterLiveSearch` to load o
 import {Component, ChangeDetectionStrategy, effect, Signal, viewChild, signal} from '@angular/core';
 import {JsonPipe} from '@angular/common';
 import {form, FormField} from '@angular/forms/signals';
-import {
-    CodeOptionsGatherer, DynamicValueHandler, DynamicValueHandlerOptions,
-    FilterLiveSearch, Select, SelectFormControl, SelectOption, SelectOptions,
-} from '@anglr/select';
+import {CodeOptionsGatherer, DynamicValueHandler, DynamicValueHandlerOptions, FilterLiveSearch, Select, SelectFormControl, SelectOption, SelectOptions} from '@anglr/select';
 import {getSearch} from '@anglr/select/extensions';
 import {RecursivePartial} from '@jscrpt/common';
 
-@Component({
+@Component(
+{
     selector: 'dynamic-sample',
     templateUrl: 'dynamic.component.html',
-    imports: [Select, JsonPipe, FormField, SelectFormControl],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports:
+    [
+        Select,
+        JsonPipe,
+        FormField,
+        SelectFormControl,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DynamicSampleComponent {
-    protected optionsGatherer = new CodeOptionsGatherer<string>();
-    protected selectField = form(signal<string | null>(null));
+export class DynamicSampleComponent
+{
+    protected optionsGatherer: CodeOptionsGatherer<string> = new CodeOptionsGatherer<string>();
+    protected selectField = form(signal<string|null>(null));
     protected select: Signal<Select<string>> = viewChild.required<Select<string>>('select');
 
-    protected selectOptions: RecursivePartial<SelectOptions<string>> = {
-        plugins: {
-            liveSearch: {type: FilterLiveSearch},
-            valueHandler: {
+    protected selectOptions: RecursivePartial<SelectOptions<string>> =
+    {
+        plugins:
+        {
+            liveSearch:
+            {
+                type: FilterLiveSearch,
+            },
+            valueHandler:
+            {
                 type: DynamicValueHandler,
                 options: {} as DynamicValueHandlerOptions<string>,
             },
@@ -946,13 +1054,16 @@ export class DynamicSampleComponent {
         optionsGatherer: this.optionsGatherer,
     };
 
-    constructor(private dataSvc: DataService) {
-        effect(async () => {
+    constructor(private dataSvc: DataService)
+    {
+        effect(async () =>
+        {
             const search = this.select().executeAndReturn(getSearch());
             const result = await this.dataSvc.search(search);
 
             this.optionsGatherer.setAvailableOptions(
-                result.map(item => ({
+                result.map(item =>
+                ({
                     value: signal(item.id),
                     text: signal(item.name),
                     group: signal(null),
@@ -975,14 +1086,20 @@ export class DynamicSampleComponent {
 When values are objects and you need to resolve them back from a server (e.g., when setting an initial value), use `DynamicValueHandlerOptions.optionGetter`:
 
 ```typescript
-this.selectOptions = {
-    valueExtractor: (itm) => itm.value()?.kod ?? '',
-    plugins: {
-        valueHandler: {
+this.selectOptions =
+{
+    valueExtractor: itm => itm.value()?.kod ?? '',
+    plugins:
+    {
+        valueHandler:
+        {
             type: DynamicValueHandler,
-            options: {
-                optionGetter: async (value) => {
+            options:
+            {
+                optionGetter: async (value) =>
+                {
                     const result = await lastValueFrom(dataSvc.getDetail(value));
+
                     return result
                         ? {
                               group: signal(null),
@@ -1017,16 +1134,22 @@ Use the native Popover API for popup positioning:
 import {PopoverPositioner, PopoverPositionerOptions, SelectOptions} from '@anglr/select';
 import {RecursivePartial} from '@jscrpt/common';
 
-const selectOptions: RecursivePartial<SelectOptions<string>> = {
-    plugins: {
-        interactions: {
-            options: {
+const selectOptions: RecursivePartial<SelectOptions<string>> =
+{
+    plugins:
+    {
+        interactions:
+        {
+            options:
+            {
                 handleClickOutside: false,
             },
         },
-        positioner: {
+        positioner:
+        {
             type: PopoverPositioner,
-            options: {
+            options:
+            {
                 popoverAuto: true,
             } as PopoverPositionerOptions,
         },
@@ -1045,10 +1168,14 @@ const selectOptions: RecursivePartial<SelectOptions<string>> = {
 Show a cancel/clear button to reset the selected value:
 
 ```typescript
-const selectOptions: RecursivePartial<SelectOptions<string>> = {
-    plugins: {
-        normalState: {
-            options: {
+const selectOptions: RecursivePartial<SelectOptions<string>> =
+{
+    plugins:
+    {
+        normalState:
+        {
+            options:
+            {
                 cancelValue: true,
             },
         },
@@ -1070,10 +1197,14 @@ In edit mode, hide the dropdown caret:
 ```typescript
 import {EditNormalStateOptions, SelectOptions} from '@anglr/select';
 
-const selectOptions: RecursivePartial<SelectOptions<string>> = {
-    plugins: {
-        normalState: {
-            options: {
+const selectOptions: RecursivePartial<SelectOptions<string>> =
+{
+    plugins:
+    {
+        normalState:
+        {
+            options:
+            {
                 carret: false,
             } as EditNormalStateOptions,
         },
@@ -1100,11 +1231,16 @@ Or use the shorthand directive:
 Allow users to create new options by typing. Configure `newOptionGetter` on the OptionsHandler:
 
 ```typescript
-const selectOptions: RecursivePartial<SelectOptions<string>> = {
-    plugins: {
-        optionsHandler: {
-            options: {
-                newOptionGetter: (value: string) => ({
+const selectOptions: RecursivePartial<SelectOptions<string>> =
+{
+    plugins:
+    {
+        optionsHandler:
+        {
+            options:
+            {
+                newOptionGetter: (value: string) =>
+                ({
                     group: signal(null),
                     text: signal(value),
                     value: signal(value),
@@ -1130,10 +1266,11 @@ Use Angular signal forms' `readonly()` to toggle readonly state:
 import {signal} from '@angular/core';
 import {form, FormField, readonly} from '@angular/forms/signals';
 
-export class ReadonlySampleComponent {
+export class ReadonlySampleComponent
+{
     protected readonly = signal(false);
     protected selectField = form(
-        signal<string | null>(null),
+        signal<string|null>(null),
         path => readonly(path, () => this.readonly()),
     );
 }
@@ -1163,9 +1300,12 @@ this.select().execute(setReadonly(true));
 Replace the readonly visual entirely with a custom plugin component:
 
 ```typescript
-this.selectOptions = {
-    plugins: {
-        readonlyState: {
+this.selectOptions =
+{
+    plugins:
+    {
+        readonlyState:
+        {
             type: CustomReadonlyStateComponent,
         },
     },
