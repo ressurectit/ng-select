@@ -45,6 +45,10 @@ export interface SelectBusOptions<TValue = unknown, TPublicValue = TValue>
     displaySelectedValue: DisplayTextFunc<TValue>;
 
     /**
+     * Function used for transformation of option into display text, if not specified, displaySelectedValue will be used for transforming option into display text
+     */
+    displayOptionValue: DisplayTextFunc<TValue>|undefined|null;
+    /**
      * Function used to extract value from option, if not provided, select option value will be used as value
      */
     valueExtractor: ValueExtractorFunc<TValue, TPublicValue>;

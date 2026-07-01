@@ -1,5 +1,16 @@
 # Changelog
 
+## Version 16.1.0 (2026-07-01)
+
+### Features
+
+- new `DisplayOptionValue` pipe, that transforms select option into string
+- updated `SelectBusOptions` interface
+   - **new properties**
+      - `displayOptionValue` function used for transformation of option into display text, if not specified, displaySelectedValue will be used for transforming option into display text
+- updated `SimplePopup` plugin component
+   - now supports customizing displayed option text using `displayOptionValue`
+
 ## Version 16.0.3 (2026-05-04)
 
 ### Bug Fixes

@@ -27,6 +27,7 @@ const defaultOptions: Omit<SelectOptions, 'optionsGatherer'|'templateGatherer'> 
     placeholder: 'please select value',
     closeOnSelect: true,
     displaySelectedValue: option => option.text(),
+    displayOptionValue: null,
     valueExtractor: (option: SelectOption) => option.value(),
     valueComparer: (source, target) => source === target,
     textExtractor: (option: SelectOption) => option.text(),
