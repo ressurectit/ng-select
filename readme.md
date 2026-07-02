@@ -36,6 +36,7 @@ Angular component representing an HTML `<select>`. Fully plugin-based and signal
   - [Multiple Select](#multiple-select)
   - [Edit / Type-ahead Mode](#edit--type-ahead-mode)
   - [Live Search (Filter)](#live-search-filter)
+  - [Search Highlighting](#search-highlighting)
   - [Custom Templates](#custom-templates)
   - [Lazy / Dynamic Options](#lazy--dynamic-options)
   - [Dynamic Options with Remote Data](#dynamic-options-with-remote-data)
@@ -274,6 +275,9 @@ export class MyComponent
 | `NormalStateTagTemplate` | `[normalStateTagTemplate]` | Custom template for individual tags in multi-select normal state |
 | `OptionTemplate` | `[optionTemplate]` | Custom template for each option in the popup |
 | `OptionGroupTemplate` | `[optionGroupTemplate]` | Custom template for option group headers |
+| `HighlightInstance` | `[highlightInstance]` | Manages `::highlight(search-query)` CSS Highlight API ranges for the popup (bound to `SimplePopup`) |
+| `HighlightSearch` | `[highlightSearch]` | Attached to a popup option element; produces `Range` objects for every occurrence of the live-search query in its text nodes |
+| `HighlightText` | `[highlightText]` | Marks an inner element inside a custom `optionTemplate` whose text should participate in search highlighting (nested under `HighlightSearch`) |
 | `WithDirectAccess` | `ng-select[withDirectAccess]` | Two-way value binding without a form control |
 
 ---
@@ -324,7 +328,7 @@ Every plugin implements the `SelectPlugin` base interface and receives:
 | **LiveSearch** | `NoLiveSearch` | `FilterLiveSearch`, `EditLiveSearch` | Text-based filtering of options |
 | **NormalState** | `SimpleNormalState` | `EditNormalState` | Closed-state appearance (value, caret, cancel button) |
 | **OptionsHandler** | `SimpleOptionsHandler` | `NoOptionsHandler` | Options list management, filtering, add-new-option |
-| **Popup** | `SimplePopup` | — | Dropdown panel rendering |
+| **Popup** | `SimplePopup` | — | Dropdown panel rendering (supports live-search text highlighting via the CSS Highlight API) |
 | **Positioner** | `CommonPositioner` | `PopoverPositioner`, `NoPositioner` | Popup positioning (z-index, absolute, popover API) |
 | **ReadonlyState** | *(same as NormalState)* | Custom component | Display when readonly |
 | **ValueHandler** | `StaticValueHandler` | `DynamicValueHandler` | Selected value storage, single/multi-select logic |
@@ -504,7 +508,8 @@ effect(() =>
 
 | Pipe | Pure | Description |
 |---|---|---|
-| `displayValue` | No | Transforms `SelectOption` or `SelectOption[]` into a display string |
+| `displayValue` | No | Transforms `SelectOption` or `SelectOption[]` into a display string (for normal/readonly state) |
+| `displayOptionValue` | No | Transforms a single `SelectOption` shown in the popup into a display string; falls back to `displaySelectedValue` when `displayOptionValue` is not configured on `SelectBusOptions` |
 | `hasValue` | Yes | Returns `true` when the option(s) represent a selected value |
 | `getPlugin` | Yes | Retrieves a typed plugin instance from another plugin |
 | `addNewOption` | Yes | Produces the "add new option" label for synthetic options |
@@ -576,6 +581,8 @@ All visual aspects are driven by CSS custom properties. Here are the key ones:
 | `--select-popup-container-borderColor` | `#acacac` | Popup border |
 | `--select-popup-option-active-background` | *(derived from container)* | Hovered option |
 | `--select-popup-option-selected-background` | *(derived from container)* | Selected option |
+| `--select-popup-option-searchHighlight-textDecoration` | `underline` | Decoration applied to `::highlight(search-query)` matches inside the popup |
+| `--select-popup-option-searchHighlight-textShadow` | `0 0 2px hsl(from currentColor h s 45%)` | Shadow applied to `::highlight(search-query)` matches inside the popup |
 
 **Live Search**
 
@@ -883,6 +890,39 @@ export class LiveSearchSampleComponent
     <ng-option value="third" text="Third value text"/>
     <ng-option value="fourth" text="Fourth value text"/>
     <ng-option value="fifth" text="Fifth value text"/>
+</ng-select>
+```
+
+### Search Highlighting
+
+For custom option templates, wrap the highlightable spans with the `HighlightText` directive so nested text nodes are registered with the parent `HighlightSearch`:
+
+```typescript
+import {HighlightText, NormalStateTemplate, Option, OptionTemplate, Select} from '@anglr/select';
+
+@Component(
+{
+    imports:
+    [
+        Select,
+        Option,
+        HighlightText,
+        OptionTemplate,
+        NormalStateTemplate,
+    ],
+})
+export class HighlightedTemplateComponent { /* ... */ }
+```
+
+```html
+<ng-select [selectOptions]="selectOptions" [formField]="field">
+    <ng-option value="a" text="Apple"/>
+    <ng-option value="b" text="Banana"/>
+
+    <span *optionTemplate="let option">
+        <strong>{{ option.value() }}</strong>
+        <span highlightText> - {{ option.text() }}</span>
+    </span>
 </ng-select>
 ```
 
