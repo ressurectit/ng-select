@@ -581,7 +581,7 @@ export class Select<TValue = unknown, TPublicValue = TValue> implements SelectAp
 
             if(pluginType == SelectPluginType.Popup)
             {
-                this.popupComponentRef = component as ComponentRef<Popup>;
+                this.popupComponentRef = component as ComponentRef<Popup<TValue, TPublicValue>>;
             }
         }
 

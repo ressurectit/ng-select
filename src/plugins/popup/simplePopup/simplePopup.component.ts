@@ -9,12 +9,14 @@ import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {POPUP_OPTIONS} from '../../../misc/tokens';
 import {AddNewOption, DisplayOptionValue, GroupedListOptions, OptionCssClasses} from '../../../pipes';
+import {HighlightInstance, HighlightSearch} from '../../../directives';
 
 //TODO: hover into mouseover => use "active"
 
 const defaultOptions: PopupOptions<SimplePopupCssClasses> =
 {
     visible: false,
+    searchHighlighting: true,
     liveSearchEnabled: false,
     cssClasses:
     {
@@ -52,10 +54,15 @@ const defaultOptions: PopupOptions<SimplePopupCssClasses> =
     [
         AddNewOption,
         LocalizePipe,
+        HighlightSearch,
         NgTemplateOutlet,
         OptionCssClasses,
         DisplayOptionValue,
         GroupedListOptions,
+    ],
+    hostDirectives:
+    [
+        HighlightInstance,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })

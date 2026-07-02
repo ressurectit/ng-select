@@ -7,6 +7,12 @@
         {
             display: block;
 
+            ::highlight(search-query) 
+            {
+                text-decoration: var(--select-popup-option-searchHighlight-textDecoration);
+                text-shadow: var(--select-popup-option-searchHighlight-textShadow);
+            }
+
             &[popover]:not(:popover-open):not(dialog[open])
             {
                 display: none;

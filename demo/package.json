@@ -19,17 +19,16 @@
         "start": "concurrently \"npm run server -- --devPort\" \"ng serve\""
     },
     "engines": {
-        "node": "^20.19.0 || ^22.12.0 || >=24.0.0"
+        "node": "^22.22.3 || ^24.15.0 || >=26.0.0"
     },
     "author": "kukjevov",
     "license": "MIT",
     "devDependencies": {
-        "@angular-devkit/build-angular": "21.1.5",
-        "@angular/cli": "21.1.5",
-        "@angular/platform-server": "21.1.5",
-        "@angular/ssr": "21.1.5",
-        "@css-styles/common": "2.0.1",
-        "@css-styles/themes": "2.4.0",
+        "@angular/build": "22.0.4",
+        "@angular/cli": "22.0.4",
+        "@angular/platform-server": "22.0.4",
+        "@angular/ssr": "22.0.4",
+        "@css-styles/themes": "2.5.0",
         "@fortawesome/fontawesome-free": "7.1.0",
         "@types/compression": "1.8.1",
         "@types/express": "5.0.6",

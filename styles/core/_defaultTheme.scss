@@ -59,6 +59,11 @@
                 ),
                 option:
                 (
+                    searchHighlight:
+                    (
+                        textDecoration: underline,
+                        textShadow: 0 0 var(--size-2px) hsl(from currentColor h s 45%),
+                    ),
                     selected:
                     (
                         background: hsl(from var(--select-popup-container-background) h s 82%),

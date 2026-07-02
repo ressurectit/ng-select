@@ -42,6 +42,11 @@ export interface PopupOptions<TCssClasses extends PopupCssClasses = PopupCssClas
     visible: boolean;
 
     /**
+     * Indication whether is highlighting enabled for popup, if set to true, then popup will search query
+     */
+    searchHighlighting: boolean;
+
+    /**
      * Texts that are used within any Popup
      */
     texts: PopupTexts;

@@ -1,3 +1,6 @@
+export * from './highlightInstance/highlightInstance.directive';
+export * from './highlightSearch/highlightSearch.directive';
+export * from './highlightText/highlightText.directive';
 export * from './normalStateTemplate/normalStateTemplate.directive';
 export * from './normalStateTagTemplate/normalStateTagTemplate.directive';
 export * from './optionGroupTemplate/optionGroupTemplate.directive';

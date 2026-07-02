@@ -1,5 +1,42 @@
 # Changelog
 
+## Version 17.0.0 (2026-07-02)
+
+### Features
+
+- new `HighlightInstance` directive, that manages highlighting for popup
+   - **implements**
+      - `OnDestroy`
+   - **properties**
+      - `searchQuery` signal that represents current search query
+      - `enabled` indication whether highlighting is enabled or not
+   - **methods**
+      - `registerHighlightRanges` registers ranges for highlighting
+      - `unregisterHighlightRanges` unregisters ranges from highlighting
+- new `HighlightSearch` directive, that handles highlighting of search text, attached directly to option where highlighting should occur.
+   - **implements**
+      - `OnDestroy`
+   - **properties**
+      - `injector` instance of injector used for obtaining dependencies in templates
+   - **methods**
+      - `addNodes` adds nodes to the list of text nodes that are currently active on this element
+      - `removeNodes` removes nodes from the list of text nodes that are currently active on this element
+- new `HighlightText` directive, that marks element that contains text that should be highlighted
+   - **implements**
+      - `OnDestroy`
+- updated `PopupOptions` interface
+   - **new properties**
+      - `searchHighlighting` indication whether is highlighting enabled for popup, if set to true, then popup will search query
+- updated `SimplePopup` plugin component
+   - is now using `HighlightInstance` and `HighlightSearch` for highlighting search
+- updated styles for popup search highlighting, two new css variables `--select-popup-option-searchHighlight-textDecoration`, `--select-popup-option-searchHighlight-textShadow`
+
+### BREAKING CHANGES
+
+- minimal supported version of `Node` is `22` (recommended version is `26`)
+- minimal supported version of `@angular` is `22.0.4`
+- minimal supported version of `rxjs` is `7.8.2`
+
 ## Version 16.1.0 (2026-07-01)
 
 ### Features

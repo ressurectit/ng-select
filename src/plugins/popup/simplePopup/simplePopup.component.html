@@ -37,8 +37,8 @@
                      (mouseover)="markActive(option)"
                      (mousedown)="preventBlur($event)"
                      (click)="optionClick(option)">
-                    <div [class]="options.cssClasses.optionText">
-                        <ng-container *ngTemplateOutlet="selectBus.selectOptions().templateGatherer.optionTemplate() || defaultOptionLook; context: {$implicit: option, popup: this}"/>
+                    <div [class]="options.cssClasses.optionText" highlightSearch #highlightSearch="highlightSearch">
+                        <ng-container *ngTemplateOutlet="selectBus.selectOptions().templateGatherer.optionTemplate() || defaultOptionLook; context: {$implicit: option, popup: this}; injector: highlightSearch.injector"/>
                     </div>
     
                     @if(option.selected() && selectBus.selectOptions().multiple)
