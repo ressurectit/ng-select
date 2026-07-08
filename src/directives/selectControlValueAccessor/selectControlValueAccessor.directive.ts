@@ -64,7 +64,15 @@ export class SelectControlValueAccessor<TValue = unknown, TPublicValue = TValue>
                 return;
             }
 
-            select.getPlugin(SelectPluginType.ValueHandler).setValue(this.value());
+            const value = this.value();
+
+            untracked(() =>
+            {
+                if(!isEqual(value, select.getPlugin(SelectPluginType.ValueHandler).value()))
+                {
+                    select.getPlugin(SelectPluginType.ValueHandler).setValue(value);
+                }
+            });
         });
 
         effect(() =>
@@ -90,6 +98,7 @@ export class SelectControlValueAccessor<TValue = unknown, TPublicValue = TValue>
             {
                 if(!isEqual(value, this.value()))
                 {
+                    this.value.set(value);
                     this.onChange?.(value);
                 }
             });

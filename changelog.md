@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 17.0.1 (2026-07-08)
+
+### Bug Fixes
+
+- fixed `SelectControlValueAccessor` directive
+   - now allows change value back to initial value
+
 ## Version 17.0.0 (2026-07-02)
 
 ### Features
