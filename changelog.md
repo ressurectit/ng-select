@@ -5,6 +5,7 @@
 ### Features
 
 - subpackage `@anglr/select/extensions`
+   - new `getSelectedOption` extension method, that gets currently selected option of Select, simplifies way how to obtain single value from select, if select is multiple, throws error, its reactive
    - new `getSelectedOptions` extension method, that gets currently selected options of Select, its reactive
 
 ## Version 17.0.1 (2026-07-08)
