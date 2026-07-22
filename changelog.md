@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 17.1.0 (2026-07-22)
+
+### Features
+
+- subpackage `@anglr/select/extensions`
+   - new `getSelectedOptions` extension method, that gets currently selected options of Select, its reactive
+
 ## Version 17.0.1 (2026-07-08)
 
 ### Bug Fixes
