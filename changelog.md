@@ -1,5 +1,21 @@
 # Changelog
 
+## Version 17.2.0 (2026-08-04)
+
+### Bug Fixes
+
+- fixed `SelectControlValueAccessor`, `SelectFormControl` and `WithDirectAccess` directives
+   - value now correctly reflects changes during *asynchronous* `setValue`, previously it could momentarily revert to previous value
+
+### Features
+
+- new `TempValue` interface, that is used for storing temporary value during async write
+   - **properties**
+      - `value` stored value
+- updated `ValueHandler` interface
+   - **methods**
+      - `setValue` sets value for Select, now returns `PromiseOr<void>`, allowing asynchronous value writes
+
 ## Version 17.1.0 (2026-07-22)
 
 ### Features

@@ -1,11 +1,12 @@
 import {forwardRef, ExistingProvider, Directive, OnDestroy, WritableSignal, signal, effect, untracked} from '@angular/core';
 import {NG_VALUE_ACCESSOR, ControlValueAccessor} from '@angular/forms';
-import {Action1, NoopAction} from '@jscrpt/common';
+import {Action1, nameof, NoopAction} from '@jscrpt/common';
 import {isEqual} from 'lodash-es';
 import {Subscription} from 'rxjs';
 
 import {SelectPluginType} from '../../misc/enums';
 import {Select} from '../../components/select/select.component';
+import {TempValue} from '../../interfaces';
 
 /**
  * Provider for control value accessor
@@ -35,6 +36,11 @@ export class SelectControlValueAccessor<TValue = unknown, TPublicValue = TValue>
     protected initSubscriptions: Subscription = new Subscription();
 
     /**
+     * Temporary value used for storing value during async write
+     */
+    protected tmpValue: TempValue<TPublicValue|TPublicValue[]> = {};
+
+    /**
      * Last set value to this control
      */
     protected value: WritableSignal<TPublicValue|TPublicValue[]|undefined|null> = signal(undefined);
@@ -57,6 +63,7 @@ export class SelectControlValueAccessor<TValue = unknown, TPublicValue = TValue>
     //######################### constructor #########################
     constructor(select: Select<TValue, TPublicValue>)
     {
+        //setting value
         effect(() =>
         {
             if(!select.initialized())
@@ -66,11 +73,13 @@ export class SelectControlValueAccessor<TValue = unknown, TPublicValue = TValue>
 
             const value = this.value();
 
-            untracked(() =>
+            untracked(async () =>
             {
                 if(!isEqual(value, select.getPlugin(SelectPluginType.ValueHandler).value()))
                 {
-                    select.getPlugin(SelectPluginType.ValueHandler).setValue(value);
+                    this.tmpValue.value = value;
+                    await select.getPlugin(SelectPluginType.ValueHandler).setValue(value);
+                    delete this.tmpValue.value;
                 }
             });
         });
@@ -85,6 +94,7 @@ export class SelectControlValueAccessor<TValue = unknown, TPublicValue = TValue>
             select.selectOptions.readonly = this.disabled();
         });
 
+        //getting value
         effect(() =>
         {
             if(!select.initialized())
@@ -92,7 +102,12 @@ export class SelectControlValueAccessor<TValue = unknown, TPublicValue = TValue>
                 return;
             }
 
-            const value = select.getPlugin(SelectPluginType.ValueHandler).value();
+            let value = select.getPlugin(SelectPluginType.ValueHandler).value();
+
+            if(nameof<TempValue<TPublicValue|TPublicValue[]>>('value') in this.tmpValue)
+            {
+                value = this.tmpValue.value;
+            }
 
             untracked(() =>
             {

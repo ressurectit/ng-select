@@ -74,9 +74,9 @@ export class DynamicValueHandler<TValue = unknown, TPublicValue = TValue> implem
     /**
      * @inheritdoc
      */
-    public setValue(value: TPublicValue|TPublicValue[]|undefined|null): void
+    public async setValue(value: TPublicValue|TPublicValue[]|undefined|null): Promise<void>
     {
-        untracked(async () =>
+        await untracked(async () =>
         {
             const selected = this.selectBus.selectedOptions();
 

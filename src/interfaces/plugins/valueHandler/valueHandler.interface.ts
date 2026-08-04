@@ -1,4 +1,5 @@
 import {Signal} from '@angular/core';
+import {PromiseOr} from '@jscrpt/common';
 
 import {PluginOptions} from '../../pluginOptions/pluginOptions.interface';
 import {SelectPlugin} from '../../selectPlugin/selectPlugin.interface';
@@ -28,5 +29,5 @@ export interface ValueHandler<TValue = unknown, TPublicValue = TValue, TOptions 
      * Sets value for Select
      * @param value - Value to be set
      */
-    setValue(value: TPublicValue|TPublicValue[]|undefined|null): void;
+    setValue(value: TPublicValue|TPublicValue[]|undefined|null): PromiseOr<void>;
 }

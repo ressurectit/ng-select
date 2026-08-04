@@ -21,4 +21,5 @@ export * from './selectOptions/selectOptions.interface';
 export * from './selectPlugin/selectPlugin.interface';
 export * from './selectPluginTypes/selectPluginTypes.interface';
 export * from './templateGatherer/templateGatherer.interface';
+export * from './tempValue/tempValue.interface';
 export * from './visualPluginOptions/visualPluginOptions.interface';
