@@ -33,6 +33,7 @@ const defaultOptions: EditNormalStateOptions<EditNormalStateCssClasses> =
         valueWrapper: 'select-relative select-flex-1 select-flex-row select-normal-state-gap',
         valueMultiple: 'select-normal-state-gap select-flex-row',
         valueSingle: 'select-flex-1',
+        interactiveElement: 'normal-state-interactive-element',
     },
 };
 

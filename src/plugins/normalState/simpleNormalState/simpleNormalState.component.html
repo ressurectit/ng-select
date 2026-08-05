@@ -1,22 +1,8 @@
 <ng-template #defaultLook>{{selectBus.selectedOptions() | displayValue | localize}}</ng-template>
 
-<button #htmlButton
-        type="button"
-        role="combobox"
-        [class]="options.cssClasses.element"
-        [disabled]="!!selectBus.selectOptions().readonly"
-        [attr.aria-expanded]="selectBus.popupVisible()"
-        [attr.aria-controls]="selectBus.popupVisible() ? selectBus.id : null"
-        [attr.aria-activedescendant]="selectBus.popupVisible() ? activeDescendant() : null"
-        [attr.aria-label]="selectBus.selectedOptions() | displayValue | localize"
-        [tooltip]="selectBus.selectedOptions() | displayValue | localize"
-        (click)="click()"
-        (blur)="blur()"
-        (focus)="handleFocus()">
-    <span [class]="options.cssClasses.value">
-        <ng-container *ngTemplateOutlet="selectBus.selectOptions().templateGatherer.normalStateTemplate() || defaultLook; context: {$implicit: this}"/>
-    </span>
-</button>
+<span [class]="options.cssClasses.value" aria-hidden="true" role="presentation">
+    <ng-container *ngTemplateOutlet="selectBus.selectOptions().templateGatherer.normalStateTemplate() || defaultLook; context: {$implicit: this}"/>
+</span>
 
 @if(options.cancelValue && (selectBus.selectedOptions() | hasValue))
 {
@@ -32,6 +18,19 @@
     </button>
 }
 
-<button type="button" [class]="options.cssClasses.carret" [disabled]="!!selectBus.selectOptions().readonly" (click)="click(); selectBus.setFocus()" (focus)="handleFocus()" (blur)="blur()" tabindex="-1" aria-hidden="true">
-    <span [class]="options.cssClasses.carretIcon"></span>
+<span aria-hidden="true" role="presentation" [class]="options.cssClasses.carret"></span>
+
+<button #htmlButton
+        type="button"
+        role="combobox"
+        [class]="options.cssClasses.interactiveElement"
+        [disabled]="!!selectBus.selectOptions().readonly"
+        [attr.aria-expanded]="selectBus.popupVisible()"
+        [attr.aria-controls]="selectBus.popupVisible() ? selectBus.id : null"
+        [attr.aria-activedescendant]="selectBus.popupVisible() ? activeDescendant() : null"
+        [attr.aria-label]="selectBus.selectedOptions() | displayValue | localize"
+        [tooltip]="selectBus.selectedOptions() | displayValue | localize"
+        (click)="click()"
+        (blur)="blur()"
+        (focus)="handleFocus()">
 </button>

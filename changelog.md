@@ -1,5 +1,30 @@
 # Changelog
 
+## Version 18.0.0 (2026-08-05)
+
+### Bug Fixes
+
+- fixed `SimpleNormalState` and `EditNormalState` plugin components
+   - interactive element now covers whole *normal state* area, so clicking anywhere within *normal state* correctly triggers Select
+   - displayed value and *carret* are no longer rendered as interactive elements, removing nested interactive elements and improving accessibility
+- fixed styles of *live search* input, it now covers whole *normal state* area and is placed above interactive element, so clicking anywhere within *normal state* correctly focuses it
+
+### Features
+
+- updated `EditNormalStateCssClasses` interface
+   - **new properties**
+      - `interactiveElement` applied to HTML element that handles user click and focuses on live search input
+- updated styles for *normal state*, new `normal-state-interactive-element` css class for element that handles user interaction
+
+### BREAKING CHANGES
+
+- updated `SimpleNormalStateCssClasses` interface
+   - **removed properties**
+      - `carretIcon`, use `carret` instead, which is now applied directly to *carret* icon element
+      - `element`, renamed to `interactiveElement`
+- removed `normal-state-element` css class
+   - use `normal-state-interactive-element` instead
+
 ## Version 17.2.0 (2026-08-04)
 
 ### Bug Fixes

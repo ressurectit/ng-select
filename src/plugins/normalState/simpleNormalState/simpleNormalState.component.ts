@@ -22,10 +22,9 @@ const defaultOptions: NormalStateOptions<SimpleNormalStateCssClasses> =
     cssClasses:
     {
         componentElement: 'normal-state-component',
-        element: 'normal-state-element',
-        value: 'select-align-self-center',
-        carret: 'normal-state-carret',
-        carretIcon: 'fas fa-caret-down select-align-self-center',
+        interactiveElement: 'normal-state-interactive-element',
+        value: 'normal-state-value select-align-self-center',
+        carret: 'normal-state-carret fas fa-caret-down select-align-self-center',
         cancel: 'normal-state-cancel',
         cancelIcon: 'fas fa-times select-align-self-center',
     },

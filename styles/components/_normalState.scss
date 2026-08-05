@@ -46,29 +46,13 @@
                 gap: var(--select-normalState-gap);
             }
 
-            .normal-state-value,
-            .normal-state-element
+            .normal-state-value
             {
                 overflow: hidden;
                 white-space: nowrap;
-            }
-
-            .normal-state-element
-            {
-                display: flex;
-                flex-direction: row;
+                justify-self: center;
                 flex: 1;
                 min-width: 0;
-
-                &:focus-visible
-                {
-                    outline: none;
-                }
-            }
-
-            .normal-state-value
-            {
-                align-items: center;
 
                 &:empty
                 {
@@ -105,8 +89,24 @@
                 font-family: inherit;
             }
 
+            .normal-state-interactive-element
+            {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+
+                &:focus-visible
+                {
+                    outline: none;
+                }
+            }
+
             .normal-state-cancel
             {
+                z-index: 2;
+
                 &:hover
                 {
                     color: hsl(from var(--select-normalState-foreground) h s 50%);

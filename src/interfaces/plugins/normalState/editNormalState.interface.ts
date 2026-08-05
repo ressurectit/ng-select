@@ -49,6 +49,11 @@ export interface EditNormalStateCssClasses extends NormalStateCssClasses
      * Applied to HTML element that represents value and holds single selected value
      */
     valueSingle: string;
+
+    /**
+     * Applied to HTML element that handles user click and focuses on live search input
+     */
+    interactiveElement: string;
 }
 
 /**

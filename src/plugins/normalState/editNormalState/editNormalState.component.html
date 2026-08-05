@@ -45,7 +45,15 @@
 
 @if(options.carret)
 {
-    <button type="button" [disabled]="!!selectBus.selectOptions().readonly" (click)="click(); selectBus.setFocus()" (focus)="handleFocus()" (blur)="blur()" tabindex="-1" aria-hidden="true">
-        <span [class]="options.cssClasses.carret"></span>
-    </button>
+    <span aria-hidden="true" role="presentation" [class]="options.cssClasses.carret"></span>
 }
+
+<button type="button"
+        [disabled]="!!selectBus.selectOptions().readonly"
+        [class]="options.cssClasses.interactiveElement"
+        (click)="click(); selectBus.setFocus()"
+        (focus)="handleFocus()"
+        (blur)="blur()"
+        tabindex="-1"
+        aria-hidden="true">
+</button>

@@ -16,14 +16,9 @@ export interface SimpleNormalStateCssClasses extends NormalStateCssClasses
     carret: string;
 
     /**
-     * Applied to "carret" icon element
-     */
-    carretIcon: string;
-
-    /**
      * Applied to HTML element that represents normal state main element visible to user
      */
-    element: string;
+    interactiveElement: string;
 
     /**
      * Applied to HTML element that represents whole component
