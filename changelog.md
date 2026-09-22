@@ -1,5 +1,18 @@
 # Changelog
 
+## Version 17.3.0 (2026-09-22)
+
+### Bug Fixes
+
+- fixed `SelectEdit` directive
+   - now properly unblocks *space* character when select is editable, so space could be written as input
+
+### Features
+
+- updated `SimpleKeyboardHandlerOptions` interface
+   - **new properties**
+      - `openPopupOnSpace` indication whether space key should trigger opening select popup
+
 ## Version 17.2.0 (2026-08-04)
 
 ### Bug Fixes

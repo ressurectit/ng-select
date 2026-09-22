@@ -18,6 +18,11 @@ export interface SimpleKeyboardHandlerOptions extends KeyboardHandlerOptions
     alphanumericSearch: boolean;
 
     /**
+     * Indication whether space key should trigger opening select popup
+     */
+    openPopupOnSpace: boolean;
+
+    /**
      * Indication whether live search events should be processed
      */
     liveSearchEvents: boolean;

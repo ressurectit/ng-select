@@ -33,6 +33,7 @@ export class SelectEdit<TValue = unknown, TPublicValue = TValue>
                     {
                         alphanumericSearch: false,
                         liveSearchEvents: true,
+                        openPopupOnSpace: false,
                     },
                 },
             },

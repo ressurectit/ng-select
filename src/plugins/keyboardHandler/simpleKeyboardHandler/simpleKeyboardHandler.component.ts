@@ -12,6 +12,7 @@ import {SimpleKeyboardActionTypes} from '../../../misc/types';
 const defaultOptions: SimpleKeyboardHandlerOptions =
 {
     selectFirstDebounceTimeout: 300,
+    openPopupOnSpace: true,
     alphanumericSearch: true,
     liveSearchEvents: false,
 };
@@ -222,7 +223,7 @@ export class SimpleKeyboardHandler<TValue = unknown, TPublicValue = TValue> impl
             });
         }
 
-        if(event.key == ' ')
+        if(this.options.openPopupOnSpace && event.key == ' ')
         {
             this.logger.verbose('Select: Keyboard handler: handling Space');
 
