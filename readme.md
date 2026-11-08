@@ -49,6 +49,7 @@ Angular component representing an HTML `<select>`. Fully plugin-based and signal
   - [Readonly](#readonly)
   - [Custom Readonly State](#custom-readonly-state)
   - [Styling Override](#styling-override)
+- [License](#license)
 
 ## Resources
 
@@ -62,13 +63,32 @@ Angular component representing an HTML `<select>`. Fully plugin-based and signal
 npm install @anglr/select
 ```
 
-**Peer dependencies**: `@angular/core`, `@angular/common`, `@angular/forms`, `@anglr/common`, `@jscrpt/common`, `@css-styles/common`, `rxjs`, `lodash-es`.
+**Dependencies**: `@angular/core`, `@angular/common`, `@angular/forms`, `@anglr/common`, `@jscrpt/common`, `@css-styles/common`, `rxjs`, `lodash-es`.
+
+The default popup positioner (`CommonPositioner`) places the popup using the `Position` service from `@anglr/common`, so an implementation has to be registered once in the application, for example the Floating UI based one:
+
+```typescript
+// app.config.ts
+import {ApplicationConfig} from '@angular/core';
+import {providePosition} from '@anglr/common';
+import {FloatingUiDomPosition} from '@anglr/common/floating-ui';
+
+export const appConfig: ApplicationConfig =
+{
+    providers:
+    [
+        providePosition(FloatingUiDomPosition),
+    ],
+};
+```
+
+The styles have to be included as well, see [Styling](#styling).
 
 ---
 
 ## Quick Start
 
-Import the standalone components directly (no module required):
+Import the standalone components directly (no module required). `SelectFormControl` connects the select to an Angular signal form field:
 
 ```typescript
 import {Component, ChangeDetectionStrategy, signal} from '@angular/core';
@@ -148,6 +168,8 @@ Groups `<ng-option>` children under a labelled header.
 |---|---|---|
 | `[text]` | `string` | **(required)** Group label text |
 
+The popup renders a header for each group, followed by its options (`OptionGroup` has to be imported next to `Option`):
+
 ```html
 <ng-select [formField]="field">
     <ng-option-group text="Fruits">
@@ -197,12 +219,15 @@ export class MyComponent
 }
 ```
 
+Values written to the control are applied to the select even when the value handler resolves them asynchronously (for example `DynamicValueHandler`). The control keeps the written value while it's being resolved.
+
 ### Signal Forms (FormField)
 
 Use the `SelectFormControl` directive with Angular's signal-based `form()` / `FormField`:
 
 ```typescript
 import {Component, ChangeDetectionStrategy, signal} from '@angular/core';
+import {JsonPipe} from '@angular/common';
 import {form, FormField} from '@angular/forms/signals';
 import {Select, Option, SelectFormControl} from '@anglr/select';
 
@@ -219,6 +244,7 @@ import {Select, Option, SelectFormControl} from '@anglr/select';
     [
         Select,
         Option,
+        JsonPipe,
         FormField,
         SelectFormControl,
     ],
@@ -230,25 +256,30 @@ export class MyComponent
 }
 ```
 
+The field's `disabled()` and `readonly()` states are reflected by the select (see [Readonly](#readonly)).
+
 ### Two-way Binding (withDirectAccess)
 
-Use the `withDirectAccess` directive for simple two-way model binding without a form layer:
+Use the `WithDirectAccess` directive (`withDirectAccess` attribute) for simple two-way model binding without a form layer. Its `value` model works with any signal:
 
 ```typescript
 import {Component, ChangeDetectionStrategy, signal} from '@angular/core';
-import {Select, Option} from '@anglr/select';
+import {Select, Option, WithDirectAccess} from '@anglr/select';
 
 @Component(
 {
     template: `
         <ng-select [(value)]="selectedValue" withDirectAccess>
             <ng-option value="a" text="A"/>
+            <ng-option value="b" text="B"/>
         </ng-select>
+        <div>Value: {{ selectedValue() }}</div>
     `,
     imports:
     [
         Select,
         Option,
+        WithDirectAccess,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -266,7 +297,7 @@ export class MyComponent
 |---|---|---|
 | `SelectControlValueAccessor` | `ng-select[formControl]`, `ng-select[formControlName]`, `ng-select[ngModel]` | Bridges to Angular reactive/template-driven forms |
 | `SelectFormControl` | `ng-select[formField]` | Bridges to Angular signal-based forms |
-| `SelectEdit` | `ng-select[edit]` | Enables type-ahead / editable mode (swaps to `EditNormalState` + `EditLiveSearch`) |
+| `SelectEdit` | `ng-select[edit]` | Enables type-ahead / editable mode (swaps to `EditNormalState` + `EditLiveSearch`, Space is typed into the input instead of opening the popup) |
 | `SelectAbsolute` | `ng-select[absolute]` | Appends popup to `document.body` for overflow-safe positioning |
 | `SelectMultipleKeepPopup` | `ng-select[multiple]` | Keeps popup open after each selection in multi-select mode |
 | `SelectPlaceholder` | `ng-select[placeholder]` | Sets placeholder text reactively |
@@ -324,7 +355,7 @@ Every plugin implements the `SelectPlugin` base interface and receives:
 | Slot | Default | Alternatives | Purpose |
 |---|---|---|---|
 | **Interactions** | `SimpleInteractions` | — | Click-to-toggle, option click, click-outside handling |
-| **KeyboardHandler** | `SimpleKeyboardHandler` | — | Arrow keys, Enter, Backspace, alphanumeric search |
+| **KeyboardHandler** | `SimpleKeyboardHandler` | — | Arrow keys, Enter, Backspace, Space (opens popup), alphanumeric search |
 | **LiveSearch** | `NoLiveSearch` | `FilterLiveSearch`, `EditLiveSearch` | Text-based filtering of options |
 | **NormalState** | `SimpleNormalState` | `EditNormalState` | Closed-state appearance (value, caret, cancel button) |
 | **OptionsHandler** | `SimpleOptionsHandler` | `NoOptionsHandler` | Options list management, filtering, add-new-option |
@@ -335,61 +366,121 @@ Every plugin implements the `SelectPlugin` base interface and receives:
 
 ### Configuring Plugins
 
-Pass a `[selectOptions]` object to override plugin types and/or their options. Partial objects are deep-merged with defaults:
+Pass a `[selectOptions]` object to override plugin types and/or their options. Partial objects are deep-merged with defaults. This select gets a filter input inside its popup:
 
 ```typescript
-import {FilterLiveSearch, SelectOptions} from '@anglr/select';
+// configuringPlugins.component.ts
+import {Component, ChangeDetectionStrategy, signal} from '@angular/core';
+import {form, FormField} from '@angular/forms/signals';
+import {FilterLiveSearch, Option, Select, SelectFormControl, SelectOptions} from '@anglr/select';
 import {RecursivePartial} from '@jscrpt/common';
-
-const options: RecursivePartial<SelectOptions> =
-{
-    plugins:
-    {
-        liveSearch:
-        {
-            type: FilterLiveSearch,
-        },
-        popup:
-        {
-            options:
-            {
-                liveSearchEnabled: true,
-            },
-        },
-    },
-};
-```
-
-```html
-<ng-select [selectOptions]="options" [formField]="field">
-    <ng-option value="a" text="Alpha"/>
-</ng-select>
-```
-
-You can also swap plugin types via dependency injection providers:
-
-```typescript
-import {provideNormalStateType, EditNormalState} from '@anglr/select';
 
 @Component(
 {
+    selector: 'configuring-plugins-sample',
+    templateUrl: 'configuringPlugins.component.html',
+    imports:
+    [
+        Select,
+        Option,
+        FormField,
+        SelectFormControl,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class ConfiguringPluginsSampleComponent
+{
+    protected field = form(signal<string|null>(null));
+
+    protected options: RecursivePartial<SelectOptions> =
+    {
+        plugins:
+        {
+            liveSearch:
+            {
+                type: FilterLiveSearch,
+            },
+            popup:
+            {
+                options:
+                {
+                    liveSearchEnabled: true,
+                },
+            },
+        },
+    };
+}
+```
+
+```html
+<!-- configuringPlugins.component.html -->
+<ng-select [selectOptions]="options" [formField]="field">
+    <ng-option value="a" text="Alpha"/>
+    <ng-option value="b" text="Beta"/>
+</ng-select>
+```
+
+Plugin types and options can also be provided through dependency injection (`provide<Plugin>Type()` and `provide<Plugin>Options()` for every plugin slot). They apply to every select inside the providing component, or the whole application when registered in the application config. The following providers switch the selects to an editable mode, which is the same thing the `edit` directive does:
+
+```typescript
+import {Component, ChangeDetectionStrategy, signal} from '@angular/core';
+import {form, FormField} from '@angular/forms/signals';
+import {EditLiveSearch, EditNormalState, Option, provideKeyboardHandlerOptions, provideLiveSearchType, provideNormalStateType, Select, SelectFormControl, SimpleKeyboardHandlerOptions} from '@anglr/select';
+
+@Component(
+{
+    selector: 'plugin-providers-sample',
+    template: `
+        <ng-select [formField]="field">
+            <ng-option value="a" text="Alpha"/>
+            <ng-option value="b" text="Beta"/>
+        </ng-select>
+    `,
+    imports:
+    [
+        Select,
+        Option,
+        FormField,
+        SelectFormControl,
+    ],
     providers:
     [
         provideNormalStateType(EditNormalState),
+        provideLiveSearchType(EditLiveSearch),
+        provideKeyboardHandlerOptions<SimpleKeyboardHandlerOptions>(
+        {
+            alphanumericSearch: false,
+            liveSearchEvents: true,
+            openPopupOnSpace: false,
+        }),
     ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
+export class PluginProvidersSampleComponent
+{
+    protected field = form(signal<string|null>(null));
+}
 ```
+
+`SimpleKeyboardHandler` options (`SimpleKeyboardHandlerOptions`):
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `selectFirstDebounceTimeout` | `number` | `300` | Debounce timeout for selecting the first option while typing |
+| `openPopupOnSpace` | `boolean` | `true` | Whether the Space key opens the popup |
+| `alphanumericSearch` | `boolean` | `true` | Typing alphanumeric keys (outside of live search) selects the first option whose text starts with the typed text |
+| `liveSearchEvents` | `boolean` | `false` | Whether keyboard events coming from the live search input are processed |
 
 ### Implementing a Custom Plugin
 
-To create a custom plugin, implement the corresponding plugin interface and register it via `selectOptions` or a provider.
+To create a custom plugin, implement the corresponding plugin interface (or extend a provided base class) and register it via `selectOptions` or a provider. A plugin is a standalone component that the select creates dynamically. It gets the shared `SelectPluginInstances`, its own `ElementRef` and the `SelectBus` through `inject()`, and the select assigns `options` from the plugin description.
 
 **Example: Custom ReadonlyState Plugin**
 
-A custom readonly state that renders selected values differently.
+A custom readonly state that renders the selected values as plain text, or "No value selected":
 
 ```typescript
-import {Component, ChangeDetectionStrategy, ElementRef} from '@angular/core';
+import {Component, ChangeDetectionStrategy, ElementRef, inject} from '@angular/core';
 import {ReadonlyState, ReadonlyStateOptions, SelectBus, SelectPluginInstances} from '@anglr/select';
 
 @Component(
@@ -399,7 +490,7 @@ import {ReadonlyState, ReadonlyStateOptions, SelectBus, SelectPluginInstances} f
         <div class="custom-readonly">
             @if (selectBus.selectedOptions(); as selected) {
                 @if (isArray(selected)) {
-                    @for (opt of selected; track opt.index) {
+                    @for (opt of selected; track $index) {
                         <span class="tag">{{ opt.text() }}</span>
                     }
                 } @else {
@@ -412,12 +503,21 @@ import {ReadonlyState, ReadonlyStateOptions, SelectBus, SelectPluginInstances} f
     `,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CustomReadonlyStateComponent implements ReadonlyState<unknown, unknown>
+export class CustomReadonlyStateComponent implements ReadonlyState
 {
-    public readonly selectPlugins!: SelectPluginInstances<unknown, unknown>;
-    public readonly pluginElement!: ElementRef<HTMLElement>;
-    public options!: ReadonlyStateOptions;
-    public readonly selectBus!: SelectBus<unknown, unknown>;
+    public readonly selectPlugins: SelectPluginInstances = inject(SelectPluginInstances);
+    public readonly pluginElement: ElementRef<HTMLElement> = inject(ElementRef);
+    public readonly selectBus: SelectBus = inject(SelectBus);
+
+    public options: ReadonlyStateOptions =
+    {
+        cancelValue: false,
+        texts:
+        {
+            cancelTitle: '',
+        },
+        cssClasses: {},
+    };
 
     protected isArray = Array.isArray;
 
@@ -428,45 +528,152 @@ export class CustomReadonlyStateComponent implements ReadonlyState<unknown, unkn
 }
 ```
 
-**Register the custom plugin:**
+**Register the custom plugin.** The select below is readonly, so it renders the custom component instead of the normal state:
 
 ```typescript
-this.selectOptions =
+// customReadonlyState.component.ts
+import {Component, ChangeDetectionStrategy, signal} from '@angular/core';
+import {form, FormField, readonly} from '@angular/forms/signals';
+import {Option, Select, SelectFormControl, SelectOptions} from '@anglr/select';
+import {RecursivePartial} from '@jscrpt/common';
+
+import {CustomReadonlyStateComponent} from './customReadonlyStatePlugin.component';
+
+@Component(
 {
-    plugins:
+    selector: 'custom-readonly-state-sample',
+    templateUrl: 'customReadonlyState.component.html',
+    imports:
+    [
+        Select,
+        Option,
+        FormField,
+        SelectFormControl,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class CustomReadonlyStateSampleComponent
+{
+    protected field = form(signal<string|null>('a'), path => readonly(path));
+
+    protected selectOptions: RecursivePartial<SelectOptions> =
     {
-        readonlyState:
+        plugins:
         {
-            type: CustomReadonlyStateComponent,
+            readonlyState:
+            {
+                type: CustomReadonlyStateComponent,
+            },
         },
-    },
-};
+    };
+}
 ```
 
 ```html
+<!-- customReadonlyState.component.html -->
 <ng-select [selectOptions]="selectOptions" [formField]="field">
     <ng-option value="a" text="A"/>
+    <ng-option value="b" text="B"/>
 </ng-select>
 ```
 
 **Example: Custom OptionsHandler Plugin**
 
-You can extend `OptionsHandlerBase` to add custom filtering logic:
+`OptionsHandlerBase` provides the injected plugin fields and the *add new option* support, so a custom options handler only needs `options`, `availableOptions` and `listOptions`. This one filters options by the live-search text and lists them sorted alphabetically, regardless of the order of the `<ng-option>` elements:
 
 ```typescript
-import {Component} from '@angular/core';
-import {OptionsHandlerBase} from '@anglr/select';
+import {Component, ChangeDetectionStrategy, computed, Signal} from '@angular/core';
+import {OptionsHandler, OptionsHandlerBase, OptionsHandlerOptions, SelectOptionState} from '@anglr/select';
+
+/**
+ * Options handler that filters options by live search text and lists them sorted alphabetically by text
+ */
+@Component(
+{
+    selector: 'sorted-options-handler',
+    template: '',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class SortedOptionsHandler<TValue = unknown, TPublicValue = TValue> extends OptionsHandlerBase<TValue, TPublicValue> implements OptionsHandler<TValue, TPublicValue>
+{
+    public options: OptionsHandlerOptions<TValue> =
+    {
+        newOptionGetter: null,
+        newOptionOnlyWhenNoOptions: false,
+    };
+
+    public readonly availableOptions: Signal<readonly SelectOptionState<TValue>[]|undefined|null> = computed(() => this.selectBus.selectOptions().optionsGatherer.availableOptions());
+
+    public readonly listOptions: Signal<readonly SelectOptionState<TValue>[]|undefined|null> = computed(() =>
+    {
+        const search = this.selectPlugins.LiveSearch.search();
+        const options = this.selectBus.selectOptions();
+
+        return this.availableOptions()
+            ?.filter(option => !search || options.textCompare(options.normalize(options.textExtractor(option)), options.normalize(search)))
+            .sort((first, second) => options.textExtractor(first).localeCompare(options.textExtractor(second)));
+    });
+}
+```
+
+```typescript
+import {Component, ChangeDetectionStrategy, signal} from '@angular/core';
+import {form, FormField} from '@angular/forms/signals';
+import {FilterLiveSearch, Option, Select, SelectFormControl, SelectOptions} from '@anglr/select';
+import {RecursivePartial} from '@jscrpt/common';
+
+import {SortedOptionsHandler} from './sortedOptionsHandler.component';
 
 @Component(
 {
-    selector: 'custom-options-handler',
-    template: '',
+    selector: 'custom-options-handler-sample',
+    template: `
+        <ng-select [selectOptions]="selectOptions" [formField]="field">
+            <ng-option value="c" text="Cherry"/>
+            <ng-option value="a" text="Apple"/>
+            <ng-option value="b" text="Banana"/>
+        </ng-select>
+    `,
+    imports:
+    [
+        Select,
+        Option,
+        FormField,
+        SelectFormControl,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CustomOptionsHandlerComponent extends OptionsHandlerBase<string>
+export class CustomOptionsHandlerSampleComponent
 {
-    // Override filtering, sorting, or add-new-option logic
+    protected field = form(signal<string|null>(null));
+
+    protected selectOptions: RecursivePartial<SelectOptions> =
+    {
+        plugins:
+        {
+            optionsHandler:
+            {
+                type: SortedOptionsHandler,
+            },
+            liveSearch:
+            {
+                type: FilterLiveSearch,
+            },
+            popup:
+            {
+                options:
+                {
+                    liveSearchEnabled: true,
+                },
+            },
+        },
+    };
 }
 ```
+
+**Custom ValueHandler**
+
+A value handler implements `ValueHandler`: a `value` signal and a `setValue(value)` method. `setValue` returns `PromiseOr<void>`, so a value handler can resolve the written value asynchronously, as `DynamicValueHandler` does with its `optionGetter`. `SelectFormControl`, `SelectControlValueAccessor` and `WithDirectAccess` wait for the returned promise and keep the written value meanwhile.
 
 ---
 
@@ -475,7 +682,7 @@ export class CustomOptionsHandlerComponent extends OptionsHandlerBase<string>
 The `@anglr/select/extensions` entry point provides helper functions for programmatic interaction with the select via `execute()` / `executeAndReturn()`:
 
 ```typescript
-import {getSearch, getValue, setReadonly, setValue} from '@anglr/select/extensions';
+import {getSearch, getSelectedOption, getSelectedOptions, getValue, setReadonly, setValue} from '@anglr/select/extensions';
 ```
 
 | Function | Type | Description |
@@ -483,23 +690,104 @@ import {getSearch, getValue, setReadonly, setValue} from '@anglr/select/extensio
 | `getValue()` | `SelectFunction` | Returns the current value (reactive) |
 | `setValue(value)` | `SelectAction` | Sets the select's value programmatically |
 | `getSearch()` | `SelectFunction` | Returns the current live-search text (reactive) |
-| `setReadonly(flag?)` | `SelectAction` | Sets the select to readonly mode |
+| `getSelectedOption()` | `SelectFunction` | Returns the selected `SelectOption` of a single-value select (reactive); throws when the select is `multiple` |
+| `getSelectedOptions()` | `SelectFunction` | Returns the selected `SelectOption` or `SelectOption[]` (reactive) |
+| `setReadonly(flag?)` | `SelectAction` | Sets the select to readonly mode (`true` when the flag is omitted) |
 
-**Usage:**
+The `get*` functions return `undefined` (`''` for `getSearch()`) until the select is initialized. They read signals, so used inside `computed()` or `effect()` they track changes of the select.
+
+**Usage:** the page shows the value, live-search text and selected option text of the first select, and the texts of all options selected in the multiple select. The buttons change the value and toggle readonly:
 
 ```typescript
-// Get the current value
-const value = this.select().executeAndReturn(getValue());
+// extensions.component.ts
+import {Component, ChangeDetectionStrategy, computed, Signal, viewChild} from '@angular/core';
+import {JsonPipe} from '@angular/common';
+import {FilterLiveSearch, Option, Select, SelectOption, SelectOptions} from '@anglr/select';
+import {getSearch, getSelectedOption, getSelectedOptions, getValue, setReadonly, setValue} from '@anglr/select/extensions';
+import {RecursivePartial} from '@jscrpt/common';
 
-// Set a value programmatically
-this.select().execute(setValue('option-a'));
-
-// Get current search text (in an effect for reactivity)
-effect(() =>
+@Component(
 {
-    const search = this.select().executeAndReturn(getSearch());
-    // fetch remote data based on search...
-});
+    selector: 'extensions-sample',
+    templateUrl: 'extensions.component.html',
+    imports:
+    [
+        Select,
+        Option,
+        JsonPipe,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class ExtensionsSampleComponent
+{
+    protected select: Signal<Select<string>> = viewChild.required<Select<string>>('select');
+    protected multiSelect: Signal<Select<string>> = viewChild.required<Select<string>>('multiSelect');
+
+    protected selectOptions: RecursivePartial<SelectOptions<string>> =
+    {
+        plugins:
+        {
+            liveSearch:
+            {
+                type: FilterLiveSearch,
+            },
+            popup:
+            {
+                options:
+                {
+                    liveSearchEnabled: true,
+                },
+            },
+        },
+    };
+
+    // reactive reads, recomputed whenever the select changes
+    protected value: Signal<string|string[]|undefined|null> = computed(() => this.select().executeAndReturn(getValue()));
+    protected search: Signal<string> = computed(() => this.select().executeAndReturn(getSearch()));
+    protected selectedOption: Signal<SelectOption<string>|undefined|null> = computed(() => this.select().executeAndReturn(getSelectedOption()));
+    protected selectedTexts: Signal<string[]> = computed(() =>
+    {
+        const options = this.multiSelect().executeAndReturn(getSelectedOptions());
+
+        return (Array.isArray(options) ? options : options ? [options] : []).map(option => option.text());
+    });
+
+    protected selectSecond(): void
+    {
+        this.select().execute(setValue('second'));
+    }
+
+    protected toggleReadonly(): void
+    {
+        const select = this.select();
+
+        select.execute(setReadonly(!select.selectOptions.readonly));
+    }
+}
+```
+
+```html
+<!-- extensions.component.html -->
+<ng-select #select [selectOptions]="selectOptions">
+    <ng-option value="first" text="First value text"/>
+    <ng-option value="second" text="Second value text"/>
+    <ng-option value="third" text="Third value text"/>
+</ng-select>
+
+<button type="button" (click)="selectSecond()">select second</button>
+<button type="button" (click)="toggleReadonly()">toggle readonly</button>
+
+<div>Value: {{ value() | json }}</div>
+<div>Search: {{ search() }}</div>
+<div>Selected option text: {{ selectedOption()?.text() }}</div>
+
+<ng-select #multiSelect multiple>
+    <ng-option value="first" text="First value text"/>
+    <ng-option value="second" text="Second value text"/>
+    <ng-option value="third" text="Third value text"/>
+</ng-select>
+
+<div>Selected texts: {{ selectedTexts().join(', ') }}</div>
 ```
 
 ---
@@ -522,14 +810,17 @@ effect(() =>
 
 ### Setup
 
-The library ships pre-built SCSS that uses CSS custom properties for theming. Import styles in your global stylesheet:
+The library ships SCSS that uses CSS custom properties for theming. Import a theme in your global stylesheet and include it **inside a style rule** (the mixins output custom-property declarations and nested rules, so they can't be used at the stylesheet root):
 
 ```scss
 // Import the light theme (includes core CSS + variables)
 @use '@anglr/select/styles/themes/light' as selectLight;
 
 // Apply the theme
-@include selectLight.buildTheme();
+:root
+{
+    @include selectLight.buildTheme();
+}
 ```
 
 Or for the dark theme:
@@ -537,7 +828,10 @@ Or for the dark theme:
 ```scss
 @use '@anglr/select/styles/themes/dark' as selectDark;
 
-@include selectDark.buildTheme();
+:root
+{
+    @include selectDark.buildTheme();
+}
 ```
 
 ### Themes
@@ -551,7 +845,12 @@ Two pre-built themes are included:
 
 Each theme exposes:
 - `defineTheme($fontSize, $theme, $customization)` — returns a theme map
-- `buildTheme()` — applies the theme to the document
+- `buildTheme()` — outputs the theme variables and the select CSS
+
+The `@anglr/select/styles` entry point exposes the building blocks:
+- `defineTheme($fontSize, $theme)` — builds a theme map from the default theme
+- `buildTheme($theme)` — outputs the theme variables and the select CSS
+- `buildThemeVars($theme)` / `buildThemeCss` — output only the variables or only the CSS, useful when switching between several themes (variables per theme class, CSS once)
 
 ### CSS Custom Properties
 
@@ -592,11 +891,11 @@ All visual aspects are driven by CSS custom properties. Here are the key ones:
 
 ### Customizing a Theme
 
-Override specific values when calling `defineTheme`:
+Override specific values when calling `defineTheme` of a theme:
 
 ```scss
+@use '@anglr/select/styles' as select;
 @use '@anglr/select/styles/themes/light' as selectLight;
-@use '@anglr/select/styles/core/mixins' as selectMixins;
 
 $myTheme: selectLight.defineTheme(
     $fontSize: 16px,
@@ -627,18 +926,20 @@ $myTheme: selectLight.defineTheme(
     ),
 );
 
-@include selectMixins.buildTheme($myTheme);
+:root
+{
+    @include select.buildTheme($myTheme);
+}
 ```
 
 ### Building a Custom Theme
 
-Create a theme from scratch using the `defineTheme` function from the default theme:
+Create a theme from scratch using `defineTheme` from `@anglr/select/styles`, which starts from the default theme values:
 
 ```scss
-@use '@anglr/select/styles/core/defaultTheme' as selectDefault;
-@use '@anglr/select/styles/core/mixins' as selectMixins;
+@use '@anglr/select/styles' as select;
 
-$customTheme: selectDefault.defineTheme(
+$customTheme: select.defineTheme(
     $fontSize: 14px,
     $theme: (
         select: (
@@ -662,27 +963,36 @@ $customTheme: selectDefault.defineTheme(
     ),
 );
 
-@include selectMixins.buildTheme($customTheme);
+:root
+{
+    @include select.buildTheme($customTheme);
+}
 ```
 
 ### Overriding Styles in Components
 
-For component-scoped overrides, wrap the select in a container and override CSS custom properties:
+For component-scoped overrides, wrap the select in a container and override CSS custom properties in the component's styles. Only selects inside the container change:
 
 ```html
+<!-- stylingOverride.component.html -->
 <div class="select-override">
     <ng-select [formField]="field">
-        <ng-option value="a" text="A"/>
+        <ng-option value="first" text="First value text"/>
+        <ng-option value="second" text="Second value text"/>
     </ng-select>
 </div>
 ```
 
 ```scss
+// stylingOverride.component.scss
 .select-override {
     --select-normalState-borderColor: tomato;
     --select-normalState-background: lightyellow;
+    --select-normalState-foreground: #333;
     --select-normalState-focus-borderColor: red;
+    --select-normalState-focus-outlineColor: red;
     --select-popup-container-background: lightyellow;
+    --select-popup-container-borderColor: tomato;
 }
 ```
 
@@ -690,9 +1000,11 @@ For component-scoped overrides, wrap the select in a container and override CSS 
 
 ## Samples
 
+Each sample prints the current value next to the select (where it makes sense), so you can see what the select writes into the form.
+
 ### Basic Select
 
-Minimal select with reactive forms:
+Minimal select with reactive forms. Picking an option writes its `value` into the `FormControl`:
 
 ```typescript
 // basic.component.ts
@@ -736,7 +1048,7 @@ export class BasicSampleComponent
 
 ### Multiple Select
 
-Multi-select with signal forms. The `multiple` attribute enables multi-selection, and `SelectMultipleKeepPopup` keeps the popup open after each pick:
+Multi-select with signal forms. The `multiple` attribute enables multi-selection: the value is an array and the selected options are shown as tags. `SelectMultipleKeepPopup` keeps the popup open after each pick:
 
 ```typescript
 // multiple.component.ts
@@ -762,7 +1074,7 @@ import {Option, Select, SelectFormControl, SelectMultipleKeepPopup} from '@anglr
 })
 export class MultipleSampleComponent
 {
-    protected selectField = form(signal<string|null>(null));
+    protected selectField = form(signal<string[]|null>(null));
 }
 ```
 
@@ -781,7 +1093,7 @@ export class MultipleSampleComponent
 
 ### Edit / Type-ahead Mode
 
-Add the `edit` directive for a type-ahead experience. Works for both single and multi-select:
+Add the `edit` directive for a type-ahead experience. The normal state becomes a text input that filters options as you type (Space is typed as text). Works for both single and multi-select:
 
 ```typescript
 // edit.component.ts
@@ -815,12 +1127,16 @@ export class EditSampleComponent
 
 ```html
 <!-- edit.component.html -->
+<div>Value: {{ selectField().value() | json }}</div>
+
 <!-- Single edit -->
 <ng-select [formField]="selectField" edit>
     <ng-option value="first" text="First value text"/>
     <ng-option value="second" text="Second value text"/>
     <ng-option value="third" text="Third value text"/>
 </ng-select>
+
+<div>Values: {{ selectMultipleField().value() | json }}</div>
 
 <!-- Multiple edit -->
 <ng-select multiple [formField]="selectMultipleField" edit>
@@ -832,7 +1148,7 @@ export class EditSampleComponent
 
 ### Live Search (Filter)
 
-Enable a filter text input inside the popup using `FilterLiveSearch`:
+Enable a filter text input inside the popup using `FilterLiveSearch`. The popup only lists options whose text contains the typed text:
 
 ```typescript
 // liveSearch.component.ts
@@ -895,26 +1211,56 @@ export class LiveSearchSampleComponent
 
 ### Search Highlighting
 
-For custom option templates, wrap the highlightable spans with the `HighlightText` directive so nested text nodes are registered with the parent `HighlightSearch`:
+The popup highlights live-search matches in option texts using the CSS Highlight API. For custom option templates, mark the elements whose text should be highlighted with the `HighlightText` directive. Typing into the filter highlights matches only in the text part, not in the bold value:
 
 ```typescript
-import {HighlightText, NormalStateTemplate, Option, OptionTemplate, Select} from '@anglr/select';
+// searchHighlighting.component.ts
+import {Component, ChangeDetectionStrategy, signal} from '@angular/core';
+import {form, FormField} from '@angular/forms/signals';
+import {FilterLiveSearch, HighlightText, Option, OptionTemplate, Select, SelectFormControl, SelectOptions} from '@anglr/select';
+import {RecursivePartial} from '@jscrpt/common';
 
 @Component(
 {
+    selector: 'search-highlighting-sample',
+    templateUrl: 'searchHighlighting.component.html',
     imports:
     [
         Select,
         Option,
+        FormField,
         HighlightText,
         OptionTemplate,
-        NormalStateTemplate,
+        SelectFormControl,
     ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HighlightedTemplateComponent { /* ... */ }
+export class SearchHighlightingSampleComponent
+{
+    protected field = form(signal<string|null>(null));
+
+    protected selectOptions: RecursivePartial<SelectOptions> =
+    {
+        plugins:
+        {
+            liveSearch:
+            {
+                type: FilterLiveSearch,
+            },
+            popup:
+            {
+                options:
+                {
+                    liveSearchEnabled: true,
+                },
+            },
+        },
+    };
+}
 ```
 
 ```html
+<!-- searchHighlighting.component.html -->
 <ng-select [selectOptions]="selectOptions" [formField]="field">
     <ng-option value="a" text="Apple"/>
     <ng-option value="b" text="Banana"/>
@@ -928,7 +1274,7 @@ export class HighlightedTemplateComponent { /* ... */ }
 
 ### Custom Templates
 
-Use `[normalStateTemplate]` and `[optionTemplate]` to completely customize rendering:
+Use `[normalStateTemplate]` and `[optionTemplate]` to completely customize rendering. The selected value is shown between arrows and every option shows its value and text:
 
 ```typescript
 // customTemplate.component.ts
@@ -985,7 +1331,7 @@ export class CustomTemplateSampleComponent
 
 ### Lazy / Dynamic Options
 
-Options can be loaded asynchronously. Use signals and `@for` to render them once loaded:
+Options can be loaded asynchronously. Use signals and `@for` to render them once loaded; here the options show up after 2.5 seconds:
 
 ```typescript
 // basicLazy.component.ts
@@ -994,10 +1340,10 @@ import {JsonPipe} from '@angular/common';
 import {form, FormField} from '@angular/forms/signals';
 import {Option, Select, SelectFormControl} from '@anglr/select';
 
-interface KodPopisValue
+interface Item
 {
-    kod: string;
-    popis: string;
+    id: string;
+    name: string;
 }
 
 @Component(
@@ -1017,17 +1363,18 @@ interface KodPopisValue
 export class BasicLazySampleComponent
 {
     protected selectField = form(signal<string|null>(null));
-    protected lazyOptions: WritableSignal<KodPopisValue[]> = signal([]);
+    protected lazyOptions: WritableSignal<Item[]> = signal([]);
 
     constructor()
     {
         // Simulate async loading
         setTimeout(() =>
         {
-            this.lazyOptions.set([
-                {kod: 'first', popis: 'First value text'},
-                {kod: 'second', popis: 'Second value text'},
-                {kod: 'third', popis: 'Third value text'},
+            this.lazyOptions.set(
+            [
+                {id: 'first', name: 'First value text'},
+                {id: 'second', name: 'Second value text'},
+                {id: 'third', name: 'Third value text'},
             ]);
         }, 2500);
     }
@@ -1039,24 +1386,26 @@ export class BasicLazySampleComponent
 <div>Value: {{ selectField().value() | json }}</div>
 
 <ng-select [formField]="selectField">
-    @for (option of lazyOptions(); track option) {
-        <ng-option [value]="option.kod" [text]="option.popis"/>
+    @for (option of lazyOptions(); track option.id) {
+        <ng-option [value]="option.id" [text]="option.name"/>
     }
 </ng-select>
 ```
 
 ### Dynamic Options with Remote Data
 
-Use `CodeOptionsGatherer` + `DynamicValueHandler` + `FilterLiveSearch` to load options from a remote API:
+Use `CodeOptionsGatherer` + `DynamicValueHandler` + `FilterLiveSearch` to load options from a remote API. The options are fetched again whenever the live-search text changes. `ItemsService.search(query)` returns a `Promise<Item[]>`, where `Item` has an `id` and a `name`:
 
 ```typescript
 // dynamic.component.ts
-import {Component, ChangeDetectionStrategy, effect, Signal, viewChild, signal} from '@angular/core';
+import {Component, ChangeDetectionStrategy, effect, inject, Signal, viewChild, signal} from '@angular/core';
 import {JsonPipe} from '@angular/common';
 import {form, FormField} from '@angular/forms/signals';
-import {CodeOptionsGatherer, DynamicValueHandler, DynamicValueHandlerOptions, FilterLiveSearch, Select, SelectFormControl, SelectOption, SelectOptions} from '@anglr/select';
+import {CodeOptionsGatherer, DynamicValueHandler, FilterLiveSearch, Select, SelectFormControl, SelectOptions} from '@anglr/select';
 import {getSearch} from '@anglr/select/extensions';
 import {RecursivePartial} from '@jscrpt/common';
+
+import {ItemsService} from './items.service';
 
 @Component(
 {
@@ -1069,10 +1418,16 @@ import {RecursivePartial} from '@jscrpt/common';
         FormField,
         SelectFormControl,
     ],
+    providers:
+    [
+        ItemsService,
+    ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DynamicSampleComponent
 {
+    private itemsSvc: ItemsService = inject(ItemsService);
+
     protected optionsGatherer: CodeOptionsGatherer<string> = new CodeOptionsGatherer<string>();
     protected selectField = form(signal<string|null>(null));
     protected select: Signal<Select<string>> = viewChild.required<Select<string>>('select');
@@ -1085,21 +1440,27 @@ export class DynamicSampleComponent
             {
                 type: FilterLiveSearch,
             },
+            popup:
+            {
+                options:
+                {
+                    liveSearchEnabled: true,
+                },
+            },
             valueHandler:
             {
                 type: DynamicValueHandler,
-                options: {} as DynamicValueHandlerOptions<string>,
             },
         },
         optionsGatherer: this.optionsGatherer,
     };
 
-    constructor(private dataSvc: DataService)
+    constructor()
     {
         effect(async () =>
         {
             const search = this.select().executeAndReturn(getSearch());
-            const result = await this.dataSvc.search(search);
+            const result = await this.itemsSvc.search(search);
 
             this.optionsGatherer.setAvailableOptions(
                 result.map(item =>
@@ -1123,107 +1484,235 @@ export class DynamicSampleComponent
 
 ### Dynamic Option Getter (Object Values)
 
-When values are objects and you need to resolve them back from a server (e.g., when setting an initial value), use `DynamicValueHandlerOptions.optionGetter`:
+When option values are objects but the form stores only a key, use `valueExtractor` to produce the public value, and `DynamicValueHandlerOptions.optionGetter` to resolve the option for a value written from outside (such as the initial value). The form below starts with `'second'` and the select displays its text once `ItemsService.getDetail(id)` (returning `Promise<Item|null>`) resolves:
 
 ```typescript
-this.selectOptions =
-{
-    valueExtractor: itm => itm.value()?.kod ?? '',
-    plugins:
-    {
-        valueHandler:
-        {
-            type: DynamicValueHandler,
-            options:
-            {
-                optionGetter: async (value) =>
-                {
-                    const result = await lastValueFrom(dataSvc.getDetail(value));
+// dynamicOptionGetter.component.ts
+import {Component, ChangeDetectionStrategy, effect, inject, Signal, viewChild, signal} from '@angular/core';
+import {JsonPipe} from '@angular/common';
+import {form, FormField} from '@angular/forms/signals';
+import {CodeOptionsGatherer, DynamicValueHandler, FilterLiveSearch, Select, SelectFormControl, SelectOptions} from '@anglr/select';
+import {getSearch} from '@anglr/select/extensions';
+import {RecursivePartial} from '@jscrpt/common';
 
-                    return result
-                        ? {
-                              group: signal(null),
-                              text: signal(result.name),
-                              value: signal({kod: result.kod, label: result.name}),
-                          }
-                        : null;
+import {Item, ItemsService} from './items.service';
+
+@Component(
+{
+    selector: 'dynamic-option-getter-sample',
+    templateUrl: 'dynamicOptionGetter.component.html',
+    imports:
+    [
+        Select,
+        JsonPipe,
+        FormField,
+        SelectFormControl,
+    ],
+    providers:
+    [
+        ItemsService,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class DynamicOptionGetterSampleComponent
+{
+    private itemsSvc: ItemsService = inject(ItemsService);
+
+    protected optionsGatherer: CodeOptionsGatherer<Item> = new CodeOptionsGatherer<Item>();
+    protected select: Signal<Select<Item, string>> = viewChild.required<Select<Item, string>>('select');
+
+    // initial value is only an id, the option for it is resolved using optionGetter
+    protected selectField = form(signal<string|null>('second'));
+
+    protected selectOptions: RecursivePartial<SelectOptions<Item, string>> =
+    {
+        valueExtractor: option => option.value()?.id ?? '',
+        plugins:
+        {
+            liveSearch:
+            {
+                type: FilterLiveSearch,
+            },
+            popup:
+            {
+                options:
+                {
+                    liveSearchEnabled: true,
+                },
+            },
+            valueHandler:
+            {
+                type: DynamicValueHandler,
+                options:
+                {
+                    optionGetter: async (value: string) =>
+                    {
+                        const item = await this.itemsSvc.getDetail(value);
+
+                        if(!item)
+                        {
+                            return null;
+                        }
+
+                        return {
+                            group: signal(null),
+                            text: signal(item.name),
+                            value: signal(item),
+                        };
+                    },
                 },
             },
         },
-    },
-    optionsGatherer: this.optionsGatherer,
-};
+        optionsGatherer: this.optionsGatherer,
+    };
+
+    constructor()
+    {
+        effect(async () =>
+        {
+            const search = this.select().executeAndReturn(getSearch());
+            const result = await this.itemsSvc.search(search);
+
+            this.optionsGatherer.setAvailableOptions(
+                result.map(item =>
+                ({
+                    value: signal(item),
+                    text: signal(item.name),
+                    group: signal(null),
+                })),
+            );
+        });
+    }
+}
+```
+
+```html
+<!-- dynamicOptionGetter.component.html -->
+<div>Value: {{ selectField().value() | json }}</div>
+
+<ng-select #select [selectOptions]="selectOptions" [formField]="selectField"/>
 ```
 
 ### Absolute Popup
 
-Use the `absolute` directive to render the popup as a direct child of `<body>`, preventing clipping by `overflow: hidden` containers:
+Use the `absolute` directive (`SelectAbsolute`) to render the popup as a direct child of `<body>`. The popup isn't clipped by the `overflow: hidden` container around the select:
 
 ```html
-<ng-select [formField]="field" absolute>
+<!-- absolute.component.html -->
+<div style="overflow: hidden; height: 40px;">
+    <ng-select [formField]="field" absolute>
+        <ng-option value="a" text="A"/>
+        <ng-option value="b" text="B"/>
+    </ng-select>
+</div>
+```
+
+### Popover Popup
+
+Use `PopoverPositioner` to display the popup using the native Popover API, so it's rendered in the top layer above any other content. With `popoverAuto` the browser closes the popup on outside click, so the click-outside handling of the interactions plugin is turned off:
+
+```typescript
+// popover.component.ts
+import {Component, ChangeDetectionStrategy, signal} from '@angular/core';
+import {form, FormField} from '@angular/forms/signals';
+import {Option, PopoverPositioner, PopoverPositionerOptions, Select, SelectFormControl, SelectOptions} from '@anglr/select';
+import {RecursivePartial} from '@jscrpt/common';
+
+@Component(
+{
+    selector: 'popover-sample',
+    templateUrl: 'popover.component.html',
+    imports:
+    [
+        Select,
+        Option,
+        FormField,
+        SelectFormControl,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class PopoverSampleComponent
+{
+    protected field = form(signal<string|null>(null));
+
+    protected selectOptions: RecursivePartial<SelectOptions<string>> =
+    {
+        plugins:
+        {
+            interactions:
+            {
+                options:
+                {
+                    handleClickOutside: false,
+                },
+            },
+            positioner:
+            {
+                type: PopoverPositioner,
+                options:
+                {
+                    popoverAuto: true,
+                } as PopoverPositionerOptions,
+            },
+        },
+    };
+}
+```
+
+```html
+<!-- popover.component.html -->
+<ng-select [formField]="field" [selectOptions]="selectOptions">
     <ng-option value="a" text="A"/>
     <ng-option value="b" text="B"/>
 </ng-select>
 ```
 
-### Popover Popup
-
-Use the native Popover API for popup positioning:
-
-```typescript
-import {PopoverPositioner, PopoverPositionerOptions, SelectOptions} from '@anglr/select';
-import {RecursivePartial} from '@jscrpt/common';
-
-const selectOptions: RecursivePartial<SelectOptions<string>> =
-{
-    plugins:
-    {
-        interactions:
-        {
-            options:
-            {
-                handleClickOutside: false,
-            },
-        },
-        positioner:
-        {
-            type: PopoverPositioner,
-            options:
-            {
-                popoverAuto: true,
-            } as PopoverPositionerOptions,
-        },
-    },
-};
-```
-
-```html
-<ng-select [formField]="field" [selectOptions]="selectOptions">
-    <ng-option value="a" text="A"/>
-</ng-select>
-```
-
 ### Cancel Value
 
-Show a cancel/clear button to reset the selected value:
+Show a cancel button in the normal state that clears the selected value:
 
 ```typescript
-const selectOptions: RecursivePartial<SelectOptions<string>> =
+// cancelValue.component.ts
+import {Component, ChangeDetectionStrategy, signal} from '@angular/core';
+import {form, FormField} from '@angular/forms/signals';
+import {Option, Select, SelectFormControl, SelectOptions} from '@anglr/select';
+import {RecursivePartial} from '@jscrpt/common';
+
+@Component(
 {
-    plugins:
+    selector: 'cancel-value-sample',
+    templateUrl: 'cancelValue.component.html',
+    imports:
+    [
+        Select,
+        Option,
+        FormField,
+        SelectFormControl,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class CancelValueSampleComponent
+{
+    protected field = form(signal<string|null>(null));
+
+    protected selectOptions: RecursivePartial<SelectOptions<string>> =
     {
-        normalState:
+        plugins:
         {
-            options:
+            normalState:
             {
-                cancelValue: true,
+                options:
+                {
+                    cancelValue: true,
+                },
             },
         },
-    },
-};
+    };
+}
 ```
 
 ```html
+<!-- cancelValue.component.html -->
 <ng-select [formField]="field" [selectOptions]="selectOptions">
     <ng-option value="a" text="A"/>
     <ng-option value="b" text="B"/>
@@ -1232,66 +1721,118 @@ const selectOptions: RecursivePartial<SelectOptions<string>> =
 
 ### Hide Caret
 
-In edit mode, hide the dropdown caret:
+Hide the dropdown caret, either through the `carret` option of `EditNormalState` (in edit mode), or with the `noCarret` shorthand directive (`SelectNoCarret`):
 
 ```typescript
-import {EditNormalStateOptions, SelectOptions} from '@anglr/select';
+// hideCaret.component.ts
+import {Component, ChangeDetectionStrategy, signal} from '@angular/core';
+import {form, FormField} from '@angular/forms/signals';
+import {EditNormalStateOptions, Option, Select, SelectEdit, SelectFormControl, SelectNoCarret, SelectOptions} from '@anglr/select';
+import {RecursivePartial} from '@jscrpt/common';
 
-const selectOptions: RecursivePartial<SelectOptions<string>> =
+@Component(
 {
-    plugins:
+    selector: 'hide-caret-sample',
+    templateUrl: 'hideCaret.component.html',
+    imports:
+    [
+        Select,
+        Option,
+        FormField,
+        SelectEdit,
+        SelectNoCarret,
+        SelectFormControl,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class HideCaretSampleComponent
+{
+    protected field = form(signal<string|null>(null));
+    protected otherField = form(signal<string|null>(null));
+
+    protected selectOptions: RecursivePartial<SelectOptions<string>> =
     {
-        normalState:
+        plugins:
         {
-            options:
+            normalState:
             {
-                carret: false,
-            } as EditNormalStateOptions,
+                options:
+                {
+                    carret: false,
+                } as EditNormalStateOptions,
+            },
         },
-    },
-};
+    };
+}
 ```
 
 ```html
+<!-- hideCaret.component.html -->
 <ng-select [formField]="field" [selectOptions]="selectOptions" edit>
     <ng-option value="a" text="A"/>
 </ng-select>
-```
 
-Or use the shorthand directive:
-
-```html
-<ng-select [formField]="field" noCarret>
+<ng-select [formField]="otherField" noCarret>
     <ng-option value="a" text="A"/>
 </ng-select>
 ```
 
 ### Add New Option
 
-Allow users to create new options by typing. Configure `newOptionGetter` on the OptionsHandler:
+Allow users to create new options by typing. Configure `newOptionGetter` on the OptionsHandler: while typing, the popup offers the typed text as the first option, and picking it sets it as the value:
 
 ```typescript
-const selectOptions: RecursivePartial<SelectOptions<string>> =
+// addNewOption.component.ts
+import {Component, ChangeDetectionStrategy, signal} from '@angular/core';
+import {JsonPipe} from '@angular/common';
+import {form, FormField} from '@angular/forms/signals';
+import {Option, Select, SelectEdit, SelectFormControl, SelectOptions} from '@anglr/select';
+import {RecursivePartial} from '@jscrpt/common';
+
+@Component(
 {
-    plugins:
+    selector: 'add-new-option-sample',
+    templateUrl: 'addNewOption.component.html',
+    imports:
+    [
+        Select,
+        Option,
+        JsonPipe,
+        FormField,
+        SelectEdit,
+        SelectFormControl,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class AddNewOptionSampleComponent
+{
+    protected field = form(signal<string|null>(null));
+
+    protected selectOptions: RecursivePartial<SelectOptions<string>> =
     {
-        optionsHandler:
+        plugins:
         {
-            options:
+            optionsHandler:
             {
-                newOptionGetter: (value: string) =>
-                ({
-                    group: signal(null),
-                    text: signal(value),
-                    value: signal(value),
-                }),
+                options:
+                {
+                    newOptionGetter: (value: string) =>
+                    ({
+                        group: signal(null),
+                        text: signal(value),
+                        value: signal(value),
+                    }),
+                },
             },
         },
-    },
-};
+    };
+}
 ```
 
 ```html
+<!-- addNewOption.component.html -->
+<div>Value: {{ field().value() | json }}</div>
+
 <ng-select [formField]="field" [selectOptions]="selectOptions" edit>
     <ng-option value="first" text="First value text"/>
     <ng-option value="second" text="Second value text"/>
@@ -1300,82 +1841,71 @@ const selectOptions: RecursivePartial<SelectOptions<string>> =
 
 ### Readonly
 
-Use Angular signal forms' `readonly()` to toggle readonly state:
+Use Angular signal forms' `readonly()` rule to toggle the readonly state of the first select. The second select is switched to readonly programmatically with the `setReadonly()` extension:
 
 ```typescript
-import {signal} from '@angular/core';
+// readonly.component.ts
+import {Component, ChangeDetectionStrategy, Signal, signal, viewChild} from '@angular/core';
 import {form, FormField, readonly} from '@angular/forms/signals';
+import {Option, Select, SelectFormControl} from '@anglr/select';
+import {setReadonly} from '@anglr/select/extensions';
 
+@Component(
+{
+    selector: 'readonly-sample',
+    templateUrl: 'readonly.component.html',
+    imports:
+    [
+        Select,
+        Option,
+        FormField,
+        SelectFormControl,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
 export class ReadonlySampleComponent
 {
-    protected readonly = signal(false);
+    protected isReadonly = signal(false);
     protected selectField = form(
         signal<string|null>(null),
-        path => readonly(path, () => this.readonly()),
+        path => readonly(path, () => this.isReadonly()),
     );
+
+    protected select: Signal<Select<string>> = viewChild.required<Select<string>>('select');
+
+    protected setSelectReadonly(): void
+    {
+        this.select().execute(setReadonly(true));
+    }
 }
 ```
 
 ```html
-<button (click)="readonly.set(!readonly())">
-    {{ readonly() ? 'to normal' : 'to readonly' }}
+<!-- readonly.component.html -->
+<button type="button" (click)="isReadonly.set(!isReadonly())">
+    {{ isReadonly() ? 'to normal' : 'to readonly' }}
 </button>
 
 <ng-select [formField]="selectField">
     <ng-option value="a" text="A"/>
     <ng-option value="b" text="B"/>
 </ng-select>
-```
 
-Or use the `setReadonly()` extension:
+<button type="button" (click)="setSelectReadonly()">set readonly via extension</button>
 
-```typescript
-import {setReadonly} from '@anglr/select/extensions';
-
-this.select().execute(setReadonly(true));
+<ng-select #select>
+    <ng-option value="a" text="A"/>
+    <ng-option value="b" text="B"/>
+</ng-select>
 ```
 
 ### Custom Readonly State
 
-Replace the readonly visual entirely with a custom plugin component:
-
-```typescript
-this.selectOptions =
-{
-    plugins:
-    {
-        readonlyState:
-        {
-            type: CustomReadonlyStateComponent,
-        },
-    },
-};
-```
+To replace the readonly visual entirely, register a custom `readonlyState` plugin, see [Example: Custom ReadonlyState Plugin](#implementing-a-custom-plugin).
 
 ### Styling Override
 
-Override CSS custom properties in a scoped container:
-
-```html
-<div class="select-override">
-    <ng-select [formField]="field">
-        <ng-option value="first" text="First value text"/>
-        <ng-option value="second" text="Second value text"/>
-    </ng-select>
-</div>
-```
-
-```scss
-.select-override {
-    --select-normalState-borderColor: tomato;
-    --select-normalState-background: lightyellow;
-    --select-normalState-foreground: #333;
-    --select-normalState-focus-borderColor: red;
-    --select-normalState-focus-outlineColor: red;
-    --select-popup-container-background: lightyellow;
-    --select-popup-container-borderColor: tomato;
-}
-```
+To restyle selects in one place of an application only, override the CSS custom properties in a container, see [Overriding Styles in Components](#overriding-styles-in-components).
 
 ---
 
