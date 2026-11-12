@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, DOCUMENT, effect, ElementRef, Inject, inject, OnDestroy, Optional} from '@angular/core';
+import {ChangeDetectionStrategy, Component, DOCUMENT, effect, ElementRef, Inject, inject, Injector, OnDestroy, Optional, runInInjectionContext} from '@angular/core';
 import {NoopAction, RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 import {Subscription} from 'rxjs';
@@ -13,6 +13,7 @@ import {SimpleKeyboardActionTypes} from '../../../misc/types';
 const defaultOptions: InteractionsOptions =
 {
     handleClickOutside: true,
+    canShowPopupPredicate: () => true,
 };
 
 /**
@@ -37,6 +38,11 @@ export class SimpleInteractions<TValue = unknown, TPublicValue = TValue> impleme
      * Instance of HTML document
      */
     protected document: Document = inject(DOCUMENT);
+
+    /**
+     * Instance of Angular injector
+     */
+    protected injector: Injector = inject(Injector);
 
     /**
      * Method used for unregistering click outside handler
@@ -72,7 +78,23 @@ export class SimpleInteractions<TValue = unknown, TPublicValue = TValue> impleme
         this.options = deepCopyWithArrayOverride(defaultOptions as InteractionsOptions,
                                                  options);
 
-        this.initSubscriptions.add(this.selectBus.click.subscribe(() => togglePopup(this.selectBus)));
+        this.initSubscriptions.add(this.selectBus.click.subscribe(() =>
+        {
+            //hide popup
+            if(this.selectBus.popupVisible())
+            {
+                togglePopup(this.selectBus);
+            }
+            //show popup conditionally
+            else
+            {
+                if(runInInjectionContext(this.injector, () => this.options.canShowPopupPredicate()))
+                {
+                    togglePopup(this.selectBus);
+                }
+            }
+        }));
+
         this.initSubscriptions.add(this.selectBus.optionActivate.subscribe(event => selectOption(this.selectBus, event.data)));
         this.initSubscriptions.add(this.selectBus.internalsFocus.subscribe(() => this.selectBus.hasFocus.set(true)));
         this.initSubscriptions.add(this.selectBus.internalsBlur.subscribe(() => this.selectBus.hasFocus.set(false)));
@@ -141,8 +163,16 @@ export class SimpleInteractions<TValue = unknown, TPublicValue = TValue> impleme
             }
         });
 
-        this.initSubscriptions.add(this.selectBus.showPopup.subscribe(() => this.selectBus.popupVisible.set(true)));
+        this.initSubscriptions.add(this.selectBus.showPopup.subscribe(() =>
+        {
+            if(runInInjectionContext(this.injector, () => this.options.canShowPopupPredicate()))
+            {
+                this.selectBus.popupVisible.set(true);
+            }
+        }));
+
         this.initSubscriptions.add(this.selectBus.hidePopup.subscribe(() => this.selectBus.popupVisible.set(false)));
+
         this.initSubscriptions.add(this.selectBus.markOption.subscribe(event =>
         {
             this.selectBus.popupVisible.set(true);

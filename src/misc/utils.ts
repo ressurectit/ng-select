@@ -1,4 +1,4 @@
-import {untracked} from '@angular/core';
+import {inject, untracked} from '@angular/core';
 import {isBlank, isDescendant, NoopAction} from '@jscrpt/common';
 
 import {SelectOption, SelectOptionState, ValueHandler, ValueHandlerOptions} from '../interfaces';
@@ -166,4 +166,17 @@ export function hasValue<TValue>(value: SelectOptionState<TValue>|SelectOptionSt
     }
 
     return !!value;
+}
+
+/**
+ * Determines whether the popup should be shown based on the presence of available values and live search value
+ */
+export function showPopupWithValues(): boolean
+{
+    return untracked(() =>
+    {
+        const selectPlugins = inject(SelectPluginInstances);
+
+        return !(selectPlugins.OptionsHandler?.availableOptions()?.length && !selectPlugins.LiveSearch?.emptyInput);
+    });
 }

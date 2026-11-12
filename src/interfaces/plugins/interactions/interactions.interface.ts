@@ -1,3 +1,4 @@
+import {CanShowPopupPredicate} from '../../../misc/types';
 import {PluginOptions} from '../../pluginOptions/pluginOptions.interface';
 import {SelectPlugin} from '../../selectPlugin/selectPlugin.interface';
 
@@ -12,6 +13,11 @@ export interface InteractionsOptions extends PluginOptions
      * Indication whether click outside should be handled by plugin. If true, click outside will close popup
      */
     handleClickOutside: boolean;
+
+    /**
+     * Predicate that determines whether the select popup can be shown
+     */
+    canShowPopupPredicate: CanShowPopupPredicate;
 }
 
 /**

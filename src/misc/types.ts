@@ -66,3 +66,8 @@ export type OptionGetterFunc<TValue, TPublicValue> = (value: TPublicValue) => Pr
  * Definition of function for obtaining new option, allows adding new options
  */
 export type NewOptionGetterFunc<TValue> = (text: string) => SelectOption<TValue>;
+
+/**
+ * Definition of function that determines whether the select popup can be shown, runs in injection context
+ */
+export type CanShowPopupPredicate = () => boolean;

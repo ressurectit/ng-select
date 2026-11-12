@@ -1,5 +1,17 @@
 # Changelog
 
+## Version 17.4.0 (2026-11-12)
+
+### Features
+
+- new `CanShowPopupPredicate` type, definition of function that determines whether the select popup can be shown, runs in injection context
+- new `showPopupWithValues` function, that determines whether the popup should be shown based on the presence of available values and live search value
+- updated `InteractionsOptions` interface
+   - **new properties**
+      - `canShowPopupPredicate` predicate that determines whether the select popup can be shown
+- updated `SimpleInteractions` plugin component
+   - now respects `canShowPopupPredicate` when showing popup on click or via `showPopup`, default predicate always allows showing popup
+
 ## Version 17.3.0 (2026-09-22)
 
 ### Bug Fixes
