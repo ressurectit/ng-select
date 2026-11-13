@@ -1,18 +1,24 @@
-import {Provider, Type, ValueProvider} from '@angular/core';
+import {FactoryProvider, inject, Provider, Type, ValueProvider} from '@angular/core';
 import {RecursivePartial} from '@jscrpt/common';
+import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
 
 import {Interactions, InteractionsOptions, KeyboardHandler, KeyboardHandlerOptions, LiveSearch, LiveSearchOptions, NormalState, NormalStateOptions, OptionsHandler, OptionsHandlerOptions, Popup, PopupOptions, Positioner, PositionerOptions, ReadonlyState, ReadonlyStateOptions, SelectOptions, ValueHandler, ValueHandlerOptions} from '../interfaces';
 import {INTERACTIONS_OPTIONS, INTERACTIONS_TYPE, KEYBOARD_HANDLER_OPTIONS, KEYBOARD_HANDLER_TYPE, LIVE_SEARCH_OPTIONS, LIVE_SEARCH_TYPE, NORMAL_STATE_OPTIONS, NORMAL_STATE_TYPE, OPTIONS_HANDLER_OPTIONS, OPTIONS_HANDLER_TYPE, POPUP_OPTIONS, POPUP_TYPE, POSITIONER_OPTIONS, POSITIONER_TYPE, READONLY_STATE_OPTIONS, READONLY_STATE_TYPE, SELECT_OPTIONS, VALUE_HANDLER_OPTIONS, VALUE_HANDLER_TYPE} from './tokens';
 
 /**
- * Provides options for select globally
+ * Provides options for select globally, merge them with parent options
  * @param options - Options to be provided
  */
 export function provideSelectOptions(options: RecursivePartial<SelectOptions>): Provider
 {
-    return <ValueProvider>{
+    return <FactoryProvider>{
         provide: SELECT_OPTIONS,
-        useValue: options,
+        useFactory: () =>
+        {
+            const parentOptions = inject(SELECT_OPTIONS, {optional: true, skipSelf: true}) ?? {};
+
+            return deepCopyWithArrayOverride({}, parentOptions, options);
+        },
     };
 }
 
@@ -125,109 +131,154 @@ export function provideOptionsHandlerType(type: Type<OptionsHandler>): Provider
 }
 
 /**
- * Provides options for keyboard handler that will be used for select globally
+ * Provides options for keyboard handler that will be used for select globally, merge them with parent options
  * @param options - Options to be used for keyboard handler
  */
 export function provideKeyboardHandlerOptions<TOptions extends KeyboardHandlerOptions = KeyboardHandlerOptions>(options: RecursivePartial<TOptions>): Provider
 {
-    return <ValueProvider>{
+    return <FactoryProvider>{
         provide: KEYBOARD_HANDLER_OPTIONS,
-        useValue: options,
+        useFactory: () =>
+        {
+            const parentOptions = inject(KEYBOARD_HANDLER_OPTIONS, {optional: true, skipSelf: true}) ?? {};
+
+            return deepCopyWithArrayOverride({}, parentOptions, options);
+        },
     };
 }
 
 /**
- * Provides options for normal state that will be used for select globally
+ * Provides options for normal state that will be used for select globally, merge them with parent options
  * @param options - Options to be used for normal state
  */
 export function provideNormalStateOptions<TOptions extends NormalStateOptions = NormalStateOptions>(options: RecursivePartial<TOptions>): Provider
 {
-    return <ValueProvider>{
+    return <FactoryProvider>{
         provide: NORMAL_STATE_OPTIONS,
-        useValue: options,
+        useFactory: () =>
+        {
+            const parentOptions = inject(NORMAL_STATE_OPTIONS, {optional: true, skipSelf: true}) ?? {};
+
+            return deepCopyWithArrayOverride({}, parentOptions, options);
+        },
     };
 }
 
 /**
- * Provides options for popup that will be used for select globally
+ * Provides options for popup that will be used for select globally, merge them with parent options
  * @param options - Options to be used for popup
  */
 export function providePopupOptions<TOptions extends PopupOptions = PopupOptions>(options: RecursivePartial<TOptions>): Provider
 {
-    return <ValueProvider>{
+    return <FactoryProvider>{
         provide: POPUP_OPTIONS,
-        useValue: options,
+        useFactory: () =>
+        {
+            const parentOptions = inject(POPUP_OPTIONS, {optional: true, skipSelf: true}) ?? {};
+
+            return deepCopyWithArrayOverride({}, parentOptions, options);
+        },
     };
 }
 
 /**
- * Provides options for positioner that will be used for select globally
+ * Provides options for positioner that will be used for select globally, merge them with parent options
  * @param options - Options to be used for positioner
  */
 export function providePositionerOptions<TOptions extends PositionerOptions = PositionerOptions>(options: RecursivePartial<TOptions>): Provider
 {
-    return <ValueProvider>{
+    return <FactoryProvider>{
         provide: POSITIONER_OPTIONS,
-        useValue: options,
+        useFactory: () =>
+        {
+            const parentOptions = inject(POSITIONER_OPTIONS, {optional: true, skipSelf: true}) ?? {};
+
+            return deepCopyWithArrayOverride({}, parentOptions, options);
+        },
     };
 }
 
 /**
- * Provides options for readonly state that will be used for select globally
+ * Provides options for readonly state that will be used for select globally, merge them with parent options
  * @param options - Options to be used for readonly state
  */
 export function provideReadonlyStateOptions<TOptions extends ReadonlyStateOptions = ReadonlyStateOptions>(options: RecursivePartial<TOptions>): Provider
 {
-    return <ValueProvider>{
+    return <FactoryProvider>{
         provide: READONLY_STATE_OPTIONS,
-        useValue: options,
+        useFactory: () =>
+        {
+            const parentOptions = inject(READONLY_STATE_OPTIONS, {optional: true, skipSelf: true}) ?? {};
+
+            return deepCopyWithArrayOverride({}, parentOptions, options);
+        },
     };
 }
 
 /**
- * Provides options for value handler that will be used for select globally
+ * Provides options for value handler that will be used for select globally, merge them with parent options
  * @param options - Options to be used for value handler
  */
 export function provideValueHandlerOptions<TOptions extends ValueHandlerOptions = ValueHandlerOptions>(options: RecursivePartial<TOptions>): Provider
 {
-    return <ValueProvider>{
+    return <FactoryProvider>{
         provide: VALUE_HANDLER_OPTIONS,
-        useValue: options,
+        useFactory: () =>
+        {
+            const parentOptions = inject(VALUE_HANDLER_OPTIONS, {optional: true, skipSelf: true}) ?? {};
+
+            return deepCopyWithArrayOverride({}, parentOptions, options);
+        },
     };
 }
 
 /**
- * Provides options for live search that will be used for select globally
+ * Provides options for live search that will be used for select globally, merge them with parent options
  * @param options - Options to be used for live search
  */
 export function provideLiveSearchOptions<TOptions extends LiveSearchOptions = LiveSearchOptions>(options: RecursivePartial<TOptions>): Provider
 {
-    return <ValueProvider>{
+    return <FactoryProvider>{
         provide: LIVE_SEARCH_OPTIONS,
-        useValue: options,
+        useFactory: () =>
+        {
+            const parentOptions = inject(LIVE_SEARCH_OPTIONS, {optional: true, skipSelf: true}) ?? {};
+
+            return deepCopyWithArrayOverride({}, parentOptions, options);
+        },
     };
 }
 
 /**
- * Provides options for interactions that will be used for select globally
+ * Provides options for interactions that will be used for select globally, merge them with parent options
  * @param options - Options to be used for interactions
  */
 export function provideInteractionsOptions<TOptions extends InteractionsOptions = InteractionsOptions>(options: RecursivePartial<TOptions>): Provider
 {
-    return <ValueProvider>{
+    return <FactoryProvider>{
         provide: INTERACTIONS_OPTIONS,
-        useValue: options,
+        useFactory: () =>
+        {
+            const parentOptions = inject(INTERACTIONS_OPTIONS, {optional: true, skipSelf: true}) ?? {};
+
+            return deepCopyWithArrayOverride({}, parentOptions, options);
+        },
     };
 }
 
 /**
- * Provides options for options handler that will be used for select globally
+ * Provides options for options handler that will be used for select globally, merge them with parent options
  * @param options - Options to be used for options handler
  */
 export function provideOptionsHandlerOptions<TOptions extends OptionsHandlerOptions = OptionsHandlerOptions>(options: RecursivePartial<TOptions>): Provider
 {
-    return <ValueProvider>{
+    return <FactoryProvider>{
         provide: OPTIONS_HANDLER_OPTIONS,
-        useValue: options,
+        useFactory: () =>
+        {
+            const parentOptions = inject(OPTIONS_HANDLER_OPTIONS, {optional: true, skipSelf: true}) ?? {};
+
+            return deepCopyWithArrayOverride({}, parentOptions, options);
+        },
     };
 }

@@ -1,5 +1,30 @@
 # Changelog
 
+## Version 17.6.0 (2026-11-13)
+
+### Features
+
+- updated `provideSelectOptions` provider function
+   - now merges provided options with options from parent injector
+- updated `provideKeyboardHandlerOptions` provider function
+   - now merges provided options with options from parent injector
+- updated `provideNormalStateOptions` provider function
+   - now merges provided options with options from parent injector
+- updated `providePopupOptions` provider function
+   - now merges provided options with options from parent injector
+- updated `providePositionerOptions` provider function
+   - now merges provided options with options from parent injector
+- updated `provideReadonlyStateOptions` provider function
+   - now merges provided options with options from parent injector
+- updated `provideValueHandlerOptions` provider function
+   - now merges provided options with options from parent injector
+- updated `provideLiveSearchOptions` provider function
+   - now merges provided options with options from parent injector
+- updated `provideInteractionsOptions` provider function
+   - now merges provided options with options from parent injector
+- updated `provideOptionsHandlerOptions` provider function
+   - now merges provided options with options from parent injector
+
 ## Version 17.5.0 (2026-11-13)
 
 ### Bug Fixes
