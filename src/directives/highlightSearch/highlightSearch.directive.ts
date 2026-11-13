@@ -78,7 +78,7 @@ export class HighlightSearch implements OnDestroy
                 return;
             }
 
-            const searchQuery = this.highlightInstance.searchQuery();
+            const searchQuery = this.highlightInstance.normalizeText(this.highlightInstance.searchQuery());
 
             if(!searchQuery)
             {
@@ -93,7 +93,15 @@ export class HighlightSearch implements OnDestroy
             this.ranges.set(nodes.flatMap(node =>
             {
                 const ranges: Range[] = [];
-                let text = node.textContent ?? '';
+                const originalText = node.textContent ?? '';
+                const normalizedText = this.highlightInstance.normalizeText(originalText);
+                const lowerText = originalText.toLowerCase();
+
+                //case and accent insensitive matching, normalized text must have same length as original text (range indexes are computed from it)
+                //fallback to only case insensitive, or original text if lengths differ
+                let text = normalizedText.length === originalText.length
+                    ? normalizedText
+                    : (lowerText.length === originalText.length ? lowerText : originalText);
                 let index: number;
                 let length: number = 0;
 

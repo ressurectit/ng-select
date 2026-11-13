@@ -4,6 +4,21 @@ import {Select} from '../../components';
 import {SelectPluginType} from '../../misc/enums';
 
 /**
+ * Name of highlight registered in CSS highlights registry
+ */
+const HIGHLIGHT_NAME = 'search-query';
+
+/**
+ * Highlight shared by all instances, CSS highlights registry is global for whole document, so there can be only one highlight with name 'search-query'
+ */
+let sharedHighlight: Highlight|null = null;
+
+/**
+ * Number of active instances using shared highlight
+ */
+let sharedHighlightRefCount: number = 0;
+
+/**
  * Directive that manages highlighting for popup
  */
 @Directive(
@@ -20,9 +35,9 @@ export class HighlightInstance<TValue = unknown, TPublicValue = TValue> implemen
     protected select: Select<TValue, TPublicValue> = inject(Select);
 
     /**
-     * Shared instance of highlight
+     * Shared instance of highlight, null if CSS highlights are not supported
      */
-    protected highlight: Highlight = new Highlight();
+    protected highlight: Highlight|null = null;
 
     //######################### public properties #########################
 
@@ -59,7 +74,19 @@ export class HighlightInstance<TValue = unknown, TPublicValue = TValue> implemen
     //######################### constructor #########################
     constructor()
     {
-        CSS.highlights.set('search-query', this.highlight);
+        if(!CSS.highlights)
+        {
+            return;
+        }
+
+        if(!sharedHighlight || !sharedHighlightRefCount)
+        {
+            sharedHighlight = new Highlight();
+            CSS.highlights.set(HIGHLIGHT_NAME, sharedHighlight);
+        }
+
+        sharedHighlightRefCount++;
+        this.highlight = sharedHighlight;
     }
 
     //######################### public methods - implementation of OnDestroy #########################
@@ -69,10 +96,34 @@ export class HighlightInstance<TValue = unknown, TPublicValue = TValue> implemen
      */
     public ngOnDestroy(): void
     {
-        CSS.highlights.delete('search-query');
+        if(!CSS.highlights || !this.highlight)
+        {
+            return;
+        }
+
+        this.highlight = null;
+        sharedHighlightRefCount--;
+
+        if(sharedHighlightRefCount <= 0)
+        {
+            sharedHighlightRefCount = 0;
+            sharedHighlight = null;
+            CSS.highlights.delete(HIGHLIGHT_NAME);
+        }
     }
 
     //######################### public methods #########################
+
+    /**
+     * Normalizes text for comparison, uses select's normalize function (same as used for filtering, default removes diacritics) and converts it to lower case
+     * @param text - Text to be normalized
+     */
+    public normalizeText(text: string): string
+    {
+        const normalize = this.select.selectOptions?.normalize;
+
+        return (normalize ? normalize(text) ?? '' : text).toLowerCase();
+    }
 
     /**
      * Registers ranges for highlighting
@@ -80,6 +131,11 @@ export class HighlightInstance<TValue = unknown, TPublicValue = TValue> implemen
      */
     public registerHighlightRanges(ranges: Range[]): void
     {
+        if(!this.highlight)
+        {
+            return;
+        }
+
         for(const range of ranges)
         {
             this.highlight.add(range);
@@ -92,6 +148,11 @@ export class HighlightInstance<TValue = unknown, TPublicValue = TValue> implemen
      */
     public unregisterHighlightRanges(ranges: Range[]): void
     {
+        if(!this.highlight)
+        {
+            return;
+        }
+
         for(const range of ranges)
         {
             this.highlight.delete(range);

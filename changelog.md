@@ -1,5 +1,21 @@
 # Changelog
 
+## Version 17.7.0 (2026-11-13)
+
+### Bug Fixes
+
+- fixed `HighlightInstance` directive
+   - no longer throws when *CSS highlights* are not supported by browser, highlighting is then disabled
+   - highlight is now shared by all instances, destroying one instance no longer removes highlighting for other instances
+
+### Features
+
+- updated `HighlightInstance` directive
+   - **new methods**
+      - `normalizeText` normalizes text for comparison, uses select's normalize function (same as used for filtering, default removes diacritics) and converts it to lower case
+- updated `HighlightSearch` directive
+   - *search highlighting* is now case and accent insensitive, uses same normalization as filtering
+
 ## Version 17.6.0 (2026-11-13)
 
 ### Features
