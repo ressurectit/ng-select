@@ -1,5 +1,21 @@
 # Changelog
 
+## Version 17.5.0 (2026-11-13)
+
+### Features
+
+- updated `EditLiveSearchCssClasses` interface
+   - **new properties**
+      - `valueSelection` applied to HTML element that represents the search input to enable value selection
+- updated `EditNormalStateCssClasses` interface
+   - **new properties**
+      - `valueSelection` applied to HTML element that represents selected value to enable selection of text
+- updated `EditLiveSearch` plugin component
+   - now applies `valueSelection` css class when select is in single mode, has value and *live search* input is empty
+- updated `EditNormalState` plugin component
+   - now allows *text selection* of selected value in single mode, value is horizontally scrollable, mouse up without selection focuses *live search*
+- updated styles for *edit normal state* and *edit live search*, enabling *text selection* of selected value, new css classes `value-selection` and `with-value-selection`
+
 ## Version 17.4.0 (2026-11-12)
 
 ### Features

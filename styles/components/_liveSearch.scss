@@ -6,6 +6,11 @@
         .live-search-component
         {
             display: contents;
+
+            .with-value-selection
+            {
+                pointer-events: none;
+            }
         }
 
         .absolute-input

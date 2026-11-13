@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, computed, effect, ElementRef, Inject, inject, Optional, Signal, viewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, DOCUMENT, effect, ElementRef, Inject, inject, Optional, Signal, viewChild} from '@angular/core';
 import {NgTemplateOutlet} from '@angular/common';
 import {LocalizePipe, TooltipDirective} from '@anglr/common';
 import {RecursivePartial} from '@jscrpt/common';
@@ -33,6 +33,7 @@ const defaultOptions: EditNormalStateOptions<EditNormalStateCssClasses> =
         valueWrapper: 'select-relative select-flex-1 select-flex-row select-normal-state-gap',
         valueMultiple: 'select-normal-state-gap select-flex-row',
         valueSingle: 'select-flex-1',
+        valueSelection: 'value-selection',
     },
 };
 
@@ -62,6 +63,13 @@ const defaultOptions: EditNormalStateOptions<EditNormalStateCssClasses> =
 })
 export class EditNormalState<TValue = unknown, TPublicValue = TValue> implements NormalState<TValue, TPublicValue, EditNormalStateOptions<EditNormalStateCssClasses>>
 {
+    //######################### protected fields #########################
+
+    /**
+     * Instance of html document
+     */
+    protected document = inject(DOCUMENT);
+
     //######################### public properties - implementation of SelectPlugin #########################
 
     /**
@@ -109,6 +117,11 @@ export class EditNormalState<TValue = unknown, TPublicValue = TValue> implements
      */
     protected liveSearchPlaceholder: Signal<ElementRef<HTMLElement>> = viewChild.required('liveSearchPlaceholder', {read: ElementRef});
 
+    /**
+     * Instance of element that is used as scrollable placeholder for value
+     */
+    protected scrollablePlaceholder: Signal<ElementRef<HTMLElement>> = viewChild.required('scrollablePlaceholder');
+
     //######################### constructor #########################
     constructor(@Inject(NORMAL_STATE_OPTIONS) @Optional() options?: RecursivePartial<EditNormalStateOptions<EditNormalStateCssClasses>>|null,)
     {
@@ -134,10 +147,11 @@ export class EditNormalState<TValue = unknown, TPublicValue = TValue> implements
                                         (!this.selectBus.selectOptions().multiple && !hasValue(this.selectBus.selectedOptions()) && !this.selectPlugins.liveSearch()?.emptyInput()));
 
         this.cssClasses = computed(() => [this.options.cssClasses.value,
-                                          ...(this.selectBus.selectOptions().multiple ? [...this.options.cssClasses.valueMultiple.split(' ')] : [...this.options.cssClasses.valueSingle.split(' ')])]);
+                                          ...(this.selectBus.selectOptions().multiple ? [...this.options.cssClasses.valueMultiple.split(' ')] : [...this.options.cssClasses.valueSingle.split(' ')]),
+                                          ...(!this.selectBus.selectOptions().multiple ? [...this.options.cssClasses.valueSelection.split(' ')] : [])]);
     }
 
-    //######################### public methods - implementation of LiveSearch #########################
+    //######################### public methods - implementation of NormalState #########################
 
     /**
      * @inheritdoc
@@ -147,6 +161,25 @@ export class EditNormalState<TValue = unknown, TPublicValue = TValue> implements
     }
 
     //######################### protected methods - template bindings #########################
+
+    /**
+     * Handles mouse up event on value placeholder
+     */
+    protected handlePlaceholderMouseUp(): void
+    {
+        if(this.selectBus.selectOptions().multiple)
+        {
+            return;
+        }
+
+        const selection = this.document.getSelection();
+
+        if(selection?.isCollapsed)
+        {
+            this.scrollablePlaceholder().nativeElement.scrollTo(0, 0);
+            this.selectPlugins.LiveSearch?.focus();
+        }
+    }
 
     /**
      * Handles click event

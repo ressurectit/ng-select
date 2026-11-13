@@ -11,7 +11,10 @@
 <div [class]="options.cssClasses.valueWrapper">
     @if(showValue())
     {
-        <div [class]="cssClasses()">
+        <div [class]="cssClasses()"
+             (mouseup)="handlePlaceholderMouseUp()"
+             tabindex="-1"
+             #scrollablePlaceholder>
             @if(!selectBus.selectOptions().multiple)
             {
                 <ng-container *ngTemplateOutlet="selectBus.selectOptions().templateGatherer.normalStateTemplate() || defaultSingleLook.template; context: {$implicit: $any(this)}"/>

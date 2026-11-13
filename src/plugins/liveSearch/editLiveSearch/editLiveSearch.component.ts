@@ -8,6 +8,7 @@ import {SelectPluginInstances, SelectBus} from '../../../misc/classes';
 import {CopyOptionsAsSignal} from '../../../decorators';
 import {LIVE_SEARCH_OPTIONS} from '../../../misc/tokens';
 import {DisplayValue, HasValue} from '../../../pipes';
+import {hasValue} from '../../../misc/utils';
 
 const defaultOptions: LiveSearchOptions<EditLiveSearchCssClasses> =
 {
@@ -18,6 +19,7 @@ const defaultOptions: LiveSearchOptions<EditLiveSearchCssClasses> =
         searchElement: 'live-search-input',
         multiple: 'select-flex-1',
         single: 'absolute-input',
+        valueSelection: 'with-value-selection',
     },
 };
 
@@ -165,7 +167,8 @@ export class EditLiveSearch<TValue = unknown, TPublicValue = TValue> implements 
         });
 
         this.cssClasses = computed(() => [this.options.cssClasses.searchElement,
-                                          ...(this.selectBus.selectOptions().multiple ? [...this.options.cssClasses.multiple.split(' ')] : [...this.options.cssClasses.single.split(' ')])]);
+                                          ...(this.selectBus.selectOptions().multiple ? [...this.options.cssClasses.multiple.split(' ')] : [...this.options.cssClasses.single.split(' ')]),
+                                          ...((!this.selectBus.selectOptions().multiple && hasValue(this.selectBus.selectedOptions()) && this.emptyInput()) ? [...this.options.cssClasses.valueSelection.split(' ')] : [])]);
 
         this.activeDescendant = computed(() => `${this.selectBus.id}-${this.selectPlugins.optionsHandler()?.listOptions()?.find(option => option.active())?.index}`);
     }

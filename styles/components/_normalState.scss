@@ -77,6 +77,19 @@
                         content: "\00a0";
                     }
                 }
+
+                &.value-selection
+                {
+                    user-select: text;
+                    overflow-x: auto;
+                    overflow-y: hidden;
+                    scrollbar-width: none;
+
+                    &::-webkit-scrollbar
+                    {
+                        display: none;
+                    }
+                }
             }
 
             .select-tag

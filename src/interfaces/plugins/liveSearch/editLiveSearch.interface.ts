@@ -21,4 +21,9 @@ export interface EditLiveSearchCssClasses extends LiveSearchCssClasses
      * Applied to HTML element that represents the search input when the select is in single mode
      */
     single: string;
+
+    /**
+     * Applied to HTML element that represents the search input to enable value selection
+     */
+    valueSelection: string;
 }
