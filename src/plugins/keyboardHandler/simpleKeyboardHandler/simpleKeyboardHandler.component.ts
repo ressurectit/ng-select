@@ -118,7 +118,7 @@ export class SimpleKeyboardHandler<TValue = unknown, TPublicValue = TValue> impl
     @BindThis
     protected handleLiveSearchKeyboardEvents(event: KeyboardEvent): void
     {
-        if(event.key == 'Backspace' && this.selectPlugins.liveSearch()?.emptyInput())
+        if((event.key == 'Backspace' || event.key == 'Delete') && this.selectPlugins.liveSearch()?.emptyInput())
         {
             this.selectBus.keyboardAction.next(
             {

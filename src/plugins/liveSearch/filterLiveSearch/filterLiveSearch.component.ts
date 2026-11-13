@@ -1,5 +1,5 @@
 import {afterRenderEffect, ChangeDetectionStrategy, Component, computed, ElementRef, Inject, inject, Optional, signal, Signal, WritableSignal} from '@angular/core';
-import {debounce, form, FormField} from '@angular/forms/signals';
+import {debounce, FieldTree, form, FormField} from '@angular/forms/signals';
 import {LocalizePipe} from '@anglr/common';
 import {RecursivePartial} from '@jscrpt/common';
 import {deepCopyWithArrayOverride} from '@jscrpt/common/lodash';
@@ -49,12 +49,17 @@ export class FilterLiveSearch<TValue = unknown, TPublicValue = TValue> implement
      */
     protected emptyInputSignal: WritableSignal<boolean> = signal(true);
 
+    /**
+     * Current value of the search input (without debounce)
+     */
+    protected valueSignal: WritableSignal<string> = signal('');
+
     //######################### protected properties - template bindings #########################
 
     /**
      * Instance of form value
      */
-    protected value;
+    protected val: FieldTree<string>;
 
     //######################### public properties - implementation of SelectPlugin #########################
 
@@ -89,6 +94,14 @@ export class FilterLiveSearch<TValue = unknown, TPublicValue = TValue> implement
     /**
      * @inheritdoc
      */
+    public get value(): Signal<string>
+    {
+        return this.valueSignal.asReadonly();
+    }
+
+    /**
+     * @inheritdoc
+     */
     public get emptyInput(): Signal<boolean>
     {
         return this.emptyInputSignal.asReadonly();
@@ -100,11 +113,11 @@ export class FilterLiveSearch<TValue = unknown, TPublicValue = TValue> implement
         this.options = deepCopyWithArrayOverride(defaultOptions as FilterLiveSearchOptions<LiveSearchCssClasses>,
                                                  options);
 
-        this.value = form(signal(''), path => debounce(path, this.options.searchDebounceTimeout));
+        this.val = form(signal(''), path => debounce(path, this.options.searchDebounceTimeout));
 
         this.search = computed(() =>
         {
-            return this.value().value();
+            return this.val().value();
         });
 
         const ref = afterRenderEffect(() =>
@@ -135,6 +148,7 @@ export class FilterLiveSearch<TValue = unknown, TPublicValue = TValue> implement
      */
     protected input(event: Event): void
     {
+        this.valueSignal.set((event.target as HTMLInputElement).value);
         this.emptyInputSignal.set((event.target as HTMLInputElement).value.length == 0);
     }
 }

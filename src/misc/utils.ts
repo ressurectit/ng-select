@@ -177,6 +177,6 @@ export function showPopupWithValues(): boolean
     {
         const selectPlugins = inject(SelectPluginInstances);
 
-        return !(selectPlugins.OptionsHandler?.availableOptions()?.length && !selectPlugins.LiveSearch?.emptyInput);
+        return !!(selectPlugins.OptionsHandler?.availableOptions()?.length && !selectPlugins.LiveSearch?.emptyInput);
     });
 }

@@ -52,6 +52,11 @@ export class NoLiveSearch<TValue = unknown, TPublicValue = TValue> implements Li
     /**
      * @inheritdoc
      */
+    public readonly value: Signal<string> = signal('');
+
+    /**
+     * @inheritdoc
+     */
     public readonly emptyInput: Signal<boolean> = signal(true);
 
     //######################### public methods - implementation of LiveSearch #########################

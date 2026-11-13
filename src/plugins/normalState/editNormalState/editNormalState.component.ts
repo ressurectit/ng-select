@@ -178,6 +178,7 @@ export class EditNormalState<TValue = unknown, TPublicValue = TValue> implements
         {
             this.scrollablePlaceholder().nativeElement.scrollTo(0, 0);
             this.selectPlugins.LiveSearch?.focus();
+            this.click();
         }
     }
 

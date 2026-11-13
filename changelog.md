@@ -2,8 +2,20 @@
 
 ## Version 17.5.0 (2026-11-13)
 
+### Bug Fixes
+
+- fixed `showPopupWithValues` function
+   - now correctly allows showing popup only when there are available values and *live search* input is not empty, previously logic was inverted
+- fixed `EditLiveSearch` plugin component
+   - `emptyInput` is now updated before popup is requested to be shown, so `canShowPopupPredicate` works with current *live search* value
+- fixed `EditNormalState` plugin component
+   - mouse up without selection now also emits *click*, so popup is opened as with other *normal states*
+
 ### Features
 
+- updated `LiveSearch` interface
+   - **new properties**
+      - `value` current value of the search input (without debounce)
 - updated `EditLiveSearchCssClasses` interface
    - **new properties**
       - `valueSelection` applied to HTML element that represents the search input to enable value selection
@@ -12,6 +24,8 @@
       - `valueSelection` applied to HTML element that represents selected value to enable selection of text
 - updated `EditLiveSearch` plugin component
    - now applies `valueSelection` css class when select is in single mode, has value and *live search* input is empty
+- updated `SimpleKeyboardHandler` plugin component
+   - *Delete* key now removes last selected value when *live search* input is empty, same as *Backspace*
 - updated `EditNormalState` plugin component
    - now allows *text selection* of selected value in single mode, value is horizontally scrollable, mouse up without selection focuses *live search*
 - updated styles for *edit normal state* and *edit live search*, enabling *text selection* of selected value, new css classes `value-selection` and `with-value-selection`

@@ -53,6 +53,11 @@ export class EditLiveSearch<TValue = unknown, TPublicValue = TValue> implements 
     protected emptyInputSignal: WritableSignal<boolean> = signal(true);
 
     /**
+     * Current value of the search input (without debounce)
+     */
+    protected valueSignal: WritableSignal<string> = signal('');
+
+    /**
      * Timeout used for debouncing search input
      */
     protected timeout: number|undefined|null;
@@ -120,6 +125,14 @@ export class EditLiveSearch<TValue = unknown, TPublicValue = TValue> implements 
      * @inheritdoc
      */
     public readonly search: Signal<string>;
+
+    /**
+     * @inheritdoc
+     */
+    public get value(): Signal<string>
+    {
+        return this.valueSignal.asReadonly();
+    }
 
     /**
      * @inheritdoc
@@ -248,6 +261,9 @@ export class EditLiveSearch<TValue = unknown, TPublicValue = TValue> implements 
      */
     protected input(event: Event): void
     {
+        this.emptyInputSignal.set((event.target as HTMLInputElement).value.length == 0);
+        this.valueSignal.set((event.target as HTMLInputElement).value);
+
         this.selectBus.showPopup.next(
         {
             source: this as SelectPlugin,
@@ -259,8 +275,6 @@ export class EditLiveSearch<TValue = unknown, TPublicValue = TValue> implements 
         {
             clearTimeout(this.timeout);
         }
-
-        this.emptyInputSignal.set((event.target as HTMLInputElement).value.length == 0);
 
         this.timeout = setTimeout(() =>
         {
@@ -277,6 +291,7 @@ export class EditLiveSearch<TValue = unknown, TPublicValue = TValue> implements 
     protected clearSearchInput(): void
     {
         this.htmlInput().nativeElement.value = '';
+        this.valueSignal.set('');
         this.emptyInputSignal.set(true);
         this.valueOutput.set('');
     }

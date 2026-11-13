@@ -40,6 +40,11 @@ export interface LiveSearch<TValue = unknown, TPublicValue = TValue, TOptions ex
     readonly search: Signal<string>;
 
     /**
+     * Current value of the search input (without debounce)
+     */
+    readonly value: Signal<string>;
+
+    /**
      * Indication whether input search value is empty
      */
     readonly emptyInput: Signal<boolean>;
